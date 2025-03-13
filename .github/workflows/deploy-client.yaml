@@ -1,4 +1,4 @@
-name: deploy-server
+name: deploy-client
 
 on: 
   workflow_dispatch:
