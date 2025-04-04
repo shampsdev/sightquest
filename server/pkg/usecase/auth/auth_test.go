@@ -67,3 +67,23 @@ func TestRegister(t *testing.T) {
 	_, err = a.ParseToken("wrong")
 	assert.Error(t, err)
 }
+
+func TestCompatibility(t *testing.T) {
+	cfg := &config.Config{}
+	cfg.Auth.PasswordSecret = "0123456789abcdef0123456789abcdef"
+	password := "WjyCxAlFRP1Xlj45bh3wuWEQZjj63ovoF3absCQKD3niEhCSPFyKwmgpQjgW+19gzlKa4B2XXHNVjigddpgvStIEZiLHpa+bT0T5NFOuv15+fXauOIB0uzEseEGrpBoi0lKiy/H4GpLDsmz/NUyxCHxS5n570kiuP+7EFok="
+
+	ctrl := gomock.NewController(t)
+	userRepo := repomocks.NewMockUser(ctrl)
+	a, err := NewAuther(cfg, userRepo)
+	assert.NoError(t, err)
+
+	userRepo.EXPECT().GetUserByUsername(gomock.Any(), "user1").Return(&domain.User{ID: "user1"}, nil).Times(1)
+	userRepo.EXPECT().GetUserPassword(gomock.Any(), "user1").Return(password, nil).Times(1)
+
+	token, err := a.Login(t.Context(), &domain.UserCredentials{Username: "user1", Password: "1234"})
+	assert.NoError(t, err)
+	userID, err := a.ParseToken(token)
+	assert.NoError(t, err)
+	assert.Equal(t, "user1", userID)
+}

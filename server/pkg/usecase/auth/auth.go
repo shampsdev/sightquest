@@ -12,6 +12,7 @@ import (
 type Auth struct {
 	params    *argonParams
 	jwtSigner *jwtSigner
+	encrypter *encrypter
 
 	userRepo repo.User
 }
@@ -22,7 +23,12 @@ func NewAuther(cfg *config.Config, userRepo repo.User) (*Auth, error) {
 		userRepo: userRepo,
 	}
 
+	var err error
 	a.jwtSigner = newJWTSigner(cfg.Auth.JWTSecret)
+	a.encrypter, err = newEncrypter(cfg.Auth.PasswordSecret)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create encrypter: %w", err)
+	}
 
 	return a, nil
 }
@@ -104,10 +110,19 @@ func (a *Auth) hashPassword(password string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to hash password: %w", err)
 	}
+	encrypted, err := a.encrypter.Encrypt(hash)
+	if err != nil {
+		return "", fmt.Errorf("failed to encrypt hash: %w", err)
+	}
 
-	return hash, nil
+	return encrypted, nil
 }
 
 func (a *Auth) checkPasswordHash(password, encodedHash string) (bool, error) {
-	return comparePasswordAndHash(password, encodedHash)
+	decrypted, err := a.encrypter.Decrypt(encodedHash)
+	if err != nil {
+		return false, fmt.Errorf("failed to decrypt hash: %w", err)
+	}
+
+	return comparePasswordAndHash(password, decrypted)
 }
