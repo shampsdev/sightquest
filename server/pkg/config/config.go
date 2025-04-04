@@ -30,6 +30,10 @@ type Config struct {
 	Log struct {
 		Handler string `envconfig:"LOG_HANDLER" default:"tint"`
 	}
+	Auth struct {
+		PasswordSecret string `envconfig:"AUTH_PASSWORD_SECRET"`
+		JWTSecret      string `envconfig:"AUTH_JWT_SECRET"`
+	}
 
 	S3 S3Config
 }

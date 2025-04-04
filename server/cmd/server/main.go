@@ -25,12 +25,17 @@ func main() {
 
 	pool, err := pgxpool.NewWithConfig(ctx, cfg.PGXConfig())
 	if err != nil {
-		log.Error("can't create new database pool")
-		os.Exit(1)
+		slogx.Fatal(log, "failed to connect to database", slogx.Err(err))
 	}
 	defer pool.Close()
 
-	s := rest.NewServer(ctx, cfg, usecase.Setup(ctx, cfg, pool))
+	cases, err := usecase.Setup(ctx, cfg, pool)
+	if err != nil {
+		slogx.Fatal(log, "failed to setup usecase", slogx.Err(err))
+	}
+	log.Info("Usecase setup")
+
+	s := rest.NewServer(ctx, cfg, cases)
 	if err := s.Run(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		slogx.WithErr(log, err).Error("error during server shutdown")
 	}

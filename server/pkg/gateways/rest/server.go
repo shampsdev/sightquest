@@ -48,7 +48,6 @@ func NewServer(ctx context.Context, cfg *config.Config, useCases usecase.Cases) 
 	return s
 }
 
-
 func (s *Server) Run(ctx context.Context) error {
 	eg := errgroup.Group{}
 	eg.Go(func() error {

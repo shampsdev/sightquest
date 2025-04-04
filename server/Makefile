@@ -59,6 +59,9 @@ lint-fmt: golangci-lint-install ## Lint fmt
 swag: swag-install ## Generate swag documentation (github.com/swaggo/swag)
 	$(SWAG) init -g cmd/server/main.go -o docs
 
+test: ## Run tests
+	go test ./... -v
+
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 define go-get-tool
 @[ -f $(1) ] || { \

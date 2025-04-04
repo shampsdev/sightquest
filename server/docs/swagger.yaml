@@ -1,16 +1,86 @@
+definitions:
+  auth.wrapToken:
+    properties:
+      token:
+        type: string
+    type: object
+  domain.UserCredentials:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
-  /hello:
-    get:
+  /auth/login:
+    post:
       consumes:
       - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserCredentials'
       produces:
       - application/json
       responses:
         "200":
           description: OK
-      summary: Get hello world
+          schema:
+            $ref: '#/definitions/auth.wrapToken'
+        "400":
+          description: Bad Request
+      summary: Login user
       tags:
-      - hello
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserCredentials'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.wrapToken'
+        "400":
+          description: Bad Request
+      summary: Register user
+      tags:
+      - auth
+  /auth/verify:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: body
+        name: token
+        required: true
+        schema:
+          $ref: '#/definitions/auth.wrapToken'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: Verify token
+      tags:
+      - auth
 swagger: "2.0"
