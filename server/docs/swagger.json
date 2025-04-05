@@ -1,7 +1,9 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "title": "Sightquest server",
+        "contact": {},
+        "version": "1.0"
     },
     "paths": {
         "/auth/login": {
@@ -101,7 +103,79 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/game": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "game"
+                ],
+                "summary": "Create game",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.GameFull"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/game/id/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "game"
+                ],
+                "summary": "Get game by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Game ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.GameFull"
+                        }
                     },
                     "400": {
                         "description": "Bad Request"
@@ -119,6 +193,61 @@
                 }
             }
         },
+        "domain.GameFull": {
+            "type": "object",
+            "properties": {
+                "admin": {
+                    "$ref": "#/definitions/domain.User"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "finished_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "state": {
+                    "$ref": "#/definitions/domain.GameState"
+                }
+            }
+        },
+        "domain.GameState": {
+            "type": "string",
+            "enum": [
+                "lobby",
+                "game",
+                "poll",
+                "finished"
+            ],
+            "x-enum-varnames": [
+                "GameStateLobby",
+                "GameStateGame",
+                "GameStatePoll",
+                "GameStateFinished"
+            ]
+        },
+        "domain.User": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "background": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.UserCredentials": {
             "type": "object",
             "properties": {
@@ -132,6 +261,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "X-API-Token",
+            "in": "header"
         }
     }
 }

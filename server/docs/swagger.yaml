@@ -4,6 +4,44 @@ definitions:
       token:
         type: string
     type: object
+  domain.GameFull:
+    properties:
+      admin:
+        $ref: '#/definitions/domain.User'
+      created_at:
+        type: string
+      finished_at:
+        type: string
+      id:
+        type: string
+      state:
+        $ref: '#/definitions/domain.GameState'
+    type: object
+  domain.GameState:
+    enum:
+    - lobby
+    - game
+    - poll
+    - finished
+    type: string
+    x-enum-varnames:
+    - GameStateLobby
+    - GameStateGame
+    - GameStatePoll
+    - GameStateFinished
+  domain.User:
+    properties:
+      avatar:
+        type: string
+      background:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      username:
+        type: string
+    type: object
   domain.UserCredentials:
     properties:
       email:
@@ -15,6 +53,8 @@ definitions:
     type: object
 info:
   contact: {}
+  title: Sightquest server
+  version: "1.0"
 paths:
   /auth/login:
     post:
@@ -78,9 +118,58 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
         "400":
           description: Bad Request
       summary: Verify token
       tags:
       - auth
+  /game:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.GameFull'
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Create game
+      tags:
+      - game
+  /game/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Game ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.GameFull'
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Get game by id
+      tags:
+      - game
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: X-API-Token
+    type: apiKey
 swagger: "2.0"

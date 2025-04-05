@@ -13,10 +13,12 @@ import (
 type Cases struct {
 	Auth *auth.Auth
 	User *User
+	Game *Game
 }
 
 func Setup(_ context.Context, cfg *config.Config, pool *pgxpool.Pool) (Cases, error) {
 	ur := pg.NewUser(pool)
+	gr := pg.NewGame(pool, ur)
 
 	auth, err := auth.NewAuther(cfg, ur)
 	if err != nil {
@@ -24,9 +26,11 @@ func Setup(_ context.Context, cfg *config.Config, pool *pgxpool.Pool) (Cases, er
 	}
 
 	user := NewUser(ur)
+	game := NewGame(gr)
 
 	return Cases{
 		Auth: auth,
 		User: user,
+		Game: game,
 	}, nil
 }

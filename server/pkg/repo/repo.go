@@ -17,3 +17,8 @@ type User interface {
 	GetUserByEmail(ctx context.Context, userID string) (*domain.User, error)
 	GetUserPassword(ctx context.Context, userID string) (string, error)
 }
+
+type Game interface {
+	CreateGame(ctx context.Context, game *domain.CreateGame) (string, error)
+	GetGameByID(ctx context.Context, gameID string) (*domain.GameFull, error)
+}

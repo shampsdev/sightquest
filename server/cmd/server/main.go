@@ -14,6 +14,11 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
 
+// @title   Sightquest server
+// @version 1.0
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name X-API-Token
 func main() {
 	cfg := config.Load(".env")
 	log := cfg.Logger()

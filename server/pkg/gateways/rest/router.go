@@ -7,6 +7,7 @@ import (
 	"github.com/shampsdev/sightquest/server/docs"
 	"github.com/shampsdev/sightquest/server/pkg/config"
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/auth"
+	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/game"
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/middlewares"
 	"github.com/shampsdev/sightquest/server/pkg/usecase"
 	swaggerfiles "github.com/swaggo/files"
@@ -25,5 +26,6 @@ func setupRouter(ctx context.Context, _ *config.Config, r *gin.Engine, cases use
 
 	{
 		auth.Setup(v1, &cases)
+		game.Setup(v1, &cases)
 	}
 }
