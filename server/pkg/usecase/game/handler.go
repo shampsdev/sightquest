@@ -52,7 +52,7 @@ func (h *Handler) buildRouter() {
 		On(event.BroadcastEvent, callGame((*Game).OnBroadcast))
 
 	h.router = g.RootHandler()
-	h.registeredEvents = h.RegisteredEvents()
+	h.registeredEvents = g.RegisteredEvents()
 }
 
 func (h *Handler) RegisteredEvents() []string {
