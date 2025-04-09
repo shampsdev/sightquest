@@ -31,9 +31,9 @@ jobs:
           go build -v ./...
 
       - name: Lint
-        uses: golangci/golangci-lint@v2.0.2
+        uses: golangci/golangci-lint-action@v7
         with:
-          version: v1.64.5
+          version: v2.0.2
           working-directory: ./server
       
       - name: Unit test
