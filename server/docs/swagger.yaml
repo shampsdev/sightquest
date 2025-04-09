@@ -4,7 +4,14 @@ definitions:
       token:
         type: string
     type: object
-  domain.GameFull:
+  domain.Coordinate:
+    properties:
+      lat:
+        type: number
+      lon:
+        type: number
+    type: object
+  domain.Game:
     properties:
       admin:
         $ref: '#/definitions/domain.User'
@@ -14,6 +21,10 @@ definitions:
         type: string
       id:
         type: string
+      players:
+        items:
+          $ref: '#/definitions/domain.Player'
+        type: array
       state:
         $ref: '#/definitions/domain.GameState'
     type: object
@@ -29,6 +40,27 @@ definitions:
     - GameStateGame
     - GameStatePoll
     - GameStateFinished
+  domain.Player:
+    properties:
+      gameId:
+        type: string
+      location:
+        $ref: '#/definitions/domain.Coordinate'
+      role:
+        $ref: '#/definitions/domain.PlayerRole'
+      score:
+        type: integer
+      user:
+        $ref: '#/definitions/domain.User'
+    type: object
+  domain.PlayerRole:
+    enum:
+    - runner
+    - catcher
+    type: string
+    x-enum-varnames:
+    - PlayerRoleRunner
+    - PlayerRoleCatcher
   domain.User:
     properties:
       avatar:
@@ -135,7 +167,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.GameFull'
+            $ref: '#/definitions/domain.Game'
         "400":
           description: Bad Request
       security:
@@ -159,7 +191,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.GameFull'
+            $ref: '#/definitions/domain.Game'
         "400":
           description: Bad Request
       security:

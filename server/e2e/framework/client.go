@@ -56,12 +56,12 @@ func (c *Client) setup(toRecord map[string]struct{}) {
 	}
 }
 
-func (c *Client) JoinGame(lobby *domain.Game) {
+func (c *Client) JoinGame(game *domain.Game) {
 	c.Emit(event.Auth{
 		Token: c.token,
 	})
 	c.Emit(event.JoinGame{
-		GameID: lobby.ID,
+		GameID: game.ID,
 	})
 }
 

@@ -144,7 +144,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.GameFull"
+                            "$ref": "#/definitions/domain.Game"
                         }
                     },
                     "400": {
@@ -183,7 +183,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.GameFull"
+                            "$ref": "#/definitions/domain.Game"
                         }
                     },
                     "400": {
@@ -202,7 +202,18 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.GameFull": {
+        "domain.Coordinate": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "number"
+                },
+                "lon": {
+                    "type": "number"
+                }
+            }
+        },
+        "domain.Game": {
             "type": "object",
             "properties": {
                 "admin": {
@@ -216,6 +227,12 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "string"
+                },
+                "players": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Player"
+                    }
                 },
                 "state": {
                     "$ref": "#/definitions/domain.GameState"
@@ -235,6 +252,37 @@ const docTemplate = `{
                 "GameStateGame",
                 "GameStatePoll",
                 "GameStateFinished"
+            ]
+        },
+        "domain.Player": {
+            "type": "object",
+            "properties": {
+                "gameId": {
+                    "type": "string"
+                },
+                "location": {
+                    "$ref": "#/definitions/domain.Coordinate"
+                },
+                "role": {
+                    "$ref": "#/definitions/domain.PlayerRole"
+                },
+                "score": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/domain.User"
+                }
+            }
+        },
+        "domain.PlayerRole": {
+            "type": "string",
+            "enum": [
+                "runner",
+                "catcher"
+            ],
+            "x-enum-varnames": [
+                "PlayerRoleRunner",
+                "PlayerRoleCatcher"
             ]
         },
         "domain.User": {

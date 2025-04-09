@@ -61,13 +61,13 @@ func (c *Client) CreateGame() (*domain.Game, error) {
 	}
 	resp, err := c.fw.HttpCli.Do(&req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to post lobby: %w", err)
+		return nil, fmt.Errorf("failed to post game: %w", err)
 	}
 
 	game := &domain.Game{}
 	err = json.NewDecoder(resp.Body).Decode(game)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode lobby: %w", err)
+		return nil, fmt.Errorf("failed to decode game: %w", err)
 	}
 	return game, nil
 }
