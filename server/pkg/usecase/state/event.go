@@ -58,11 +58,11 @@ func NewGroup[S any, E Event]() *Group[S, E, E] {
 	}
 }
 
-func (eh *eventHandler[S, E]) Register(event string, handler HandlerFunc[S, E]) {
+func (eh *eventHandler[S, E]) On(event string, handler HandlerFunc[S, E]) {
 	eh.handlers[event] = handler
 }
 
-func GroupWithMW[S any, EH, E Event](
+func GroupMW[S any, EH, E Event](
 	g *Group[S, EH, E],
 	middleware MiddlewareFunc[S, S, EH, E],
 ) *Group[S, EH, E] {
@@ -79,8 +79,9 @@ type Group[S any, EH, E Event] struct {
 	applyMiddleware func(HandlerFunc[S, E]) HandlerFunc[S, EH]
 }
 
-func (g *Group[S, EH, E]) Register(event string, handler HandlerFunc[S, E]) {
-	g.handler.Register(event, g.applyMiddleware(handler))
+func (g *Group[S, EH, E]) On(event string, handler HandlerFunc[S, E]) *Group[S, EH, E] {
+	g.handler.On(event, g.applyMiddleware(handler))
+	return g
 }
 
 func (g *Group[S, EH, E]) RootHandler() HandlerFunc[S, EH] {
