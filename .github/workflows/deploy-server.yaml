@@ -10,12 +10,12 @@ on:
         options: [DEV, PROD]
 
 jobs:
-#   ci:
-#     uses: ./.github/workflows/ci-server.yaml
+  ci:
+    uses: ./.github/workflows/ci-server.yaml
 
   deploy:
     uses: shampsdev/cicd-pipelines/.github/workflows/deploy.yaml@main
-    # needs: [ci]
+    needs: [ci]
     permissions:
       packages: write
       contents: read
