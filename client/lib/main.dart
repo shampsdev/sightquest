@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 void main() {
   runApp(const MyApp());
@@ -7,116 +8,206 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return const MaterialApp(home: SimpleSocketPage());
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class SimpleSocketPage extends StatefulWidget {
+  const SimpleSocketPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<SimpleSocketPage> createState() => _SimpleSocketPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _SimpleSocketPageState extends State<SimpleSocketPage> {
+  late IO.Socket socket;
+  String log = '⏳ Waiting to connect...';
 
-  void _incrementCounter() {
+  final TextEditingController tokenController = TextEditingController();
+  final TextEditingController gameIdController = TextEditingController();
+  final TextEditingController lonController = TextEditingController();
+  final TextEditingController latController = TextEditingController();
+  final TextEditingController broadcastController = TextEditingController();
+
+  bool isConnected = false;
+
+  void _connectSocket() {
+    if (isConnected) return;
+
+    socket = IO.io('https://dev.sightquest.ru', {
+      'transports': ['websocket'],
+      'autoConnect': true,
+    });
+
+    socket.onConnect((_) {
+      setState(() {
+        isConnected = true;
+      });
+
+      _appendLog('✅ Connected');
+
+      final token = tokenController.text.trim();
+      final gameId = gameIdController.text.trim();
+      final lon = double.tryParse(lonController.text.trim()) ?? 0.0;
+      final lat = double.tryParse(latController.text.trim()) ?? 0.0;
+      final broadcastData = broadcastController.text.trim();
+
+      socket.emit('auth', {'token': token});
+      socket.emit('joinGame', {'gameId': gameId});
+      socket.emit('locationUpdate', {
+        'location': {'lon': lon, 'lat': lat},
+      });
+      socket.emit('broadcast', {'data': broadcastData});
+    });
+
+    socket.on('auth', (data) => _appendLog('🛡️ Auth: $data'));
+    socket.on('joinGame', (data) => _appendLog('🎮 JoinGame: $data'));
+    socket.on('game', (data) => _appendLog('📦 Game: $data'));
+    socket.on('locationUpdate', (data) => _appendLog('📍 Location: $data'));
+    socket.on('broadcasted', (data) {
+      try {
+        if (data is Map<String, dynamic>) {
+          final from = data['from'];
+          final payload = data['data'];
+
+          _appendLog('📢 Broadcasted message from: ${from.toString()}');
+          _appendLog('📝 Data: ${payload.toString()}');
+        } else {
+          _appendLog('⚠️ Unexpected broadcasted format: ${data.runtimeType}');
+        }
+      } catch (e) {
+        _appendLog('❌ Error parsing broadcasted event: $e');
+      }
+    });
+
+    socket.onDisconnect((_) {
+      _appendLog('❌ Disconnected');
+      setState(() {
+        isConnected = false;
+      });
+    });
+
+    socket.onConnectError((err) => _appendLog('❗ Connect error: $err'));
+    socket.onError((err) => _appendLog('💥 Socket error: $err'));
+  }
+
+  void _appendLog(String text) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      log = '$log\n$text';
     });
   }
 
+  void _sendBroadcast() {
+    final message = broadcastController.text.trim();
+    socket.emit('broadcast', {'data': message});
+
+    _appendLog('Sent in broadcast: $message');
+  }
+
+  void _sendLocationUpdate() {
+    final lon = double.tryParse(lonController.text.trim()) ?? 0.0;
+    final lat = double.tryParse(latController.text.trim()) ?? 0.0;
+
+    socket.emit('locationUpdate', {
+      'location': {'lon': lon, 'lan': lat},
+    });
+
+    _appendLog('📤 Sent location ($lon, $lat)');
+  }
+
+  @override
+  void dispose() {
+    if (isConnected) {
+      socket.disconnect();
+    }
+    super.dispose();
+  }
+
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller, {
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      appBar: AppBar(title: const Text('Socket.IO Flutter Demo')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          children: [
+            _buildTextField('Token', tokenController),
+            _buildTextField('Game ID', gameIdController),
+
+            _buildTextField('Broadcast Message', broadcastController),
+            if (isConnected)
+              ElevatedButton.icon(
+                icon: const Icon(Icons.broadcast_on_personal),
+                label: const Text('Отправить сообщение'),
+                onPressed: _sendBroadcast,
+              ),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildTextField(
+                    'Longitude',
+                    lonController,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _buildTextField(
+                    'Latitude',
+                    latController,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.link),
+                    label: const Text('Подключиться'),
+                    onPressed: _connectSocket,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                if (isConnected)
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.send),
+                    label: const Text('Отправить координаты'),
+                    onPressed: _sendLocationUpdate,
+                  ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Лог событий:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Expanded(child: SingleChildScrollView(child: Text(log))),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
