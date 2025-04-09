@@ -1,0 +1,113 @@
+version: "2"
+linters:
+  enable:
+    - asciicheck
+    - bidichk
+    - errorlint
+    - exhaustive
+    - gomodguard
+    - nilerr
+    - nolintlint
+    - revive
+    - zerologlint
+  settings:
+    errcheck:
+      check-type-assertions: true
+      check-blank: false
+    exhaustive:
+      check:
+        - switch
+        - map
+      default-signifies-exhaustive: true
+      explicit-exhaustive-map: true
+    gomodguard:
+      blocked:
+        modules:
+          - github.com/golang/protobuf:
+              recommendations:
+                - google.golang.org/protobuf
+              reason: see https://developers.google.com/protocol-buffers/docs/reference/go/faq#modules
+          - github.com/satori/go.uuid:
+              recommendations:
+                - github.com/google/uuid
+              reason: satori's package is not maintained
+          - github.com/gofrs/uuid:
+              recommendations:
+                - github.com/google/uuid
+              reason: gofrs' package is not go module
+          - github.com/pkg/errors:
+              recommendations:
+                - errors
+                - fmt
+              reason: Should be replaced by standard lib errors package
+    nolintlint:
+      require-explanation: true
+      require-specific: false
+      allow-no-explanation:
+        - funlen
+        - gocognit
+        - lll
+    revive:
+      rules:
+        - name: atomic
+          disabled: false
+        - name: time-equal
+          disabled: false
+        - name: errorf
+          disabled: false
+        - name: context-as-argument
+          disabled: false
+        - name: context-keys-type
+          disabled: false
+        - name: blank-imports
+          disabled: false
+        - name: dot-imports
+          disabled: false
+        - name: error-return
+          disabled: false
+        - name: error-strings
+          disabled: false
+        - name: if-return
+          disabled: false
+        - name: increment-decrement
+          disabled: false
+        - name: var-declaration
+          disabled: false
+        - name: range
+          disabled: false
+        - name: indent-error-flow
+          disabled: false
+        - name: superfluous-else
+          disabled: false
+        - name: empty-block
+          disabled: false
+        - name: unused-parameter
+          disabled: false
+        - name: defer
+          disabled: false
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+formatters:
+  enable:
+    - gofumpt
+  settings:
+    gofumpt:
+      extra-rules: true
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
