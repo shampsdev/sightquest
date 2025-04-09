@@ -11,11 +11,11 @@ func TestEncrypter(t *testing.T) {
 	assert.NoError(t, err)
 
 	plaintext := "hello world"
-	encrypted, err := encrypter.Encrypt(plaintext)
+	encrypted, err := encrypter.Encrypt([]byte(plaintext))
 	assert.NoError(t, err)
 	assert.NotEqual(t, plaintext, encrypted)
 
 	decrypted, err := encrypter.Decrypt(encrypted)
 	assert.NoError(t, err)
-	assert.Equal(t, plaintext, decrypted)
+	assert.Equal(t, plaintext, string(decrypted))
 }

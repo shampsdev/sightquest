@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 
 	"github.com/shampsdev/sightquest/server/pkg/config"
@@ -110,19 +111,25 @@ func (a *Auth) hashPassword(password string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to hash password: %w", err)
 	}
-	encrypted, err := a.encrypter.Encrypt(hash)
+	encrypted, err := a.encrypter.Encrypt([]byte(hash))
 	if err != nil {
 		return "", fmt.Errorf("failed to encrypt hash: %w", err)
 	}
+	encryptedB64 := base64.StdEncoding.EncodeToString(encrypted)
 
-	return encrypted, nil
+	return encryptedB64, nil
 }
 
-func (a *Auth) checkPasswordHash(password, encodedHash string) (bool, error) {
+func (a *Auth) checkPasswordHash(password, encodedHashB64 string) (bool, error) {
+	encodedHash, err := base64.StdEncoding.DecodeString(encodedHashB64)
+	if err != nil {
+		return false, fmt.Errorf("failed to decode hash: %w", err)
+	}
+
 	decrypted, err := a.encrypter.Decrypt(encodedHash)
 	if err != nil {
 		return false, fmt.Errorf("failed to decrypt hash: %w", err)
 	}
 
-	return comparePasswordAndHash(password, decrypted)
+	return comparePasswordAndHash(password, string(decrypted))
 }

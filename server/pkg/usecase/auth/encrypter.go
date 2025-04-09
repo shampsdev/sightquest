@@ -4,7 +4,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"encoding/base64"
 	"fmt"
 )
 
@@ -33,32 +32,26 @@ func newEncrypter(key string) (*encrypter, error) {
 	return &encrypter{gcm: gcm}, nil
 }
 
-func (e *encrypter) Encrypt(plaintext string) (string, error) {
+func (e *encrypter) Encrypt(plain []byte) ([]byte, error) {
 	nonce := make([]byte, e.gcm.NonceSize())
 	if _, err := rand.Read(nonce); err != nil {
-		return "", err
+		return nil, err
 	}
 
-	ciphertext := e.gcm.Seal(nonce, nonce, []byte(plaintext), nil)
-	return base64.StdEncoding.EncodeToString(ciphertext), nil
+	return e.gcm.Seal(nonce, nonce, plain, nil), nil
 }
 
-func (e *encrypter) Decrypt(ciphertext string) (string, error) {
-	rawData, err := base64.StdEncoding.DecodeString(ciphertext)
-	if err != nil {
-		return "", err
-	}
-
+func (e *encrypter) Decrypt(encrypted []byte) ([]byte, error) {
 	nonceSize := e.gcm.NonceSize()
-	if len(rawData) < nonceSize {
-		return "", fmt.Errorf("ciphertext too short")
+	if len(encrypted) < nonceSize {
+		return nil, fmt.Errorf("ciphertext too short")
 	}
 
-	nonce, ciphertextBytes := rawData[:nonceSize], rawData[nonceSize:]
-	plaintext, err := e.gcm.Open(nil, nonce, ciphertextBytes, nil)
+	nonce, ciphertextBytes := encrypted[:nonceSize], encrypted[nonceSize:]
+	plain, err := e.gcm.Open(nil, nonce, ciphertextBytes, nil)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return string(plaintext), nil
+	return plain, nil
 }
