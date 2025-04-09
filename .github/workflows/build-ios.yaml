@@ -1,7 +1,7 @@
 name: ios-build
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build-and-release:
@@ -35,9 +35,11 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+        working-directory: client
 
       - name: Build iOS app
         run: flutter build ios --release --no-codesign
+        working-directory: client
 
       - name: Create GitHub release and upload iOS build
         env:
@@ -48,4 +50,4 @@ jobs:
             --repo="$GITHUB_REPOSITORY" \
             --title="${GITHUB_REPOSITORY#*/}:${RELEASE_TAG}" \
             --generate-notes \
-            build/ios/iphoneos/Runner.app
+            client/build/ios/iphoneos/Runner.app

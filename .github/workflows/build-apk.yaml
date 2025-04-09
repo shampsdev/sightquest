@@ -1,7 +1,7 @@
 name: apk-build
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build-and-release:
@@ -39,17 +39,19 @@ jobs:
           url: telegram://${{ secrets.ALERTS_TELEGRAM_HTTP_API_TOKEN }}@telegram/?channels=${{ secrets.ALERTS_CHAT_ID }}
           title: "[APK] SightQuest build started"
           message: |
-            ✅ APK file for commit: ${{ github.sha }} has been successfully built.
+            ✅ Starting APK build for commit: ${{ github.sha }}
             Release name: ${{ github.repository }}:${{ env.SHORT_SHA }}-${{ env.RUN_NUMBER }}
-        
+            
             Commit url: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
             Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Install dependencies
         run: flutter pub get
-        
+        working-directory: client
+
       - name: Build APK
         run: flutter build apk --release
+        working-directory: client
 
       - name: Create GitHub release and upload APK
         env:
@@ -60,7 +62,7 @@ jobs:
             --repo="$GITHUB_REPOSITORY" \
             --title="${GITHUB_REPOSITORY#*/}:${RELEASE_TAG}" \
             --generate-notes \
-            build/app/outputs/flutter-apk/app-release.apk
+            client/build/app/outputs/flutter-apk/app-release.apk
 
       - name: Notification - success
         if: ${{ success() }}
@@ -75,7 +77,7 @@ jobs:
             Link to commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
         
             APK file available for download: https://github.com/${{ github.repository }}/releases/download/${{ env.SHORT_SHA }}-${{ env.RUN_NUMBER }}/app-release.apk
-        
+
       - name: Notification - fail
         if: ${{ failure() }}
         uses: containrrr/shoutrrr-action@v1
@@ -88,4 +90,3 @@ jobs:
             Link to commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
             Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            Check the pipeline logs for details.
