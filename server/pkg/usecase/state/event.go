@@ -46,6 +46,14 @@ func (eh *eventHandler[S, E]) Handle(c *Context[S], event E) error {
 	return handler(c, event)
 }
 
+func (eh *eventHandler[S, E]) RegisteredEvents() []string {
+	var events []string
+	for event := range eh.handlers {
+		events = append(events, event)
+	}
+	return events
+}
+
 func NewGroup[S any, E Event]() *Group[S, E, E] {
 	eh := &eventHandler[S, E]{
 		handlers: make(map[string]HandlerFunc[S, E]),
@@ -86,4 +94,8 @@ func (g *Group[S, EH, E]) On(event string, handler HandlerFunc[S, E]) *Group[S, 
 
 func (g *Group[S, EH, E]) RootHandler() HandlerFunc[S, EH] {
 	return g.handler.Handle
+}
+
+func (g *Group[S, EH, E]) RegisteredEvents() []string {
+	return g.handler.RegisteredEvents()
 }

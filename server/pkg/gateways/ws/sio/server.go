@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"
 	"github.com/googollee/go-socket.io/engineio/transport/polling"
-	"github.com/shampsdev/sightquest/server/pkg/usecase/event"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/state"
 
 	"github.com/googollee/go-socket.io/engineio"
@@ -20,6 +19,7 @@ import (
 )
 
 type Handler[S any] interface {
+	RegisteredEvents() []string
 	OnConnect(c *state.Context[S]) error
 	OnDisconnect(c *state.Context[S]) error
 	Handle(c *state.Context[S], e state.AnyEvent) error
@@ -29,13 +29,6 @@ type Server[S any] struct {
 	SIO     *socketio.Server
 	metrics ServerMetrics
 	handler Handler[S]
-}
-
-var events = []string{
-	event.AuthEvent,
-	event.GameEvent,
-	event.JoinGameEvent,
-	event.LocationUpdateEvent,
 }
 
 func NewServer[S any](
@@ -110,7 +103,7 @@ func (s *Server[S]) setup(ctx context.Context) {
 		}
 	})
 
-	for _, event := range events {
+	for _, event := range s.handler.RegisteredEvents() {
 		s.SIO.OnEvent("/", event, func(conn socketio.Conn, data any) {
 			c, ok := conn.Context().(*state.Context[S])
 			if !ok {

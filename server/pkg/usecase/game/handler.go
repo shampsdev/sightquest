@@ -22,7 +22,8 @@ type Handler struct {
 	userCase     *usecore.User
 	auth         *auth.Auth
 
-	router state.HandlerFunc[PlayerState, state.AnyEvent]
+	router           state.HandlerFunc[PlayerState, state.AnyEvent]
+	registeredEvents []string
 }
 
 type Context = *state.Context[PlayerState]
@@ -51,6 +52,11 @@ func (h *Handler) buildRouter() {
 		On(event.BroadcastEvent, callGame((*Game).OnBroadcast))
 
 	h.router = g.RootHandler()
+	h.registeredEvents = h.RegisteredEvents()
+}
+
+func (h *Handler) RegisteredEvents() []string {
+	return h.registeredEvents
 }
 
 func callGame[E any](f func(g *Game, c Context, e E) error) state.HandlerFunc[PlayerState, state.AnyEvent] {
