@@ -8,6 +8,6 @@ import (
 
 func Setup(r *gin.RouterGroup, cases *usecase.Cases) {
 	r.Group("/game").Use(middlewares.Auth(cases.Auth)).
-		POST("/", Create(cases)).
+		POST("", Create(cases)).
 		GET("/id/:id", Get(cases))
 }

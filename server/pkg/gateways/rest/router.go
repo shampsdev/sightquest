@@ -14,7 +14,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func setupRouter(ctx context.Context, _ *config.Config, r *gin.Engine, cases usecase.Cases) {
+func setupRouter(ctx context.Context, _ *config.Config, r *gin.Engine, cases *usecase.Cases) {
 	r.HandleMethodNotAllowed = true
 	r.Use(middlewares.AllowOrigin())
 	r.Use(middlewares.InjectLogger(ctx))
@@ -25,7 +25,7 @@ func setupRouter(ctx context.Context, _ *config.Config, r *gin.Engine, cases use
 	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	{
-		auth.Setup(v1, &cases)
-		game.Setup(v1, &cases)
+		auth.Setup(v1, cases)
+		game.Setup(v1, cases)
 	}
 }

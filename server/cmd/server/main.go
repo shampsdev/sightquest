@@ -3,16 +3,19 @@ package main
 import (
 	"context"
 	"errors"
+	"flag"
 	"net/http"
 	"os"
 	"os/signal"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/shampsdev/sightquest/server/pkg/config"
-	"github.com/shampsdev/sightquest/server/pkg/gateways/rest"
+	"github.com/shampsdev/sightquest/server/pkg/gateways"
 	"github.com/shampsdev/sightquest/server/pkg/usecase"
 	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
+
+var envFile = flag.String("env-file", ".env", "path to env file")
 
 // @title   Sightquest server
 // @version 1.0
@@ -20,7 +23,8 @@ import (
 // @in header
 // @name X-API-Token
 func main() {
-	cfg := config.Load(".env")
+	flag.Parse()
+	cfg := config.Load(*envFile)
 	log := cfg.Logger()
 	log.Info("Hello from sightquest server!")
 
@@ -40,7 +44,7 @@ func main() {
 	}
 	log.Info("Usecase setup")
 
-	s := rest.NewServer(ctx, cfg, cases)
+	s := gateways.NewServer(ctx, cfg, cases)
 	if err := s.Run(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		slogx.WithErr(log, err).Error("error during server shutdown")
 	}

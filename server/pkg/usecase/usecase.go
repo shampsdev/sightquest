@@ -8,29 +8,37 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/config"
 	"github.com/shampsdev/sightquest/server/pkg/repo/pg"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/auth"
+	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
+	"github.com/shampsdev/sightquest/server/pkg/usecase/game"
 )
 
 type Cases struct {
 	Auth *auth.Auth
-	User *User
-	Game *Game
+	User *usecore.User
+	Game *usecore.Game
+
+	GameHandler *game.Handler
 }
 
-func Setup(_ context.Context, cfg *config.Config, pool *pgxpool.Pool) (Cases, error) {
-	ur := pg.NewUser(pool)
-	gr := pg.NewGame(pool, ur)
+func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases, error) {
+	userRepo := pg.NewUser(pool)
+	gameRepo := pg.NewGame(pool, userRepo)
 
-	auth, err := auth.NewAuther(cfg, ur)
+	auth, err := auth.NewAuther(cfg, userRepo)
 	if err != nil {
-		return Cases{}, fmt.Errorf("failed to create auth: %w", err)
+		return nil, fmt.Errorf("failed to create auth: %w", err)
 	}
 
-	user := NewUser(ur)
-	game := NewGame(gr)
+	userCase := usecore.NewUser(userRepo)
+	gameCase := usecore.NewGame(gameRepo)
 
-	return Cases{
-		Auth: auth,
-		User: user,
-		Game: game,
+	gameProvider := game.NewInMemoryGameRepo(ctx, gameCase)
+	gameHandler := game.NewHandler(gameProvider, userCase, auth)
+
+	return &Cases{
+		Auth:        auth,
+		User:        userCase,
+		Game:        gameCase,
+		GameHandler: gameHandler,
 	}, nil
 }

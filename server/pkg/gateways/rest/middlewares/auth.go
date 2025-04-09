@@ -2,8 +2,8 @@ package middlewares
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/shampsdev/sightquest/server/pkg/usecase"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/auth"
+	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
 	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
 
@@ -29,6 +29,6 @@ func MustGetUserID(c *gin.Context) string {
 	return c.GetString("user_id")
 }
 
-func MustUsecaseCtx(c *gin.Context) *usecase.Context {
-	return usecase.NewCtx(c, MustGetUserID(c))
+func MustUsecaseCtx(c *gin.Context) *usecore.Context {
+	return usecore.NewCtx(c, MustGetUserID(c))
 }

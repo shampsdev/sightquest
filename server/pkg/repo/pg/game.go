@@ -35,23 +35,25 @@ func (g *Game) CreateGame(ctx context.Context, game *domain.CreateGame) (string,
 	return gameID, nil
 }
 
-func (g *Game) GetGameByID(ctx context.Context, gameID string) (*domain.GameFull, error) {
+func (g *Game) GetGameByID(ctx context.Context, gameID string) (*domain.Game, error) {
 	q := `SELECT id, state, admin_id, created_at, finished_at FROM game WHERE id = $1`
 	game := &domain.Game{}
-	err := g.db.QueryRow(ctx, q, gameID).Scan(&game.ID, &game.State, &game.AdminID, &game.CreatedAt, &game.FinishedAt)
+	game.Admin = &domain.User{}
+	err := g.db.QueryRow(ctx, q, gameID).Scan(&game.ID, &game.State, &game.Admin.ID, &game.CreatedAt, &game.FinishedAt)
 	if err != nil {
 		return nil, err
 	}
 
-	admin, err := g.ur.GetUserByID(ctx, game.AdminID)
+	admin, err := g.ur.GetUserByID(ctx, game.Admin.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return &domain.GameFull{
+	return &domain.Game{
 		ID:         game.ID,
 		State:      game.State,
 		Admin:      admin,
+		Players:    []*domain.Player{},
 		CreatedAt:  game.CreatedAt,
 		FinishedAt: game.FinishedAt,
 	}, nil

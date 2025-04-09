@@ -13,7 +13,7 @@ import (
 // @Produce json
 // @Schemes http https
 // @Param id path string true "Game ID"
-// @Success 200 {object} domain.GameFull
+// @Success 200 {object} domain.Game
 // @Failure 400
 // @Router /game/id/{id} [get]
 // @Security ApiKeyAuth

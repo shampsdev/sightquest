@@ -1,6 +1,7 @@
-package usecase
+package usecore
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
@@ -15,7 +16,7 @@ func NewGame(gameRepo repo.Game) *Game {
 	return &Game{gameRepo: gameRepo}
 }
 
-func (g *Game) CreateGame(ctx *Context) (*domain.GameFull, error) {
+func (g *Game) CreateGame(ctx *Context) (*domain.Game, error) {
 	cg := &domain.CreateGame{
 		AdminID: ctx.UserID,
 		State:   domain.GameStateLobby,
@@ -31,13 +32,10 @@ func (g *Game) CreateGame(ctx *Context) (*domain.GameFull, error) {
 	return game, nil
 }
 
-func (g *Game) GetGameByID(ctx *Context, id string) (*domain.GameFull, error) {
+func (g *Game) GetGameByID(ctx context.Context, id string) (*domain.Game, error) {
 	game, err := g.gameRepo.GetGameByID(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get game: %w", err)
-	}
-	if ctx.UserID != game.Admin.ID {
-		return nil, fmt.Errorf("not allowed")
 	}
 	return game, nil
 }

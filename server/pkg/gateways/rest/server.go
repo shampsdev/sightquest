@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
@@ -12,18 +11,16 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/config"
 	"github.com/shampsdev/sightquest/server/pkg/usecase"
 	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
-	"github.com/tj/go-spin"
 	"golang.org/x/sync/errgroup"
 )
 
-const shutdownDuration = 1500 * time.Millisecond
 
 type Server struct {
 	HTTPServer http.Server
 	Router     *gin.Engine
 }
 
-func NewServer(ctx context.Context, cfg *config.Config, useCases usecase.Cases) *Server {
+func NewServer(ctx context.Context, cfg *config.Config, cases *usecase.Cases) *Server {
 	setupGinLogging(ctx)
 	r := gin.New()
 	r.Use(gin.Recovery())
@@ -43,7 +40,7 @@ func NewServer(ctx context.Context, cfg *config.Config, useCases usecase.Cases) 
 		},
 	}
 
-	setupRouter(ctx, cfg, s.Router, useCases)
+	setupRouter(ctx, cfg, s.Router, cases)
 
 	return s
 }
@@ -56,18 +53,7 @@ func (s *Server) Run(ctx context.Context) error {
 
 	<-ctx.Done()
 	err := s.HTTPServer.Shutdown(ctx)
-	shutdownWait()
 	return err
-}
-
-func shutdownWait() {
-	spinner := spin.New()
-	const spinIterations = 20
-	for range spinIterations {
-		fmt.Printf("\rgraceful shutdown %s ", spinner.Next())
-		time.Sleep(shutdownDuration / spinIterations)
-	}
-	fmt.Println()
 }
 
 func setupGinLogging(ctx context.Context) {

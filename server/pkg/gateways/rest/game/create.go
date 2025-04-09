@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Schemes http https
-// @Success 200 {object} domain.GameFull
+// @Success 200 {object} domain.Game
 // @Failure 400
 // @Router /game [post]
 // @Security ApiKeyAuth

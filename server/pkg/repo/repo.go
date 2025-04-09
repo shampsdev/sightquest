@@ -20,5 +20,5 @@ type User interface {
 
 type Game interface {
 	CreateGame(ctx context.Context, game *domain.CreateGame) (string, error)
-	GetGameByID(ctx context.Context, gameID string) (*domain.GameFull, error)
+	GetGameByID(ctx context.Context, gameID string) (*domain.Game, error)
 }
