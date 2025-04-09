@@ -14,7 +14,6 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-
 type Server struct {
 	HTTPServer http.Server
 	Router     *gin.Engine

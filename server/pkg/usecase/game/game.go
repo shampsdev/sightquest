@@ -22,7 +22,7 @@ func (g *Game) Active() bool {
 	return true
 }
 
-func (g *Game) OnJoinGame(c Context) (*domain.Player, error) {
+func (g *Game) OnJoinGame(c Context) error {
 	p := &domain.Player{
 		User:   c.S.User,
 		GameID: g.game.ID,
@@ -36,7 +36,7 @@ func (g *Game) OnJoinGame(c Context) (*domain.Player, error) {
 	c.BroadcastToOthers(event.PlayerJoined{Player: p})
 	c.Emit(event.Game{Game: g.game})
 
-	return p, nil
+	return nil
 }
 
 func (g *Game) OnLocationUpdate(c Context, ev event.LocationUpdate) error {

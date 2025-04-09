@@ -53,7 +53,6 @@ func (u *User) queryUser(ctx context.Context, condition sq.Eq) (*domain.User, er
 	sql, args, err := u.psql.Select("id", "username", "avatar", "background").
 		From(`"user"`).
 		Where(condition).ToSql()
-
 	if err != nil {
 		return nil, err
 	}

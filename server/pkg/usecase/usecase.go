@@ -8,8 +8,8 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/config"
 	"github.com/shampsdev/sightquest/server/pkg/repo/pg"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/auth"
-	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/game"
+	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
 )
 
 type Cases struct {

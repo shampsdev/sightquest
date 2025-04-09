@@ -108,8 +108,7 @@ func (h *Handler) OnJoinGame(c Context, ev event.JoinGame) error {
 		return err
 	}
 	c.S.Game = game
-	c.S.Game.OnJoinGame(c)
-	return nil
+	return c.S.Game.OnJoinGame(c)
 }
 
 func (h *Handler) OnLocationUpdate(c Context, ev event.LocationUpdate) error {

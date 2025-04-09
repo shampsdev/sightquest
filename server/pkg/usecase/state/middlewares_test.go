@@ -6,11 +6,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type TState struct{}
-type TEvent struct {
-	X int
-	Y string
-}
+type (
+	TState struct{}
+	TEvent struct {
+		X int
+		Y string
+	}
+)
 
 func (e TEvent) Event() string {
 	return "TEvent"
@@ -31,6 +33,7 @@ func TestMiddleware(t *testing.T) {
 	}
 
 	handlerWrapped := WithMiddleware(TypedMiddleware, handler)
-	handlerWrapped(nil, NewAnyEvent("TEvent", tEventMap))
+	err := handlerWrapped(nil, NewAnyEvent("TEvent", tEventMap))
+	assert.NoError(t, err)
 	assert.Equal(t, handlerCalled, true)
 }
