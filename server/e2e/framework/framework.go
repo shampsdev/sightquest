@@ -19,8 +19,8 @@ type Framework struct {
 	DB  *pgxpool.Pool
 	Log *slog.Logger
 
-	HttpCli *http.Client
-	ApiHost string
+	HTTPCli *http.Client
+	APIHost string
 	SIOHost string
 
 	Session *session.Session
@@ -46,8 +46,8 @@ func MustInit() *Framework {
 	}
 	fw.Log.Info("Connected to database")
 
-	fw.HttpCli = &http.Client{Timeout: 10 * time.Second}
-	fw.ApiHost = "http://localhost:8001/api/v1"
+	fw.HTTPCli = &http.Client{Timeout: 10 * time.Second}
+	fw.APIHost = "http://localhost:8001/api/v1"
 	fw.SIOHost = "http://localhost:8001"
 
 	return fw

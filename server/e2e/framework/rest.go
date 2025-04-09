@@ -22,7 +22,7 @@ func (fw *Framework) registerUser(username string) (string, error) {
 		return "", fmt.Errorf("failed to marshal user: %w", err)
 	}
 
-	resp, err := fw.HttpCli.Post(fmt.Sprintf("%s/auth/register", fw.ApiHost), "application/json", bytes.NewReader(b))
+	resp, err := fw.HTTPCli.Post(fmt.Sprintf("%s/auth/register", fw.APIHost), "application/json", bytes.NewReader(b))
 	if err != nil {
 		return "", fmt.Errorf("failed to post user: %w", err)
 	}
@@ -47,7 +47,7 @@ func (c *Client) MustCreateGame() *domain.Game {
 }
 
 func (c *Client) CreateGame() (*domain.Game, error) {
-	u, err := url.Parse(fmt.Sprintf("%s/game", c.fw.ApiHost))
+	u, err := url.Parse(fmt.Sprintf("%s/game", c.fw.APIHost))
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse url: %w", err)
 	}
@@ -59,7 +59,7 @@ func (c *Client) CreateGame() (*domain.Game, error) {
 			"Content-Type": []string{"application/json"},
 		},
 	}
-	resp, err := c.fw.HttpCli.Do(&req)
+	resp, err := c.fw.HTTPCli.Do(&req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to post game: %w", err)
 	}
