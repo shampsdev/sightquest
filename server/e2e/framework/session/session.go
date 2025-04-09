@@ -27,7 +27,7 @@ type Step struct {
 
 type EventData struct {
 	Event string
-	Data  interface{}
+	Data  any
 }
 
 func New() *Session {

@@ -36,7 +36,7 @@ func NewServer(ctx context.Context, cfg *config.Config, cases *usecase.Cases) *S
 	s := &Server{
 		RestServer: rest.NewServer(ctx, cfg, cases),
 	}
-	s.WSServer = sio.NewServer(s.RestServer.Router, cases.GameHandler)
+	s.WSServer = sio.NewServer(ctx, s.RestServer.Router, cases.GameHandler)
 	return s
 }
 

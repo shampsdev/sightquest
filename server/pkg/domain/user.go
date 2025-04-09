@@ -6,7 +6,7 @@ type User struct {
 	Avatar     string `json:"avatar"`
 	Background string `json:"background"`
 
-	CreatedAt string `json:"created_at"`
+	CreatedAt string `json:"createdAt"`
 }
 
 type UserCredentials struct {

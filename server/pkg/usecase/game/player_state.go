@@ -20,16 +20,33 @@ type Handler struct {
 	gameProvider *InMemoryGameRepo
 	userCase     *usecore.User
 	auth         *auth.Auth
+
+	router state.HandlerFunc[PlayerState, state.AnyEvent]
 }
 
 type Context = *state.Context[PlayerState]
 
 func NewHandler(gameProvider *InMemoryGameRepo, userCase *usecore.User, auth *auth.Auth) *Handler {
-	return &Handler{
+	h := &Handler{
 		gameProvider: gameProvider,
 		userCase:     userCase,
 		auth:         auth,
 	}
+	h.buildRouter()
+	return h
+}
+
+func (h *Handler) buildRouter() {
+	g := state.NewGroup[PlayerState, state.AnyEvent]()
+	g = state.GroupWithMW(g, h.logMW)
+
+	g.Register(event.AuthEvent, state.WrapT(h.OnAuth))
+	g.Register(event.JoinGameEvent, state.WrapT(h.OnJoinGame))
+
+	gAuth := state.GroupWithMW(g, h.checkInGameMW)
+	gAuth.Register(event.LocationUpdateEvent, state.WrapT(h.OnLocationUpdate))
+
+	h.router = g.RootHandler()
 }
 
 func (h *Handler) OnConnect(_ Context) error {
@@ -41,19 +58,7 @@ func (h *Handler) OnDisconnect(_ Context) error {
 }
 
 func (h *Handler) Handle(c Context, e state.AnyEvent) error {
-	switch e.Event() {
-	case event.AuthEvent:
-		return state.WithMiddleware(h.logMW,
-			state.WrapT(h.OnAuth))(c, e)
-	case event.JoinGameEvent:
-		return state.WithMiddleware(h.logMW,
-			state.WrapT(h.OnJoinGame))(c, e)
-	case event.LocationUpdateEvent:
-		return state.WithMiddleware(h.logMW,
-			state.WithMiddleware(h.checkInGameMW,
-				state.WrapT(h.OnLocationUpdate)))(c, e)
-	}
-	return fmt.Errorf("unknown event: %s", e.Event())
+	return h.router(c, e)
 }
 
 func (h *Handler) logMW(

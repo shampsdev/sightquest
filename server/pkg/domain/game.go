@@ -8,8 +8,8 @@ type Game struct {
 	State   GameState `json:"state"`
 	Players []*Player `json:"players"`
 
-	CreatedAt  time.Time  `json:"created_at"`
-	FinishedAt *time.Time `json:"finished_at"`
+	CreatedAt  time.Time  `json:"createdAt"`
+	FinishedAt *time.Time `json:"finishedAt"`
 }
 
 type GameState string

@@ -22,13 +22,7 @@ type Server[S any] interface {
 	ForEach(roomID string, f func(c *Context[S]))
 }
 
-type HandlerFunc[S any, E Event] func(c *Context[S], event E) error
-
-type Handler[S any, E Event] interface {
-	OnConnect(c *Context[S]) error
-	OnDisconnect(c *Context[S]) error
-	Handle(c *Context[S], event E) error
-}
+type HandlerFunc[S any, E any] func(c *Context[S], event E) error
 
 // Context
 

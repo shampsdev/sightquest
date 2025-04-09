@@ -30,8 +30,10 @@ func compareEventData(x, y EventData) bool {
 	return bytes.Compare(aBytes, bBytes) < 0
 }
 
-func isIgnoredMapEntry(key string, _ interface{}) bool {
+func isIgnoredMapEntry(key string, _ any) bool {
 	return slices.Contains([]string{
+		"id",
+		"gameId",
 		"createdAt",
 		"updatedAt",
 	}, key)
