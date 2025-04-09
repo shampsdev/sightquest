@@ -47,10 +47,16 @@ func (h *Handler) buildRouter() {
 		On(event.JoinGameEvent, state.WrapT(h.OnJoinGame))
 
 	state.GroupMW(g, h.checkInGameMW).
-		On(event.LocationUpdateEvent, state.WrapT(h.OnLocationUpdate)).
-		On(event.BroadcastEvent, state.WrapT(h.OnBroadcast))
+		On(event.LocationUpdateEvent, callGame((*Game).OnLocationUpdate)).
+		On(event.BroadcastEvent, callGame((*Game).OnBroadcast))
 
 	h.router = g.RootHandler()
+}
+
+func callGame[E any](f func(g *Game, c Context, e E) error) state.HandlerFunc[PlayerState, state.AnyEvent] {
+	return state.WrapT(func(c *state.Context[PlayerState], event E) error {
+		return f(c.S.Game, c, event)
+	})
 }
 
 func (h *Handler) OnConnect(_ Context) error {
@@ -118,12 +124,4 @@ func (h *Handler) OnJoinGame(c Context, ev event.JoinGame) error {
 	}
 	c.S.Game = game
 	return c.S.Game.OnJoinGame(c)
-}
-
-func (h *Handler) OnLocationUpdate(c Context, ev event.LocationUpdate) error {
-	return c.S.Game.OnLocationUpdate(c, ev)
-}
-
-func (h *Handler) OnBroadcast(c Context, ev event.Broadcast) error {
-	return c.S.Game.OnBroadcast(c, ev)
 }
