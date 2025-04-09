@@ -40,3 +40,9 @@ jobs:
         run: |
           go mod tidy
           go test -v ./...
+
+      - name: E2E Test
+        run: |
+          go mod tidy
+          cd e2e && make e2e
+  
