@@ -33,6 +33,7 @@ func compareEventData(x, y EventData) bool {
 func isIgnoredMapEntry(key string, _ any) bool {
 	return slices.Contains([]string{
 		"id",
+		"gameId",
 		"createdAt",
 		"updatedAt",
 	}, key)
