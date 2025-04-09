@@ -10,16 +10,16 @@
               "admin": {
                 "avatar": "",
                 "background": "",
-                "created_at": "",
-                "id": "887ef20d-37ee-4402-8a40-a0123ceaf5fe",
+                "createdAt": "",
+                "id": "6a2da8db-e884-425e-897a-8e003460e266",
                 "username": "user1"
               },
-              "created_at": "2025-04-09T00:38:37.983038Z",
-              "finished_at": null,
-              "id": "K66LF",
+              "createdAt": "2025-04-09T21:09:51.549878Z",
+              "finishedAt": null,
+              "id": "600OW",
               "players": [
                 {
-                  "gameId": "K66LF",
+                  "gameId": "600OW",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -29,8 +29,8 @@
                   "user": {
                     "avatar": "",
                     "background": "",
-                    "created_at": "",
-                    "id": "887ef20d-37ee-4402-8a40-a0123ceaf5fe",
+                    "createdAt": "",
+                    "id": "6a2da8db-e884-425e-897a-8e003460e266",
                     "username": "user1"
                   }
                 }
@@ -50,7 +50,7 @@
           "Event": "playerJoined",
           "Data": {
             "player": {
-              "gameId": "K66LF",
+              "gameId": "600OW",
               "location": {
                 "lat": 0,
                 "lon": 0
@@ -60,8 +60,8 @@
               "user": {
                 "avatar": "",
                 "background": "",
-                "created_at": "",
-                "id": "6a811eaa-5709-40e5-b0b3-6051efb26264",
+                "createdAt": "",
+                "id": "74b05734-7ec2-4270-b2a7-83efbe012d1a",
                 "username": "user2"
               }
             }
@@ -76,16 +76,16 @@
               "admin": {
                 "avatar": "",
                 "background": "",
-                "created_at": "",
-                "id": "887ef20d-37ee-4402-8a40-a0123ceaf5fe",
+                "createdAt": "",
+                "id": "6a2da8db-e884-425e-897a-8e003460e266",
                 "username": "user1"
               },
-              "created_at": "2025-04-09T00:38:37.983038Z",
-              "finished_at": null,
-              "id": "K66LF",
+              "createdAt": "2025-04-09T21:09:51.549878Z",
+              "finishedAt": null,
+              "id": "600OW",
               "players": [
                 {
-                  "gameId": "K66LF",
+                  "gameId": "600OW",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -95,13 +95,13 @@
                   "user": {
                     "avatar": "",
                     "background": "",
-                    "created_at": "",
-                    "id": "887ef20d-37ee-4402-8a40-a0123ceaf5fe",
+                    "createdAt": "",
+                    "id": "6a2da8db-e884-425e-897a-8e003460e266",
                     "username": "user1"
                   }
                 },
                 {
-                  "gameId": "K66LF",
+                  "gameId": "600OW",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -111,8 +111,8 @@
                   "user": {
                     "avatar": "",
                     "background": "",
-                    "created_at": "",
-                    "id": "6a811eaa-5709-40e5-b0b3-6051efb26264",
+                    "createdAt": "",
+                    "id": "74b05734-7ec2-4270-b2a7-83efbe012d1a",
                     "username": "user2"
                   }
                 }

@@ -51,11 +51,11 @@ func (r *InMemoryGameRepo) GetGame(ctx context.Context, id string) (*Game, error
 }
 
 func (r *InMemoryGameRepo) goGC(ctx context.Context) {
-	timer := time.NewTimer(time.Minute)
+	ticker := time.NewTicker(time.Minute)
 	go func() {
 		for {
 			select {
-			case <-timer.C:
+			case <-ticker.C:
 				r.gamesMutex.Lock()
 				var deleted atomic.Int32
 				for id, game := range r.games {
