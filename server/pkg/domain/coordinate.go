@@ -6,7 +6,7 @@ import (
 	"github.com/Vaniog/go-postgis"
 )
 
-const EARTH_RADIUS = 6371.0
+const EarthRadius = 6371.0
 
 type Coordinate struct {
 	Lon float64 `json:"lon"`
@@ -26,7 +26,7 @@ func (c *Coordinate) GreatCircleDistance(c2 *Coordinate) float64 {
 	a := a1 + a2
 	circle := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 
-	return EARTH_RADIUS * circle
+	return EarthRadius * circle
 }
 
 func (c *Coordinate) ToPostgis() postgis.PointS {

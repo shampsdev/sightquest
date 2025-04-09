@@ -19,10 +19,16 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
 
+type Handler[S any] interface {
+	OnConnect(c *state.Context[S]) error
+	OnDisconnect(c *state.Context[S]) error
+	Handle(c *state.Context[S], e state.AnyEvent) error
+}
+
 type Server[S any] struct {
 	SIO     *socketio.Server
 	metrics ServerMetrics
-	handler state.Handler[S, state.AnyEvent]
+	handler Handler[S]
 }
 
 var events = []string{
@@ -33,15 +39,16 @@ var events = []string{
 }
 
 func NewServer[S any](
+	ctx context.Context,
 	r *gin.Engine,
-	handler state.Handler[S, state.AnyEvent],
+	handler Handler[S],
 ) *Server[S] {
 	s := &Server[S]{
 		SIO:     newSocketIOServer(),
 		metrics: NewServerMetrics(),
 		handler: handler,
 	}
-	s.setup()
+	s.setup(ctx)
 	r.GET("/socket.io/*any", gin.WrapH(s.SIO))
 	r.POST("/socket.io/*any", gin.WrapH(s.SIO))
 	return s
@@ -63,11 +70,11 @@ func newSocketIOServer() *socketio.Server {
 	return server
 }
 
-func (s *Server[S]) setup() {
+func (s *Server[S]) setup(ctx context.Context) {
 	s.SIO.OnConnect("/", func(conn socketio.Conn) error {
 		defer s.metrics.ActiveConnections.Inc()
 		sioConn := s.wrapSocketIOConn(conn)
-		c := state.NewContext(context.TODO(), s, sioConn)
+		c := state.NewContext(ctx, s, sioConn)
 		conn.SetContext(c)
 		err := s.handler.OnConnect(c)
 		if err != nil {

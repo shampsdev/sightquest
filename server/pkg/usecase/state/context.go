@@ -24,12 +24,6 @@ type Server[S any] interface {
 
 type HandlerFunc[S any, E any] func(c *Context[S], event E) error
 
-type Handler[S any, E any] interface {
-	OnConnect(c *Context[S]) error
-	OnDisconnect(c *Context[S]) error
-	Handle(c *Context[S], event E) error
-}
-
 // Context
 
 type Context[S any] struct {
