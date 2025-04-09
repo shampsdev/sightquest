@@ -35,6 +35,7 @@ func (g *Game) OnJoinGame(c Context) error {
 	c.JoinRoom(g.game.ID)
 	c.BroadcastToOthers(event.PlayerJoined{Player: p})
 	c.Emit(event.Game{Game: g.game})
+	c.S.Player = p
 
 	return nil
 }
@@ -42,5 +43,13 @@ func (g *Game) OnJoinGame(c Context) error {
 func (g *Game) OnLocationUpdate(c Context, ev event.LocationUpdate) error {
 	g.players[c.S.User.ID].Location = ev.Location
 	c.BroadcastToOthers(event.LocationUpdate{Location: ev.Location})
+	return nil
+}
+
+func (g *Game) OnBroadcast(c Context, ev event.Broadcast) error {
+	c.Broadcast(event.Broadcasted{
+		From: c.S.Player,
+		Data: ev.Data,
+	})
 	return nil
 }

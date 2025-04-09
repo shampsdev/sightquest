@@ -12,8 +12,9 @@ import (
 )
 
 type PlayerState struct {
-	User *domain.User
-	Game *Game
+	User   *domain.User
+	Player *domain.Player
+	Game   *Game
 }
 
 type Handler struct {
@@ -46,7 +47,8 @@ func (h *Handler) buildRouter() {
 		On(event.JoinGameEvent, state.WrapT(h.OnJoinGame))
 
 	state.GroupMW(g, h.checkInGameMW).
-		On(event.LocationUpdateEvent, state.WrapT(h.OnLocationUpdate))
+		On(event.LocationUpdateEvent, state.WrapT(h.OnLocationUpdate)).
+		On(event.BroadcastEvent, state.WrapT(h.OnBroadcast))
 
 	h.router = g.RootHandler()
 }
@@ -120,4 +122,8 @@ func (h *Handler) OnJoinGame(c Context, ev event.JoinGame) error {
 
 func (h *Handler) OnLocationUpdate(c Context, ev event.LocationUpdate) error {
 	return c.S.Game.OnLocationUpdate(c, ev)
+}
+
+func (h *Handler) OnBroadcast(c Context, ev event.Broadcast) error {
+	return c.S.Game.OnBroadcast(c, ev)
 }
