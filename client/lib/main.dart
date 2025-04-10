@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 void main() {
@@ -45,6 +48,8 @@ class _SimpleSocketPageState extends State<SimpleSocketPage> {
       setState(() {
         isConnected = true;
       });
+
+      _startLocationTracking();
 
       _appendLog('✅ Connected');
 
@@ -106,12 +111,14 @@ class _SimpleSocketPageState extends State<SimpleSocketPage> {
     _appendLog('Sent in broadcast: $message');
   }
 
-  void _sendLocationUpdate() {
-    final lon = double.tryParse(lonController.text.trim()) ?? 0.0;
-    final lat = double.tryParse(latController.text.trim()) ?? 0.0;
-
+  void _sendLocationUpdate() async {
+    final pos = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    final lon = pos.longitude;
+    final lat = pos.latitude;
     socket.emit('locationUpdate', {
-      'location': {'lon': lon, 'lan': lat},
+      'location': {'lon': lon, 'lat': lat},
     });
 
     _appendLog('📤 Sent location ($lon, $lat)');
@@ -119,6 +126,7 @@ class _SimpleSocketPageState extends State<SimpleSocketPage> {
 
   @override
   void dispose() {
+    locationTimer?.cancel();
     if (isConnected) {
       socket.disconnect();
     }
@@ -143,69 +151,94 @@ class _SimpleSocketPageState extends State<SimpleSocketPage> {
     );
   }
 
+  Timer? locationTimer;
+
+  Future<void> _startLocationTracking() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        _appendLog('❗ Location permission not granted.');
+        return;
+      }
+    }
+
+    _appendLog('📡 Starting location updates...');
+
+    locationTimer?.cancel();
+    locationTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
+      if (isConnected) {
+        try {
+          final pos = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high,
+          );
+
+          socket.emit('locationUpdate', {
+            'location': {'lon': pos.longitude, 'lat': pos.latitude},
+          });
+
+          _appendLog(
+            '📤 Auto-sent location (${pos.longitude}, ${pos.latitude})',
+          );
+        } catch (e) {
+          _appendLog('⚠️ Location error: $e');
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Socket.IO Flutter Demo')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _buildTextField('Token', tokenController),
-            _buildTextField('Game ID', gameIdController),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTextField('Token', tokenController),
+              _buildTextField('Game ID', gameIdController),
+              _buildTextField('Broadcast Message', broadcastController),
+              if (isConnected)
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.broadcast_on_personal),
+                  label: const Text('Отправить сообщение'),
+                  onPressed: _sendBroadcast,
+                ),
 
-            _buildTextField('Broadcast Message', broadcastController),
-            if (isConnected)
-              ElevatedButton.icon(
-                icon: const Icon(Icons.broadcast_on_personal),
-                label: const Text('Отправить сообщение'),
-                onPressed: _sendBroadcast,
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.link),
+                      label: const Text('Подключиться'),
+                      onPressed: _connectSocket,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  if (isConnected)
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.send),
+                      label: const Text('Отправить координаты'),
+                      onPressed: _sendLocationUpdate,
+                    ),
+                ],
               ),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildTextField(
-                    'Longitude',
-                    lonController,
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _buildTextField(
-                    'Latitude',
-                    latController,
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.link),
-                    label: const Text('Подключиться'),
-                    onPressed: _connectSocket,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                if (isConnected)
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.send),
-                    label: const Text('Отправить координаты'),
-                    onPressed: _sendLocationUpdate,
-                  ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Лог событий:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Expanded(child: SingleChildScrollView(child: Text(log))),
-          ],
+              const SizedBox(height: 16),
+              const Text(
+                'Лог событий:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Container(
+                constraints: const BoxConstraints(minHeight: 300),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(log),
+              ),
+            ],
+          ),
         ),
       ),
     );
