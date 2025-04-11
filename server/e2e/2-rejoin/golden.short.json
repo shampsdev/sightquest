@@ -1,0 +1,365 @@
+[
+  {
+    "Name": "User1 joining game",
+    "Events": {
+      "user1": [
+        {
+          "Event": "authed",
+          "Data": {
+            "user": {
+              "avatar": "",
+              "background": "",
+              "createdAt": "",
+              "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+              "username": "user1"
+            }
+          }
+        },
+        {
+          "Event": "game",
+          "Data": {
+            "game": {
+              "admin": {
+                "avatar": "",
+                "background": "",
+                "createdAt": "",
+                "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "username": "user1"
+              },
+              "createdAt": "2025-04-11T17:52:10.832775Z",
+              "finishedAt": null,
+              "id": "XISJX",
+              "players": [
+                {
+                  "gameId": "XISJX",
+                  "location": {
+                    "lat": 0,
+                    "lon": 0
+                  },
+                  "role": "runner",
+                  "score": 0,
+                  "user": {
+                    "avatar": "",
+                    "background": "",
+                    "createdAt": "",
+                    "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "username": "user1"
+                  }
+                }
+              ],
+              "state": "lobby"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "User2 joining game",
+    "Events": {
+      "user1": [
+        {
+          "Event": "playerJoined",
+          "Data": {
+            "player": {
+              "gameId": "XISJX",
+              "location": {
+                "lat": 0,
+                "lon": 0
+              },
+              "role": "runner",
+              "score": 0,
+              "user": {
+                "avatar": "",
+                "background": "",
+                "createdAt": "",
+                "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+                "username": "user2"
+              }
+            }
+          }
+        }
+      ],
+      "user2": [
+        {
+          "Event": "authed",
+          "Data": {
+            "user": {
+              "avatar": "",
+              "background": "",
+              "createdAt": "",
+              "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+              "username": "user2"
+            }
+          }
+        },
+        {
+          "Event": "game",
+          "Data": {
+            "game": {
+              "admin": {
+                "avatar": "",
+                "background": "",
+                "createdAt": "",
+                "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "username": "user1"
+              },
+              "createdAt": "2025-04-11T17:52:10.832775Z",
+              "finishedAt": null,
+              "id": "XISJX",
+              "players": [
+                {
+                  "gameId": "XISJX",
+                  "location": {
+                    "lat": 0,
+                    "lon": 0
+                  },
+                  "role": "runner",
+                  "score": 0,
+                  "user": {
+                    "avatar": "",
+                    "background": "",
+                    "createdAt": "",
+                    "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "username": "user1"
+                  }
+                },
+                {
+                  "gameId": "XISJX",
+                  "location": {
+                    "lat": 0,
+                    "lon": 0
+                  },
+                  "role": "runner",
+                  "score": 0,
+                  "user": {
+                    "avatar": "",
+                    "background": "",
+                    "createdAt": "",
+                    "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+                    "username": "user2"
+                  }
+                }
+              ],
+              "state": "lobby"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "User2 leaving game",
+    "Events": {
+      "user1": [
+        {
+          "Event": "playerLeft",
+          "Data": {
+            "player": {
+              "gameId": "XISJX",
+              "location": {
+                "lat": 0,
+                "lon": 0
+              },
+              "role": "runner",
+              "score": 0,
+              "user": {
+                "avatar": "",
+                "background": "",
+                "createdAt": "",
+                "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+                "username": "user2"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "User3 joining game",
+    "Events": {
+      "user1": [
+        {
+          "Event": "playerJoined",
+          "Data": {
+            "player": {
+              "gameId": "XISJX",
+              "location": {
+                "lat": 0,
+                "lon": 0
+              },
+              "role": "runner",
+              "score": 0,
+              "user": {
+                "avatar": "",
+                "background": "",
+                "createdAt": "",
+                "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+                "username": "user3"
+              }
+            }
+          }
+        }
+      ],
+      "user3": [
+        {
+          "Event": "authed",
+          "Data": {
+            "user": {
+              "avatar": "",
+              "background": "",
+              "createdAt": "",
+              "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+              "username": "user3"
+            }
+          }
+        },
+        {
+          "Event": "game",
+          "Data": {
+            "game": {
+              "admin": {
+                "avatar": "",
+                "background": "",
+                "createdAt": "",
+                "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "username": "user1"
+              },
+              "createdAt": "2025-04-11T17:52:10.832775Z",
+              "finishedAt": null,
+              "id": "XISJX",
+              "players": [
+                {
+                  "gameId": "XISJX",
+                  "location": {
+                    "lat": 0,
+                    "lon": 0
+                  },
+                  "role": "runner",
+                  "score": 0,
+                  "user": {
+                    "avatar": "",
+                    "background": "",
+                    "createdAt": "",
+                    "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "username": "user1"
+                  }
+                },
+                {
+                  "gameId": "XISJX",
+                  "location": {
+                    "lat": 0,
+                    "lon": 0
+                  },
+                  "role": "runner",
+                  "score": 0,
+                  "user": {
+                    "avatar": "",
+                    "background": "",
+                    "createdAt": "",
+                    "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+                    "username": "user3"
+                  }
+                }
+              ],
+              "state": "lobby"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Start game",
+    "Events": {
+      "user1": [
+        {
+          "Event": "startGame",
+          "Data": {}
+        }
+      ],
+      "user3": [
+        {
+          "Event": "startGame",
+          "Data": {}
+        }
+      ]
+    }
+  },
+  {
+    "Name": "User1 disconnect",
+    "Events": {}
+  },
+  {
+    "Name": "User1 reconnect",
+    "Events": {
+      "user1": [
+        {
+          "Event": "authed",
+          "Data": {
+            "user": {
+              "avatar": "",
+              "background": "",
+              "createdAt": "",
+              "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+              "username": "user1"
+            }
+          }
+        },
+        {
+          "Event": "game",
+          "Data": {
+            "game": {
+              "admin": {
+                "avatar": "",
+                "background": "",
+                "createdAt": "",
+                "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "username": "user1"
+              },
+              "createdAt": "2025-04-11T17:52:10.832775Z",
+              "finishedAt": null,
+              "id": "XISJX",
+              "players": [
+                {
+                  "gameId": "XISJX",
+                  "location": {
+                    "lat": 0,
+                    "lon": 0
+                  },
+                  "role": "runner",
+                  "score": 0,
+                  "user": {
+                    "avatar": "",
+                    "background": "",
+                    "createdAt": "",
+                    "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "username": "user1"
+                  }
+                },
+                {
+                  "gameId": "XISJX",
+                  "location": {
+                    "lat": 0,
+                    "lon": 0
+                  },
+                  "role": "runner",
+                  "score": 0,
+                  "user": {
+                    "avatar": "",
+                    "background": "",
+                    "createdAt": "",
+                    "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+                    "username": "user3"
+                  }
+                }
+              ],
+              "state": "game"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

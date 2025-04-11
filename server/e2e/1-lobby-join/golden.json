@@ -11,15 +11,15 @@
                 "avatar": "",
                 "background": "",
                 "createdAt": "",
-                "id": "6a2da8db-e884-425e-897a-8e003460e266",
+                "id": "68019aea-9f7f-4a93-bf99-c96ff40f074a",
                 "username": "user1"
               },
-              "createdAt": "2025-04-09T21:09:51.549878Z",
+              "createdAt": "2025-04-11T18:06:03.581935Z",
               "finishedAt": null,
-              "id": "600OW",
+              "id": "XACTD",
               "players": [
                 {
-                  "gameId": "600OW",
+                  "gameId": "XACTD",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -30,7 +30,7 @@
                     "avatar": "",
                     "background": "",
                     "createdAt": "",
-                    "id": "6a2da8db-e884-425e-897a-8e003460e266",
+                    "id": "68019aea-9f7f-4a93-bf99-c96ff40f074a",
                     "username": "user1"
                   }
                 }
@@ -50,7 +50,7 @@
           "Event": "playerJoined",
           "Data": {
             "player": {
-              "gameId": "600OW",
+              "gameId": "XACTD",
               "location": {
                 "lat": 0,
                 "lon": 0
@@ -61,7 +61,7 @@
                 "avatar": "",
                 "background": "",
                 "createdAt": "",
-                "id": "74b05734-7ec2-4270-b2a7-83efbe012d1a",
+                "id": "d6c8b4af-a19d-49d5-8dc5-8db6a5d58c2e",
                 "username": "user2"
               }
             }
@@ -77,15 +77,15 @@
                 "avatar": "",
                 "background": "",
                 "createdAt": "",
-                "id": "6a2da8db-e884-425e-897a-8e003460e266",
+                "id": "68019aea-9f7f-4a93-bf99-c96ff40f074a",
                 "username": "user1"
               },
-              "createdAt": "2025-04-09T21:09:51.549878Z",
+              "createdAt": "2025-04-11T18:06:03.581935Z",
               "finishedAt": null,
-              "id": "600OW",
+              "id": "XACTD",
               "players": [
                 {
-                  "gameId": "600OW",
+                  "gameId": "XACTD",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -96,12 +96,12 @@
                     "avatar": "",
                     "background": "",
                     "createdAt": "",
-                    "id": "6a2da8db-e884-425e-897a-8e003460e266",
+                    "id": "68019aea-9f7f-4a93-bf99-c96ff40f074a",
                     "username": "user1"
                   }
                 },
                 {
-                  "gameId": "600OW",
+                  "gameId": "XACTD",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -112,7 +112,7 @@
                     "avatar": "",
                     "background": "",
                     "createdAt": "",
-                    "id": "74b05734-7ec2-4270-b2a7-83efbe012d1a",
+                    "id": "d6c8b4af-a19d-49d5-8dc5-8db6a5d58c2e",
                     "username": "user2"
                   }
                 }
@@ -126,18 +126,6 @@
   },
   {
     "Name": "Location update",
-    "Events": {
-      "user2": [
-        {
-          "Event": "locationUpdate",
-          "Data": {
-            "location": {
-              "lat": 2,
-              "lon": 1
-            }
-          }
-        }
-      ]
-    }
+    "Events": {}
   }
 ]

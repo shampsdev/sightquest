@@ -45,11 +45,16 @@ func (h *Handler) buildRouter() {
 
 	g.
 		On(event.AuthEvent, state.WrapT(h.OnAuth)).
-		On(event.JoinGameEvent, state.WrapT(h.OnJoinGame))
+		On(event.JoinGameEvent, state.WrapT(h.OnJoinGame)).
+		On(event.LeaveGameEvent, state.WrapT(h.OnLeaveGame))
 
-	state.GroupMW(g, h.checkInGameMW).
+	gInGame := state.GroupMW(g, h.checkInGameMW)
+	gInGame = state.GroupMW(gInGame, recordGameActivityMW)
+
+	gInGame.
 		On(event.LocationUpdateEvent, callGame((*Game).OnLocationUpdate)).
-		On(event.BroadcastEvent, callGame((*Game).OnBroadcast))
+		On(event.BroadcastEvent, callGame((*Game).OnBroadcast)).
+		On(event.StartGameEvent, callGame((*Game).OnStartGame))
 
 	h.router = g.RootHandler()
 	h.registeredEvents = g.RegisteredEvents()
@@ -69,7 +74,10 @@ func (h *Handler) OnConnect(_ Context) error {
 	return nil
 }
 
-func (h *Handler) OnDisconnect(_ Context) error {
+func (h *Handler) OnDisconnect(c Context) error {
+	if c.S.Game != nil {
+		return c.S.Game.OnDisconnect(c)
+	}
 	return nil
 }
 
@@ -84,7 +92,7 @@ func (h *Handler) logMW(
 ) error {
 	c.Log = slog.Default().With("received_event", e.Event())
 	if c.S.User != nil {
-		c.Log = c.Log.With("user", c.S.User.ID)
+		c.Log = c.Log.With("user", c.S.User.Username)
 	}
 	if c.S.Game != nil {
 		c.Log = c.Log.With("game", c.S.Game.game.ID)
@@ -117,6 +125,7 @@ func (h *Handler) OnAuth(c Context, ev event.Auth) error {
 		return err
 	}
 	c.S.User = user
+	c.Emit(event.Authed{User: user})
 	return nil
 }
 
@@ -130,4 +139,8 @@ func (h *Handler) OnJoinGame(c Context, ev event.JoinGame) error {
 	}
 	c.S.Game = game
 	return c.S.Game.OnJoinGame(c)
+}
+
+func (h *Handler) OnLeaveGame(c Context, _ event.LeaveGame) error {
+	return c.Close()
 }

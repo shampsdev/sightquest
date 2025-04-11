@@ -39,3 +39,11 @@ func (g *Game) GetGameByID(ctx context.Context, id string) (*domain.Game, error)
 	}
 	return game, nil
 }
+
+func (g *Game) UpdateGame(ctx context.Context, game *domain.Game) error {
+	err := g.gameRepo.UpdateGame(ctx, game)
+	if err != nil {
+		return fmt.Errorf("failed to update game: %w", err)
+	}
+	return nil
+}

@@ -67,21 +67,21 @@ func (fw *Framework) NewClient(username string) (*Client, error) {
 		return nil, fmt.Errorf("failed to create client: %w", err)
 	}
 
-	token, err := fw.registerUser(username)
+	token, err := fw.RegisterUser(username)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
 
 	c := &Client{
-		fw:    fw,
+		FW:    fw,
 		User:  &domain.User{Username: username},
 		Log:   slog.Default(),
-		cli:   cli,
-		token: token,
+		Cli:   cli,
+		Token: token,
 	}
-	c.setup(allEvents)
+	c.Setup(AllEvents)
 
-	err = c.cli.Connect()
+	err = c.Cli.Connect()
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect client: %w", err)
 	}

@@ -10,7 +10,7 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/domain"
 )
 
-func (fw *Framework) registerUser(username string) (string, error) {
+func (fw *Framework) RegisterUser(username string) (string, error) {
 	creds := &domain.UserCredentials{
 		Username: username,
 		Password: "password",
@@ -47,7 +47,7 @@ func (c *Client) MustCreateGame() *domain.Game {
 }
 
 func (c *Client) CreateGame() (*domain.Game, error) {
-	u, err := url.Parse(fmt.Sprintf("%s/game", c.fw.APIHost))
+	u, err := url.Parse(fmt.Sprintf("%s/game", c.FW.APIHost))
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse url: %w", err)
 	}
@@ -55,11 +55,11 @@ func (c *Client) CreateGame() (*domain.Game, error) {
 		Method: "POST",
 		URL:    u,
 		Header: http.Header{
-			"X-Api-Token":  []string{c.token},
+			"X-Api-Token":  []string{c.Token},
 			"Content-Type": []string{"application/json"},
 		},
 	}
-	resp, err := c.fw.HTTPCli.Do(&req)
+	resp, err := c.FW.HTTPCli.Do(&req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to post game: %w", err)
 	}

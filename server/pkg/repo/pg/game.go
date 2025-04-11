@@ -59,6 +59,12 @@ func (g *Game) GetGameByID(ctx context.Context, gameID string) (*domain.Game, er
 	}, nil
 }
 
+func (g *Game) UpdateGame(ctx context.Context, game *domain.Game) error {
+	q := `UPDATE game SET state = $1, finished_at = $2 WHERE id = $3`
+	_, err := g.db.Exec(ctx, q, game.State, game.FinishedAt, game.ID)
+	return err
+}
+
 var letterRunes = []rune("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func (g *Game) generateID() string {

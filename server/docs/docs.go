@@ -219,10 +219,10 @@ const docTemplate = `{
                 "admin": {
                     "$ref": "#/definitions/domain.User"
                 },
-                "created_at": {
+                "createdAt": {
                     "type": "string"
                 },
-                "finished_at": {
+                "finishedAt": {
                     "type": "string"
                 },
                 "id": {
@@ -294,7 +294,7 @@ const docTemplate = `{
                 "background": {
                     "type": "string"
                 },
-                "created_at": {
+                "createdAt": {
                     "type": "string"
                 },
                 "id": {

@@ -21,4 +21,13 @@ type User interface {
 type Game interface {
 	CreateGame(ctx context.Context, game *domain.CreateGame) (string, error)
 	GetGameByID(ctx context.Context, gameID string) (*domain.Game, error)
+	UpdateGame(ctx context.Context, game *domain.Game) error
+}
+
+type Player interface {
+	CreatePlayer(ctx context.Context, player *domain.Player) error
+	UpdatePlayer(ctx context.Context, player *domain.Player) error
+	GetPlayer(ctx context.Context, gameID, userID string) (*domain.Player, error)
+	GetPlayersByGameID(ctx context.Context, gameID string) ([]*domain.Player, error)
+	DeletePlayer(ctx context.Context, gameID, userID string) error
 }

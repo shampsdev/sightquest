@@ -1,8 +1,9 @@
 package domain
 
 type Player struct {
-	GameID   string     `json:"gameId"`
-	User     *User      `json:"user"`
+	GameID string `json:"gameId"`
+	User   *User  `json:"user"`
+
 	Role     PlayerRole `json:"role"`
 	Score    int        `json:"score"`
 	Location Coordinate `json:"location"`

@@ -78,6 +78,9 @@ func (s *Server[S]) setup(ctx context.Context) {
 	})
 
 	s.SIO.OnError("/", func(conn socketio.Conn, err error) {
+		if conn == nil {
+			return
+		}
 		c, ok := conn.Context().(*state.Context[S])
 		if ok {
 			c.Error(err)
@@ -146,4 +149,8 @@ func (s *socketIOConn[S]) Close() error {
 
 func (s *socketIOConn[S]) Join(roomID string) {
 	s.conn.Join(roomID)
+}
+
+func (s *socketIOConn[S]) Leave(roomID string) {
+	s.conn.Leave(roomID)
 }
