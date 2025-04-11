@@ -15,6 +15,7 @@ type Event interface {
 type Conn interface {
 	Emit(event string, data any)
 	Join(roomID string)
+	Leave(roomID string)
 	Close() error
 }
 
@@ -52,6 +53,11 @@ func (c *Context[S]) JoinRoom(roomID string) {
 	c.conn.Join(roomID)
 	c.Log = c.Log.With("room", roomID)
 	c.Log.Debug("Joined room")
+}
+
+func (c *Context[S]) LeaveRoom(roomID string) {
+	c.conn.Leave(roomID)
+	c.Log.Debug("Left room")
 }
 
 func (c *Context[S]) Emit(e Event) {

@@ -2,6 +2,7 @@ package game
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"sync"
 	"sync/atomic"
@@ -12,18 +13,18 @@ import (
 )
 
 type InMemoryGameRepo struct {
-	gameCase *usecore.Game
+	gameCase   *usecore.Game
+	playerCase *usecore.Player
 
-	gamesMutex  sync.RWMutex
-	games       map[string]*Game
-	activeGames map[string]time.Time
+	gamesMutex sync.RWMutex
+	games      map[string]*Game
 }
 
-func NewInMemoryGameRepo(ctx context.Context, gameCase *usecore.Game) *InMemoryGameRepo {
+func NewInMemoryGameRepo(ctx context.Context, gameCase *usecore.Game, playerCase *usecore.Player) *InMemoryGameRepo {
 	r := &InMemoryGameRepo{
-		gameCase:    gameCase,
-		games:       make(map[string]*Game),
-		activeGames: make(map[string]time.Time),
+		gameCase:   gameCase,
+		games:      make(map[string]*Game),
+		playerCase: playerCase,
 	}
 
 	r.goGC(ctx)
@@ -35,18 +36,14 @@ func (r *InMemoryGameRepo) GetGame(ctx context.Context, id string) (*Game, error
 	defer r.gamesMutex.Unlock()
 	game, ok := r.games[id]
 	if !ok {
-		g, err := r.gameCase.GetGameByID(ctx, id)
+		game, err := NewGame(ctx, id, r.gameCase, r.playerCase)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to create game: %w", err)
 		}
-
-		game := NewGame(g)
 		r.games[id] = game
-		r.activeGames[id] = time.Now()
 		return game, nil
 	}
 
-	r.activeGames[id] = time.Now()
 	return game, nil
 }
 
@@ -59,14 +56,9 @@ func (r *InMemoryGameRepo) goGC(ctx context.Context) {
 				r.gamesMutex.Lock()
 				var deleted atomic.Int32
 				for id, game := range r.games {
-					if game.Active() {
-						r.activeGames[id] = time.Now()
-					} else {
-						wasActive := r.activeGames[id]
-						if time.Since(wasActive) > time.Minute*5 {
-							delete(r.games, id)
-							deleted.Add(1)
-						}
+					if !game.Active() {
+						delete(r.games, id)
+						deleted.Add(1)
 					}
 				}
 				slogx.Info(ctx, "GC passed", "games_amount", len(r.games), "deleted_amount", deleted.Load())

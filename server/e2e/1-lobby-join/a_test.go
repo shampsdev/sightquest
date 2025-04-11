@@ -28,10 +28,10 @@ func Test(t *testing.T) {
 	game := cli1.MustCreateGame()
 	fw.Step("User1 joining game", func() {
 		cli1.JoinGame(game)
-	}, 1)
+	}, 2)
 	fw.Step("User2 joining game", func() {
 		cli2.JoinGame(game)
-	}, 2)
+	}, 3)
 
 	fw.Step("Location update", func() {
 		cli1.Emit(event.LocationUpdate{

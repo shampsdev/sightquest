@@ -1,7 +1,7 @@
 services:
   database:
     restart: unless-stopped
-    image: postgres:16.7
+    image: postgis/postgis:16-3.4
     container_name: database
     volumes:
       - ~/.pg/sq-db:/var/lib/postgresql/data

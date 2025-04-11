@@ -10,15 +10,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var allEvents = map[string]struct{}{
-	event.ErrorEvent:          {},
-	event.AuthEvent:           {},
-	event.AuthResponseEvent:   {},
-	event.JoinGameEvent:       {},
-	event.GameEvent:           {},
-	event.PlayerJoinedEvent:   {},
-	event.StartGameEvent:      {},
-	event.LocationUpdateEvent: {},
+var AllEvents = map[string]struct{}{
+	event.ErrorEvent:           {},
+	event.AuthEvent:            {},
+	event.AuthedEvent:          {},
+	event.JoinGameEvent:        {},
+	event.GameEvent:            {},
+	event.PlayerJoinedEvent:    {},
+	event.PlayerLeftEvent:      {},
+	event.StartGameEvent:       {},
+	event.LocationUpdateEvent:  {},
+	event.LocationUpdatedEvent: {},
+	event.LeaveGameEvent:       {},
+	event.BroadcastEvent:       {},
+	event.BroadcastedEvent:     {},
 }
 
 func isE2ETesting() bool {
