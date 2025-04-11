@@ -31,7 +31,7 @@ func (p *Player) CreatePlayer(ctx context.Context, player *domain.Player) error 
 	return nil
 }
 
-func (p *Player) DeletePlayer(ctx context.Context, gameID string, userID string) error {
+func (p *Player) DeletePlayer(ctx context.Context, gameID, userID string) error {
 	q := `DELETE FROM "player" WHERE "game_id" = $1 AND "user_id" = $2`
 	_, err := p.db.Exec(ctx, q, gameID, userID)
 	if err != nil {
@@ -40,7 +40,7 @@ func (p *Player) DeletePlayer(ctx context.Context, gameID string, userID string)
 	return nil
 }
 
-func (p *Player) GetPlayer(ctx context.Context, gameID string, userID string) (*domain.Player, error) {
+func (p *Player) GetPlayer(ctx context.Context, gameID, userID string) (*domain.Player, error) {
 	q := `
 	    SELECT p.game_id, p.user_id, p.role, p.score, p.location, u.username, u.avatar, u.background
         FROM player AS p

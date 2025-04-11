@@ -25,7 +25,7 @@ func (p *Player) UpdatePlayer(ctx context.Context, player *domain.Player) error 
 	return p.playerRepo.UpdatePlayer(ctx, player)
 }
 
-func (p *Player) GetPlayer(ctx context.Context, gameID string, userID string) (*domain.Player, error) {
+func (p *Player) GetPlayer(ctx context.Context, gameID, userID string) (*domain.Player, error) {
 	return p.playerRepo.GetPlayer(ctx, gameID, userID)
 }
 
@@ -33,6 +33,6 @@ func (p *Player) GetPlayersByGameID(ctx context.Context, gameID string) ([]*doma
 	return p.playerRepo.GetPlayersByGameID(ctx, gameID)
 }
 
-func (p *Player) DeletePlayer(ctx context.Context, gameID string, userID string) error {
+func (p *Player) DeletePlayer(ctx context.Context, gameID, userID string) error {
 	return p.playerRepo.DeletePlayer(ctx, gameID, userID)
 }

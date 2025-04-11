@@ -3,13 +3,13 @@ package game
 import (
 	"context"
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/event"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/state"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
-	"slices"
 )
 
 type Game struct {

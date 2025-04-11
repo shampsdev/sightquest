@@ -27,7 +27,7 @@ type Game interface {
 type Player interface {
 	CreatePlayer(ctx context.Context, player *domain.Player) error
 	UpdatePlayer(ctx context.Context, player *domain.Player) error
-	GetPlayer(ctx context.Context, gameID string, userID string) (*domain.Player, error)
+	GetPlayer(ctx context.Context, gameID, userID string) (*domain.Player, error)
 	GetPlayersByGameID(ctx context.Context, gameID string) ([]*domain.Player, error)
-	DeletePlayer(ctx context.Context, gameID string, userID string) error
+	DeletePlayer(ctx context.Context, gameID, userID string) error
 }
