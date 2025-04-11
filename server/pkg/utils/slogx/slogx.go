@@ -32,6 +32,10 @@ func Err(err error) slog.Attr {
 	return slog.Any("error", err)
 }
 
+func With(ctx context.Context, args ...any) context.Context {
+	return NewCtx(ctx, FromCtx(ctx).With(args...))
+}
+
 func WithErr(logger *slog.Logger, err error) *slog.Logger {
 	return logger.With(Err(err))
 }
@@ -46,6 +50,10 @@ func Error(ctx context.Context, msg string, args ...any) {
 
 func Info(ctx context.Context, msg string, args ...any) {
 	FromCtx(ctx).Info(msg, args...)
+}
+
+func Debug(ctx context.Context, msg string, args ...any) {
+	FromCtx(ctx).Debug(msg, args...)
 }
 
 func InjectGin(c *gin.Context, logger *slog.Logger) {

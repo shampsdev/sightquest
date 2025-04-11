@@ -17,7 +17,7 @@ func TestMain(m *testing.M) {
 		event.ErrorEvent,
 		event.PlayerJoinedEvent,
 		event.GameEvent,
-		event.LocationUpdateEvent,
+		event.LocationUpdatedEvent,
 	)
 	fw.TestMain(m)
 }

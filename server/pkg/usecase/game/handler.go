@@ -9,6 +9,7 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/usecase/event"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/state"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
+	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
 
 type PlayerState struct {
@@ -22,11 +23,11 @@ type Handler struct {
 	userCase     *usecore.User
 	auth         *auth.Auth
 
-	router           state.HandlerFunc[PlayerState, state.AnyEvent]
+	router           state.HandlerFunc[*PlayerState, state.AnyEvent]
 	registeredEvents []string
 }
 
-type Context = *state.Context[PlayerState]
+type Context = *state.Context[*PlayerState]
 
 func NewHandler(gameProvider *InMemoryGameRepo, userCase *usecore.User, auth *auth.Auth) *Handler {
 	h := &Handler{
@@ -40,7 +41,7 @@ func NewHandler(gameProvider *InMemoryGameRepo, userCase *usecore.User, auth *au
 
 func (h *Handler) buildRouter() {
 	g := state.GroupMW(
-		state.NewGroup[PlayerState, state.AnyEvent](),
+		state.NewGroup[*PlayerState, state.AnyEvent](),
 		h.logMW)
 
 	g.
@@ -64,13 +65,23 @@ func (h *Handler) RegisteredEvents() []string {
 	return h.registeredEvents
 }
 
-func callGame[E any](f func(g *Game, c Context, e E) error) state.HandlerFunc[PlayerState, state.AnyEvent] {
-	return state.WrapT(func(c *state.Context[PlayerState], event E) error {
+func callGame[E any](f func(g *Game, c Context, e E) error) state.HandlerFunc[*PlayerState, state.AnyEvent] {
+	return state.WrapT(func(c *state.Context[*PlayerState], event E) error {
 		return f(c.S.Game, c, event)
 	})
 }
 
-func (h *Handler) OnConnect(_ Context) error {
+func (h *Handler) OnConnect(c Context) error {
+	c.S = &PlayerState{}
+	c.Ctx = slogx.NewCtx(c.Ctx, slog.Default())
+	slogx.Debug(c.Ctx, "Connected")
+
+	c.OnError(func(c *state.Context[*PlayerState], err error) {
+		slogx.Error(c.Ctx, "Error handling event", slogx.Err(err))
+	})
+	c.OnEmit(func(c *state.Context[*PlayerState], e state.Event) {
+		slogx.Debug(c.Ctx, "Event emitted", "emitted_event", e.Event())
+	})
 	return nil
 }
 
@@ -88,23 +99,17 @@ func (h *Handler) Handle(c Context, e state.AnyEvent) error {
 func (h *Handler) logMW(
 	c Context,
 	e state.AnyEvent,
-	next state.HandlerFunc[PlayerState, state.AnyEvent],
+	next state.HandlerFunc[*PlayerState, state.AnyEvent],
 ) error {
-	c.Log = slog.Default().With("received_event", e.Event())
-	if c.S.User != nil {
-		c.Log = c.Log.With("user", c.S.User.Username)
-	}
-	if c.S.Game != nil {
-		c.Log = c.Log.With("game", c.S.Game.game.ID)
-	}
-	c.Log.Debug("Event received")
-	return next(c, e)
+	log := slogx.FromCtx(c.Ctx).With("received_event", e.Event())
+	log.Debug("Received event")
+	return next(c.WithCtx(slogx.NewCtx(c.Ctx, log)), e)
 }
 
 func (h *Handler) checkInGameMW(
 	c Context,
 	e state.AnyEvent,
-	next state.HandlerFunc[PlayerState, state.AnyEvent],
+	next state.HandlerFunc[*PlayerState, state.AnyEvent],
 ) error {
 	if c.S.User == nil {
 		return fmt.Errorf("user not authenticated")
@@ -125,6 +130,7 @@ func (h *Handler) OnAuth(c Context, ev event.Auth) error {
 		return err
 	}
 	c.S.User = user
+	c.Ctx = slogx.With(c.Ctx, "username", user.Username, "user", user.ID)
 	c.Emit(event.Authed{User: user})
 	return nil
 }
@@ -138,6 +144,7 @@ func (h *Handler) OnJoinGame(c Context, ev event.JoinGame) error {
 		return err
 	}
 	c.S.Game = game
+	c.Ctx = slogx.With(c.Ctx, "game", game.game.ID)
 	return c.S.Game.OnJoinGame(c)
 }
 

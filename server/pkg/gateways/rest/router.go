@@ -18,9 +18,9 @@ func setupRouter(ctx context.Context, _ *config.Config, r *gin.Engine, cases *us
 	r.HandleMethodNotAllowed = true
 	r.Use(middlewares.AllowOrigin())
 	r.Use(middlewares.InjectLogger(ctx))
-	r.Use(middlewares.Logger())
 
 	v1 := r.Group("/api/v1")
+	v1.Use(middlewares.Logger())
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

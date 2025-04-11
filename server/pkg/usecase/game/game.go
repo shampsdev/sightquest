@@ -10,6 +10,7 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/usecase/event"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/state"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
+	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
 
 type Game struct {
@@ -87,7 +88,7 @@ func (g *Game) Active() bool {
 	return active
 }
 
-func recordGameActivityMW[E any](c Context, e E, next state.HandlerFunc[PlayerState, E]) error {
+func recordGameActivityMW[E any](c Context, e E, next state.HandlerFunc[*PlayerState, E]) error {
 	c.S.Game.activity[c.S.User.ID] = time.Now()
 	return next(c, e)
 }
@@ -128,7 +129,7 @@ func (g *Game) OnJoinGame(c Context) error {
 }
 
 func (g *Game) OnDisconnect(c Context) error {
-	log := c.Log.With("user", c.S.User.Username, "game_state", g.game.State)
+	log := slogx.FromCtx(c.Ctx).With("game_state", g.game.State)
 	log.Debug("player disconnected")
 
 	if g.game.State == domain.GameStateLobby {

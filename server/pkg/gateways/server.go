@@ -19,7 +19,7 @@ const shutdownDuration = 1000 * time.Millisecond
 
 type Server struct {
 	RestServer *rest.Server
-	WSServer   *sio.Server[game.PlayerState]
+	WSServer   *sio.Server[*game.PlayerState]
 }
 
 func shutdownWait() {
