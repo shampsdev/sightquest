@@ -11,15 +11,15 @@
                 "avatar": "",
                 "background": "",
                 "createdAt": "",
-                "id": "12e77825-a602-4258-be71-a1bd44d45b0e",
+                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
                 "username": "user1"
               },
-              "createdAt": "2025-04-11T20:12:06.25728Z",
+              "createdAt": "2025-04-13T21:56:25.281795Z",
               "finishedAt": null,
-              "id": "PGFXG",
+              "id": "K78TA",
               "players": [
                 {
-                  "gameId": "PGFXG",
+                  "gameId": "K78TA",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -30,7 +30,7 @@
                     "avatar": "",
                     "background": "",
                     "createdAt": "",
-                    "id": "12e77825-a602-4258-be71-a1bd44d45b0e",
+                    "id": "9018e059-78d5-427b-905a-5f7b157691ce",
                     "username": "user1"
                   }
                 }
@@ -50,7 +50,7 @@
           "Event": "playerJoined",
           "Data": {
             "player": {
-              "gameId": "PGFXG",
+              "gameId": "K78TA",
               "location": {
                 "lat": 0,
                 "lon": 0
@@ -61,7 +61,7 @@
                 "avatar": "",
                 "background": "",
                 "createdAt": "",
-                "id": "8e8517b2-bb31-43da-aba0-1f32edef1c02",
+                "id": "744cfbd2-fd49-49fd-95b1-d525782a743c",
                 "username": "user2"
               }
             }
@@ -77,15 +77,15 @@
                 "avatar": "",
                 "background": "",
                 "createdAt": "",
-                "id": "12e77825-a602-4258-be71-a1bd44d45b0e",
+                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
                 "username": "user1"
               },
-              "createdAt": "2025-04-11T20:12:06.25728Z",
+              "createdAt": "2025-04-13T21:56:25.281795Z",
               "finishedAt": null,
-              "id": "PGFXG",
+              "id": "K78TA",
               "players": [
                 {
-                  "gameId": "PGFXG",
+                  "gameId": "K78TA",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -96,12 +96,12 @@
                     "avatar": "",
                     "background": "",
                     "createdAt": "",
-                    "id": "12e77825-a602-4258-be71-a1bd44d45b0e",
+                    "id": "9018e059-78d5-427b-905a-5f7b157691ce",
                     "username": "user1"
                   }
                 },
                 {
-                  "gameId": "PGFXG",
+                  "gameId": "K78TA",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -112,7 +112,7 @@
                     "avatar": "",
                     "background": "",
                     "createdAt": "",
-                    "id": "8e8517b2-bb31-43da-aba0-1f32edef1c02",
+                    "id": "744cfbd2-fd49-49fd-95b1-d525782a743c",
                     "username": "user2"
                   }
                 }
@@ -136,7 +136,7 @@
               "lon": 1
             },
             "player": {
-              "gameId": "PGFXG",
+              "gameId": "K78TA",
               "location": {
                 "lat": 2,
                 "lon": 1
@@ -147,7 +147,60 @@
                 "avatar": "",
                 "background": "",
                 "createdAt": "",
-                "id": "12e77825-a602-4258-be71-a1bd44d45b0e",
+                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "username": "user1"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Broadcast",
+    "Events": {
+      "user1": [
+        {
+          "Event": "broadcasted",
+          "Data": {
+            "data": "Shamps are cool!",
+            "player": {
+              "gameId": "K78TA",
+              "location": {
+                "lat": 2,
+                "lon": 1
+              },
+              "role": "runner",
+              "score": 0,
+              "user": {
+                "avatar": "",
+                "background": "",
+                "createdAt": "",
+                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "username": "user1"
+              }
+            }
+          }
+        }
+      ],
+      "user2": [
+        {
+          "Event": "broadcasted",
+          "Data": {
+            "data": "Shamps are cool!",
+            "player": {
+              "gameId": "K78TA",
+              "location": {
+                "lat": 2,
+                "lon": 1
+              },
+              "role": "runner",
+              "score": 0,
+              "user": {
+                "avatar": "",
+                "background": "",
+                "createdAt": "",
+                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
                 "username": "user1"
               }
             }

@@ -18,6 +18,7 @@ func TestMain(m *testing.M) {
 		event.PlayerJoinedEvent,
 		event.GameEvent,
 		event.LocationUpdatedEvent,
+		event.BroadcastedEvent,
 	)
 	fw.TestMain(m)
 }
@@ -41,6 +42,12 @@ func Test(t *testing.T) {
 			},
 		})
 	}, 1)
+
+	fw.Step("Broadcast", func() {
+		cli1.Emit(event.Broadcast{
+			Data: "Shamps are cool!",
+		})
+	}, 2)
 
 	assert.NoError(t, cli1.Close())
 	assert.NoError(t, cli2.Close())
