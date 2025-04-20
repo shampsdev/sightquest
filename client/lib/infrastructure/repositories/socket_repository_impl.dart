@@ -34,24 +34,26 @@ class SocketRepositoryImpl implements SocketRepository {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _dataSource.dispose();
+    _broadcastController.close();
+    _locationController.close();
   }
 
   @override
-  // TODO: implement onBroadcast
-  Stream<BroadcastMessage> get onBroadcast => throw UnimplementedError();
+  Stream<BroadcastMessage> get onBroadcast => _broadcastController.stream;
 
   @override
-  // TODO: implement onLocationUpdate
-  Stream<Location> get onLocationUpdate => throw UnimplementedError();
+  Stream<Location> get onLocationUpdate => _locationController.stream;
 
   @override
   void sendBroadcast(String message) {
-    // TODO: implement sendBroadcast
+    _dataSource.emit('broadcast', {'data': message});
   }
 
   @override
   void sendLocation(Location loc) {
-    // TODO: implement sendLocation
+    _dataSource.emit('locationUpdate', {
+      'location': {'lat': loc.lat, 'lon': loc.lon},
+    });
   }
 }
