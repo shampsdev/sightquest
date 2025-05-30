@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "client",
+    "name": "SightQuest",
     "slug": "sightquest",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,19 +8,24 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shampsdev.sightquest",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.shampsdev.sightquest"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +35,20 @@
         "projectId": "ba7e05b8-d26d-4cba-acd0-aa04c79eca56"
       }
     },
-    "owner": "shampsdev"
+    "owner": "shampsdev",
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#975DFF",
+          "image": "./assets/icon.png",
+          "dark": {
+            "image": "./assets/icon-dark.png",
+            "backgroundColor": "#111111"
+          },
+          "imageWidth": 200
+        }
+      ]
+    ]
   }
 }
