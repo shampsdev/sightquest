@@ -9,26 +9,24 @@
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		475E0FBE870BC53E260D2017 /* libPods-SightQuest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA9EA6019A731DA554B289C0 /* libPods-SightQuest.a */; };
-		4CA77A231E5F4FAE941ABD90 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B20D37BBBB477988B221D2 /* noop-file.swift */; };
-		9E96AA69EDF642E0AB0FC70F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 55572C7998C7D8273D8FDADB /* PrivacyInfo.xcprivacy */; };
+		4B92084F49217CC89406044B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 17E6EFEF96BEF81D5FDF92BE /* PrivacyInfo.xcprivacy */; };
+		4DF36D0B46FD8EB60A5B2BAA /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CFDA8348090C0A890F8F25 /* ExpoModulesProvider.swift */; };
+		6E93B1444144225662A2F7C6 /* libPods-SightQuest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D7E6B29DAEB965B085CC11D /* libPods-SightQuest.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		F3595D3607DD83E69F61568A /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E331D4D331C7D65491862B /* ExpoModulesProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		12B97033AFCDA3421C76DB8B /* Pods-SightQuest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SightQuest.debug.xcconfig"; path = "Target Support Files/Pods-SightQuest/Pods-SightQuest.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* SightQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SightQuest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SightQuest/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SightQuest/Info.plist; sourceTree = "<group>"; };
-		54E331D4D331C7D65491862B /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-SightQuest/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		55572C7998C7D8273D8FDADB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = SightQuest/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		605FF7C7FCF8475791B55268 /* Pods-SightQuest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SightQuest.debug.xcconfig"; path = "Target Support Files/Pods-SightQuest/Pods-SightQuest.debug.xcconfig"; sourceTree = "<group>"; };
-		A8B20D37BBBB477988B221D2 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "SightQuest/noop-file.swift"; sourceTree = "<group>"; };
+		173C86AE226592E25B58E589 /* Pods-SightQuest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SightQuest.release.xcconfig"; path = "Target Support Files/Pods-SightQuest/Pods-SightQuest.release.xcconfig"; sourceTree = "<group>"; };
+		17E6EFEF96BEF81D5FDF92BE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = SightQuest/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		3D7E6B29DAEB965B085CC11D /* libPods-SightQuest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SightQuest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = SightQuest/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		CA9EA6019A731DA554B289C0 /* libPods-SightQuest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SightQuest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D66FB64EA1EA0A7E8AF2D93F /* Pods-SightQuest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SightQuest.release.xcconfig"; path = "Target Support Files/Pods-SightQuest/Pods-SightQuest.release.xcconfig"; sourceTree = "<group>"; };
+		E2CFDA8348090C0A890F8F25 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-SightQuest/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = SightQuest/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* SightQuest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SightQuest-Bridging-Header.h"; path = "SightQuest/SightQuest-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -39,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				475E0FBE870BC53E260D2017 /* libPods-SightQuest.a in Frameworks */,
+				6E93B1444144225662A2F7C6 /* libPods-SightQuest.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,17 +53,24 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				A8B20D37BBBB477988B221D2 /* noop-file.swift */,
-				55572C7998C7D8273D8FDADB /* PrivacyInfo.xcprivacy */,
+				17E6EFEF96BEF81D5FDF92BE /* PrivacyInfo.xcprivacy */,
 			);
 			name = SightQuest;
+			sourceTree = "<group>";
+		};
+		1E351017BEEB8DE7A84513C2 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				B134D4EB7666F1456E971975 /* SightQuest */,
+			);
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				CA9EA6019A731DA554B289C0 /* libPods-SightQuest.a */,
+				3D7E6B29DAEB965B085CC11D /* libPods-SightQuest.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -84,8 +89,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				9DAB34B3516704AB3C4AE60F /* Pods */,
-				8580F1B8539D5C6C5F447AE6 /* ExpoModulesProviders */,
+				AFA4F2EF0500E7784CB9C214 /* Pods */,
+				1E351017BEEB8DE7A84513C2 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -100,30 +105,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8580F1B8539D5C6C5F447AE6 /* ExpoModulesProviders */ = {
+		AFA4F2EF0500E7784CB9C214 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9B761D58E61089DB1FCFC361 /* SightQuest */,
-			);
-			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
-		9B761D58E61089DB1FCFC361 /* SightQuest */ = {
-			isa = PBXGroup;
-			children = (
-				54E331D4D331C7D65491862B /* ExpoModulesProvider.swift */,
-			);
-			name = SightQuest;
-			sourceTree = "<group>";
-		};
-		9DAB34B3516704AB3C4AE60F /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				605FF7C7FCF8475791B55268 /* Pods-SightQuest.debug.xcconfig */,
-				D66FB64EA1EA0A7E8AF2D93F /* Pods-SightQuest.release.xcconfig */,
+				12B97033AFCDA3421C76DB8B /* Pods-SightQuest.debug.xcconfig */,
+				173C86AE226592E25B58E589 /* Pods-SightQuest.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		B134D4EB7666F1456E971975 /* SightQuest */ = {
+			isa = PBXGroup;
+			children = (
+				E2CFDA8348090C0A890F8F25 /* ExpoModulesProvider.swift */,
+			);
+			name = SightQuest;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
@@ -143,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SightQuest" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				4C5A3111BC571498FA718E2E /* [Expo] Configure project */,
+				F23DD45672C92DE3922F7D8D /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				2A5A8494781B7C5B61DF4752 /* [CP] Embed Pods Frameworks */,
+				65C582F3E1816F71890BA853 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -199,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				9E96AA69EDF642E0AB0FC70F /* PrivacyInfo.xcprivacy in Resources */,
+				4B92084F49217CC89406044B /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +240,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2A5A8494781B7C5B61DF4752 /* [CP] Embed Pods Frameworks */ = {
+		65C582F3E1816F71890BA853 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -260,25 +257,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SightQuest/Pods-SightQuest-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		4C5A3111BC571498FA718E2E /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-SightQuest/expo-configure-project.sh\"\n";
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -297,7 +275,6 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/react-native-maps/ReactNativeMapsPrivacy.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -311,12 +288,30 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/glog_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReactNativeMapsPrivacy.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SightQuest/Pods-SightQuest-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		F23DD45672C92DE3922F7D8D /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-SightQuest/expo-configure-project.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -326,8 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				4CA77A231E5F4FAE941ABD90 /* noop-file.swift in Sources */,
-				F3595D3607DD83E69F61568A /* ExpoModulesProvider.swift in Sources */,
+				4DF36D0B46FD8EB60A5B2BAA /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,10 +330,11 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 605FF7C7FCF8475791B55268 /* Pods-SightQuest.debug.xcconfig */;
+			baseConfigurationReference = 12B97033AFCDA3421C76DB8B /* Pods-SightQuest.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SightQuest/SightQuest.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -360,7 +355,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shampsdev.sightquest;
-				PRODUCT_NAME = SightQuest;
+				PRODUCT_NAME = "SightQuest";
 				SWIFT_OBJC_BRIDGING_HEADER = "SightQuest/SightQuest-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -371,10 +366,11 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D66FB64EA1EA0A7E8AF2D93F /* Pods-SightQuest.release.xcconfig */;
+			baseConfigurationReference = 173C86AE226592E25B58E589 /* Pods-SightQuest.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SightQuest/SightQuest.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = SightQuest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -390,7 +386,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shampsdev.sightquest;
-				PRODUCT_NAME = SightQuest;
+				PRODUCT_NAME = "SightQuest";
 				SWIFT_OBJC_BRIDGING_HEADER = "SightQuest/SightQuest-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
