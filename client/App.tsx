@@ -16,12 +16,16 @@ Mapbox.Logger.setLogCallback((lcb) => {
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text className="text-red-800">Aboba</Text>
+      <View className="bg-bg_primary">
+        <Text className="text-primary">Abiba</Text>
+        <Text className="text-[#FFFF]">Abiba</Text>
+      </View>
       <Mapbox.MapView
         scaleBarEnabled={false}
         attributionEnabled={false}
         style={styles.map}
         styleURL="mapbox://styles/mikedegeofroy/cma57ielt004801s3gkciegzd"
+        className="flex-1"
       ></Mapbox.MapView>
       <StatusBar style="auto" />
     </View>
@@ -29,11 +33,6 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   container: {
     flex: 1,
   },
