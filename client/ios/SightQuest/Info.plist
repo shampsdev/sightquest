@@ -78,5 +78,7 @@
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>MGLMapboxMetricsEnabledSettingShownInApp</key>
+    <false/>
   </dict>
 </plist>

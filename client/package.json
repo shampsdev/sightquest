@@ -9,6 +9,7 @@
     "ios": "expo run:ios"
   },
   "dependencies": {
+    "@rnmapbox/maps": "^10.1.39",
     "expo": "~53.0.9",
     "expo-dev-client": "~5.1.8",
     "expo-splash-screen": "~0.30.8",

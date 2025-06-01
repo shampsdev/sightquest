@@ -12,6 +12,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "buildNumber": "7",
       "supportsTablet": true,
       "bundleIdentifier": "com.shampsdev.sightquest",
       "infoPlist": {
@@ -43,6 +44,12 @@
             "backgroundColor": "#111111"
           },
           "imageWidth": 200
+        }
+      ],
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA"
         }
       ]
     ]
