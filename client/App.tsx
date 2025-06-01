@@ -1,12 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View, Text } from "react-native";
+import "./global.css";
 
-import Mapbox from '@rnmapbox/maps';
+import Mapbox from "@rnmapbox/maps";
 
 Mapbox.setAccessToken(
-  'sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA'
+  "sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA"
 );
-Mapbox.Logger.setLogLevel('verbose');
+Mapbox.Logger.setLogLevel("verbose");
 Mapbox.Logger.setLogCallback((lcb) => {
   console.log(lcb);
   return true;
@@ -15,13 +16,14 @@ Mapbox.Logger.setLogCallback((lcb) => {
 export default function App() {
   return (
     <View style={styles.container}>
+      <Text className="text-red-800">Aboba</Text>
       <Mapbox.MapView
         scaleBarEnabled={false}
         attributionEnabled={false}
         style={styles.map}
-        styleURL='mapbox://styles/mikedegeofroy/cma57ielt004801s3gkciegzd'
+        styleURL="mapbox://styles/mikedegeofroy/cma57ielt004801s3gkciegzd"
       ></Mapbox.MapView>
-      <StatusBar style='auto' />
+      <StatusBar style="auto" />
     </View>
   );
 }
@@ -29,8 +31,8 @@ export default function App() {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   container: {
     flex: 1,
