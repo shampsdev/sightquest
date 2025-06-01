@@ -16,10 +16,6 @@ Mapbox.Logger.setLogCallback((lcb) => {
 export default function App() {
   return (
     <View style={styles.container}>
-      <View className="bg-bg_primary">
-        <Text className="text-primary">Abiba</Text>
-        <Text className="text-[#FFFF]">Abiba</Text>
-      </View>
       <Mapbox.MapView
         scaleBarEnabled={false}
         attributionEnabled={false}
