@@ -1,24 +1,12 @@
 import "./global.css";
 
 import { NavigationContainer } from "@react-navigation/native";
-import MapScreen from "@/components/screens/map.screen";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import HomeScreen from "@/components/screens/home.screen";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
-type RootStackParamList = {
-  Home: undefined;
-  Map: undefined;
-};
-
-export type HomeScreenProps = NativeStackScreenProps<
-  RootStackParamList,
-  "Home"
->;
-
-const Stack = createStackNavigator<RootStackParamList>();
+import { MainNavigator } from "./routers/main.navigator";
+import { AuthNavigator } from "./routers/auth.navigator";
+import { useAuthStore } from "./stores/auth.store";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,6 +27,8 @@ export default function App() {
     "Onest-Thin": require("./assets/fonts/Onest-Thin.ttf"),
   });
 
+  const { auth } = useAuthStore();
+
   useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync();
@@ -51,10 +41,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Map" component={MapScreen} />
-      </Stack.Navigator>
+      {auth ? <MainNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 }
