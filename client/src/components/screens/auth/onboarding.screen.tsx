@@ -12,8 +12,8 @@ export const OnboardingScreen = () => {
   };
 
   return (
-    <View className="flex-1 items-center justify-center">
-      <Text>Onboarding Screen</Text>
+    <View className="flex-1 items-center justify-center bg-bg_primary">
+      <Text className='text-text_primary'>Onboarding Screen</Text>
       <Button onPress={login} text={"Войти"} />
     </View>
   );
