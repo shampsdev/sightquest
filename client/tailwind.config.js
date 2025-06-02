@@ -27,7 +27,7 @@ module.exports = {
     },
     colors: {
       primary: "rgba(var(--primary-color))",
-      accent_primary: "rgba(var(--accent-primary-color))",
+      accent_primary: "rgba(var(--accent-primary))",
       bg_primary: "rgba(var(--bg-primary))",
       text_primary: "rgba(var(--text-primary))",
       text_secondary: "rgba(var(--text-secondary))",
