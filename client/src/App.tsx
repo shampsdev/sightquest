@@ -1,10 +1,10 @@
 import "./global.css";
 
-import { NavigationContainer, ParamListBase } from "@react-navigation/native";
-import MapScreen from "@/components/screens/Map/MapScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import MapScreen from "@/components/screens/map.screen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import HomeScreen from "@/components/screens/Home/HomeScreen";
+import HomeScreen from "@/components/screens/home.screen";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";

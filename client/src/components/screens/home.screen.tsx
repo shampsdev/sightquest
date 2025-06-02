@@ -1,5 +1,5 @@
 import { HomeScreenProps } from "@/App";
-import { Button } from "@/components/ui/Button/button";
+import { Button } from "@/components/ui/button";
 import { Pressable, Text, View } from "react-native";
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {

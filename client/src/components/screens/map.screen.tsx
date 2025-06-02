@@ -1,9 +1,9 @@
-import { IconContainer } from "@/components/ui/Icon/icon-container";
-import { Icons } from "@/components/ui/Icon/icons";
+import { IconContainer } from "@/components/ui/icons/icon-container";
+import { Icons } from "@/components/ui/icons/icons";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import { Map } from "@/components/widgets/map";
-import { Button } from "@/components/ui/Button/button";
+import { Button } from "@/components/ui/button";
 
 const MapScreen = () => {
   return (
