@@ -5,7 +5,7 @@ import { Pressable, Text, View } from "react-native";
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
   return (
     <View>
-      <Text>Home Page</Text>
+      <Text className="text-onest-bold">Home Page</Text>
       <Button text="ToMap" onPress={() => navigation.navigate("Map")} />
     </View>
   );

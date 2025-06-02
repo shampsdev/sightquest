@@ -3,7 +3,23 @@ module.exports = {
   content: ["./src/App.tsx", "./src/components/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        "bounded-black": ["Bounded-Black"],
+        "bounded-extralight": ["Bounded-ExtraLight"],
+        "bounded-regular": ["Bounded-Regular"],
+        "bounded-variable": ["Bounded-Variable"],
+        "onest-black": ["Onest-Black"],
+        "onest-bold": ["Onest-Bold"],
+        "onest-extrabold": ["Onest-ExtraBold"],
+        "onest-extralight": ["Onest-ExtraLight"],
+        "onest-light": ["Onest-Light"],
+        "onest-medium": ["Onest-Medium"],
+        "onest-regular": ["Onest-Regular"],
+        "onest-semibold": ["Onest-SemiBold"],
+        "onest-thin": ["Onest-Thin"],
+      },
+    },
     colors: {
       primary: "rgba(var(--primary-color))",
       accent_primary: "rgba(var(--accent-primary-color))",
