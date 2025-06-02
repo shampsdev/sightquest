@@ -4,9 +4,10 @@ import { twMerge } from "tailwind-merge";
 interface ButtonProps {
   className?: string;
   onPress?: () => void;
+  text: string;
 }
 
-export const Button = ({ className, onPress }: ButtonProps) => {
+export const Button = ({ className, onPress, text }: ButtonProps) => {
   return (
     <Pressable
       className={twMerge(
@@ -15,7 +16,7 @@ export const Button = ({ className, onPress }: ButtonProps) => {
       )}
       onPress={onPress}
     >
-      <Text className="text-[#FFFF] text-lg font-semibold">Начать игру</Text>
+      <Text className="text-[#FFFF] text-lg font-semibold">{text}</Text>
     </Pressable>
   );
 };
