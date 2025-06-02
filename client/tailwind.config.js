@@ -6,9 +6,14 @@ module.exports = {
     extend: {
       fontFamily: {
         "bounded-black": ["Bounded-Black"],
-        "bounded-extralight": ["Bounded-ExtraLight"],
+        "bounded-bold": ["Bounded-Bold"],
+        "bounded-extrabold": ["Bounded-ExtraBold"],
+        "bounded-light": ["Bounded-Light"],
+        "bounded-medium": ["Bounded-Medium"],
         "bounded-regular": ["Bounded-Regular"],
-        "bounded-variable": ["Bounded-Variable"],
+        "bounded-semibold": ["Bounded-SemiBold"],
+        "bounded-thin": ["Bounded-Thin"],
+
         "onest-black": ["Onest-Black"],
         "onest-bold": ["Onest-Bold"],
         "onest-extrabold": ["Onest-ExtraBold"],

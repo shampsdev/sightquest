@@ -13,9 +13,14 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [loaded, error] = useFonts({
     "Bounded-Black": require("./assets/fonts/Bounded-Black.ttf"),
-    "Bounded-ExtraLight": require("./assets/fonts/Bounded-ExtraLight.ttf"),
+    "Bounded-Bold": require("./assets/fonts/Bounded-Bold.ttf"),
+    "Bounded-ExtraBold": require("./assets/fonts/Bounded-ExtraBold.ttf"),
+    "Bounded-Light": require("./assets/fonts/Bounded-Light.ttf"),
+    "Bounded-Medium": require("./assets/fonts/Bounded-Medium.ttf"),
     "Bounded-Regular": require("./assets/fonts/Bounded-Regular.ttf"),
-    "Bounded-Variable": require("./assets/fonts/Bounded-Variable.ttf"),
+    "Bounded-SemiBold": require("./assets/fonts/Bounded-SemiBold.ttf"),
+    "Bounded-Thin": require("./assets/fonts/Bounded-Thin.ttf"),
+
     "Onest-Black": require("./assets/fonts/Onest-Black.ttf"),
     "Onest-Bold": require("./assets/fonts/Onest-Bold.ttf"),
     "Onest-ExtraBold": require("./assets/fonts/Onest-ExtraBold.ttf"),
