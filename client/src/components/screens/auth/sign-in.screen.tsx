@@ -37,7 +37,7 @@ export const SignInScreen = () => {
                 <Text className="text-center text-3xl text-text_primary font-bounded-semibold">
                   Вход
                 </Text>
-                <Text className="text-center text-lg text-text_secondary font-onest-medium">
+                <Text className="text-center text-md text-text_secondary font-onest-medium">
                   Только не говори, что забыл пароль…
                 </Text>
               </View>

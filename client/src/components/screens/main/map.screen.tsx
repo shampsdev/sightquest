@@ -1,11 +1,20 @@
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { Map } from "@/components/widgets/map";
 import { Button } from "@/components/ui/button";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { MainStackParamList } from "@/routers/main.navigator";
 
-const MapScreen = () => {
+export const MapScreen = () => {
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+
+  const account = () => {
+    navigation.navigate("Account");
+  };
+
   return (
     <View className="flex-1">
       <Map />
@@ -16,9 +25,12 @@ const MapScreen = () => {
       <IconContainer className="absolute top-16 left-5">
         <Icons.Store />
       </IconContainer>
+      <Pressable className="absolute top-16 right-5" onPress={account}>
+        <IconContainer>
+          <Text className="text-text_primary font-bounded-bold">A</Text>
+        </IconContainer>
+      </Pressable>
       <StatusBar style="auto" />
     </View>
   );
 };
-
-export default MapScreen;

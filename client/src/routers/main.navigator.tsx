@@ -1,25 +1,19 @@
-import HomeScreen from "@/components/screens/main/home.screen";
-import MapScreen from "@/components/screens/main/map.screen";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AccountScreen } from "@/components/screens/main/account.screen";
+import { MapScreen } from "@/components/screens/main/map.screen";
 import { createStackNavigator } from "@react-navigation/stack";
 
-type MainStackParamList = {
-  Home: undefined;
+export type MainStackParamList = {
+  Account: undefined;
   Map: undefined;
 };
-
-export type HomeScreenProps = NativeStackScreenProps<
-  MainStackParamList,
-  "Home"
->;
 
 const Stack = createStackNavigator<MainStackParamList>();
 
 export const MainNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Map" component={MapScreen} />
+      <Stack.Screen name="Account" component={AccountScreen} />
     </Stack.Navigator>
   );
 };

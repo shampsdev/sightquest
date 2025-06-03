@@ -39,7 +39,7 @@ export const SignUpScreen = () => {
                 <Text className="text-center text-3xl text-text_primary font-bounded-semibold">
                   Регистрация
                 </Text>
-                <Text className="text-center text-lg text-text_secondary font-onest-medium">
+                <Text className="text-center text-md text-text_secondary font-onest-medium">
                   Сможешь заполнить форму быстрее всех?
                 </Text>
               </View>
