@@ -11,7 +11,7 @@ export const IconContainer = ({
   return (
     <View
       className={twMerge(
-        "flex-1 items-center justify-center h-12 w-12 rounded-full bg-[#67676780]",
+        "items-center justify-center h-12 w-12 rounded-full bg-[#67676780]",
         className
       )}
     >

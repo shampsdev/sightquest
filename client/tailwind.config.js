@@ -6,9 +6,14 @@ module.exports = {
     extend: {
       fontFamily: {
         "bounded-black": ["Bounded-Black"],
-        "bounded-extralight": ["Bounded-ExtraLight"],
+        "bounded-bold": ["Bounded-Bold"],
+        "bounded-extrabold": ["Bounded-ExtraBold"],
+        "bounded-light": ["Bounded-Light"],
+        "bounded-medium": ["Bounded-Medium"],
         "bounded-regular": ["Bounded-Regular"],
-        "bounded-variable": ["Bounded-Variable"],
+        "bounded-semibold": ["Bounded-SemiBold"],
+        "bounded-thin": ["Bounded-Thin"],
+
         "onest-black": ["Onest-Black"],
         "onest-bold": ["Onest-Bold"],
         "onest-extrabold": ["Onest-ExtraBold"],
@@ -22,7 +27,7 @@ module.exports = {
     },
     colors: {
       primary: "rgba(var(--primary-color))",
-      accent_primary: "rgba(var(--accent-primary-color))",
+      accent_primary: "rgba(var(--accent-primary))",
       bg_primary: "rgba(var(--bg-primary))",
       text_primary: "rgba(var(--text-primary))",
       text_secondary: "rgba(var(--text-secondary))",

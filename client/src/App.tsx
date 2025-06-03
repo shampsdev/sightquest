@@ -1,33 +1,29 @@
 import "./global.css";
+import "react-native-reanimated";
 
 import { NavigationContainer } from "@react-navigation/native";
-import MapScreen from "@/components/screens/map.screen";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import HomeScreen from "@/components/screens/home.screen";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
-type RootStackParamList = {
-  Home: undefined;
-  Map: undefined;
-};
-
-export type HomeScreenProps = NativeStackScreenProps<
-  RootStackParamList,
-  "Home"
->;
-
-const Stack = createStackNavigator<RootStackParamList>();
+import { MainNavigator } from "./routers/main.navigator";
+import { AuthNavigator } from "./routers/auth.navigator";
+import { useAuthStore } from "./shared/stores/auth.store";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [loaded, error] = useFonts({
     "Bounded-Black": require("./assets/fonts/Bounded-Black.ttf"),
-    "Bounded-ExtraLight": require("./assets/fonts/Bounded-ExtraLight.ttf"),
+    "Bounded-Bold": require("./assets/fonts/Bounded-Bold.ttf"),
+    "Bounded-ExtraBold": require("./assets/fonts/Bounded-ExtraBold.ttf"),
+    "Bounded-Light": require("./assets/fonts/Bounded-Light.ttf"),
+    "Bounded-Medium": require("./assets/fonts/Bounded-Medium.ttf"),
     "Bounded-Regular": require("./assets/fonts/Bounded-Regular.ttf"),
-    "Bounded-Variable": require("./assets/fonts/Bounded-Variable.ttf"),
+    "Bounded-SemiBold": require("./assets/fonts/Bounded-SemiBold.ttf"),
+    "Bounded-Thin": require("./assets/fonts/Bounded-Thin.ttf"),
+
     "Onest-Black": require("./assets/fonts/Onest-Black.ttf"),
     "Onest-Bold": require("./assets/fonts/Onest-Bold.ttf"),
     "Onest-ExtraBold": require("./assets/fonts/Onest-ExtraBold.ttf"),
@@ -38,6 +34,8 @@ export default function App() {
     "Onest-SemiBold": require("./assets/fonts/Onest-SemiBold.ttf"),
     "Onest-Thin": require("./assets/fonts/Onest-Thin.ttf"),
   });
+
+  const { auth } = useAuthStore();
 
   useEffect(() => {
     if (loaded || error) {
@@ -50,11 +48,10 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Map" component={MapScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        {auth ? <MainNavigator /> : <AuthNavigator />}
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
