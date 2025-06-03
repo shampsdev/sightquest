@@ -26,11 +26,7 @@ export const useGeolocation = () => {
   useEffect(() => {
     const configure = async () => {
       await BackgroundGeolocation.ready({
-        stopOnTerminate: true,
-        startOnBoot: false,
-        debug: true,
         logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-        foregroundService: true,
         ...foregroundTracking,
       });
 

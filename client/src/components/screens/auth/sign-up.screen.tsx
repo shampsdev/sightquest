@@ -14,6 +14,7 @@ import { TextInput } from "@/components/ui/textinput";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { register as registerRequest } from "@/shared/api/auth.api";
 import { useState } from "react";
+import { StatusBar } from 'expo-status-bar';
 
 export const SignUpScreen = () => {
   const { login } = useAuthStore();
@@ -96,6 +97,7 @@ export const SignUpScreen = () => {
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      <StatusBar style="light" />
     </SafeAreaView>
   );
 };

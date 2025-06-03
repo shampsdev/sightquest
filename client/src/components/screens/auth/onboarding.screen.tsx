@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { AuthStackParamList } from "@/routers/auth.navigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { View, Text, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -32,6 +33,7 @@ export const OnboardingScreen = () => {
       <View className="h-28">
         <Button className="w-[90%] mx-auto" onPress={login} text={"Войти"} />
       </View>
+      <StatusBar style="light" />
     </SafeAreaView>
   );
 };
