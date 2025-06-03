@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/src/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#111111"
     },
     "ios": {
       "buildNumber": "7",
@@ -23,7 +23,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/src/icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#111111"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.shampsdev.sightquest"
@@ -41,7 +41,7 @@
           "backgroundColor": "#975DFF",
           "image": "./assets/src/icon.png",
           "dark": {
-            "image": "./assets/src/icon-dark.png",
+            "image": "./assets/src/icon.png",
             "backgroundColor": "#111111"
           },
           "imageWidth": 200
