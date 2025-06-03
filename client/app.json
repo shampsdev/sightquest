@@ -5,10 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "sightquest-scheme",
-    "icon": "./assets/src/icon.png",
+    "icon": "./src/assets/icon.png",
     "newArchEnabled": false,
     "splash": {
-      "image": "./assets/src/icon.png",
+      "image": "./src/assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#111111"
     },
@@ -22,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/src/icon.png",
+        "foregroundImage": "./src/assets/icon.png",
         "backgroundColor": "#111111"
       },
       "edgeToEdgeEnabled": true,
@@ -39,9 +39,9 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#975DFF",
-          "image": "./assets/src/icon.png",
+          "image": "./src/assets/icon.png",
           "dark": {
-            "image": "./assets/src/icon.png",
+            "image": "./src/assets/icon.png",
             "backgroundColor": "#111111"
           },
           "imageWidth": 200
