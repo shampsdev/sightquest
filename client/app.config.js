@@ -18,6 +18,17 @@ module.exports = {
       bundleIdentifier: "com.shampsdev.sightquest",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
+        NSLocationAlwaysAndWhenInUseUsageDescription:
+          "To be able to share your location with friends while playing. This app requires location in the background",
+        NSLocationWhenInUseUsageDescription:
+          "To be able to share your location with friends while playing. This app requires location while in use",
+        NSMotionUsageDescription:
+          "To be able to share your location with friends while playing. This app uses motion-detection to determine the motion-activity of the device (walking, vehicle, bicycle, etc)",
+        UIBackgroundModes: ["location", "fetch", "processing"],
+        BGTaskSchedulerPermittedIdentifiers: [
+          "com.transistorsoft.fetch",
+          "com.transistorsoft.customtask",
+        ],
       },
     },
     android: {
@@ -29,6 +40,7 @@ module.exports = {
       package: "com.shampsdev.sightquest",
     },
     extra: {
+      mapboxToken: process.env.MAPBOX_TOKEN,
       apiUrl: process.env.API_URL || "https://sightquest.ru/",
       eas: {
         projectId: "ba7e05b8-d26d-4cba-acd0-aa04c79eca56",
@@ -55,6 +67,15 @@ module.exports = {
             "sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA",
         },
       ],
+      "react-native-background-geolocation",
+      [
+        "expo-gradle-ext-vars",
+        {
+          googlePlayServicesLocationVersion: "21.1.0",
+          appCompatVersion: "1.4.2",
+        },
+      ],
+      "react-native-background-fetch",
     ],
   },
 };

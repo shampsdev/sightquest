@@ -2734,6 +2734,11 @@ expo-asset@~11.1.5:
     "@expo/image-utils" "^0.7.4"
     expo-constants "~17.1.5"
 
+expo-blur@~14.1.4:
+  version "14.1.4"
+  resolved "https://registry.yarnpkg.com/expo-blur/-/expo-blur-14.1.4.tgz#d246c0a224ce63321d022edfc0e6a8c5fa2cc865"
+  integrity sha512-55P9tK/RjJZEcu2tU7BqX3wmIOrGMOOkmHztJMMws+ZGHzvtjnPmT7dsQxhOU9vPj77oHnKetYHU2sik3iBcCw==
+
 expo-constants@~17.1.5, expo-constants@~17.1.6:
   version "17.1.6"
   resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-17.1.6.tgz"
@@ -2786,6 +2791,11 @@ expo-font@~13.3.1:
   integrity sha512-d+xrHYvSM9WB42wj8vP9OOFWyxed5R1evphfDb6zYBmC1dA9Hf89FpT7TNFtj2Bk3clTnpmVqQTCYbbA2P3CLg==
   dependencies:
     fontfaceobserver "^2.1.0"
+
+expo-gradle-ext-vars@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/expo-gradle-ext-vars/-/expo-gradle-ext-vars-0.1.3.tgz#1ecf9a1d2b558ad7b5a2360507c916cf0d486e67"
+  integrity sha512-gbRclqGfebkog597+ZyeH6RnMxb7jojQDOUMkjFLZYNRAYye2edcPW5MrJyNX2lu7PsZWKEBTT0H7DRElSKFxA==
 
 expo-json-utils@~0.15.0:
   version "0.15.0"
@@ -4540,7 +4550,7 @@ react-is@^19.1.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.1.0.tgz#805bce321546b7e14c084989c77022351bbdd11b"
   integrity sha512-Oe56aUPnkHyyDxxkvqtd7KkdQP5uIUfHxd5XTb3wE9d/kRnZLmKbDB0GWk919tdQ+mxxPtG6EAs6RMT6i1qtHg==
 
-react-native-background-fetch@~4.2.6:
+react-native-background-fetch@^4.2.8, react-native-background-fetch@~4.2.6:
   version "4.2.8"
   resolved "https://registry.yarnpkg.com/react-native-background-fetch/-/react-native-background-fetch-4.2.8.tgz#b0ff9fafe30349035179ae08d7426778d3eabf01"
   integrity sha512-vKPumvhBuxr3oI1L7cNunYIsKV8jD4Xz2A9JT/FW5yvn7GAAct184FAZ9dFef75auBxixinaCjRBlip53xGWmQ==
@@ -4578,15 +4588,15 @@ react-native-gesture-handler@~2.24.0:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
 
-react-native-is-edge-to-edge@^1.1.6:
+react-native-is-edge-to-edge@1.1.7, react-native-is-edge-to-edge@^1.1.6:
   version "1.1.7"
   resolved "https://registry.npmjs.org/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.1.7.tgz"
   integrity sha512-EH6i7E8epJGIcu7KpfXYXiV2JFIYITtq+rVS8uEb+92naMRBdxhTuS8Wn2Q7j9sqyO0B+Xbaaf9VdipIAmGW4w==
 
-react-native-reanimated@3.16.2:
-  version "3.16.2"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.16.2.tgz#8ae2d632cbf02174ce3ef1329b3ce6e3cfe46aa2"
-  integrity sha512-Jk8y+iOLcK3J8YK3Qj/U+zclwfetgM1fFhlYaxFrJ5TPvuwdRG5YY1pvO91FcZ3C1+0meGHR6BZGl9d/Z0xh3Q==
+react-native-reanimated@^3.18.0:
+  version "3.18.0"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.18.0.tgz#0a246eab38a9e807887fe561a2868cfe85351f3c"
+  integrity sha512-eVcNcqeOkMW+BUWAHdtvN3FKgC8J8wiEJkX6bNGGQaLS7m7e4amTfjIcqf/Ta+lerZLurmDaQ0lICI1CKPrb1Q==
   dependencies:
     "@babel/plugin-transform-arrow-functions" "^7.0.0-0"
     "@babel/plugin-transform-class-properties" "^7.0.0-0"
@@ -4599,6 +4609,7 @@ react-native-reanimated@3.16.2:
     "@babel/preset-typescript" "^7.16.7"
     convert-source-map "^2.0.0"
     invariant "^2.2.4"
+    react-native-is-edge-to-edge "1.1.7"
 
 react-native-safe-area-context@^5.4.1:
   version "5.4.1"

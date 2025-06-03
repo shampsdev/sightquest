@@ -1,4 +1,5 @@
 import "./global.css";
+import "react-native-reanimated";
 
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
@@ -8,7 +9,6 @@ import { MainNavigator } from "./routers/main.navigator";
 import { AuthNavigator } from "./routers/auth.navigator";
 import { useAuthStore } from "./shared/stores/auth.store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { SignInScreen } from "./components/screens/auth/sign-in.screen";
 
 SplashScreen.preventAutoHideAsync();
 
