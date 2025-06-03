@@ -1,5 +1,8 @@
 PODS:
   - boost (1.84.0)
+  - CocoaLumberjack (3.8.5):
+    - CocoaLumberjack/Core (= 3.8.5)
+  - CocoaLumberjack/Core (3.8.5)
   - DoubleConversion (1.1.6)
   - EXConstants (17.1.6):
     - ExpoModulesCore
@@ -1971,6 +1974,11 @@ PODS:
     - React-logger (= 0.79.2)
     - React-perflogger (= 0.79.2)
     - React-utils (= 0.79.2)
+  - RNBackgroundGeolocation (4.18.7):
+    - CocoaLumberjack (~> 3.8.5)
+    - React-Core
+  - RNCAsyncStorage (2.1.2):
+    - React-Core
   - RNGestureHandler (2.24.0):
     - DoubleConversion
     - glog
@@ -2225,6 +2233,8 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNBackgroundGeolocation (from `../node_modules/react-native-background-geolocation`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "rnmapbox-maps (from `../node_modules/@rnmapbox/maps`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -2234,6 +2244,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CocoaLumberjack
     - MapboxCommon
     - MapboxCoreMaps
     - MapboxMaps
@@ -2415,6 +2426,10 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNBackgroundGeolocation:
+    :path: "../node_modules/react-native-background-geolocation"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   rnmapbox-maps:
@@ -2430,6 +2445,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
+  CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   EXConstants: 9f310f44bfedba09087042756802040e464323c0
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
@@ -2519,6 +2535,8 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 04d5eb15eb46be6720e17a4a7fa92940a776e584
   ReactCodegen: c63eda03ba1d94353fb97b031fc84f75a0d125ba
   ReactCommon: 76d2dc87136d0a667678668b86f0fca0c16fdeb0
+  RNBackgroundGeolocation: 01da64beda4468433b30df6f4ad207ddeba69497
+  RNCAsyncStorage: b9f5f78da5d16a853fe3dc22e8268d932fc45a83
   RNGestureHandler: ce4a87dba81030b374d7f1993c4376f5c230da2e
   rnmapbox-maps: 6eff285916f933203753f6c08c8bbb042bbd22cd
   RNReanimated: ef031abf4263e84c9cd3fc7a5cb9db7a4957df6e

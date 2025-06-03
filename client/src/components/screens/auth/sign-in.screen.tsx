@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/ui/textinput";
 import { AuthStackParamList } from "@/routers/auth.navigator";
-import { useAuthStore } from "@/stores/auth.store";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { login as loginRequest } from "@/shared/api/auth.api";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import {
@@ -12,14 +13,29 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 
 export const SignInScreen = () => {
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
   const { login } = useAuthStore();
 
-  const register = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      const response = await loginRequest(username, password);
+      login({ username }, response.token);
+    } catch (error: any) {
+      console.error(error);
+      Alert.alert("Ошибка входа", "Неверный логин или пароль");
+    }
+  };
+
+  const goToRegister = () => {
     navigation.navigate("SignUp");
   };
 
@@ -42,10 +58,17 @@ export const SignInScreen = () => {
                 </Text>
               </View>
               <View className="gap-4">
-                <TextInput placeholder="Никнейм" className="w-[90%] mx-auto" />
+                <TextInput
+                  placeholder="Никнейм"
+                  value={username}
+                  onChangeText={setUsername}
+                  className="w-[90%] mx-auto"
+                />
                 <TextInput
                   secureTextEntry
                   placeholder="Пароль"
+                  value={password}
+                  onChangeText={setPassword}
                   className="w-[90%] mx-auto"
                 />
               </View>
@@ -53,14 +76,14 @@ export const SignInScreen = () => {
             <View className="h-28 gap-5">
               <Button
                 className="w-[90%] mx-auto"
-                onPress={login}
+                onPress={handleLogin}
                 text="Войти"
               />
               <View className="flex flex-row gap-1 mx-auto">
                 <Text className="font-medium text-text_secondary">
                   Нет аккаунта?
                 </Text>
-                <Pressable onPress={register}>
+                <Pressable onPress={goToRegister}>
                   <Text className="font-medium text-text_primary">
                     Зарегистрироваться
                   </Text>

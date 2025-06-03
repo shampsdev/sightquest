@@ -6,14 +6,23 @@
     "stage": {
       "developmentClient": true,
       "distribution": "internal",
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "API_URL": "https://dev.sightquest.ru/"
+      }
     },
     "preview": {
       "distribution": "internal",
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "API_URL": "https://dev.sightquest.ru/"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "API_URL": "https://sightquest.ru/"
+      }
     }
   }
 }

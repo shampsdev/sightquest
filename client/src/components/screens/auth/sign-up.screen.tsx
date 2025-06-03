@@ -1,23 +1,37 @@
 import {
   View,
   Text,
-  Pressable,
   Platform,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/ui/textinput";
-import { AuthStackParamList } from "@/routers/auth.navigator";
-import { useAuthStore } from "@/stores/auth.store";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { register as registerRequest } from "@/shared/api/auth.api";
+import { useState } from "react";
 
 export const SignUpScreen = () => {
   const { login } = useAuthStore();
+
+  const [name, setName] = useState(""); // not sent to api
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = async () => {
+    try {
+      const response = await registerRequest(email, username, password);
+      login({ username }, response.token);
+    } catch (error: any) {
+      console.error(error);
+      Alert.alert("Ошибка регистрации", "Проверьте корректность данных");
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-bg_primary" edges={["top", "bottom"]}>
@@ -44,16 +58,30 @@ export const SignUpScreen = () => {
                 </Text>
               </View>
               <View className="gap-4">
-                <TextInput placeholder="Имя" className="w-[90%] mx-auto" />
-                <TextInput placeholder="Никнейм" className="w-[90%] mx-auto" />
+                <TextInput
+                  placeholder="Имя"
+                  value={name}
+                  onChangeText={setName}
+                  className="w-[90%] mx-auto"
+                />
+                <TextInput
+                  placeholder="Никнейм"
+                  value={username}
+                  onChangeText={setUsername}
+                  className="w-[90%] mx-auto"
+                />
                 <TextInput
                   autoComplete="email"
                   placeholder="Email"
+                  value={email}
+                  onChangeText={setEmail}
                   className="w-[90%] mx-auto"
                 />
                 <TextInput
                   secureTextEntry
                   placeholder="Пароль"
+                  value={password}
+                  onChangeText={setPassword}
                   className="w-[90%] mx-auto"
                 />
               </View>
@@ -61,8 +89,8 @@ export const SignUpScreen = () => {
             <View className="h-28 gap-5 mt-5">
               <Button
                 className="w-[90%] mx-auto"
-                onPress={login}
-                text="Войти"
+                onPress={handleRegister}
+                text="Зарегистрироваться"
               />
             </View>
           </ScrollView>

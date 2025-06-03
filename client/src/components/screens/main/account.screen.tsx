@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/stores/auth.store";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
