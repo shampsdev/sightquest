@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { MainNavigator } from "./routers/main.navigator";
 import { AuthNavigator } from "./routers/auth.navigator";
 import { useAuthStore } from "./stores/auth.store";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SignInScreen } from "./components/screens/auth/sign-in.screen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,8 +47,10 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      {auth ? <MainNavigator /> : <AuthNavigator />}
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        {auth ? <MainNavigator /> : <AuthNavigator />}
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

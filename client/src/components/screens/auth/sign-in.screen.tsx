@@ -1,28 +1,75 @@
 import { Button } from "@/components/ui/button";
+import { TextInput } from "@/components/ui/textinput";
 import { AuthStackParamList } from "@/routers/auth.navigator";
 import { useAuthStore } from "@/stores/auth.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { View, Text, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export const SignInScreen = () => {
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
+  const { login } = useAuthStore();
 
   const register = () => {
     navigation.navigate("SignUp");
   };
 
   return (
-    <View className="flex-1 bg-bg_primary justify-center items-center">
-      <Button disabled text={"Войти"} />
-      <View className="flex flex-row gap-1">
-        <Text className="font-medium text-text_secondary">Нет аккаунта?</Text>
-        <Pressable onPress={register}>
-          <Text className="font-medium text-text_primary">
-            Зарегистрироваться
-          </Text>
-        </Pressable>
-      </View>
-    </View>
+    <SafeAreaView className="flex-1 bg-bg_primary" edges={["top", "bottom"]}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View className="flex-1 justify-between">
+            <View className="flex-1 gap-10 mt-[15%]">
+              <View className="gap-2">
+                <Text className="text-center text-3xl text-text_primary font-bounded-semibold">
+                  Вход
+                </Text>
+                <Text className="text-center text-lg text-text_secondary font-onest-medium">
+                  Только не говори, что забыл пароль…
+                </Text>
+              </View>
+              <View className="gap-4">
+                <TextInput placeholder="Никнейм" className="w-[90%] mx-auto" />
+                <TextInput
+                  secureTextEntry
+                  placeholder="Пароль"
+                  className="w-[90%] mx-auto"
+                />
+              </View>
+            </View>
+            <View className="h-28 gap-5">
+              <Button
+                className="w-[90%] mx-auto"
+                onPress={login}
+                text="Войти"
+              />
+              <View className="flex flex-row gap-1 mx-auto">
+                <Text className="font-medium text-text_secondary">
+                  Нет аккаунта?
+                </Text>
+                <Pressable onPress={register}>
+                  <Text className="font-medium text-text_primary">
+                    Зарегистрироваться
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };

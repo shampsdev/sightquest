@@ -1,6 +1,7 @@
 import { OnboardingScreen } from "@/components/screens/auth/onboarding.screen";
 import { SignInScreen } from "@/components/screens/auth/sign-in.screen";
 import { SignUpScreen } from "@/components/screens/auth/sign-up.screen";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 export type AuthStackParamList = {
