@@ -1,4 +1,4 @@
-import Svg, { Path } from "react-native-svg";
+import Svg, { Path, Rect } from "react-native-svg";
 
 export const Icons = {
   Store: () => {
@@ -22,6 +22,39 @@ export const Icons = {
           d="M8.50087 14.689H13.5009V20.5556H8.50087V14.689Z"
           stroke="white"
           strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </Svg>
+    );
+  },
+  Marker: ({ fill = "#975DFF" }: { fill: string }) => {
+    return (
+      <Svg width={33} height={42} viewBox="0 0 33 42" fill="none">
+        <Path
+          d="M16.5 2.357c5.533 0 10.018 4.125 10.018 11.197 0 5.38-5.8 13.148-8.573 16.556-.798.945-2.138.908-2.89 0-2.773-3.406-8.573-11.175-8.573-16.556 0-7.072 4.485-11.197 10.018-11.197zm0 6.482a3.536 3.536 0 100 7.072 3.536 3.536 0 000-7.072z"
+          fill={fill}
+        />
+        <Rect
+          x={13}
+          y={34}
+          width={7}
+          height={7}
+          rx={3.5}
+          fill={fill}
+          stroke="#fff"
+          strokeWidth={2}
+        />
+      </Svg>
+    );
+  },
+  Back: () => {
+    return (
+      <Svg width={10} height={18} viewBox="0 0 10 18" fill="none">
+        <Path
+          d="M8.4 16.2L1.2 9l7.2-7.2"
+          stroke="#fff"
+          strokeWidth={2.4}
           strokeLinecap="round"
           strokeLinejoin="round"
         />

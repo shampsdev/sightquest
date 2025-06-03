@@ -1,14 +1,35 @@
 import { Button } from "@/components/ui/button";
+import { IconContainer } from "@/components/ui/icons/icon-container";
+import { Icons } from "@/components/ui/icons/icons";
+import { MainStackParamList } from "@/routers/main.navigator";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { StatusBar } from "expo-status-bar";
+import { Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const AccountScreen = () => {
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const { logout } = useAuthStore();
 
+  const back = () => {
+    navigation.goBack();
+  };
+
   return (
-    <SafeAreaView className="flex-1 justify-end">
+    <SafeAreaView className="flex-1 justify-end bg-bg_primary">
+      <View className="absolute top-20 w-full">
+        <View className="w-[90%] mx-auto flex-row justify-between items-center">
+          <Pressable onPress={back}>
+            <IconContainer className="bg-[#222222]">
+              <Icons.Back />
+            </IconContainer>
+          </Pressable>
+        </View>
+      </View>
       <Button onPress={logout} className="w-[90%] mx-auto" text={"Выйти"} />
+      <StatusBar style="light" />
     </SafeAreaView>
   );
 };

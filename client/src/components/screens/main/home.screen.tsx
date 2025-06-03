@@ -12,8 +12,9 @@ import { useGeolocation } from "@/shared/hooks/useGeolocation";
 import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
+import { RouteMarker } from "@/components/ui/map/route-marker";
 
-export const MapScreen = () => {
+export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const location = useGeolocation();
 
@@ -30,7 +31,6 @@ export const MapScreen = () => {
               coordinate={location}
               name="Мишель"
               avatarSrc={require("@/assets/avatars/avatar-14.png")}
-              // pulse
             />
             <Camera
               defaultSettings={{
@@ -40,6 +40,21 @@ export const MapScreen = () => {
             />
           </>
         )}
+
+        <RouteMarker
+          points={[
+            [30.322951, 59.943216],
+            [30.3241, 59.9532],
+          ]}
+          path={[
+            [30.318977, 59.94153],
+            [30.326345, 59.944563],
+            [30.33018, 59.945526],
+            [30.323688, 59.953183],
+            [30.333407, 59.957705],
+            [30.344544, 59.958102],
+          ]}
+        />
       </Map>
 
       <View className="absolute top-20 w-full">
