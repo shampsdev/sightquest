@@ -25,7 +25,7 @@ export const OnboardingSlide = ({
       <Text className="text-text_primary text-3xl font-bounded-medium text-center mb-6">
         {title}
       </Text>
-      <Text className="text-text_secondary text-lg font-onest-medium text-center">
+      <Text className="text-text_secondary text-md font-onest-medium text-center">
         {subtitle}
       </Text>
     </View>

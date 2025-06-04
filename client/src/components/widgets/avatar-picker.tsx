@@ -23,7 +23,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 import { AVATARS } from "@/constants";
 type Item = { id: number; src: any };
 
-const ITEM_WIDTH = 144;
+const ITEM_WIDTH = 192;
 const SPACER_WIDTH = (SCREEN_WIDTH - ITEM_WIDTH) / 2;
 
 const AvatarItem = ({
@@ -195,8 +195,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   avatarImage: {
-    width: 120,
-    height: 120,
+    width: 160,
+    height: 160,
     borderRadius: 40,
   },
 });
