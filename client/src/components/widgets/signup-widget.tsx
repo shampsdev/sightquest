@@ -43,18 +43,6 @@ export const SignUpWidget = () => {
       className="flex-1 items-center"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-      <View
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: "50%",
-          width: 1,
-          backgroundColor: "red",
-          zIndex: 10,
-        }}
-      />
-
       <View>
         <AvatarPicker />
       </View>

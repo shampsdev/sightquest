@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import {
   FlatList,
   Dimensions,
@@ -13,7 +13,9 @@ import Animated, {
   useAnimatedScrollHandler,
   interpolate,
   Extrapolation,
+  runOnJS,
 } from "react-native-reanimated";
+import * as Haptics from "expo-haptics";
 
 import { AVATARS } from "@/constants";
 
@@ -21,7 +23,7 @@ type AvatarItemData = { id: number; src: any };
 type Item = AvatarItemData;
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const ITEM_WIDTH = 100;
+const ITEM_WIDTH = 144;
 
 const SPACER_WIDTH = (SCREEN_WIDTH - ITEM_WIDTH) / 2;
 
@@ -70,9 +72,34 @@ export const AvatarPicker = ({
   const SPACER_ITEM: Item = { id: -1, src: null };
   const data: Item[] = [SPACER_ITEM, ...AVATARS, SPACER_ITEM];
 
+  const lastSelectedIndex = useRef<number | null>(null);
+
+  const triggerHapticAndSelect = (index: number) => {
+    const avatar = AVATARS[index];
+    if (avatar) {
+      Haptics.selectionAsync();
+      onSelect?.(avatar.id);
+    }
+  };
+
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x;
+
+      // Run on the JS thread using runOnJS
+      const centerOffset = event.contentOffset.x + SCREEN_WIDTH / 2;
+      const rawIndex =
+        (centerOffset - SPACER_WIDTH - ITEM_WIDTH / 2) / ITEM_WIDTH;
+      const roundedIndex = Math.round(rawIndex);
+
+      if (
+        roundedIndex >= 0 &&
+        roundedIndex < AVATARS.length &&
+        lastSelectedIndex.current !== roundedIndex
+      ) {
+        lastSelectedIndex.current = roundedIndex;
+        runOnJS(triggerHapticAndSelect)(roundedIndex);
+      }
     },
   });
 
@@ -160,8 +187,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   avatarImage: {
-    width: 80,
-    height: 80,
+    width: 120,
+    height: 120,
     borderRadius: 40,
   },
 });
