@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { useState } from "react";
+import { Icons } from "./icons/icons";
 
 interface TextInputProps extends RNTextInputProps {
   className?: string;
@@ -45,9 +46,7 @@ export const TextInput = ({
           onPress={() => setIsSecure((prev) => !prev)}
           className="px-5"
         >
-          <Text className="text-text_secondary text-xl">
-            {isSecure ? "E" : "e"}
-          </Text>
+          {isSecure ? <Icons.Eye fill="#878787" /> : <Icons.Eye />}
         </Pressable>
       )}
     </View>

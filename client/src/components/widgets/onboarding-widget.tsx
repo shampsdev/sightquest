@@ -26,7 +26,7 @@ const SLIDES: OnboardingSlideProps[] = [
   },
 ];
 
-export const Onboarding = () => {
+export const OnboardingWidget = () => {
   const [screen, setScreen] = useState(0);
 
   const onScreenTap = () => {
