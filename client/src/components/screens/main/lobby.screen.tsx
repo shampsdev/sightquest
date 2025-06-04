@@ -1,17 +1,14 @@
-import { Button } from "@/components/ui/button";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import { MainStackParamList } from "@/routers/main.navigator";
-import { useAuthStore } from "@/shared/stores/auth.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import { Pressable, View, Text } from "react-native";
+import { Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export const AccountScreen = () => {
+export const LobbyScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const { logout } = useAuthStore();
 
   const back = () => {
     navigation.goBack();
@@ -28,12 +25,6 @@ export const AccountScreen = () => {
           </Pressable>
         </View>
       </View>
-      <Text
-        className="text-center text-md font-medium text-text_secondary"
-        onPress={logout}
-      >
-        Выйти
-      </Text>
       <StatusBar style="light" />
     </SafeAreaView>
   );

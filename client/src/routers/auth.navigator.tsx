@@ -16,6 +16,7 @@ export const AuthNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
+        gestureEnabled: false,
         headerShown: false,
       }}
     >

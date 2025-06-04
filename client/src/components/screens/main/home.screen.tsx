@@ -13,24 +13,36 @@ import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
 import { RouteMarker } from "@/components/ui/map/route-marker";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { AVATARS } from "@/constants";
+import { useRef } from "react";
+import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
+import BottomSheet from '@gorhom/bottom-sheet';
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const location = useGeolocation();
+  const { user } = useAuthStore();
 
   const account = () => {
     navigation.navigate("Account");
   };
 
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
   return (
     <View className="flex-1">
       <Map>
-        {location && (
+        {location && user && (
           <>
             <PlayerMarker
               coordinate={location}
-              name="Мишель"
-              avatarSrc={require("@/assets/avatars/avatar-14.png")}
+              name={user?.name ?? user.username}
+              avatarSrc={
+                user.avatar
+                  ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
+                  : AVATARS[0].src
+              }
             />
             <Camera
               defaultSettings={{
@@ -63,18 +75,31 @@ export const HomeScreen = () => {
             <Icons.Store />
           </IconContainer>
 
-          <Pressable onPress={account}>
-            <Avatar
-              className="h-12 w-12"
-              source={require("@/assets/avatars/avatar-14.png")}
-            />
-          </Pressable>
+          {user && (
+            <Pressable onPress={account}>
+              <Avatar
+                className="h-12 w-12"
+                source={
+                  user.avatar
+                    ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
+                    : AVATARS[0].src
+                }
+              />
+            </Pressable>
+          )}
         </View>
       </View>
 
-      <View className="absolute bottom-12 w-full items-center">
-        <Button className="w-[90%]" text="Начать игру" />
+      <View className="absolute bottom-12 px-[5%] gap-2 flex flex-1 flex-row items-center">
+        <Button
+          onPress={() => bottomSheetRef.current?.snapToIndex(0)}
+          className="flex-1 w-auto"
+          text="Присоединится"
+        />
+        <Button className="flex-1 w-auto" text="Начать игру" />
       </View>
+
+      <JoinBottomSheet ref={bottomSheetRef} />
 
       <StatusBar style="dark" />
     </View>

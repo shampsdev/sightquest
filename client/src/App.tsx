@@ -10,6 +10,7 @@ import { AuthNavigator } from "./routers/auth.navigator";
 import { useAuthStore } from "./shared/stores/auth.store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -48,10 +49,12 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        {auth ? <MainNavigator /> : <AuthNavigator />}
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          {auth ? <MainNavigator /> : <AuthNavigator />}
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
