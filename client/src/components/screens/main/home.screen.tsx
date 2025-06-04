@@ -15,6 +15,9 @@ import { Avatar } from "@/components/ui/avatar";
 import { RouteMarker } from "@/components/ui/map/route-marker";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { AVATARS } from "@/constants";
+import { useRef } from "react";
+import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
+import BottomSheet from '@gorhom/bottom-sheet';
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -24,6 +27,8 @@ export const HomeScreen = () => {
   const account = () => {
     navigation.navigate("Account");
   };
+
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
   return (
     <View className="flex-1">
@@ -85,9 +90,16 @@ export const HomeScreen = () => {
         </View>
       </View>
 
-      <View className="absolute bottom-12 w-full items-center">
-        <Button className="w-[90%]" text="Начать игру" />
+      <View className="absolute bottom-12 px-[5%] gap-2 flex flex-1 flex-row items-center">
+        <Button
+          onPress={() => bottomSheetRef.current?.snapToIndex(0)}
+          className="flex-1 w-auto"
+          text="Присоединится"
+        />
+        <Button className="flex-1 w-auto" text="Начать игру" />
       </View>
+
+      <JoinBottomSheet ref={bottomSheetRef} />
 
       <StatusBar style="dark" />
     </View>

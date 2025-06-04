@@ -2,7 +2,6 @@ import {
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
   View,
-  Text,
   Pressable,
   StyleSheet,
 } from "react-native";
@@ -12,11 +11,15 @@ import { Icons } from "./icons/icons";
 
 interface TextInputProps extends RNTextInputProps {
   className?: string;
+  inputClassName?: string;
+  InputComponent?: React.ComponentType<RNTextInputProps>;
 }
 
 export const TextInput = ({
   className,
+  inputClassName,
   secureTextEntry,
+  InputComponent = RNTextInput,
   ...props
 }: TextInputProps) => {
   const [isSecure, setIsSecure] = useState(secureTextEntry);
@@ -24,17 +27,17 @@ export const TextInput = ({
 
   return (
     <View
-      className={twMerge(
-        "flex-row items-center rounded-3xl border bg-bg_primary",
-        className
-      )}
+      className={twMerge("flex-row items-center rounded-3xl border", className)}
       style={[styles.base, inputFocused ? styles.focused : styles.blurred]}
     >
-      <RNTextInput
+      <InputComponent
         autoCapitalize="none"
         autoCorrect={false}
         secureTextEntry={isSecure}
-        className="flex-1 font-onest-medium px-5 py-5 text-xl text-text_primary placeholder-text_secondary"
+        className={twMerge(
+          "flex-1 font-onest-medium px-5 py-5 text-xl text-text_primary placeholder-text_secondary",
+          inputClassName
+        )}
         placeholderTextColor="#878787"
         onFocus={() => setInputFocused(true)}
         onBlur={() => setInputFocused(false)}
@@ -52,8 +55,6 @@ export const TextInput = ({
     </View>
   );
 };
-
-// тут, к сожалению, twMerge / nativewind не осилил
 
 const styles = StyleSheet.create({
   base: {

@@ -6,7 +6,7 @@ import { useAuthStore } from "@/shared/stores/auth.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import { Pressable, View } from "react-native";
+import { Pressable, View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const AccountScreen = () => {
@@ -28,7 +28,12 @@ export const AccountScreen = () => {
           </Pressable>
         </View>
       </View>
-      <Button onPress={logout} className="w-[90%] mx-auto" text={"Выйти"} />
+      <Text
+        className="text-center text-md font-medium text-text_secondary"
+        onPress={logout}
+      >
+        Выйти
+      </Text>
       <StatusBar style="light" />
     </SafeAreaView>
   );
