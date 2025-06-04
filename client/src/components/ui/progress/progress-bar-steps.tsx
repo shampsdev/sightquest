@@ -5,26 +5,39 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useEffect } from "react";
-import { twMerge } from "tailwind-merge";
+
+interface ProgressBarConfig {
+  indicatorWidth?: number;
+  indicatorWidthSm?: number;
+  gap?: number;
+  dotHeight?: number;
+  duration?: number;
+}
 
 interface ProgressBarStepsProps {
   currentStep: number;
   totalSteps: number;
+  config?: ProgressBarConfig;
 }
 
 export const ProgressBarSteps = ({
   currentStep,
   totalSteps,
+  config = {},
 }: ProgressBarStepsProps) => {
-  const INDICATOR_WIDTH = 64;
-  const GAP = 8;
-  const DOT_HEIGHT = 8;
+  const {
+    indicatorWidth = 64,
+    indicatorWidthSm = 48,
+    gap = 8,
+    dotHeight = 8,
+    duration = 250,
+  } = config;
 
   const translateX = useSharedValue(0);
 
   useEffect(() => {
-    translateX.value = withTiming(currentStep * (48 + GAP), {
-      duration: 250,
+    translateX.value = withTiming(currentStep * (indicatorWidthSm + gap), {
+      duration,
     });
   }, [currentStep]);
 
@@ -34,45 +47,45 @@ export const ProgressBarSteps = ({
 
   return (
     <View className="mx-auto mt-4 relative">
-      {/* Dots container */}
-      <View className="flex-row gap-2">
+      <View className="flex-row" style={{ gap }}>
         {Array.from({ length: totalSteps }).map((_, index) => {
           const width = useSharedValue(
-            index === currentStep ? INDICATOR_WIDTH : 48
+            index === currentStep ? indicatorWidth : indicatorWidthSm
           );
 
           useEffect(() => {
             width.value = withTiming(
-              index === currentStep ? INDICATOR_WIDTH : 48,
-              {
-                duration: 250,
-              }
+              index === currentStep ? indicatorWidth : indicatorWidthSm,
+              { duration }
             );
           }, [currentStep]);
 
-          const animatedStyle = useAnimatedStyle(() => {
-            return {
-              width: width.value,
-            };
-          });
+          const animatedStyle = useAnimatedStyle(() => ({
+            width: width.value,
+          }));
 
           return (
             <Animated.View
               key={`progress_step_${index}`}
-              style={animatedStyle}
-              className="h-2 rounded-full bg-navigation"
+              style={[
+                animatedStyle,
+                {
+                  height: dotHeight,
+                  borderRadius: 999,
+                },
+              ]}
+              className="bg-navigation"
             />
           );
         })}
       </View>
 
-      {/* Floating white indicator above */}
       <Animated.View
         style={[
           {
             position: "absolute",
-            height: DOT_HEIGHT,
-            width: INDICATOR_WIDTH,
+            height: dotHeight,
+            width: indicatorWidth,
             borderRadius: 999,
             backgroundColor: "#fff",
             top: 0,
