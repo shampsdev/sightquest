@@ -14,17 +14,16 @@ import Animated, {
   interpolate,
   Extrapolation,
   runOnJS,
+  SharedValue,
 } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
 
-import { AVATARS } from "@/constants";
-
-type AvatarItemData = { id: number; src: any };
-type Item = AvatarItemData;
-
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const ITEM_WIDTH = 144;
 
+import { AVATARS } from "@/constants";
+type Item = { id: number; src: any };
+
+const ITEM_WIDTH = 144;
 const SPACER_WIDTH = (SCREEN_WIDTH - ITEM_WIDTH) / 2;
 
 const AvatarItem = ({
@@ -32,12 +31,12 @@ const AvatarItem = ({
   index,
   scrollX,
 }: {
-  item: AvatarItemData;
+  item: Item;
   index: number;
-  scrollX: Animated.SharedValue<number>;
+  scrollX: SharedValue<number>;
 }) => {
   const animatedStyle = useAnimatedStyle(() => {
-    const realIndex = index - 1; // adjust for left spacer
+    const realIndex = index - 1;
     const itemCenterX = realIndex * ITEM_WIDTH + ITEM_WIDTH / 2 + SPACER_WIDTH;
     const screenCenterX = scrollX.value + SCREEN_WIDTH / 2;
     const distance = Math.abs(itemCenterX - screenCenterX);
@@ -69,8 +68,11 @@ export const AvatarPicker = ({
   const flatListRef = useRef<FlatList<Item>>(null);
   const scrollX = useSharedValue(0);
 
-  const SPACER_ITEM: Item = { id: -1, src: null };
-  const data: Item[] = [SPACER_ITEM, ...AVATARS, SPACER_ITEM];
+  const data: Item[] = [
+    { id: -1, src: null },
+    ...AVATARS,
+    { id: -1, src: null },
+  ];
 
   const lastSelectedIndex = useRef<number | null>(null);
 
@@ -86,7 +88,6 @@ export const AvatarPicker = ({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x;
 
-      // Run on the JS thread using runOnJS
       const centerOffset = event.contentOffset.x + SCREEN_WIDTH / 2;
       const rawIndex =
         (centerOffset - SPACER_WIDTH - ITEM_WIDTH / 2) / ITEM_WIDTH;
@@ -108,17 +109,17 @@ export const AvatarPicker = ({
       return <View style={{ width: SPACER_WIDTH }} />;
     }
 
+    const onItemPress = () => {
+      flatListRef.current?.scrollToIndex({
+        index,
+        viewPosition: 0.5,
+        animated: true,
+      });
+      onSelect?.(item.id);
+    };
+
     return (
-      <Pressable
-        onPress={() => {
-          flatListRef.current?.scrollToIndex({
-            index,
-            viewPosition: 0.5,
-            animated: true,
-          });
-          onSelect?.(item.id);
-        }}
-      >
+      <Pressable onPress={onItemPress}>
         <AvatarItem item={item} index={index} scrollX={scrollX} />
       </Pressable>
     );
@@ -128,23 +129,46 @@ export const AvatarPicker = ({
     return SPACER_WIDTH + i * ITEM_WIDTH - (SCREEN_WIDTH / 2 - ITEM_WIDTH / 2);
   });
 
+  const onLayout = () => {
+    requestAnimationFrame(() => {
+      const middleIndex = Math.floor(AVATARS.length / 2);
+      flatListRef.current?.scrollToIndex({
+        index: middleIndex,
+        viewPosition: 0.5,
+        animated: true,
+      });
+
+      onSelect?.(AVATARS[middleIndex].id);
+    });
+  };
+
+  const keyExtractor = (item: Item, index: number) =>
+    item.src === null ? `spacer-${index}` : `avatar-${item.id}`;
+
+  const getItemLayout = (
+    _: ArrayLike<Item> | null | undefined,
+    index: number
+  ) => {
+    if (index === 0 || index === data.length - 1) {
+      return {
+        length: SPACER_WIDTH,
+        offset: index === 0 ? 0 : SPACER_WIDTH + AVATARS.length * ITEM_WIDTH,
+        index,
+      };
+    }
+    return {
+      length: ITEM_WIDTH,
+      offset: SPACER_WIDTH + (index - 1) * ITEM_WIDTH,
+      index,
+    };
+  };
+
   return (
     <Animated.FlatList
       ref={flatListRef}
       data={data}
       horizontal
-      onLayout={() => {
-        requestAnimationFrame(() => {
-          const middleIndex = Math.floor(AVATARS.length / 2);
-          flatListRef.current?.scrollToIndex({
-            index: middleIndex,
-            viewPosition: 0.5,
-            animated: true,
-          });
-
-          onSelect?.(AVATARS[middleIndex].id);
-        });
-      }}
+      onLayout={onLayout}
       snapToOffsets={snapToOffsets}
       contentInset={{ left: SPACER_WIDTH, right: SPACER_WIDTH }}
       decelerationRate="fast"
@@ -154,25 +178,9 @@ export const AvatarPicker = ({
         paddingHorizontal: 0,
       }}
       style={{ width: SCREEN_WIDTH }}
-      keyExtractor={(item, index) =>
-        item.src === null ? `spacer-${index}` : `avatar-${item.id}`
-      }
+      keyExtractor={keyExtractor}
       renderItem={renderItem}
-      getItemLayout={(_, index) => {
-        if (index === 0 || index === data.length - 1) {
-          return {
-            length: SPACER_WIDTH,
-            offset:
-              index === 0 ? 0 : SPACER_WIDTH + AVATARS.length * ITEM_WIDTH,
-            index,
-          };
-        }
-        return {
-          length: ITEM_WIDTH,
-          offset: SPACER_WIDTH + (index - 1) * ITEM_WIDTH,
-          index,
-        };
-      }}
+      getItemLayout={getItemLayout}
       onScroll={scrollHandler}
       scrollEventThrottle={16}
     />
