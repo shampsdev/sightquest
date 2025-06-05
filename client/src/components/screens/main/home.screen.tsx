@@ -17,7 +17,7 @@ import { useAuthStore } from "@/shared/stores/auth.store";
 import { AVATARS } from "@/constants";
 import { useRef } from "react";
 import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet from "@gorhom/bottom-sheet";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();

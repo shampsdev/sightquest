@@ -5,4 +5,10 @@ export interface User {
   avatar?: string;
   background?: string;
   createdAt?: string;
+  stats?: UserStats;
+}
+
+export interface UserStats {
+  wins: number;
+  matches: number;
 }

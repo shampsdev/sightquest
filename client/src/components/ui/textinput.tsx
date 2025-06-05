@@ -49,7 +49,11 @@ export const TextInput = ({
           onPress={() => setIsSecure((prev) => !prev)}
           className="px-5"
         >
-          {isSecure ? <Icons.Eye fill="#878787" /> : <Icons.Eye />}
+          {isSecure ? (
+            <Icons.Eye.Striked fill="#878787" />
+          ) : (
+            <Icons.Eye.Striked />
+          )}
         </Pressable>
       )}
     </View>

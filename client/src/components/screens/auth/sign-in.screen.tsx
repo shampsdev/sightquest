@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from "expo-status-bar";
 
 export const SignInScreen = () => {
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
