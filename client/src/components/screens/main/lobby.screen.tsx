@@ -4,12 +4,11 @@ import { MainStackParamList } from "@/routers/main.navigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import { Pressable, View } from "react-native";
+import { Pressable, View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const LobbyScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-
   const back = () => {
     navigation.goBack();
   };

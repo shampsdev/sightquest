@@ -1,6 +1,6 @@
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
-import { View, Pressable } from "react-native";
+import { View, Pressable, Text } from "react-native";
 import { Map } from "@/components/widgets/map";
 import { Button } from "@/components/ui/button";
 import { useNavigation } from "@react-navigation/native";
@@ -22,7 +22,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const location = useGeolocation();
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   const account = () => {
     navigation.navigate("Account");
@@ -79,6 +79,10 @@ export const HomeScreen = () => {
             <IconContainer>
               <Icons.Store />
             </IconContainer>
+          </Pressable>
+
+          <Pressable onPress={logout}>
+            <Text>ВЫЙТИ</Text>
           </Pressable>
 
           {user && (

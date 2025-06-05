@@ -45,6 +45,42 @@ export const ShopScreen = () => {
       withButton: true,
       disabled: false,
     },
+    {
+      avatar: AVATARS[0].src,
+      title: "Название",
+      subtitle: "Описание",
+      withButton: true,
+      disabled: false,
+    },
+    {
+      avatar: AVATARS[0].src,
+      title: "Название",
+      subtitle: "Описание",
+      withButton: true,
+      disabled: false,
+    },
+    {
+      avatar: AVATARS[0].src,
+      title: "Название",
+      subtitle: "Описание",
+      withButton: true,
+      disabled: false,
+    },
+    {
+      avatar: AVATARS[0].src,
+      title: "Название",
+      subtitle: "Описание",
+      withButton: true,
+      disabled: false,
+    },
+
+    {
+      avatar: AVATARS[0].src,
+      title: "Название",
+      subtitle: "Описание",
+      withButton: true,
+      disabled: false,
+    },
   ];
 
   const back = () => {
