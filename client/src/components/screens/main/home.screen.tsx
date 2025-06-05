@@ -28,6 +28,10 @@ export const HomeScreen = () => {
     navigation.navigate("Account");
   };
 
+  const shop = () => {
+    navigation.navigate("Shop");
+  };
+
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   return (
@@ -71,9 +75,11 @@ export const HomeScreen = () => {
 
       <View className="absolute top-20 w-full">
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
-          <IconContainer>
-            <Icons.Store />
-          </IconContainer>
+          <Pressable onPress={shop}>
+            <IconContainer>
+              <Icons.Store />
+            </IconContainer>
+          </Pressable>
 
           {user && (
             <Pressable onPress={account}>

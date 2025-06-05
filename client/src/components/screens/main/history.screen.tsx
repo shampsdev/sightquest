@@ -1,3 +1,4 @@
+import Header from "@/components/ui/header";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import UserPreview from "@/components/widgets/user/user-preview";
@@ -34,15 +35,7 @@ export const HistoryScreen = () => {
             </Pressable>
           </View>
 
-          <View className="flex flex-col items-center justify-center">
-            <Text className="mx-auto text-text_primary text-[24px] font-bounded-regular">
-              Участники
-            </Text>
-
-            <Text className="mx-auto text-[16px] text-text_secondary font-bounded-regular">
-              Маршрут: A
-            </Text>
-          </View>
+          <Header mainText={"Участники"} descriptionText={"Маршрут: A"} />
 
           <View className="flex flex-col w-full gap-[15px]">
             <UserPreview

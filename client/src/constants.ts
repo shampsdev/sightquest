@@ -28,3 +28,5 @@ export const ACTIVITIES: Record<"wins" | "matches", ImageSourcePropType> = {
   wins: require("@/assets/activites/wins.png"),
   matches: require("@/assets/activites/matches.png"),
 } as const;
+
+export const SHOP_SECTIONS = ["Аватарки", "Маршруты", "Ник"] as const;
