@@ -1,8 +1,15 @@
 import { Route } from "./Route";
 import { User } from "./User";
 
+export interface UserStatistic {
+  score: number;
+  username: string;
+  avatar: string;
+}
+
 export interface GameStatistics {
-  members: User[];
+  membersStatistics: UserStatistic[];
   route: Route;
   date: Date;
+  gameId: string;
 }

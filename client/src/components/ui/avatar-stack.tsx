@@ -1,8 +1,8 @@
-import { View, Text } from "react-native";
+import { View, Text, ImageSourcePropType } from "react-native";
 import { Avatar } from "./avatar";
 import { AVATARS } from "@/constants";
 interface AvatarStackProps {
-  avatars: string[];
+  avatars: ImageSourcePropType[];
 }
 const AvatarStack = ({ avatars }: AvatarStackProps) => {
   const positionClasses = ["left-0 z-1", "left-10 z-10", "left-20 z-20"];
@@ -11,8 +11,7 @@ const AvatarStack = ({ avatars }: AvatarStackProps) => {
   const showedAvatarsCount =
     avatars.length >= DISPLAY_AVATARS ? DISPLAY_AVATARS : avatars.length;
 
-  const stackWidthCoefficient = [15, 25, 40];
-  const width = DISPLAY_AVATARS * stackWidthCoefficient[showedAvatarsCount - 1];
+  const width = DISPLAY_AVATARS * 40;
   avatars.length > 2 ? 40 * showedAvatarsCount : 15 * showedAvatarsCount;
 
   return (
@@ -21,11 +20,11 @@ const AvatarStack = ({ avatars }: AvatarStackProps) => {
         <Avatar
           className={`absolute ${positionClasses[index]}`}
           key={index}
-          source={avatar || AVATARS[0].src}
+          source={avatar}
         />
       ))}
       {hiddenAvatarsCount > 0 && (
-        <View className=" absolute top-[-6px] right-[-10px] rounded-full bg-accent_primary z-40 px-[8px] py-[4px]">
+        <View className="absolute top-[-6px] right-[-10px] rounded-full bg-accent_primary z-40 px-[8px] py-[4px]">
           <Text className="font-bounded-regular text-text_primary text-[12px]">
             +{hiddenAvatarsCount}
           </Text>
