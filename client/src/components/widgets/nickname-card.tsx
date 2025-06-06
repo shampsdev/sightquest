@@ -19,8 +19,12 @@ import {
   rect,
 } from "@shopify/react-native-skia";
 import { Skia } from "@shopify/react-native-skia/lib/module/skia";
+import { Camera, MapView } from "@rnmapbox/maps";
+import { AVATARS, MAPBOX_STYLE_URL } from "@/constants";
+import { PlayerMarker } from "../ui/map/player-marker";
+import { useAuthStore } from "@/shared/stores/auth.store";
 
-export interface AvatarCardProps {
+export interface NicknameCardProps {
   avatar: ImageSourcePropType;
   title: string;
   subtitle: string;
@@ -30,7 +34,7 @@ export interface AvatarCardProps {
   className?: string;
 }
 
-const AvatarCard = ({
+const NicknameCard = ({
   avatar,
   title,
   subtitle,
@@ -38,10 +42,10 @@ const AvatarCard = ({
   withButton,
   disabled,
   className,
-}: AvatarCardProps) => {
+}: NicknameCardProps) => {
   const { width } = useWindowDimensions();
   const [cardHeight, setCardHeight] = useState(100);
-
+  const { user } = useAuthStore();
   const handleLayout = useCallback(
     (event: LayoutChangeEvent) => {
       const { height } = event.nativeEvent.layout;
@@ -60,12 +64,37 @@ const AvatarCard = ({
   return (
     <View
       className={twMerge(
-        "w-[48%] relative flex flex-col items-center justify-center",
+        "w-[48%] relative pt-[40px] flex flex-col items-center justify-center",
         className
       )}
     >
-      <View className="absolute top-0 left-0 w-full flex items-center z-30">
-        <Avatar className="top-[-60px] w-[130px] h-[130px]" source={avatar} />
+      <View className="absolute top-[-20px] left-0 w-full flex items-center z-30">
+        <MapView
+          pitchEnabled={false}
+          rotateEnabled={false}
+          scrollEnabled={false}
+          logoEnabled={false}
+          scaleBarEnabled={false}
+          attributionEnabled={false}
+          styleURL={MAPBOX_STYLE_URL}
+          className="flex-1 h-[120px] w-full rounded-[30px] overflow-hidden z-100"
+        >
+          <Camera
+            defaultSettings={{
+              centerCoordinate: [30.34018, 59.965526],
+              zoomLevel: 12,
+            }}
+          />
+          <PlayerMarker
+            coordinate={[30.34018, 59.965526]}
+            name={user?.name ?? (user?.username || "")}
+            avatarSrc={
+              user?.avatar
+                ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
+                : AVATARS[0].src
+            }
+          />
+        </MapView>
       </View>
 
       <View
@@ -129,4 +158,4 @@ const AvatarCard = ({
   );
 };
 
-export default AvatarCard;
+export default NicknameCard;

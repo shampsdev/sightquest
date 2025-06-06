@@ -15,6 +15,8 @@ import { View, Pressable, SafeAreaView, ScrollView, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import RoutesWidget, { RouteData } from "@/components/widgets/shop/routes";
 import { Route } from "@/shared/interfaces/Route";
+import Nicknames from "@/components/widgets/shop/nicknames";
+import NicknamesWidget from "@/components/widgets/shop/nicknames";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -141,6 +143,9 @@ export const ShopScreen = () => {
 
           {sectionRef.current?.selectedSection === "Маршруты" && (
             <RoutesWidget routes={routes} />
+          )}
+          {sectionRef.current?.selectedSection === "Ник" && (
+            <NicknamesWidget cards={cards} />
           )}
         </View>
       </ScrollView>
