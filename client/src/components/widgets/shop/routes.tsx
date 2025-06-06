@@ -7,6 +7,7 @@ export interface RouteData {
   coords: Coords;
   route: Route;
   title: string;
+  disabled?: boolean;
 }
 
 interface RoutesWidgetProps {
@@ -22,6 +23,7 @@ const RoutesWidget = (props: RoutesWidgetProps) => {
           title={route.title}
           route={route.route}
           coords={route.coords}
+          disabled={route.disabled}
         />
       ))}
     </View>

@@ -31,7 +31,7 @@ export const ShopScreen = () => {
       title: "Название",
       subtitle: "Описание",
       withButton: true,
-      disabled: false,
+      disabled: true,
     },
     {
       avatar: AVATARS[0].src,
@@ -90,6 +90,7 @@ export const ShopScreen = () => {
       coords: { lon: 30.33018, lat: 59.945526 },
       route: "A",
       title: "ABOBA",
+      disabled: true,
     },
     {
       coords: { lon: 30.33018, lat: 59.945526 },

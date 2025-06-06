@@ -5,6 +5,7 @@ import {
   ImageSourcePropType,
   LayoutChangeEvent,
   useWindowDimensions,
+  Pressable,
 } from "react-native";
 import { Avatar } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -108,13 +109,21 @@ const AvatarCard = ({
           </Text>
         </View>
 
-        {withButton && (
-          <Button
-            className="w-full z-10"
-            text={"Применить"}
-            onPress={buttonAction}
-            disabled={disabled}
-          />
+        {withButton && disabled && (
+          <Text
+            style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
+            className="flex w-fit rounded-[40px] text-[13px] font-bounded-regular text-text_primary px-[20px] py-[9px]"
+          >
+            Применить
+          </Text>
+        )}
+
+        {withButton && !disabled && (
+          <Pressable onPress={buttonAction}>
+            <Text className="flex bg-accent_primary w-fit rounded-[40px] text-[13px] font-bounded-regular text-text_primary px-[20px] py-[9px]">
+              Купить
+            </Text>
+          </Pressable>
         )}
       </View>
     </View>
