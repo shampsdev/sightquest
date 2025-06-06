@@ -6,8 +6,8 @@ import {
   LayoutChangeEvent,
   useWindowDimensions,
 } from "react-native";
-import { Avatar } from "./avatar";
-import { Button } from "./button";
+import { Avatar } from "../ui/avatar";
+import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
 import {
   Canvas,

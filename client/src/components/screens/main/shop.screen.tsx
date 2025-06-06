@@ -1,5 +1,5 @@
 import { Avatar } from "@/components/ui/avatar";
-import { AvatarCardProps } from "@/components/ui/avatar-card";
+import { AvatarCardProps } from "@/components/widgets/avatar-card";
 import { Button } from "@/components/ui/button";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
@@ -13,6 +13,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useEffect, useRef, useState } from "react";
 import { View, Pressable, SafeAreaView, ScrollView, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import RoutesWidget, { RouteData } from "@/components/widgets/shop/routes";
+import { Route } from "@/shared/interfaces/Route";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -83,6 +85,19 @@ export const ShopScreen = () => {
     },
   ];
 
+  const routes: RouteData[] = [
+    {
+      coords: { lon: 30.33018, lat: 59.945526 },
+      route: "A",
+      title: "ABOBA",
+    },
+    {
+      coords: { lon: 30.33018, lat: 59.945526 },
+      route: "A",
+      title: "ABIBA",
+    },
+  ];
+
   const back = () => {
     navigation.goBack();
   };
@@ -121,6 +136,10 @@ export const ShopScreen = () => {
 
           {sectionRef.current?.selectedSection === "Аватарки" && (
             <AvatarsWidget cards={cards} />
+          )}
+
+          {sectionRef.current?.selectedSection === "Маршруты" && (
+            <RoutesWidget routes={routes} />
           )}
         </View>
       </ScrollView>

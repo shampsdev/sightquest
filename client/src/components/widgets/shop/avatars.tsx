@@ -1,4 +1,4 @@
-import AvatarCard, { AvatarCardProps } from "@/components/ui/avatar-card";
+import AvatarCard, { AvatarCardProps } from "@/components/widgets/avatar-card";
 import { View } from "react-native";
 import { twMerge } from "tailwind-merge";
 

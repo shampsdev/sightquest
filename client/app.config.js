@@ -42,6 +42,7 @@ module.exports = {
     extra: {
       mapboxToken: process.env.MAPBOX_TOKEN,
       apiUrl: process.env.API_URL || "https://sightquest.ru/",
+      mapboxStyleUrl: process.env.MAPBOX_STYLE_URL,
       eas: {
         projectId: "ba7e05b8-d26d-4cba-acd0-aa04c79eca56",
       },
