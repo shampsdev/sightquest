@@ -111,7 +111,7 @@ const AvatarCard = ({
         {withButton && disabled && (
           <Text
             style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
-            className="flex w-fit rounded-[40px] text-[13px] font-bounded-regular text-text_primary px-[20px] py-[9px]"
+            className="flex w-fit rounded-[40px] text-[12px] font-bounded-regular text-text_primary px-[20px] py-[9px]"
           >
             Применить
           </Text>
@@ -119,7 +119,7 @@ const AvatarCard = ({
 
         {withButton && !disabled && (
           <Pressable onPress={buttonAction}>
-            <Text className="flex bg-accent_primary w-fit rounded-[40px] text-[13px] font-bounded-regular text-text_primary px-[20px] py-[9px]">
+            <Text className="flex bg-accent_primary w-fit rounded-[40px] text-[12px] font-bounded-regular text-text_primary px-[20px] py-[9px]">
               Купить
             </Text>
           </Pressable>
