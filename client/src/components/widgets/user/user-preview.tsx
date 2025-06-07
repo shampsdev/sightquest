@@ -1,6 +1,7 @@
 import { Avatar } from "@/components/ui/avatar";
-import { Role } from "@/shared/interfaces/Role";
+import { Role } from "@/shared/interfaces/role";
 import { ImageSourcePropType, View, Text } from "react-native";
+import { twMerge } from "tailwind-merge";
 
 interface UserPreviewProps {
   scores?: number;
@@ -9,19 +10,23 @@ interface UserPreviewProps {
   role: Role;
   active?: boolean;
 }
-const UserPreview = ({
+
+export const UserPreview = ({
   scores,
   avatar,
   name,
   role,
   active,
 }: UserPreviewProps) => {
-  const listStyle = active
-    ? "flex flex-row gap-[21px] py-[20px] px-[28px] justify-between items-center rounded-[20px] border-[2px] border-accent_primary"
-    : "flex flex-row gap-[21px] py-[20px] px-[28px] justify-between items-center rounded-[20px]";
+  const styles =
+    "flex flex-row gap-[21px] py-[20px] px-[28px] justify-between items-center rounded-[20px]";
 
   return (
-    <View className={listStyle}>
+    <View
+      className={
+        active ? twMerge(styles, " border-[2px] border-accent_primary") : styles
+      }
+    >
       <Avatar source={avatar} />
       <View className="flex flex-col flex-1 justify-start gap-[8px]">
         <Text className="text-text_primary font-bounded-regular text-[18px]">
@@ -40,5 +45,3 @@ const UserPreview = ({
     </View>
   );
 };
-
-export default UserPreview;

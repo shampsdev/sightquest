@@ -1,3 +1,5 @@
+import { UserStats } from "@/shared/interfaces/user-statistics";
+
 export interface User {
   id?: string;
   name?: string;
@@ -6,9 +8,4 @@ export interface User {
   background?: string;
   createdAt?: string;
   stats?: UserStats;
-}
-
-export interface UserStats {
-  wins: number;
-  matches: number;
 }

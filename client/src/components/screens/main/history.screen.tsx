@@ -1,7 +1,7 @@
-import Header from "@/components/ui/header";
+import { Header } from "@/components/ui/header";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
-import UserPreview from "@/components/widgets/user/user-preview";
+import { UserPreview } from "@/components/widgets/user/user-preview";
 import { AVATARS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -20,6 +20,7 @@ export const HistoryScreen = () => {
   const back = () => {
     navigation.goBack();
   };
+
   return (
     <SafeAreaView
       className="flex-1 bg-bg_primary"

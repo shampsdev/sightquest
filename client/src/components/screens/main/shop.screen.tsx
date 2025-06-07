@@ -1,22 +1,17 @@
-import { Avatar } from "@/components/ui/avatar";
 import { AvatarCardProps } from "@/components/widgets/avatar-card";
-import { Button } from "@/components/ui/button";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
-import SectionPicker from "@/components/widgets/section-picker";
-import AvatarsWidget from "@/components/widgets/shop/avatars";
-import UserPreview from "@/components/widgets/user/user-preview";
+import { SectionPicker } from "@/components/widgets/section-picker";
+import { AvatarsWidget } from "@/components/widgets/shop/avatars";
 import { AVATARS, SHOP_SECTIONS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { View, Pressable, SafeAreaView, ScrollView, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import RoutesWidget, { RouteData } from "@/components/widgets/shop/routes";
-import { Route } from "@/shared/interfaces/Route";
-import Nicknames from "@/components/widgets/shop/nicknames";
-import NicknamesWidget from "@/components/widgets/shop/nicknames";
+import { RoutesWidget, RouteData } from "@/components/widgets/shop/routes";
+import { NicknamesWidget } from "@/components/widgets/shop/nicknames";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();

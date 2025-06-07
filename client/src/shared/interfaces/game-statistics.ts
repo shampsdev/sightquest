@@ -1,5 +1,4 @@
-import { Route } from "./Route";
-import { User } from "./User";
+import { Route } from "./route";
 
 export interface UserStatistic {
   score: number;
@@ -11,5 +10,4 @@ export interface GameStatistics {
   membersStatistics: UserStatistic[];
   route: Route;
   date: Date;
-  gameId: string;
 }

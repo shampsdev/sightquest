@@ -1,4 +1,4 @@
-import AvatarCard, { AvatarCardProps } from "@/components/widgets/avatar-card";
+import { AvatarCard, AvatarCardProps } from "@/components/widgets/avatar-card";
 import { View } from "react-native";
 import { twMerge } from "tailwind-merge";
 
@@ -7,7 +7,7 @@ interface AvatarWidgetProps {
   className?: string;
 }
 
-const AvatarsWidget = ({ cards, className }: AvatarWidgetProps) => {
+export const AvatarsWidget = ({ cards, className }: AvatarWidgetProps) => {
   return (
     <View
       className={twMerge(
@@ -21,5 +21,3 @@ const AvatarsWidget = ({ cards, className }: AvatarWidgetProps) => {
     </View>
   );
 };
-
-export default AvatarsWidget;

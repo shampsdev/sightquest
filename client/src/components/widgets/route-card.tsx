@@ -1,12 +1,9 @@
-import { Route } from "@/shared/interfaces/Route";
+import { Route } from "@/shared/interfaces/route";
 import { Camera, Location, MapView } from "@rnmapbox/maps";
 import { View, Text, Pressable } from "react-native";
-import { Map } from "./map";
-import { Coords } from "@/shared/interfaces/Coords";
 import { MAPBOX_STYLE_URL } from "@/constants";
-import { Button } from "../ui/button";
 import { BlurView } from "@react-native-community/blur";
-import { rgbaColor } from "react-native-reanimated/lib/typescript/Colors";
+import { Coords } from "@/shared/interfaces/coords";
 
 export interface RouteCardProps {
   route: Route;
@@ -16,7 +13,7 @@ export interface RouteCardProps {
   disabled?: boolean;
 }
 
-const RouteCard = ({
+export const RouteCard = ({
   route,
   coords,
   title,
@@ -83,5 +80,3 @@ const RouteCard = ({
     </View>
   );
 };
-
-export default RouteCard;

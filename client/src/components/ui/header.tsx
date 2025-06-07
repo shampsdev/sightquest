@@ -4,7 +4,8 @@ interface HeaderProps {
   mainText: string;
   descriptionText: string;
 }
-const Header = ({ mainText, descriptionText }: HeaderProps) => {
+
+export const Header = ({ mainText, descriptionText }: HeaderProps) => {
   return (
     <View className="flex flex-col items-center justify-center">
       <Text className="mx-auto text-text_primary text-[24px] font-bounded-regular">
@@ -17,5 +18,3 @@ const Header = ({ mainText, descriptionText }: HeaderProps) => {
     </View>
   );
 };
-
-export default Header;

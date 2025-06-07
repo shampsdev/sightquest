@@ -1,10 +1,11 @@
 import { View, Text, ImageSourcePropType } from "react-native";
 import { Avatar } from "./avatar";
-import { AVATARS } from "@/constants";
+
 interface AvatarStackProps {
   avatars: ImageSourcePropType[];
 }
-const AvatarStack = ({ avatars }: AvatarStackProps) => {
+
+export const AvatarStack = ({ avatars }: AvatarStackProps) => {
   const positionClasses = ["left-0 z-1", "left-10 z-10", "left-20 z-20"];
   const DISPLAY_AVATARS = 3;
   const hiddenAvatarsCount = avatars.length - DISPLAY_AVATARS;
@@ -33,5 +34,3 @@ const AvatarStack = ({ avatars }: AvatarStackProps) => {
     </View>
   );
 };
-
-export default AvatarStack;

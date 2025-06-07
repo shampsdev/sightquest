@@ -1,12 +1,12 @@
 import { Avatar } from "@/components/ui/avatar";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
-import GameStats from "@/components/widgets/game-stats";
-import UserProfile from "@/components/widgets/user/user-profile";
-import UserStats from "@/components/widgets/user/user-stats";
+import { GameStats } from "@/components/widgets/game-stats";
+import { UserProfile } from "@/components/widgets/user/user-profile";
+import { UserStats } from "@/components/widgets/user/user-stats";
 import { AVATARS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
-import { GameStatistics } from "@/shared/interfaces/GameStats";
+import { GameStatistics } from "@/shared/interfaces/game-statistics";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -43,7 +43,6 @@ export const AccountScreen = () => {
       ],
       route: "A",
       date: new Date(),
-      gameId: "mockId",
     },
     {
       membersStatistics: [
@@ -70,7 +69,6 @@ export const AccountScreen = () => {
       ],
       route: "A",
       date: new Date(),
-      gameId: "mockId",
     },
     {
       membersStatistics: [
@@ -92,7 +90,6 @@ export const AccountScreen = () => {
       ],
       route: "A",
       date: new Date(),
-      gameId: "mockId",
     },
     {
       membersStatistics: [
@@ -109,7 +106,6 @@ export const AccountScreen = () => {
       ],
       route: "A",
       date: new Date(),
-      gameId: "mockId",
     },
 
     {
@@ -127,7 +123,6 @@ export const AccountScreen = () => {
       ],
       route: "A",
       date: new Date(),
-      gameId: "mockId",
     },
     {
       membersStatistics: [
@@ -139,7 +134,6 @@ export const AccountScreen = () => {
       ],
       route: "A",
       date: new Date(),
-      gameId: "mockId",
     },
   ];
 
@@ -184,7 +178,7 @@ export const AccountScreen = () => {
                 route={stats.route}
                 date={stats.date}
                 onPress={() => {
-                  navigation.navigate("History", { gameId: stats.gameId });
+                  navigation.navigate("History", { gameId: "mockId" });
                 }}
               />
             ))}

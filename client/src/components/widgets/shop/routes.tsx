@@ -1,7 +1,7 @@
 import { View } from "react-native";
-import RouteCard, { RouteCardProps } from "../route-card";
-import { Coords } from "@/shared/interfaces/Coords";
-import { Route } from "@/shared/interfaces/Route";
+import { RouteCard } from "../route-card";
+import { Coords } from "@/shared/interfaces/coords";
+import { Route } from "@/shared/interfaces/route";
 
 export interface RouteData {
   coords: Coords;
@@ -14,7 +14,7 @@ interface RoutesWidgetProps {
   routes: RouteData[];
 }
 
-const RoutesWidget = (props: RoutesWidgetProps) => {
+export const RoutesWidget = (props: RoutesWidgetProps) => {
   return (
     <View className="flex flex-col justify-center items-center gap-[24px]">
       {props.routes.map((route, index) => (
@@ -29,5 +29,3 @@ const RoutesWidget = (props: RoutesWidgetProps) => {
     </View>
   );
 };
-
-export default RoutesWidget;

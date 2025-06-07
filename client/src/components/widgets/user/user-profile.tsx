@@ -1,5 +1,4 @@
 import { Avatar } from "@/components/ui/avatar";
-import { AVATARS } from "@/constants";
 import { ImageSourcePropType, View, Text } from "react-native";
 
 interface UserProfileProps {
@@ -8,7 +7,7 @@ interface UserProfileProps {
   username: string;
 }
 
-const UserProfile = ({ avatar, name, username }: UserProfileProps) => {
+export const UserProfile = ({ avatar, name, username }: UserProfileProps) => {
   return (
     <View className="flex flex-col gap-6 items-center justify-center">
       <Avatar source={avatar} className="w-[154px] h-[154px]" />
@@ -23,5 +22,3 @@ const UserProfile = ({ avatar, name, username }: UserProfileProps) => {
     </View>
   );
 };
-
-export default UserProfile;

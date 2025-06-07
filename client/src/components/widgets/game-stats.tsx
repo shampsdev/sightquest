@@ -1,17 +1,18 @@
-import { GameStatistics } from "@/shared/interfaces/GameStats";
+import { GameStatistics } from "@/shared/interfaces/game-statistics";
 import { View, Text, Pressable, ImageSourcePropType } from "react-native";
-import AvatarStack from "../ui/avatar-stack";
+import { AvatarStack } from "../ui/avatar-stack";
 import { Icons } from "../ui/icons/icons";
 
 interface Pressable {
   onPress?: () => void;
 }
-const GameStats = ({
+
+export const GameStats = ({
   membersStatistics,
   date,
   route,
   onPress,
-}: Omit<GameStatistics, "gameId"> & Pressable) => {
+}: GameStatistics & Pressable) => {
   const avatars = membersStatistics
     .map((user) => user.avatar)
     .filter((avatar) => avatar !== undefined);
@@ -33,5 +34,3 @@ const GameStats = ({
     </Pressable>
   );
 };
-
-export default GameStats;

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,6 @@ import {
   useWindowDimensions,
   Pressable,
 } from "react-native";
-import { Avatar } from "../ui/avatar";
 import { twMerge } from "tailwind-merge";
 import {
   Canvas,
@@ -34,7 +33,7 @@ export interface NicknameCardProps {
   className?: string;
 }
 
-const NicknameCard = ({
+export const NicknameCard = ({
   avatar,
   title,
   subtitle,
@@ -43,9 +42,10 @@ const NicknameCard = ({
   disabled,
   className,
 }: NicknameCardProps) => {
+  const { user } = useAuthStore();
+
   const { width } = useWindowDimensions();
   const [cardHeight, setCardHeight] = useState(100);
-  const { user } = useAuthStore();
   const handleLayout = useCallback(
     (event: LayoutChangeEvent) => {
       const { height } = event.nativeEvent.layout;
@@ -140,7 +140,9 @@ const NicknameCard = ({
         {withButton && disabled && (
           <Text
             style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
-            className="flex w-fit rounded-[40px] text-[12px] font-bounded-regular text-text_primary px-[20px] py-[9px]"
+            className={twMerge(
+              "flex w-fit rounded-[40px] text-[12px] font-bounded-regular text-text_primary px-[20px] py-[9px]"
+            )}
           >
             Применить
           </Text>
@@ -157,5 +159,3 @@ const NicknameCard = ({
     </View>
   );
 };
-
-export default NicknameCard;

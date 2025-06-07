@@ -40,7 +40,7 @@ interface SectionPickerProps {
   onChange?: (section: string) => void;
 }
 
-const SectionPicker = ({
+export const SectionPicker = ({
   options,
   selectedRef,
   onChange,
@@ -131,5 +131,3 @@ const SectionPicker = ({
     </View>
   );
 };
-
-export default SectionPicker;

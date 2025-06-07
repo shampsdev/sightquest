@@ -6,7 +6,7 @@ interface UserStatsProps {
   matches: number;
 }
 
-const UserStats = ({ wins, matches }: UserStatsProps) => {
+export const UserStats = ({ wins, matches }: UserStatsProps) => {
   return (
     <View className="w-full flex flex-row gap-[4px] items-center justify-between">
       <View className="flex-1 py-[16px] justify-center flex-row items-center bg-navigation rounded-tl-[30px] rounded-bl-[30px]">
@@ -44,5 +44,3 @@ const UserStats = ({ wins, matches }: UserStatsProps) => {
     </View>
   );
 };
-
-export default UserStats;

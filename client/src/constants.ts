@@ -4,6 +4,7 @@ import { ImageSourcePropType } from "react-native";
 export const API_URL = Constants?.expoConfig?.extra?.apiUrl;
 export const MAPBOX_TOKEN = Constants?.expoConfig?.extra?.mapboxToken;
 export const MAPBOX_STYLE_URL = Constants?.expoConfig?.extra?.mapboxStyleUrl;
+
 export const AVATARS = [
   // { id: 1, src: require("@/assets/avatars/avatar-1.png") },
   // { id: 2, src: require("@/assets/avatars/avatar-2.png") },

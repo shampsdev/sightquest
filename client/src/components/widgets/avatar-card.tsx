@@ -30,7 +30,7 @@ export interface AvatarCardProps {
   className?: string;
 }
 
-const AvatarCard = ({
+export const AvatarCard = ({
   avatar,
   title,
   subtitle,
@@ -128,5 +128,3 @@ const AvatarCard = ({
     </View>
   );
 };
-
-export default AvatarCard;
