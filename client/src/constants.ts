@@ -1,7 +1,9 @@
 import Constants from "expo-constants";
+import { ImageSourcePropType } from "react-native";
 
 export const API_URL = Constants?.expoConfig?.extra?.apiUrl;
 export const MAPBOX_TOKEN = Constants?.expoConfig?.extra?.mapboxToken;
+export const MAPBOX_STYLE_URL = Constants?.expoConfig?.extra?.mapboxStyleUrl;
 
 export const AVATARS = [
   // { id: 1, src: require("@/assets/avatars/avatar-1.png") },
@@ -21,4 +23,11 @@ export const AVATARS = [
   { id: 15, src: require("@/assets/avatars/avatar-15.png") },
   { id: 16, src: require("@/assets/avatars/avatar-16.png") },
   { id: 17, src: require("@/assets/avatars/avatar-17.png") },
-];
+] as const;
+
+export const ACTIVITIES: Record<"wins" | "matches", ImageSourcePropType> = {
+  wins: require("@/assets/activites/wins.png"),
+  matches: require("@/assets/activites/matches.png"),
+} as const;
+
+export const SHOP_SECTIONS = ["Аватарки", "Маршруты", "Ник"] as const;

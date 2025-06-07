@@ -9,7 +9,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export const LobbyScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-
   const back = () => {
     navigation.goBack();
   };

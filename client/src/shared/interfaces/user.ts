@@ -1,3 +1,5 @@
+import { UserStats } from "@/shared/interfaces/user-statistics";
+
 export interface User {
   id?: string;
   name?: string;
@@ -5,4 +7,5 @@ export interface User {
   avatar?: string;
   background?: string;
   createdAt?: string;
+  stats?: UserStats;
 }

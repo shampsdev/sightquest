@@ -9,10 +9,7 @@ interface AvatarProps {
 export const Avatar = ({ source, className }: AvatarProps) => {
   return (
     <Image
-      className={twMerge(
-        "h-14 w-14 rounded-full",
-        className
-      )}
+      className={twMerge("h-14 w-14 rounded-full", className)}
       source={source}
       resizeMode="cover"
     />
