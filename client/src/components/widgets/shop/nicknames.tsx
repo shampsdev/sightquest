@@ -11,7 +11,7 @@ const NicknamesWidget = ({ cards, className }: NicknamesWidgetProps) => {
   return (
     <View
       className={twMerge(
-        "mt-[32px] flex flex-row gap-y-[90px] gap-x-[10px] flex-wrap items-start justify-start",
+        "mt-[32px] flex flex-row gap-y-[50px] gap-x-[10px] flex-wrap items-start justify-start",
         className
       )}
     >

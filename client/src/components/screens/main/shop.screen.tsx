@@ -88,7 +88,7 @@ export const ShopScreen = () => {
       className="flex-1 bg-bg_primary"
       style={{ paddingTop: insets.top || 20 }}
     >
-      <ScrollView className="w-full">
+      <ScrollView className="w-full pt-[36px]">
         <View className="w-[90%] gap-[36px] relative mx-auto flex-col items-center">
           <View className="absolute w-full flex-row justify-between items-center">
             <Pressable onPress={back}>
@@ -116,14 +116,14 @@ export const ShopScreen = () => {
           </View>
 
           {sectionRef.current?.selectedSection === "Аватарки" && (
-            <AvatarsWidget cards={cards} />
+            <AvatarsWidget cards={cards} className="pb-[70px]" />
           )}
 
           {sectionRef.current?.selectedSection === "Маршруты" && (
             <RoutesWidget routes={routes} />
           )}
           {sectionRef.current?.selectedSection === "Ник" && (
-            <NicknamesWidget cards={cards} />
+            <NicknamesWidget cards={cards} className="pb-[70px]" />
           )}
         </View>
       </ScrollView>
