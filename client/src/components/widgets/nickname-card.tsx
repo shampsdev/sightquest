@@ -118,10 +118,14 @@ export const NicknameCard = ({
             <Group clip={clipPath}>
               <Fill>
                 <LinearGradient
-                  start={vec(0, 0)}
-                  end={vec(0, cardHeight * 2)}
-                  colors={["rgba(60, 100, 55, 0.4)", "rgba(34, 34, 34, 1)"]}
-                  positions={[0, 0.3]}
+                  start={vec(0, -cardHeight * 2)}
+                  end={vec(0, cardHeight)}
+                  colors={[
+                    "rgba(83, 114, 175, 1)",
+                    "rgba(63, 94, 155, 1)",
+                    "rgba(34, 34, 34, 1)",
+                  ]}
+                  positions={[0.1, 0.2, 0.9]}
                 />
               </Fill>
             </Group>

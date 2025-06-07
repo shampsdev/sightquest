@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   LayoutChangeEvent,
   useWindowDimensions,
   Pressable,
+  Image,
 } from "react-native";
 import { Avatar } from "../ui/avatar";
 import { twMerge } from "tailwind-merge";
@@ -19,6 +20,7 @@ import {
   rect,
 } from "@shopify/react-native-skia";
 import { Skia } from "@shopify/react-native-skia/lib/module/skia";
+import { usePixelColor } from "@/shared/hooks/usePixelColor";
 
 export interface AvatarCardProps {
   avatar: ImageSourcePropType;
@@ -51,6 +53,9 @@ export const AvatarCard = ({
     },
     [cardHeight]
   );
+
+  const avatarUri = Image.resolveAssetSource(avatar)?.uri || "";
+  const pixelColor = usePixelColor({ imageUri: avatarUri });
 
   const cardWidth = width * 0.48;
 
@@ -89,10 +94,26 @@ export const AvatarCard = ({
             <Group clip={clipPath}>
               <Fill>
                 <LinearGradient
-                  start={vec(0, 0)}
-                  end={vec(0, cardHeight * 2)}
-                  colors={["rgba(60, 100, 55, 0.4)", "rgba(34, 34, 34, 1)"]}
-                  positions={[0, 0.3]}
+                  start={vec(0, -cardHeight * 2)}
+                  end={vec(0, cardHeight)}
+                  colors={
+                    pixelColor
+                      ? [
+                          `rgba(${pixelColor.r - 80}, ${pixelColor.g - 80}, ${
+                            pixelColor.b - 80
+                          }, 1)`,
+                          `rgba(${pixelColor.r - 100}, ${pixelColor.g - 100}, ${
+                            pixelColor.b - 100
+                          },1)`,
+                          "rgba(34, 34, 34, 0.2)",
+                        ]
+                      : [
+                          "rgba(83, 114, 175, 1)",
+                          "rgba(63, 94, 155, 1)",
+                          "rgba(34, 34, 34, 1)",
+                        ]
+                  }
+                  positions={[0.1, 0.4, 0.9]}
                 />
               </Fill>
             </Group>
