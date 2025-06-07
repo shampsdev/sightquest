@@ -11,7 +11,7 @@ export const Nickname = ({ type, name }: NicknameProps) => {
   switch (type) {
     case "default":
       return (
-        <View className="rounded-full z-10 overflow-hidden">
+        <View className="rounded-full z-20 overflow-hidden">
           <BlurView
             intensity={10}
             tint="dark"

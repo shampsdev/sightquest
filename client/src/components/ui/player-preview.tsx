@@ -21,7 +21,7 @@ export const PlayerPreview = ({
 }: PlayerPreviewProps) => {
   return (
     <View className={twMerge("items-center", className)}>
-      <Nickname name="aboba" type={"default"} />
+      <Nickname name={name} type={nicknameType} />
       <View className="items-center -mt-2">
         <Avatar source={avatar} className="border-2 border-text_primary z-10" />
 
