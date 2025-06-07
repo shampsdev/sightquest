@@ -6,6 +6,7 @@ import {
   LayoutChangeEvent,
   useWindowDimensions,
   Pressable,
+  Image,
 } from "react-native";
 import { twMerge } from "tailwind-merge";
 import {
@@ -22,6 +23,7 @@ import { Camera, MapView } from "@rnmapbox/maps";
 import { AVATARS, MAPBOX_STYLE_URL } from "@/constants";
 import { PlayerMarker } from "../ui/map/player-marker";
 import { useAuthStore } from "@/shared/stores/auth.store";
+import { PlayerPreview } from "../ui/player-preview";
 
 export interface NicknameCardProps {
   avatar: ImageSourcePropType;
@@ -69,32 +71,18 @@ export const NicknameCard = ({
       )}
     >
       <View className="absolute top-[-20px] left-0 w-full flex items-center z-30">
-        <MapView
-          pitchEnabled={false}
-          rotateEnabled={false}
-          scrollEnabled={false}
-          logoEnabled={false}
-          scaleBarEnabled={false}
-          attributionEnabled={false}
-          styleURL={MAPBOX_STYLE_URL}
+        <PlayerPreview
+          name={user?.name ?? "nickname"}
+          nicknameType={"default"}
+          avatar={user?.avatar ? user?.avatar : AVATARS[0].src}
+          className="absolute top-[20px]"
+        />
+
+        <Image
+          source={require("@/assets/map-preview.png")}
+          resizeMode="cover"
           className="flex-1 h-[120px] w-full rounded-[30px] overflow-hidden z-100"
-        >
-          <Camera
-            defaultSettings={{
-              centerCoordinate: [30.34018, 59.965526],
-              zoomLevel: 12,
-            }}
-          />
-          <PlayerMarker
-            coordinate={[30.34018, 59.965526]}
-            name={user?.name ?? (user?.username || "")}
-            avatarSrc={
-              user?.avatar
-                ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
-                : AVATARS[0].src
-            }
-          />
-        </MapView>
+        />
       </View>
 
       <View
