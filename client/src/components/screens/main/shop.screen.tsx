@@ -9,13 +9,11 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useRef, useState } from "react";
 import { View, Pressable, SafeAreaView, ScrollView, Text } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { RoutesWidget, RouteData } from "@/components/widgets/shop/routes";
 import { NicknamesWidget } from "@/components/widgets/shop/nicknames";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const insets = useSafeAreaInsets();
   const sectionRef = useRef<{ selectedSection: string }>({
     selectedSection: "Аватарки",
   });
@@ -79,10 +77,7 @@ export const ShopScreen = () => {
   };
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-bg_primary"
-      style={{ paddingTop: insets.top || 20 }}
-    >
+    <SafeAreaView className="flex-1 bg-bg_primary">
       <ScrollView className="w-full pt-[36px]">
         <View className="w-[90%] gap-[36px] relative mx-auto flex-col items-center">
           <View className="absolute w-full flex-row justify-between items-center">
