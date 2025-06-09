@@ -74,21 +74,25 @@ export const NicknameCard = ({
         <PlayerPreview
           name={user?.name ?? user!.username}
           nicknameType={"default"}
-          avatar={user?.avatar ? user?.avatar : AVATARS[0].src}
-          className="absolute top-[20px]"
+          avatar={
+            user!.avatar
+              ? AVATARS.find((x) => x.id === Number(user!.avatar))?.src
+              : AVATARS[0].src
+          }
+          className="absolute top-[20px] z-[100]"
         />
 
         <Image
           source={require("@/assets/map-preview.png")}
           resizeMode="cover"
-          className="flex-1 h-[120px] w-full rounded-[30px] overflow-hidden z-100"
+          className="flex-1 h-[120px] w-full rounded-[30px] overflow-hidden"
         />
       </View>
 
       <View
         onLayout={handleLayout}
         className={twMerge(
-          "w-full pt-[80px] px-[20px] pb-[24px] relative flex flex-col items-center justify-center gap-[24px] rounded-[30px] overflow-hidden",
+          "w-full pt-[80px]  pb-[24px] relative flex flex-col items-center justify-center gap-[24px] rounded-[30px] overflow-hidden",
           className
         )}
       >
@@ -130,19 +134,25 @@ export const NicknameCard = ({
         </View>
 
         {withButton && disabled && (
-          <Text
-            style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
-            className={twMerge(
-              "flex w-fit rounded-[40px] text-[12px] font-bounded-regular text-text_primary px-[20px] py-[9px]"
-            )}
+          <Pressable
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+            }}
+            className="rounded-[40px] flex w-fit  px-[20px] py-[9px]"
+            disabled
           >
-            Применить
-          </Text>
+            <Text className="text-[12px] font-bounded-regular text-text_primary">
+              Применить
+            </Text>
+          </Pressable>
         )}
 
         {withButton && !disabled && (
-          <Pressable onPress={buttonAction}>
-            <Text className="flex bg-accent_primary w-fit rounded-[40px] text-[12px] font-bounded-regular text-text_primary px-[20px] py-[9px]">
+          <Pressable
+            onPress={buttonAction}
+            className="flex bg-accent_primary w-fit rounded-[40px] px-[20px] py-[9px]"
+          >
+            <Text className=" text-[12px] font-bounded-regular text-text_primary ">
               Купить
             </Text>
           </Pressable>
