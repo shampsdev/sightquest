@@ -1,1 +1,1 @@
-export type Role = "Догоняющий" | "Убегающий";
+export type Role = "cather" | "runner";
