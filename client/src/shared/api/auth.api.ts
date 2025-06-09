@@ -1,5 +1,4 @@
-import { api } from "./axios.instance";
-
+import { api } from "../instances/axios.instance";
 interface AuthResponse {
   token: string;
 }
