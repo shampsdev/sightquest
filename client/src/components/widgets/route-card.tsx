@@ -69,6 +69,7 @@ export const RouteCard = ({
               <Pressable
                 style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
                 className="flex w-fit rounded-[40px] px-[20px] py-[9px]"
+                disabled
               >
                 <Text className="text-[14px] font-bounded-regular text-text_primary ">
                   Купить
