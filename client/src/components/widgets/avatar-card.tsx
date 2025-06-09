@@ -76,7 +76,7 @@ export const AvatarCard = ({
       <View
         onLayout={handleLayout}
         className={twMerge(
-          "w-full pt-[80px] px-[20px] pb-[24px] relative flex flex-col items-center justify-center gap-[24px] rounded-[30px] overflow-hidden",
+          "w-full pt-[80px] pb-[24px] relative flex flex-col items-center justify-center gap-[24px] rounded-[30px] overflow-hidden",
           className
         )}
       >
@@ -130,17 +130,25 @@ export const AvatarCard = ({
         </View>
 
         {withButton && disabled && (
-          <Text
-            style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
-            className="flex w-fit rounded-[40px] text-[12px] font-bounded-regular text-text_primary px-[20px] py-[9px]"
+          <Pressable
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+            }}
+            className="rounded-[40px] flex w-fit  px-[20px] py-[9px]"
+            disabled
           >
-            Применить
-          </Text>
+            <Text className="text-[12px] font-bounded-regular text-text_primary">
+              Применить
+            </Text>
+          </Pressable>
         )}
 
         {withButton && !disabled && (
-          <Pressable onPress={buttonAction}>
-            <Text className="flex bg-accent_primary w-fit rounded-[40px] text-[12px] font-bounded-regular text-text_primary px-[20px] py-[9px]">
+          <Pressable
+            onPress={buttonAction}
+            className="flex bg-accent_primary w-fit rounded-[40px] px-[20px] py-[9px]"
+          >
+            <Text className=" text-[12px] font-bounded-regular text-text_primary ">
               Купить
             </Text>
           </Pressable>
