@@ -72,7 +72,7 @@ export const NicknameCard = ({
     >
       <View className="absolute top-[-20px] left-0 w-full flex items-center z-30">
         <PlayerPreview
-          name={user?.name ?? "nickname"}
+          name={user?.name ?? user!.username}
           nicknameType={"default"}
           avatar={user?.avatar ? user?.avatar : AVATARS[0].src}
           className="absolute top-[20px]"
