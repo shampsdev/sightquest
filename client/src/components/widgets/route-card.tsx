@@ -1,8 +1,8 @@
 import { Route } from "@/shared/interfaces/route";
 import { Camera, Location, MapView } from "@rnmapbox/maps";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import { MAPBOX_STYLE_URL } from "@/constants";
-import { BlurView } from "@react-native-community/blur";
+import { BlurView } from "expo-blur";
 import { Coords } from "@/shared/interfaces/coords";
 
 export interface RouteCardProps {
@@ -49,27 +49,38 @@ export const RouteCard = ({
               left: 0,
               bottom: 0,
               right: 0,
-              borderRadius: 30,
+              borderRadius: 40,
             }}
-            blurType="light"
-            blurAmount={10}
-            overlayColor="rgba(34, 34, 34, 0.8)"
+            tint="dark"
+            intensity={10}
+          />
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: "rgba(34, 34, 34, 0.8)",
+              borderRadius: 40,
+            }}
           />
           <Text className="font-bounded-regular text-[12px] text-text_primary z-10">
             {title}
           </Text>
           <View className="z-10">
             {disabled && (
-              <Text
+              <Pressable
                 style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
-                className="flex w-fit rounded-[40px] text-[14px] font-bounded-regular text-text_primary px-[20px] py-[9px]"
+                className="flex w-fit rounded-[40px] px-[20px] py-[9px]"
               >
-                Купить
-              </Text>
+                <Text className="text-[14px] font-bounded-regular text-text_primary ">
+                  Купить
+                </Text>
+              </Pressable>
             )}
             {!disabled && (
-              <Pressable onPress={buttonAction}>
-                <Text className="flex bg-accent_primary w-fit rounded-[40px] text-[14px] font-bounded-regular text-text_primary px-[20px] py-[9px]">
+              <Pressable
+                onPress={buttonAction}
+                className="flex bg-accent_primary w-fit px-[20px] py-[9px] rounded-[40px]"
+              >
+                <Text className="text-[14px] font-bounded-regular text-text_primary">
                   Купить
                 </Text>
               </Pressable>
