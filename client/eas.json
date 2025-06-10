@@ -9,6 +9,7 @@
       "autoIncrement": true,
       "env": {
         "API_URL": "https://dev.sightquest.ru/",
+        "SOCKET_URL": "wss://dev.sightquest.ru/",
         "MAPBOX_TOKEN": "sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA"
       }
     },
@@ -17,6 +18,7 @@
       "autoIncrement": true,
       "env": {
         "API_URL": "https://dev.sightquest.ru/",
+        "SOCKET_URL": "wss://dev.sightquest.ru/",
         "MAPBOX_TOKEN": "sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA"
       }
     },
@@ -24,6 +26,7 @@
       "autoIncrement": true,
       "env": {
         "API_URL": "https://sightquest.ru/",
+        "SOCKET_URL": "wss://sightquest.ru/",
         "MAPBOX_TOKEN": "sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA"
       }
     }

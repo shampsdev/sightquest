@@ -1,71 +1,36 @@
 import { create } from "zustand";
-import { socket } from "@/shared/instances/socket.instance";
+import { ServerToClientEvents, socketManager } from "../socket/socket-manager";
+import { useAuthStore } from "./auth.store";
 
 interface SocketState {
   isConnected: boolean;
-  subscribe: (
-    event: string,
-    callback: (...args: any[]) => void,
+  emit: typeof socketManager.emit;
+  subscribe: <K extends keyof ServerToClientEvents>(
+    event: K,
+    cb: ServerToClientEvents[K],
     signal?: AbortSignal
   ) => () => void;
-  emit: (event: string, ...args: any[]) => void;
-  socket: typeof socket;
 }
 
 export const useSocketStore = create<SocketState>((set) => {
-  const onConnect = () => {
-    console.info("[socket] connected");
-    set({ isConnected: true });
-  };
+  socketManager.onRaw("connect", () => set({ isConnected: true }));
+  socketManager.onRaw("disconnect", () => set({ isConnected: false }));
 
-  const onDisconnect = () => {
-    console.info("[socket] disconnected");
-    set({ isConnected: false });
-  };
-
-  const onConnectError = (error: Error) => {
-    console.error("[socket] connection error:", error);
-  };
-
-  socket.on("connect", onConnect);
-  socket.on("disconnect", onDisconnect);
-  socket.on("connect_error", onConnectError);
-
+  socketManager.connect();
   return {
-    isConnected: socket.connected,
-    socket,
+    isConnected: socketManager.connected,
+    emit: socketManager.emit.bind(socketManager),
 
-    subscribe: (
-      event: string,
-      callback: (...args: any[]) => void,
-      signal?: AbortSignal
-    ) => {
+    subscribe: (event, cb, signal) => {
       if (signal?.aborted) {
         return () => {};
       }
 
-      const loggingCallback = (data: any) => {
-        const shouldLog = process.env.NODE_ENV !== "production";
-        if (shouldLog) console.info(`[socket] < ${event}`, data);
-        callback(data);
-      };
+      const off = socketManager.on(event, cb);
 
-      socket.on(event, loggingCallback);
+      signal?.addEventListener("abort", off, { once: true });
 
-      const unsubscribe = () => {
-        socket.off(event, loggingCallback);
-        signal?.removeEventListener("abort", unsubscribe);
-      };
-
-      signal?.addEventListener("abort", unsubscribe, { once: true });
-
-      return unsubscribe;
-    },
-
-    emit: (event: string, ...args: any[]) => {
-      const shouldLog = process.env.NODE_ENV !== "production";
-      if (shouldLog) console.info(`[socket] > ${event}`, args);
-      socket.emit(event, ...args);
+      return off;
     },
   };
 });

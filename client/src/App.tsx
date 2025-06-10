@@ -9,8 +9,9 @@ import { MainNavigator } from "./routers/main.navigator";
 import { AuthNavigator } from "./routers/auth.navigator";
 import { useAuthStore } from "./shared/stores/auth.store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { socketManager } from "./shared/socket/socket-manager";
+import { useSocketStore } from "@/shared/stores/socket.store";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,13 +37,25 @@ export default function App() {
     "Onest-Thin": require("./assets/fonts/Onest-Thin.ttf"),
   });
 
-  const { auth } = useAuthStore();
+  const { auth, token } = useAuthStore();
+  const { emit } = useSocketStore();
 
   useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync();
     }
   }, [loaded, error]);
+
+  useEffect(() => {
+    socketManager.connect();
+    return () => socketManager.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      emit("auth", { token: token });
+    }
+  }, [token]);
 
   if (!loaded && !error) {
     return null;
