@@ -6,24 +6,23 @@ import { Coords } from "@/shared/interfaces/coords";
 import { Player } from "@/shared/interfaces/player";
 
 export interface ServerToClientEvents {
-  heartBeat: (ts: number) => void;
   chatMessage: (msg: string) => void;
-  authed: (user: User) => void;
-  joinGame: (game: Game) => void;
-  playerJoined: (game: Game) => void;
-  startGame: (game: Game) => void;
-  locationUpdate: (player: Player) => void;
+  authed: ({ user }: { user: User }) => void;
+  joinGame: ({ game }: { game: Game }) => void;
+  playerJoined: ({ game }: { game: Game }) => void;
+  startGame: ({ game }: { game: Game }) => void;
+  locationUpdate: ({ player }: { player: Player }) => void;
   endGame: () => void;
-  error: (error: string) => void;
+  error: ({ error }: { error: string }) => void;
 }
 
 export interface ClientToServerEvents {
   sendMessage: (msg: string) => void;
   ping: () => void;
   auth: ({ token }: { token: string }) => void;
-  joinGame: (gameId: string) => void;
+  joinGame: ({ gameId }: { gameId: string }) => void;
   startGame: () => void;
-  locationUpdate: (location: Coords) => void;
+  locationUpdate: ({ location }: { location: Coords }) => void;
   endGame: () => void;
 }
 

@@ -12,8 +12,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { socketManager } from "./shared/socket/socket-manager";
 import { useSocketStore } from "@/shared/stores/socket.store";
+import {
+  useQueryClient,
+  QueryClientProvider,
+  QueryClient,
+} from "@tanstack/react-query";
 
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const [loaded, error] = useFonts({
@@ -48,26 +55,25 @@ export default function App() {
 
   useEffect(() => {
     socketManager.connect();
+    emit("auth", { token: token! });
     return () => socketManager.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (token) {
-      emit("auth", { token: token });
-    }
-  }, [token]);
+  useEffect(() => emit("auth", { token: token! }), [token]);
 
   if (!loaded && !error) {
     return null;
   }
 
   return (
-    <GestureHandlerRootView>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          {auth ? <MainNavigator /> : <AuthNavigator />}
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            {auth ? <MainNavigator /> : <AuthNavigator />}
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   );
 }
