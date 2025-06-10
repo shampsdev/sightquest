@@ -55,11 +55,22 @@ export default function App() {
 
   useEffect(() => {
     socketManager.connect();
-    emit("auth", { token: token! });
-    return () => socketManager.disconnect();
-  }, []);
 
-  useEffect(() => emit("auth", { token: token! }), [token]);
+    if (token) {
+      emit("auth", { token });
+    }
+
+    const offConnect = socketManager.onRaw("connect", () => {
+      if (token) {
+        emit("auth", { token });
+      }
+    });
+
+    return () => {
+      offConnect();
+      socketManager.disconnect();
+    };
+  }, [emit, token]);
 
   if (!loaded && !error) {
     return null;
