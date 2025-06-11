@@ -115,7 +115,7 @@ export const HomeScreen = () => {
         <Button
           onPress={() => bottomSheetRef.current?.snapToIndex(0)}
           className="flex-1 w-auto"
-          text="Присоединится"
+          text="Присоединиться"
         />
         <Button
           className="flex-1 w-auto"

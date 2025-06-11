@@ -4,20 +4,17 @@ import { Icons } from "@/components/ui/icons/icons";
 import { UserLobbyPreview } from "@/components/widgets/user/user-preview.lobby";
 import { AVATARS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
-import { socketManager } from "@/shared/socket/socket-manager";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
 import { useSocketStore } from "@/shared/stores/socket.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { Pressable, View, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const LobbyScreen = () => {
   const { game } = useGameStore();
-  const { token } = useAuthStore();
   const { emit } = useSocketStore();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
