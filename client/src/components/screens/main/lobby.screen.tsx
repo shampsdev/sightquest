@@ -27,7 +27,6 @@ export const LobbyScreen = () => {
 
   useEffect(() => {
     emit("joinGame", { gameId: game?.id ?? "" });
-    setTimeout(() => console.log(game), 2000);
   }, [game]);
 
   return (
