@@ -1,5 +1,3 @@
-import * as io from "socket.io-client";
-import { SOCKET_URL } from "@/constants";
 import { User } from "@/shared/interfaces/user";
 import { Game } from "@/shared/interfaces/game";
 import { Coords } from "@/shared/interfaces/coords";
