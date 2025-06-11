@@ -65,27 +65,19 @@ export const RouteCard = ({
             {title}
           </Text>
           <View className="z-10">
-            {disabled && (
-              <Pressable
-                style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
-                className="flex w-fit rounded-[40px] px-[20px] py-[9px]"
-                disabled
-              >
-                <Text className="text-[14px] font-bounded-regular text-text_primary ">
-                  Купить
-                </Text>
-              </Pressable>
-            )}
-            {!disabled && (
-              <Pressable
-                onPress={buttonAction}
-                className="flex bg-accent_primary w-fit px-[20px] py-[9px] rounded-[40px]"
-              >
-                <Text className="text-[14px] font-bounded-regular text-text_primary">
-                  Купить
-                </Text>
-              </Pressable>
-            )}
+            <Pressable
+              style={{
+                backgroundColor: disabled
+                  ? "rgba(255, 255, 255, 0.2)"
+                  : "rgba(151, 93, 255, 1)",
+              }}
+              className="flex w-fit rounded-[40px] px-[20px] py-[9px]"
+              disabled={disabled}
+            >
+              <Text className="text-[14px] font-bounded-regular text-text_primary ">
+                Купить
+              </Text>
+            </Pressable>
           </View>
         </View>
       </View>
