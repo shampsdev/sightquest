@@ -82,7 +82,7 @@ export const useGameStore = create<GameState>((set, get) => {
   });
 
   socketManager.on("locationUpdated", ({ player, location }) => {
-    updatePlayerLocation(player.gameId, location);
+    updatePlayerLocation(player.user.id!, location);
   });
 
   return {
