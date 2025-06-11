@@ -27,7 +27,7 @@ export const LobbyScreen = () => {
 
   useEffect(() => {
     emit("joinGame", { gameId: game?.id ?? "" });
-  }, [game]);
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-bg_primary">

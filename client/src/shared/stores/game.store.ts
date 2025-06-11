@@ -4,6 +4,7 @@ import { socketManager } from "../socket/socket-manager";
 import { Player } from "../interfaces/player";
 import { GameState as GameStatus } from "../interfaces/game-state";
 import { Coords } from "../interfaces/coords";
+
 interface GameState {
   game: Game | null;
   setGame: (game: Game) => void;

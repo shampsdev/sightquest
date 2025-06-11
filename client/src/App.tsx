@@ -45,7 +45,7 @@ export default function App() {
   });
 
   const { auth, token } = useAuthStore();
-  const { emit } = useSocketStore();
+  const { isConnected, emit } = useSocketStore();
 
   useEffect(() => {
     if (loaded || error) {
@@ -54,23 +54,10 @@ export default function App() {
   }, [loaded, error]);
 
   useEffect(() => {
-    socketManager.connect();
-
-    if (token) {
+    if (token && isConnected) {
       emit("auth", { token });
     }
-
-    const offConnect = socketManager.onRaw("connect", () => {
-      if (token) {
-        emit("auth", { token });
-      }
-    });
-
-    return () => {
-      offConnect();
-      socketManager.disconnect();
-    };
-  }, [emit, token]);
+  }, [emit, isConnected]);
 
   if (!loaded && !error) {
     return null;
