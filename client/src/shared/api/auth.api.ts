@@ -1,5 +1,4 @@
-import { api } from "./axios.instance";
-
+import { api } from "../instances/axios.instance";
 interface AuthResponse {
   token: string;
 }
@@ -12,6 +11,7 @@ export const login = async (
     username,
     password,
   });
+
   return response.data;
 };
 

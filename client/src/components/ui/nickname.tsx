@@ -1,6 +1,6 @@
 import { NicknameType } from "@/shared/interfaces/nickname";
 import { BlurView } from "expo-blur";
-import { View, Text, StyleProp, ViewStyle } from "react-native";
+import { View, Text } from "react-native";
 
 interface NicknameProps {
   name: string;

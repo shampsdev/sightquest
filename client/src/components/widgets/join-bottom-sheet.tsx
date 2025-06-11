@@ -14,11 +14,8 @@ import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
 import { TextInput } from "../ui/textinput";
 
-// Utility to format input as XXX XXX
 const formatCode = (value: string) => {
-  const numeric = value.replace(/\D/g, "").slice(0, 6); // only digits, max 6
-  if (numeric.length <= 3) return numeric;
-  return `${numeric.slice(0, 3)} ${numeric.slice(3)}`;
+  return value;
 };
 
 export const JoinBottomSheet = forwardRef<BottomSheet>((_, ref) => {
@@ -28,8 +25,7 @@ export const JoinBottomSheet = forwardRef<BottomSheet>((_, ref) => {
   useImperativeHandle(ref, () => localRef.current!);
 
   const handleChangeText = useCallback((text: string) => {
-    const numericOnly = text.replace(/\D/g, "").slice(0, 6);
-    setCode(numericOnly);
+    setCode(text);
   }, []);
 
   return (
@@ -67,7 +63,7 @@ export const JoinBottomSheet = forwardRef<BottomSheet>((_, ref) => {
               code.length !== 6 ? "bg-accent_secondary" : ""
             )}
             text="Готово"
-            disabled={code.length !== 6}
+            disabled={code.length !== 0}
             onPress={() => {
               console.log("Submitted code:", code);
               handleChangeText("");

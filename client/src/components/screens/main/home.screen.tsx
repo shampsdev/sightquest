@@ -18,11 +18,22 @@ import { AVATARS } from "@/constants";
 import { useRef } from "react";
 import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { useSocketStore } from "@/shared/stores/socket.store";
+import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
+import { useGameStore } from "@/shared/stores/game.store";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const location = useGeolocation();
   const { user, logout } = useAuthStore();
+  const { setGame } = useGameStore();
+  const createGameMutation = useCreateGame();
+
+  const createGameHandler = async () => {
+    const game = await createGameMutation.mutateAsync();
+    setGame(game);
+    navigation.navigate("Lobby");
+  };
 
   const account = () => {
     navigation.navigate("Account");
@@ -104,9 +115,13 @@ export const HomeScreen = () => {
         <Button
           onPress={() => bottomSheetRef.current?.snapToIndex(0)}
           className="flex-1 w-auto"
-          text="Присоединится"
+          text="Присоединиться"
         />
-        <Button className="flex-1 w-auto" text="Начать игру" />
+        <Button
+          className="flex-1 w-auto"
+          text="Начать игру"
+          onPress={() => createGameHandler()}
+        />
       </View>
 
       <JoinBottomSheet ref={bottomSheetRef} />

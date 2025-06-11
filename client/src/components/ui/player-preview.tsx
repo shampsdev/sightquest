@@ -1,6 +1,5 @@
 import { Animated, View, Text, Image, ImageSourcePropType } from "react-native";
 import { PlayerMarker } from "./map/player-marker";
-import { BlurView } from "expo-blur";
 import { Avatar } from "./avatar";
 import { Nickname } from "./nickname";
 import { NicknameType } from "@/shared/interfaces/nickname";

@@ -9,10 +9,17 @@ import { MainNavigator } from "./routers/main.navigator";
 import { AuthNavigator } from "./routers/auth.navigator";
 import { useAuthStore } from "./shared/stores/auth.store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useSocket } from "./shared/hooks/useSocket";
+import {
+  useQueryClient,
+  QueryClientProvider,
+  QueryClient,
+} from "@tanstack/react-query";
 
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const [loaded, error] = useFonts({
@@ -36,7 +43,8 @@ export default function App() {
     "Onest-Thin": require("./assets/fonts/Onest-Thin.ttf"),
   });
 
-  const { auth } = useAuthStore();
+  const { auth, token } = useAuthStore();
+  const { isConnected, emit } = useSocket();
 
   useEffect(() => {
     if (loaded || error) {
@@ -44,17 +52,25 @@ export default function App() {
     }
   }, [loaded, error]);
 
+  useEffect(() => {
+    if (token && isConnected) {
+      emit("auth", { token });
+    }
+  }, [emit, isConnected]);
+
   if (!loaded && !error) {
     return null;
   }
 
   return (
-    <GestureHandlerRootView>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          {auth ? <MainNavigator /> : <AuthNavigator />}
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            {auth ? <MainNavigator /> : <AuthNavigator />}
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   );
 }

@@ -129,27 +129,18 @@ export const AvatarCard = ({
           </Text>
         </View>
 
-        {withButton && disabled && (
+        {withButton && (
           <Pressable
             style={{
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              backgroundColor: disabled
+                ? "rgba(255, 255, 255, 0.2)"
+                : "rgba(151, 93, 255, 1)",
             }}
-            className="rounded-[40px] flex w-fit  px-[20px] py-[9px]"
-            disabled
+            className="flex w-fit rounded-[40px] px-[20px] py-[9px]"
+            disabled={disabled}
           >
             <Text className="text-[12px] font-bounded-regular text-text_primary">
               Применить
-            </Text>
-          </Pressable>
-        )}
-
-        {withButton && !disabled && (
-          <Pressable
-            onPress={buttonAction}
-            className="flex bg-accent_primary w-fit rounded-[40px] px-[20px] py-[9px]"
-          >
-            <Text className=" text-[12px] font-bounded-regular text-text_primary ">
-              Купить
             </Text>
           </Pressable>
         )}

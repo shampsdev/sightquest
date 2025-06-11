@@ -11,6 +11,7 @@ import { useRef, useState } from "react";
 import { View, Pressable, SafeAreaView, ScrollView, Text } from "react-native";
 import { RoutesWidget, RouteData } from "@/components/widgets/shop/routes";
 import { NicknamesWidget } from "@/components/widgets/shop/nicknames";
+import { Header } from "@/components/ui/header";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -87,15 +88,11 @@ export const ShopScreen = () => {
               </IconContainer>
             </Pressable>
           </View>
-          <View className="flex flex-col items-center justify-center">
-            <Text className="mx-auto text-text_primary text-[24px] font-bounded-regular">
-              Магазин
-            </Text>
 
-            <Text className="mx-auto text-[16px] text-text_secondary font-bounded-regular">
-              Все, чтобы бежать стильно
-            </Text>
-          </View>
+          <Header
+            mainText={"Магазин"}
+            descriptionText={"Все, чтобы бежать стильно"}
+          />
 
           <View className="flex items-center justify-center">
             <SectionPicker
