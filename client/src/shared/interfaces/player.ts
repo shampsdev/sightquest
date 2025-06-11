@@ -1,6 +1,6 @@
 import { Coords } from "./coords";
 import { Role } from "./role";
-import { User } from "./User";
+import { User } from "./user";
 
 export interface Player {
   gameId: string;

@@ -8,22 +8,30 @@ import { Player } from "@/shared/interfaces/player";
 export interface ServerToClientEvents {
   chatMessage: (msg: string) => void;
   authed: ({ user }: { user: User }) => void;
-  joinGame: ({ game }: { game: Game }) => void;
-  playerJoined: ({ game }: { game: Game }) => void;
-  startGame: ({ game }: { game: Game }) => void;
-  locationUpdate: ({ player }: { player: Player }) => void;
+  game: ({ game }: { game: Game }) => void;
+  playerJoined: ({ player }: { player: Player }) => void;
+  playerLeft: ({ player }: { player: Player }) => void;
+  locationUpdated: ({
+    player,
+    location,
+  }: {
+    player: Player;
+    location: Coords;
+  }) => void;
+  broadcasted: ({ from, data }: { from: Player; data: any }) => void;
+  startGame: () => void;
   endGame: () => void;
   error: ({ error }: { error: string }) => void;
 }
 
 export interface ClientToServerEvents {
-  sendMessage: (msg: string) => void;
-  ping: () => void;
   auth: ({ token }: { token: string }) => void;
   joinGame: ({ gameId }: { gameId: string }) => void;
-  startGame: () => void;
   locationUpdate: ({ location }: { location: Coords }) => void;
+  broadcast: ({ data }: { data: any }) => void;
+  startGame: () => void;
   endGame: () => void;
+  leaveGame: () => void;
 }
 
 type Sock = any;

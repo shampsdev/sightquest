@@ -7,6 +7,7 @@ import { MainStackParamList } from "@/routers/main.navigator";
 import { socketManager } from "@/shared/socket/socket-manager";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
+import { useSocketStore } from "@/shared/stores/socket.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
@@ -17,6 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export const LobbyScreen = () => {
   const { game } = useGameStore();
   const { token } = useAuthStore();
+  const { emit } = useSocketStore();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const back = () => {
@@ -24,7 +26,8 @@ export const LobbyScreen = () => {
   };
 
   useEffect(() => {
-    socketManager.emit("joinGame", { gameId: game?.id ?? "" });
+    emit("joinGame", { gameId: game?.id ?? "" });
+    setTimeout(() => console.log(game), 2000);
   }, [game]);
 
   return (
