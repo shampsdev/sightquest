@@ -1,44 +1,40 @@
-import { User } from "@/shared/interfaces/user";
-import { Game } from "@/shared/interfaces/game";
-import { Coords } from "@/shared/interfaces/coords";
-import { Player } from "@/shared/interfaces/player";
-import { Sock, socket } from "../instances/socket.instance";
+import { SOCKET_URL } from "@/constants";
+import io from "socket.io-client";
 
-export interface ServerToClientEvents {
-  chatMessage: (msg: string) => void;
-  authed: ({ user }: { user: User }) => void;
-  game: ({ game }: { game: Game }) => void;
-  playerJoined: ({ player }: { player: Player }) => void;
-  playerLeft: ({ player }: { player: Player }) => void;
-  locationUpdated: ({
-    player,
-    location,
-  }: {
-    player: Player;
-    location: Coords;
-  }) => void;
-  broadcasted: ({ from, data }: { from: Player; data: any }) => void;
-  startGame: () => void;
-  endGame: () => void;
-  error: ({ error }: { error: string }) => void;
+export type Sock = any;
+
+function createSocket(): Sock {
+  const sock = io.connect(SOCKET_URL, {
+    autoConnect: true,
+    transports: ["websocket"],
+    timeout: 2000,
+  });
+
+  if (__DEV__) {
+    const originalOnevent = sock.onevent;
+    sock.onevent = function (packet: any) {
+      const [event, ...args] = packet.data;
+      console.info(`[socket] < ${event}`, ...args);
+      return originalOnevent.call(this, packet);
+    };
+
+    const originalEmit = sock.emit.bind(sock);
+    sock.emit = function (ev: string, ...args: any[]) {
+      console.info(`[socket] > ${ev}`, ...args);
+      return originalEmit.call(this, ev, ...args);
+    };
+  }
+
+  return sock;
 }
 
-export interface ClientToServerEvents {
-  auth: ({ token }: { token: string }) => void;
-  joinGame: ({ gameId }: { gameId: string }) => void;
-  locationUpdate: ({ location }: { location: Coords }) => void;
-  broadcast: ({ data }: { data: any }) => void;
-  startGame: () => void;
-  endGame: () => void;
-  leaveGame: () => void;
-}
+export type EventMap = Record<string, (...args: any[]) => any>;
 
-class SocketManager {
-  private constructor(private readonly sock: Sock) {}
+export class SocketManager<S extends EventMap, C extends EventMap> {
+  private sock: Sock;
 
-  private static _instance?: SocketManager;
-  static get instance() {
-    return (this._instance ??= new SocketManager(socket));
+  constructor() {
+    this.sock = createSocket();
   }
 
   connect() {
@@ -49,18 +45,23 @@ class SocketManager {
     this.sock.disconnect();
   }
 
-  on<K extends keyof ServerToClientEvents>(
-    event: K,
-    cb: ServerToClientEvents[K]
-  ): () => void {
+  on<K extends keyof S>(event: K, cb: S[K], signal?: AbortSignal): () => void {
     this.sock.on(event as string, cb as any);
-    return () => this.sock.off(event as string, cb as any);
+
+    const off = () => this.sock.off(event as string, cb as any);
+
+    if (signal) {
+      if (signal.aborted) {
+        off();
+      } else {
+        signal.addEventListener("abort", off, { once: true });
+      }
+    }
+
+    return off;
   }
 
-  emit<K extends keyof ClientToServerEvents>(
-    event: K,
-    ...args: Parameters<ClientToServerEvents[K]>
-  ) {
+  emit<K extends keyof C>(event: K, ...args: Parameters<C[K]>) {
     this.sock.emit(event as string, ...args);
   }
 
@@ -73,5 +74,3 @@ class SocketManager {
     return () => this.sock.off(event, cb);
   }
 }
-
-export const socketManager = SocketManager.instance;

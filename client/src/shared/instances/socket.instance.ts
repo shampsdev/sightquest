@@ -1,33 +1,39 @@
-import { SOCKET_URL } from "@/constants";
-import io from "socket.io-client";
+import { Coords } from "../interfaces/coords";
+import { Game } from "../interfaces/game";
+import { Player } from "../interfaces/player";
+import { User } from "../interfaces/user";
+import { EventMap, SocketManager } from "../socket/socket-manager";
 
-export type Sock = any;
-
-const g = globalThis as { __socket__?: Sock };
-
-function createSocket(): Sock {
-  const sock = io.connect(SOCKET_URL, {
-    autoConnect: false,
-    transports: ["websocket"],
-    timeout: 2000,
-  });
-
-  if (__DEV__) {
-    const originalOnevent = sock.onevent;
-    sock.onevent = function (packet: any) {
-      const [event, ...args] = packet.data;
-      console.info(`[socket] < ${event}`, ...args);
-      return originalOnevent.call(this, packet);
-    };
-
-    const originalEmit = sock.emit.bind(sock);
-    sock.emit = function (ev: string, ...args: any[]) {
-      console.info(`[socket] > ${ev}`, ...args);
-      return originalEmit.call(this, ev, ...args);
-    };
-  }
-
-  return sock;
+export interface ServerToClientEvents extends EventMap {
+  chatMessage: (msg: string) => void;
+  authed: ({ user }: { user: User }) => void;
+  game: ({ game }: { game: Game }) => void;
+  playerJoined: ({ player }: { player: Player }) => void;
+  playerLeft: ({ player }: { player: Player }) => void;
+  locationUpdated: ({
+    player,
+    location,
+  }: {
+    player: Player;
+    location: Coords;
+  }) => void;
+  broadcasted: ({ from, data }: { from: Player; data: any }) => void;
+  startGame: () => void;
+  endGame: () => void;
+  error: ({ error }: { error: string }) => void;
 }
 
-export const socket: Sock = g.__socket__ ?? (g.__socket__ = createSocket());
+export interface ClientToServerEvents extends EventMap {
+  auth: ({ token }: { token: string }) => void;
+  joinGame: ({ gameId }: { gameId: string }) => void;
+  locationUpdate: ({ location }: { location: Coords }) => void;
+  broadcast: ({ data }: { data: any }) => void;
+  startGame: () => void;
+  endGame: () => void;
+  leaveGame: () => void;
+}
+
+export const socket = new SocketManager<
+  ServerToClientEvents,
+  ClientToServerEvents
+>();

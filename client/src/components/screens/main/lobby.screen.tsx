@@ -4,8 +4,8 @@ import { Icons } from "@/components/ui/icons/icons";
 import { UserLobbyPreview } from "@/components/widgets/user/user-preview.lobby";
 import { AVATARS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
+import { useSocket } from "@/shared/hooks/useSocket";
 import { useGameStore } from "@/shared/stores/game.store";
-import { useSocketStore } from "@/shared/stores/socket.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useEffect } from "react";
@@ -14,7 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export const LobbyScreen = () => {
   const { game } = useGameStore();
-  const { emit } = useSocketStore();
+  const { emit } = useSocket();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const back = () => {

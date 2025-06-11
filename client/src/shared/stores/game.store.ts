@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { Game } from "@/shared/interfaces/game";
-import { socketManager } from "../socket/socket-manager";
 import { Player } from "../interfaces/player";
 import { GameState as GameStatus } from "../interfaces/game-state";
+import { socket } from "../instances/socket.instance";
 import { Coords } from "../interfaces/coords";
 
 interface GameState {
@@ -61,27 +61,27 @@ export const useGameStore = create<GameState>((set, get) => {
       };
     });
 
-  socketManager.on("game", ({ game }) => {
+  socket.on("game", ({ game }) => {
     set({ game });
   });
 
-  socketManager.on("startGame", () => {
+  socket.on("startGame", () => {
     updateStatus("game");
   });
 
-  socketManager.on("endGame", () => {
+  socket.on("endGame", () => {
     updateStatus("finished");
   });
 
-  socketManager.on("playerJoined", ({ player }) => {
+  socket.on("playerJoined", ({ player }) => {
     addPlayer(player);
   });
 
-  socketManager.on("playerLeft", ({ player }) => {
+  socket.on("playerLeft", ({ player }) => {
     removePlayer(player.user.id ?? "");
   });
 
-  socketManager.on("locationUpdated", ({ player, location }) => {
+  socket.on("locationUpdated", ({ player, location }) => {
     updatePlayerLocation(player.user.id!, location);
   });
 

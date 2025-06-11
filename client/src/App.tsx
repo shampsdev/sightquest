@@ -10,8 +10,7 @@ import { AuthNavigator } from "./routers/auth.navigator";
 import { useAuthStore } from "./shared/stores/auth.store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { socketManager } from "./shared/socket/socket-manager";
-import { useSocketStore } from "@/shared/stores/socket.store";
+import { useSocket } from "./shared/hooks/useSocket";
 import {
   useQueryClient,
   QueryClientProvider,
@@ -45,7 +44,7 @@ export default function App() {
   });
 
   const { auth, token } = useAuthStore();
-  const { isConnected, emit } = useSocketStore();
+  const { isConnected, emit } = useSocket();
 
   useEffect(() => {
     if (loaded || error) {
