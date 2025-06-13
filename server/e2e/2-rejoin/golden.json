@@ -11,6 +11,7 @@
               "background": "",
               "createdAt": "",
               "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+              "name": "",
               "username": "user1"
             }
           }
@@ -24,6 +25,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "name": "",
                 "username": "user1"
               },
               "createdAt": "2025-04-11T17:52:10.832775Z",
@@ -43,6 +45,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "name": "",
                     "username": "user1"
                   }
                 }
@@ -74,6 +77,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+                "name": "",
                 "username": "user2"
               }
             }
@@ -89,6 +93,7 @@
               "background": "",
               "createdAt": "",
               "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+              "name": "",
               "username": "user2"
             }
           }
@@ -102,6 +107,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "name": "",
                 "username": "user1"
               },
               "createdAt": "2025-04-11T17:52:10.832775Z",
@@ -121,6 +127,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "name": "",
                     "username": "user1"
                   }
                 },
@@ -137,6 +144,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+                    "name": "",
                     "username": "user2"
                   }
                 }
@@ -168,6 +176,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+                "name": "",
                 "username": "user2"
               }
             }
@@ -196,6 +205,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+                "name": "",
                 "username": "user3"
               }
             }
@@ -211,6 +221,7 @@
               "background": "",
               "createdAt": "",
               "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+              "name": "",
               "username": "user3"
             }
           }
@@ -224,6 +235,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "name": "",
                 "username": "user1"
               },
               "createdAt": "2025-04-11T17:52:10.832775Z",
@@ -243,6 +255,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "name": "",
                     "username": "user1"
                   }
                 },
@@ -259,6 +272,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+                    "name": "",
                     "username": "user3"
                   }
                 }
@@ -303,6 +317,7 @@
               "background": "",
               "createdAt": "",
               "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+              "name": "",
               "username": "user1"
             }
           }
@@ -316,6 +331,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "name": "",
                 "username": "user1"
               },
               "createdAt": "2025-04-11T17:52:10.832775Z",
@@ -335,6 +351,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "name": "",
                     "username": "user1"
                   }
                 },
@@ -351,6 +368,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+                    "name": "",
                     "username": "user3"
                   }
                 }

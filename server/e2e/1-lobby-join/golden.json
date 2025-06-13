@@ -12,6 +12,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "name": "",
                 "username": "user1"
               },
               "createdAt": "2025-04-13T21:56:25.281795Z",
@@ -31,6 +32,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                    "name": "",
                     "username": "user1"
                   }
                 }
@@ -62,6 +64,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "744cfbd2-fd49-49fd-95b1-d525782a743c",
+                "name": "",
                 "username": "user2"
               }
             }
@@ -97,6 +100,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                    "name": "",
                     "username": "user1"
                   }
                 },
@@ -113,6 +117,7 @@
                     "background": "",
                     "createdAt": "",
                     "id": "744cfbd2-fd49-49fd-95b1-d525782a743c",
+                    "name": "",
                     "username": "user2"
                   }
                 }
@@ -148,6 +153,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "name": "",
                 "username": "user1"
               }
             }
@@ -177,6 +183,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "name": "",
                 "username": "user1"
               }
             }
@@ -201,6 +208,7 @@
                 "background": "",
                 "createdAt": "",
                 "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "name": "",
                 "username": "user1"
               }
             }
