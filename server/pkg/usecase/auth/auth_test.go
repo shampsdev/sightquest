@@ -25,9 +25,10 @@ func TestRegister(t *testing.T) {
 
 	// Register
 	var password string
-	userRepo.EXPECT().CreateUser(gomock.Any(), &domain.CreateUser{Username: "shamp", Email: "shamp@mail.ru"}, gomock.Any()).
-		DoAndReturn(func(_ context.Context, _ *domain.CreateUser, pass string) (string, error) {
-			password = pass
+	userRepo.EXPECT().Create(gomock.Any(), gomock.Any()).
+		DoAndReturn(func(_ context.Context, cu *domain.CreateUser) (string, error) {
+			password = cu.Password
+			assert.Equal(t, "shamp", cu.Username)
 			return "user1", nil
 		}).Times(1)
 
@@ -41,24 +42,24 @@ func TestRegister(t *testing.T) {
 	assert.Equal(t, "user1", userID)
 
 	// Auth by username + password
-	userRepo.EXPECT().GetUserByUsername(gomock.Any(), "shamp").Times(1).Return(&domain.User{ID: "user1"}, nil)
-	userRepo.EXPECT().GetUserPassword(gomock.Any(), "user1").Times(1).Return(password, nil)
+	userRepo.EXPECT().Filter(gomock.Any(), &domain.FilterUser{Username: ptrTo("shamp")}).Times(1).Return([]*domain.User{{ID: "user1"}}, nil)
+	userRepo.EXPECT().GetPassword(gomock.Any(), "user1").Times(1).Return(password, nil)
 
 	token, err = a.Login(ctx, &domain.UserCredentials{Username: "shamp", Password: "password"})
 	assert.NoError(t, err)
 	assert.NotEmpty(t, token)
 
 	// Auth by email + password
-	userRepo.EXPECT().GetUserByEmail(gomock.Any(), "shamp@mail.ru").Times(1).Return(&domain.User{ID: "user1"}, nil)
-	userRepo.EXPECT().GetUserPassword(gomock.Any(), "user1").Times(1).Return(password, nil)
+	userRepo.EXPECT().Filter(gomock.Any(), &domain.FilterUser{Email: ptrTo("shamp@mail.ru")}).Times(1).Return([]*domain.User{{ID: "user1"}}, nil)
+	userRepo.EXPECT().GetPassword(gomock.Any(), "user1").Times(1).Return(password, nil)
 
 	token, err = a.Login(ctx, &domain.UserCredentials{Email: "shamp@mail.ru", Password: "password"})
 	assert.NoError(t, err)
 	assert.NotEmpty(t, token)
 
 	// Wrong password
-	userRepo.EXPECT().GetUserByUsername(gomock.Any(), "shamp").Times(1).Return(&domain.User{ID: "user1"}, nil)
-	userRepo.EXPECT().GetUserPassword(gomock.Any(), "user1").Times(1).Return(password, nil)
+	userRepo.EXPECT().Filter(gomock.Any(), &domain.FilterUser{Username: ptrTo("shamp")}).Times(1).Return([]*domain.User{{ID: "user1"}}, nil)
+	userRepo.EXPECT().GetPassword(gomock.Any(), "user1").Times(1).Return(password, nil)
 
 	_, err = a.Login(ctx, &domain.UserCredentials{Username: "shamp", Password: "wrong"})
 	assert.Error(t, err)
@@ -78,12 +79,16 @@ func TestCompatibility(t *testing.T) {
 	a, err := NewAuther(cfg, userRepo)
 	assert.NoError(t, err)
 
-	userRepo.EXPECT().GetUserByUsername(gomock.Any(), "user1").Return(&domain.User{ID: "user1"}, nil).Times(1)
-	userRepo.EXPECT().GetUserPassword(gomock.Any(), "user1").Return(password, nil).Times(1)
+	userRepo.EXPECT().Filter(gomock.Any(), &domain.FilterUser{Username: ptrTo("user1")}).Return([]*domain.User{{ID: "user1"}}, nil).Times(1)
+	userRepo.EXPECT().GetPassword(gomock.Any(), "user1").Return(password, nil).Times(1)
 
 	token, err := a.Login(t.Context(), &domain.UserCredentials{Username: "user1", Password: "1234"})
 	assert.NoError(t, err)
 	userID, err := a.ParseToken(token)
 	assert.NoError(t, err)
 	assert.Equal(t, "user1", userID)
+}
+
+func ptrTo[T any](v T) *T {
+	return &v
 }

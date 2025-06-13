@@ -14,12 +14,17 @@ type UserCredentials struct {
 }
 
 type CreateUser struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	UserCredentials
 }
 
 type PatchUser struct {
 	Username   *string `json:"username"`
 	Avatar     *string `json:"avatar"`
 	Background *string `json:"background"`
+}
+
+type FilterUser struct {
+	ID       *string `json:"id"`
+	Email    *string `json:"email"`
+	Username *string `json:"username"`
 }

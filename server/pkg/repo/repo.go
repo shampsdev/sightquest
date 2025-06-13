@@ -11,12 +11,12 @@ var ErrUserNotFound = errors.New("user not found")
 
 //go:generate mockgen -source=repo.go -destination=mocks/repo_mock.go -package=mocks -typed
 type User interface {
-	CreateUser(ctx context.Context, user *domain.CreateUser, password string) (string, error)
-	GetUserByUsername(ctx context.Context, userID string) (*domain.User, error)
-	GetUserByID(ctx context.Context, userID string) (*domain.User, error)
-	GetUserByEmail(ctx context.Context, userID string) (*domain.User, error)
-	GetUserPassword(ctx context.Context, userID string) (string, error)
-	PatchUser(ctx context.Context, userID string, user *domain.PatchUser) error
+	Create(ctx context.Context, user *domain.CreateUser) (string, error)
+	Patch(ctx context.Context, id string, user *domain.PatchUser) error
+	Filter(ctx context.Context, filter *domain.FilterUser) ([]*domain.User, error)
+	Delete(ctx context.Context, id string) error
+
+	GetPassword(ctx context.Context, userID string) (string, error)
 }
 
 type Game interface {
@@ -31,4 +31,18 @@ type Player interface {
 	GetPlayer(ctx context.Context, gameID, userID string) (*domain.Player, error)
 	GetPlayersByGameID(ctx context.Context, gameID string) ([]*domain.Player, error)
 	DeletePlayer(ctx context.Context, gameID, userID string) error
+}
+
+type Route interface {
+	Create(ctx context.Context, route *domain.CreateRoute) (string, error)
+	Patch(ctx context.Context, id string, route *domain.PatchRoute) error
+	Filter(ctx context.Context, filter *domain.FilterRoute) ([]*domain.Route, error)
+	Delete(ctx context.Context, id string) error
+}
+
+type TaskPoint interface {
+	Create(ctx context.Context, taskPoint *domain.CreateTaskPoint) (string, error)
+	Patch(ctx context.Context, id string, taskPoint *domain.PatchTaskPoint) error
+	Filter(ctx context.Context, filter *domain.FilterTaskPoint) ([]*domain.TaskPoint, error)
+	Delete(ctx context.Context, id string) error
 }

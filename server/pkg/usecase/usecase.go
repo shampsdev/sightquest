@@ -13,10 +13,12 @@ import (
 )
 
 type Cases struct {
-	Auth   *auth.Auth
-	User   *usecore.User
-	Game   *usecore.Game
-	Player *usecore.Player
+	Auth      *auth.Auth
+	User      *usecore.User
+	Game      *usecore.Game
+	Player    *usecore.Player
+	Route     *usecore.Route
+	TaskPoint *usecore.TaskPoint
 
 	GameHandler *game.Handler
 }
@@ -25,6 +27,8 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 	userRepo := pg.NewUser(pool)
 	gameRepo := pg.NewGame(pool, userRepo)
 	playerRepo := pg.NewPlayer(pool, userRepo)
+	routeRepo := pg.NewRoute(pool)
+	taskPointRepo := pg.NewTaskPoint(pool)
 
 	auth, err := auth.NewAuther(cfg, userRepo)
 	if err != nil {
@@ -34,6 +38,8 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 	userCase := usecore.NewUser(userRepo)
 	gameCase := usecore.NewGame(gameRepo)
 	playerCase := usecore.NewPlayer(playerRepo)
+	routeCase := usecore.NewRoute(routeRepo)
+	taskPointCase := usecore.NewTaskPoint(taskPointRepo)
 
 	gameProvider := game.NewInMemoryGameRepo(ctx, gameCase, playerCase)
 	gameHandler := game.NewHandler(gameProvider, userCase, auth)
@@ -43,6 +49,8 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 		User:        userCase,
 		Game:        gameCase,
 		Player:      playerCase,
+		Route:       routeCase,
+		TaskPoint:   taskPointCase,
 		GameHandler: gameHandler,
 	}, nil
 }

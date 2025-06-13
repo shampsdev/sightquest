@@ -41,11 +41,14 @@ func (a *Auth) Register(ctx context.Context, creds *domain.UserCredentials) (str
 	}
 
 	user := &domain.CreateUser{
-		Username: creds.Username,
-		Email:    creds.Email,
+		UserCredentials: domain.UserCredentials{
+			Username: creds.Username,
+			Email:    creds.Email,
+			Password: hash,
+		},
 	}
 
-	id, err := a.userRepo.CreateUser(ctx, user, hash)
+	id, err := a.userRepo.Create(ctx, user)
 	if err != nil {
 		return "", fmt.Errorf("failed to create user: %w", err)
 	}
@@ -63,12 +66,12 @@ func (a *Auth) Login(ctx context.Context, creds *domain.UserCredentials) (string
 	var err error
 
 	if creds.Username != "" {
-		user, err = a.userRepo.GetUserByUsername(ctx, creds.Username)
+		user, err = repo.First(a.userRepo)(ctx, &domain.FilterUser{Username: &creds.Username})
 		if err != nil {
 			return "", fmt.Errorf("failed to get user: %w", err)
 		}
 	} else if creds.Email != "" {
-		user, err = a.userRepo.GetUserByEmail(ctx, creds.Email)
+		user, err = repo.First(a.userRepo)(ctx, &domain.FilterUser{Email: &creds.Email})
 		if err != nil {
 			return "", fmt.Errorf("failed to get user: %w", err)
 		}
@@ -76,7 +79,7 @@ func (a *Auth) Login(ctx context.Context, creds *domain.UserCredentials) (string
 		return "", fmt.Errorf("either username or email must be provided")
 	}
 
-	hash, err := a.userRepo.GetUserPassword(ctx, user.ID)
+	hash, err := a.userRepo.GetPassword(ctx, user.ID)
 	if err != nil {
 		return "", fmt.Errorf("failed to get user password: %w", err)
 	}

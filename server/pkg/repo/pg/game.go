@@ -44,7 +44,7 @@ func (g *Game) GetGameByID(ctx context.Context, gameID string) (*domain.Game, er
 		return nil, err
 	}
 
-	admin, err := g.ur.GetUserByID(ctx, game.Admin.ID)
+	admin, err := repo.First(g.ur)(ctx, &domain.FilterUser{ID: &game.Admin.ID})
 	if err != nil {
 		return nil, err
 	}

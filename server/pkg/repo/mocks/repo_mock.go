@@ -41,235 +41,195 @@ func (m *MockUser) EXPECT() *MockUserMockRecorder {
 	return m.recorder
 }
 
-// CreateUser mocks base method.
-func (m *MockUser) CreateUser(ctx context.Context, user *domain.CreateUser, password string) (string, error) {
+// Create mocks base method.
+func (m *MockUser) Create(ctx context.Context, user *domain.CreateUser) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateUser", ctx, user, password)
+	ret := m.ctrl.Call(m, "Create", ctx, user)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateUser indicates an expected call of CreateUser.
-func (mr *MockUserMockRecorder) CreateUser(ctx, user, password any) *MockUserCreateUserCall {
+// Create indicates an expected call of Create.
+func (mr *MockUserMockRecorder) Create(ctx, user any) *MockUserCreateCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUser)(nil).CreateUser), ctx, user, password)
-	return &MockUserCreateUserCall{Call: call}
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUser)(nil).Create), ctx, user)
+	return &MockUserCreateCall{Call: call}
 }
 
-// MockUserCreateUserCall wrap *gomock.Call
-type MockUserCreateUserCall struct {
+// MockUserCreateCall wrap *gomock.Call
+type MockUserCreateCall struct {
 	*gomock.Call
 }
 
 // Return rewrite *gomock.Call.Return
-func (c *MockUserCreateUserCall) Return(arg0 string, arg1 error) *MockUserCreateUserCall {
+func (c *MockUserCreateCall) Return(arg0 string, arg1 error) *MockUserCreateCall {
 	c.Call = c.Call.Return(arg0, arg1)
 	return c
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockUserCreateUserCall) Do(f func(context.Context, *domain.CreateUser, string) (string, error)) *MockUserCreateUserCall {
+func (c *MockUserCreateCall) Do(f func(context.Context, *domain.CreateUser) (string, error)) *MockUserCreateCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockUserCreateUserCall) DoAndReturn(f func(context.Context, *domain.CreateUser, string) (string, error)) *MockUserCreateUserCall {
+func (c *MockUserCreateCall) DoAndReturn(f func(context.Context, *domain.CreateUser) (string, error)) *MockUserCreateCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }
 
-// GetUserByEmail mocks base method.
-func (m *MockUser) GetUserByEmail(ctx context.Context, userID string) (*domain.User, error) {
+// Delete mocks base method.
+func (m *MockUser) Delete(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserByEmail", ctx, userID)
-	ret0, _ := ret[0].(*domain.User)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetUserByEmail indicates an expected call of GetUserByEmail.
-func (mr *MockUserMockRecorder) GetUserByEmail(ctx, userID any) *MockUserGetUserByEmailCall {
-	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByEmail", reflect.TypeOf((*MockUser)(nil).GetUserByEmail), ctx, userID)
-	return &MockUserGetUserByEmailCall{Call: call}
-}
-
-// MockUserGetUserByEmailCall wrap *gomock.Call
-type MockUserGetUserByEmailCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *MockUserGetUserByEmailCall) Return(arg0 *domain.User, arg1 error) *MockUserGetUserByEmailCall {
-	c.Call = c.Call.Return(arg0, arg1)
-	return c
-}
-
-// Do rewrite *gomock.Call.Do
-func (c *MockUserGetUserByEmailCall) Do(f func(context.Context, string) (*domain.User, error)) *MockUserGetUserByEmailCall {
-	c.Call = c.Call.Do(f)
-	return c
-}
-
-// DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockUserGetUserByEmailCall) DoAndReturn(f func(context.Context, string) (*domain.User, error)) *MockUserGetUserByEmailCall {
-	c.Call = c.Call.DoAndReturn(f)
-	return c
-}
-
-// GetUserByID mocks base method.
-func (m *MockUser) GetUserByID(ctx context.Context, userID string) (*domain.User, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserByID", ctx, userID)
-	ret0, _ := ret[0].(*domain.User)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetUserByID indicates an expected call of GetUserByID.
-func (mr *MockUserMockRecorder) GetUserByID(ctx, userID any) *MockUserGetUserByIDCall {
-	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByID", reflect.TypeOf((*MockUser)(nil).GetUserByID), ctx, userID)
-	return &MockUserGetUserByIDCall{Call: call}
-}
-
-// MockUserGetUserByIDCall wrap *gomock.Call
-type MockUserGetUserByIDCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *MockUserGetUserByIDCall) Return(arg0 *domain.User, arg1 error) *MockUserGetUserByIDCall {
-	c.Call = c.Call.Return(arg0, arg1)
-	return c
-}
-
-// Do rewrite *gomock.Call.Do
-func (c *MockUserGetUserByIDCall) Do(f func(context.Context, string) (*domain.User, error)) *MockUserGetUserByIDCall {
-	c.Call = c.Call.Do(f)
-	return c
-}
-
-// DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockUserGetUserByIDCall) DoAndReturn(f func(context.Context, string) (*domain.User, error)) *MockUserGetUserByIDCall {
-	c.Call = c.Call.DoAndReturn(f)
-	return c
-}
-
-// GetUserByUsername mocks base method.
-func (m *MockUser) GetUserByUsername(ctx context.Context, userID string) (*domain.User, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserByUsername", ctx, userID)
-	ret0, _ := ret[0].(*domain.User)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetUserByUsername indicates an expected call of GetUserByUsername.
-func (mr *MockUserMockRecorder) GetUserByUsername(ctx, userID any) *MockUserGetUserByUsernameCall {
-	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByUsername", reflect.TypeOf((*MockUser)(nil).GetUserByUsername), ctx, userID)
-	return &MockUserGetUserByUsernameCall{Call: call}
-}
-
-// MockUserGetUserByUsernameCall wrap *gomock.Call
-type MockUserGetUserByUsernameCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *MockUserGetUserByUsernameCall) Return(arg0 *domain.User, arg1 error) *MockUserGetUserByUsernameCall {
-	c.Call = c.Call.Return(arg0, arg1)
-	return c
-}
-
-// Do rewrite *gomock.Call.Do
-func (c *MockUserGetUserByUsernameCall) Do(f func(context.Context, string) (*domain.User, error)) *MockUserGetUserByUsernameCall {
-	c.Call = c.Call.Do(f)
-	return c
-}
-
-// DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockUserGetUserByUsernameCall) DoAndReturn(f func(context.Context, string) (*domain.User, error)) *MockUserGetUserByUsernameCall {
-	c.Call = c.Call.DoAndReturn(f)
-	return c
-}
-
-// GetUserPassword mocks base method.
-func (m *MockUser) GetUserPassword(ctx context.Context, userID string) (string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserPassword", ctx, userID)
-	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetUserPassword indicates an expected call of GetUserPassword.
-func (mr *MockUserMockRecorder) GetUserPassword(ctx, userID any) *MockUserGetUserPasswordCall {
-	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserPassword", reflect.TypeOf((*MockUser)(nil).GetUserPassword), ctx, userID)
-	return &MockUserGetUserPasswordCall{Call: call}
-}
-
-// MockUserGetUserPasswordCall wrap *gomock.Call
-type MockUserGetUserPasswordCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *MockUserGetUserPasswordCall) Return(arg0 string, arg1 error) *MockUserGetUserPasswordCall {
-	c.Call = c.Call.Return(arg0, arg1)
-	return c
-}
-
-// Do rewrite *gomock.Call.Do
-func (c *MockUserGetUserPasswordCall) Do(f func(context.Context, string) (string, error)) *MockUserGetUserPasswordCall {
-	c.Call = c.Call.Do(f)
-	return c
-}
-
-// DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockUserGetUserPasswordCall) DoAndReturn(f func(context.Context, string) (string, error)) *MockUserGetUserPasswordCall {
-	c.Call = c.Call.DoAndReturn(f)
-	return c
-}
-
-// PatchUser mocks base method.
-func (m *MockUser) PatchUser(ctx context.Context, userID string, user *domain.PatchUser) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PatchUser", ctx, userID, user)
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// PatchUser indicates an expected call of PatchUser.
-func (mr *MockUserMockRecorder) PatchUser(ctx, userID, user any) *MockUserPatchUserCall {
+// Delete indicates an expected call of Delete.
+func (mr *MockUserMockRecorder) Delete(ctx, id any) *MockUserDeleteCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PatchUser", reflect.TypeOf((*MockUser)(nil).PatchUser), ctx, userID, user)
-	return &MockUserPatchUserCall{Call: call}
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockUser)(nil).Delete), ctx, id)
+	return &MockUserDeleteCall{Call: call}
 }
 
-// MockUserPatchUserCall wrap *gomock.Call
-type MockUserPatchUserCall struct {
+// MockUserDeleteCall wrap *gomock.Call
+type MockUserDeleteCall struct {
 	*gomock.Call
 }
 
 // Return rewrite *gomock.Call.Return
-func (c *MockUserPatchUserCall) Return(arg0 error) *MockUserPatchUserCall {
+func (c *MockUserDeleteCall) Return(arg0 error) *MockUserDeleteCall {
 	c.Call = c.Call.Return(arg0)
 	return c
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockUserPatchUserCall) Do(f func(context.Context, string, *domain.PatchUser) error) *MockUserPatchUserCall {
+func (c *MockUserDeleteCall) Do(f func(context.Context, string) error) *MockUserDeleteCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockUserPatchUserCall) DoAndReturn(f func(context.Context, string, *domain.PatchUser) error) *MockUserPatchUserCall {
+func (c *MockUserDeleteCall) DoAndReturn(f func(context.Context, string) error) *MockUserDeleteCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Filter mocks base method.
+func (m *MockUser) Filter(ctx context.Context, filter *domain.FilterUser) ([]*domain.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Filter", ctx, filter)
+	ret0, _ := ret[0].([]*domain.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Filter indicates an expected call of Filter.
+func (mr *MockUserMockRecorder) Filter(ctx, filter any) *MockUserFilterCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Filter", reflect.TypeOf((*MockUser)(nil).Filter), ctx, filter)
+	return &MockUserFilterCall{Call: call}
+}
+
+// MockUserFilterCall wrap *gomock.Call
+type MockUserFilterCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockUserFilterCall) Return(arg0 []*domain.User, arg1 error) *MockUserFilterCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockUserFilterCall) Do(f func(context.Context, *domain.FilterUser) ([]*domain.User, error)) *MockUserFilterCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockUserFilterCall) DoAndReturn(f func(context.Context, *domain.FilterUser) ([]*domain.User, error)) *MockUserFilterCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// GetPassword mocks base method.
+func (m *MockUser) GetPassword(ctx context.Context, userID string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPassword", ctx, userID)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPassword indicates an expected call of GetPassword.
+func (mr *MockUserMockRecorder) GetPassword(ctx, userID any) *MockUserGetPasswordCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPassword", reflect.TypeOf((*MockUser)(nil).GetPassword), ctx, userID)
+	return &MockUserGetPasswordCall{Call: call}
+}
+
+// MockUserGetPasswordCall wrap *gomock.Call
+type MockUserGetPasswordCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockUserGetPasswordCall) Return(arg0 string, arg1 error) *MockUserGetPasswordCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockUserGetPasswordCall) Do(f func(context.Context, string) (string, error)) *MockUserGetPasswordCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockUserGetPasswordCall) DoAndReturn(f func(context.Context, string) (string, error)) *MockUserGetPasswordCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Patch mocks base method.
+func (m *MockUser) Patch(ctx context.Context, id string, user *domain.PatchUser) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Patch", ctx, id, user)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Patch indicates an expected call of Patch.
+func (mr *MockUserMockRecorder) Patch(ctx, id, user any) *MockUserPatchCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Patch", reflect.TypeOf((*MockUser)(nil).Patch), ctx, id, user)
+	return &MockUserPatchCall{Call: call}
+}
+
+// MockUserPatchCall wrap *gomock.Call
+type MockUserPatchCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockUserPatchCall) Return(arg0 error) *MockUserPatchCall {
+	c.Call = c.Call.Return(arg0)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockUserPatchCall) Do(f func(context.Context, string, *domain.PatchUser) error) *MockUserPatchCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockUserPatchCall) DoAndReturn(f func(context.Context, string, *domain.PatchUser) error) *MockUserPatchCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }

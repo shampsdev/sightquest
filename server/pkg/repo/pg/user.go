@@ -2,13 +2,10 @@ package pg
 
 import (
 	"context"
-	"errors"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/shampsdev/sightquest/server/pkg/domain"
-	"github.com/shampsdev/sightquest/server/pkg/repo"
 )
 
 type User struct {
@@ -23,33 +20,55 @@ func NewUser(db *pgxpool.Pool) *User {
 	}
 }
 
-func (u *User) CreateUser(ctx context.Context, user *domain.CreateUser, password string) (string, error) {
+func (u *User) Create(ctx context.Context, user *domain.CreateUser) (string, error) {
 	q := `INSERT INTO "user" (username, email, password) VALUES ($1, $2, $3) RETURNING id`
 	var id string
-	err := u.db.QueryRow(ctx, q, user.Username, user.Email, password).Scan(&id)
+	err := u.db.QueryRow(ctx, q, user.Username, user.Email, user.Password).Scan(&id)
 	return id, err
 }
 
-func (u *User) GetUserPassword(ctx context.Context, userID string) (string, error) {
+func (u *User) GetPassword(ctx context.Context, userID string) (string, error) {
 	q := `SELECT password FROM "user" WHERE id = $1`
 	var password string
 	err := u.db.QueryRow(ctx, q, userID).Scan(&password)
 	return password, err
 }
 
-func (u *User) GetUserByID(ctx context.Context, id string) (*domain.User, error) {
-	return u.queryUser(ctx, sq.Eq{"id": id})
+func (u *User) Filter(ctx context.Context, filter *domain.FilterUser) ([]*domain.User, error) {
+	q := u.psql.Select("id", "username", "avatar", "background").From(`"user"`)
+	if filter.ID != nil {
+		q = q.Where(sq.Eq{"id": *filter.ID})
+	}
+	if filter.Username != nil {
+		q = q.Where(sq.Eq{"username": *filter.Username})
+	}
+	if filter.Email != nil {
+		q = q.Where(sq.Eq{"email": *filter.Email})
+	}
+	sql, args, err := q.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := u.db.Query(ctx, sql, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []*domain.User
+	for rows.Next() {
+		var user domain.User
+		err := rows.Scan(&user.ID, &user.Username, &user.Avatar, &user.Background)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, &user)
+	}
+	return users, nil
 }
 
-func (u *User) GetUserByUsername(ctx context.Context, username string) (*domain.User, error) {
-	return u.queryUser(ctx, sq.Eq{"username": username})
-}
-
-func (u *User) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
-	return u.queryUser(ctx, sq.Eq{"email": email})
-}
-
-func (u *User) PatchUser(ctx context.Context, id string, user *domain.PatchUser) error {
+func (u *User) Patch(ctx context.Context, id string, user *domain.PatchUser) error {
 	q := u.psql.Update(`"user"`)
 	if user.Username != nil {
 		q = q.Set("username", *user.Username)
@@ -69,18 +88,12 @@ func (u *User) PatchUser(ctx context.Context, id string, user *domain.PatchUser)
 	return err
 }
 
-func (u *User) queryUser(ctx context.Context, condition sq.Eq) (*domain.User, error) {
-	sql, args, err := u.psql.Select("id", "username", "avatar", "background").
-		From(`"user"`).
-		Where(condition).ToSql()
+func (u *User) Delete(ctx context.Context, id string) error {
+	q := u.psql.Delete(`"user"`).Where(sq.Eq{"id": id})
+	sql, args, err := q.ToSql()
 	if err != nil {
-		return nil, err
+		return err
 	}
-
-	var user domain.User
-	err = u.db.QueryRow(ctx, sql, args...).Scan(&user.ID, &user.Username, &user.Avatar, &user.Background)
-	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, repo.ErrUserNotFound
-	}
-	return &user, err
+	_, err = u.db.Exec(ctx, sql, args...)
+	return err
 }
