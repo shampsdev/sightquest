@@ -183,11 +183,10 @@ export const AccountScreen = () => {
                 }}
               />
             ))}
+            <Pressable className="mx-auto pt-4" onPress={logout}>
+              <Text className="text-lg text-text_secondary font-onest-medium">Выйти</Text>
+            </Pressable>
           </View>
-
-          <Pressable onPress={logout}>
-            <Text>ВЫЙТИ</Text>
-          </Pressable>
         </View>
       </ScrollView>
       <StatusBar style="light" />
