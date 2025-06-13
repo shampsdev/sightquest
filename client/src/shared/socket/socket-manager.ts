@@ -45,6 +45,11 @@ export class SocketManager<S extends EventMap, C extends EventMap> {
     this.sock.disconnect();
   }
 
+  reconnect() {
+    this.sock.disconnect();
+    this.sock.connect();
+  }
+
   on<K extends keyof S>(event: K, cb: S[K], signal?: AbortSignal): () => void {
     this.sock.on(event as string, cb as any);
 

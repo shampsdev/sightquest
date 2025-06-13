@@ -8,10 +8,11 @@ import { MainStackParamList } from "@/routers/main.navigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useRef, useState } from "react";
-import { View, Pressable, SafeAreaView, ScrollView, Text } from "react-native";
+import { View, Pressable, SafeAreaView, ScrollView } from "react-native";
 import { RoutesWidget, RouteData } from "@/components/widgets/shop/routes";
 import { NicknamesWidget } from "@/components/widgets/shop/nicknames";
 import { Header } from "@/components/ui/header";
+import { StatusBar } from 'expo-status-bar';
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -79,7 +80,7 @@ export const ShopScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-bg_primary">
-      <ScrollView className="w-full pt-[36px]">
+      <ScrollView className="w-full">
         <View className="w-[90%] gap-[36px] relative mx-auto flex-col items-center">
           <View className="absolute w-full flex-row justify-between items-center">
             <Pressable onPress={back}>
@@ -114,6 +115,7 @@ export const ShopScreen = () => {
           )}
         </View>
       </ScrollView>
+      <StatusBar style="light" />
     </SafeAreaView>
   );
 };

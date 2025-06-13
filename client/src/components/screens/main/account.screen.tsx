@@ -10,12 +10,13 @@ import { GameStatistics } from "@/shared/interfaces/game-statistics";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { StatusBar } from "expo-status-bar";
 import { Pressable, View, Image, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const AccountScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   const mockGamesStatistics: GameStatistics[] = [
     {
@@ -187,8 +188,13 @@ export const AccountScreen = () => {
               />
             ))}
           </View>
+
+          <Pressable onPress={logout}>
+            <Text>ВЫЙТИ</Text>
+          </Pressable>
         </View>
       </ScrollView>
+      <StatusBar style="light" />
     </SafeAreaView>
   );
 };

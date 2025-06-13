@@ -11,5 +11,6 @@ export const useSocket = () => {
     emit: socket.emit.bind(socket),
     on: socket.on.bind(socket),
     isConnected,
+    reconnect: socket.reconnect.bind(socket)
   };
 };
