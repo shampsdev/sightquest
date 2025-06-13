@@ -258,118 +258,156 @@ func (m *MockGame) EXPECT() *MockGameMockRecorder {
 	return m.recorder
 }
 
-// CreateGame mocks base method.
-func (m *MockGame) CreateGame(ctx context.Context, game *domain.CreateGame) (string, error) {
+// Create mocks base method.
+func (m *MockGame) Create(ctx context.Context, game *domain.CreateGame) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateGame", ctx, game)
+	ret := m.ctrl.Call(m, "Create", ctx, game)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateGame indicates an expected call of CreateGame.
-func (mr *MockGameMockRecorder) CreateGame(ctx, game any) *MockGameCreateGameCall {
+// Create indicates an expected call of Create.
+func (mr *MockGameMockRecorder) Create(ctx, game any) *MockGameCreateCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateGame", reflect.TypeOf((*MockGame)(nil).CreateGame), ctx, game)
-	return &MockGameCreateGameCall{Call: call}
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockGame)(nil).Create), ctx, game)
+	return &MockGameCreateCall{Call: call}
 }
 
-// MockGameCreateGameCall wrap *gomock.Call
-type MockGameCreateGameCall struct {
+// MockGameCreateCall wrap *gomock.Call
+type MockGameCreateCall struct {
 	*gomock.Call
 }
 
 // Return rewrite *gomock.Call.Return
-func (c *MockGameCreateGameCall) Return(arg0 string, arg1 error) *MockGameCreateGameCall {
+func (c *MockGameCreateCall) Return(arg0 string, arg1 error) *MockGameCreateCall {
 	c.Call = c.Call.Return(arg0, arg1)
 	return c
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockGameCreateGameCall) Do(f func(context.Context, *domain.CreateGame) (string, error)) *MockGameCreateGameCall {
+func (c *MockGameCreateCall) Do(f func(context.Context, *domain.CreateGame) (string, error)) *MockGameCreateCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockGameCreateGameCall) DoAndReturn(f func(context.Context, *domain.CreateGame) (string, error)) *MockGameCreateGameCall {
+func (c *MockGameCreateCall) DoAndReturn(f func(context.Context, *domain.CreateGame) (string, error)) *MockGameCreateCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }
 
-// GetGameByID mocks base method.
-func (m *MockGame) GetGameByID(ctx context.Context, gameID string) (*domain.Game, error) {
+// Delete mocks base method.
+func (m *MockGame) Delete(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetGameByID", ctx, gameID)
-	ret0, _ := ret[0].(*domain.Game)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetGameByID indicates an expected call of GetGameByID.
-func (mr *MockGameMockRecorder) GetGameByID(ctx, gameID any) *MockGameGetGameByIDCall {
-	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetGameByID", reflect.TypeOf((*MockGame)(nil).GetGameByID), ctx, gameID)
-	return &MockGameGetGameByIDCall{Call: call}
-}
-
-// MockGameGetGameByIDCall wrap *gomock.Call
-type MockGameGetGameByIDCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *MockGameGetGameByIDCall) Return(arg0 *domain.Game, arg1 error) *MockGameGetGameByIDCall {
-	c.Call = c.Call.Return(arg0, arg1)
-	return c
-}
-
-// Do rewrite *gomock.Call.Do
-func (c *MockGameGetGameByIDCall) Do(f func(context.Context, string) (*domain.Game, error)) *MockGameGetGameByIDCall {
-	c.Call = c.Call.Do(f)
-	return c
-}
-
-// DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockGameGetGameByIDCall) DoAndReturn(f func(context.Context, string) (*domain.Game, error)) *MockGameGetGameByIDCall {
-	c.Call = c.Call.DoAndReturn(f)
-	return c
-}
-
-// UpdateGame mocks base method.
-func (m *MockGame) UpdateGame(ctx context.Context, game *domain.Game) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateGame", ctx, game)
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// UpdateGame indicates an expected call of UpdateGame.
-func (mr *MockGameMockRecorder) UpdateGame(ctx, game any) *MockGameUpdateGameCall {
+// Delete indicates an expected call of Delete.
+func (mr *MockGameMockRecorder) Delete(ctx, id any) *MockGameDeleteCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateGame", reflect.TypeOf((*MockGame)(nil).UpdateGame), ctx, game)
-	return &MockGameUpdateGameCall{Call: call}
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockGame)(nil).Delete), ctx, id)
+	return &MockGameDeleteCall{Call: call}
 }
 
-// MockGameUpdateGameCall wrap *gomock.Call
-type MockGameUpdateGameCall struct {
+// MockGameDeleteCall wrap *gomock.Call
+type MockGameDeleteCall struct {
 	*gomock.Call
 }
 
 // Return rewrite *gomock.Call.Return
-func (c *MockGameUpdateGameCall) Return(arg0 error) *MockGameUpdateGameCall {
+func (c *MockGameDeleteCall) Return(arg0 error) *MockGameDeleteCall {
 	c.Call = c.Call.Return(arg0)
 	return c
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockGameUpdateGameCall) Do(f func(context.Context, *domain.Game) error) *MockGameUpdateGameCall {
+func (c *MockGameDeleteCall) Do(f func(context.Context, string) error) *MockGameDeleteCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockGameUpdateGameCall) DoAndReturn(f func(context.Context, *domain.Game) error) *MockGameUpdateGameCall {
+func (c *MockGameDeleteCall) DoAndReturn(f func(context.Context, string) error) *MockGameDeleteCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Filter mocks base method.
+func (m *MockGame) Filter(ctx context.Context, filter *domain.FilterGame) ([]*domain.Game, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Filter", ctx, filter)
+	ret0, _ := ret[0].([]*domain.Game)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Filter indicates an expected call of Filter.
+func (mr *MockGameMockRecorder) Filter(ctx, filter any) *MockGameFilterCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Filter", reflect.TypeOf((*MockGame)(nil).Filter), ctx, filter)
+	return &MockGameFilterCall{Call: call}
+}
+
+// MockGameFilterCall wrap *gomock.Call
+type MockGameFilterCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockGameFilterCall) Return(arg0 []*domain.Game, arg1 error) *MockGameFilterCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockGameFilterCall) Do(f func(context.Context, *domain.FilterGame) ([]*domain.Game, error)) *MockGameFilterCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockGameFilterCall) DoAndReturn(f func(context.Context, *domain.FilterGame) ([]*domain.Game, error)) *MockGameFilterCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Patch mocks base method.
+func (m *MockGame) Patch(ctx context.Context, id string, game *domain.PatchGame) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Patch", ctx, id, game)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Patch indicates an expected call of Patch.
+func (mr *MockGameMockRecorder) Patch(ctx, id, game any) *MockGamePatchCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Patch", reflect.TypeOf((*MockGame)(nil).Patch), ctx, id, game)
+	return &MockGamePatchCall{Call: call}
+}
+
+// MockGamePatchCall wrap *gomock.Call
+type MockGamePatchCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockGamePatchCall) Return(arg0 error) *MockGamePatchCall {
+	c.Call = c.Call.Return(arg0)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockGamePatchCall) Do(f func(context.Context, string, *domain.PatchGame) error) *MockGamePatchCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockGamePatchCall) DoAndReturn(f func(context.Context, string, *domain.PatchGame) error) *MockGamePatchCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }
@@ -398,194 +436,512 @@ func (m *MockPlayer) EXPECT() *MockPlayerMockRecorder {
 	return m.recorder
 }
 
-// CreatePlayer mocks base method.
-func (m *MockPlayer) CreatePlayer(ctx context.Context, player *domain.Player) error {
+// Create mocks base method.
+func (m *MockPlayer) Create(ctx context.Context, player *domain.CreatePlayer) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreatePlayer", ctx, player)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// CreatePlayer indicates an expected call of CreatePlayer.
-func (mr *MockPlayerMockRecorder) CreatePlayer(ctx, player any) *MockPlayerCreatePlayerCall {
-	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePlayer", reflect.TypeOf((*MockPlayer)(nil).CreatePlayer), ctx, player)
-	return &MockPlayerCreatePlayerCall{Call: call}
-}
-
-// MockPlayerCreatePlayerCall wrap *gomock.Call
-type MockPlayerCreatePlayerCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *MockPlayerCreatePlayerCall) Return(arg0 error) *MockPlayerCreatePlayerCall {
-	c.Call = c.Call.Return(arg0)
-	return c
-}
-
-// Do rewrite *gomock.Call.Do
-func (c *MockPlayerCreatePlayerCall) Do(f func(context.Context, *domain.Player) error) *MockPlayerCreatePlayerCall {
-	c.Call = c.Call.Do(f)
-	return c
-}
-
-// DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockPlayerCreatePlayerCall) DoAndReturn(f func(context.Context, *domain.Player) error) *MockPlayerCreatePlayerCall {
-	c.Call = c.Call.DoAndReturn(f)
-	return c
-}
-
-// DeletePlayer mocks base method.
-func (m *MockPlayer) DeletePlayer(ctx context.Context, gameID, userID string) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeletePlayer", ctx, gameID, userID)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// DeletePlayer indicates an expected call of DeletePlayer.
-func (mr *MockPlayerMockRecorder) DeletePlayer(ctx, gameID, userID any) *MockPlayerDeletePlayerCall {
-	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePlayer", reflect.TypeOf((*MockPlayer)(nil).DeletePlayer), ctx, gameID, userID)
-	return &MockPlayerDeletePlayerCall{Call: call}
-}
-
-// MockPlayerDeletePlayerCall wrap *gomock.Call
-type MockPlayerDeletePlayerCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *MockPlayerDeletePlayerCall) Return(arg0 error) *MockPlayerDeletePlayerCall {
-	c.Call = c.Call.Return(arg0)
-	return c
-}
-
-// Do rewrite *gomock.Call.Do
-func (c *MockPlayerDeletePlayerCall) Do(f func(context.Context, string, string) error) *MockPlayerDeletePlayerCall {
-	c.Call = c.Call.Do(f)
-	return c
-}
-
-// DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockPlayerDeletePlayerCall) DoAndReturn(f func(context.Context, string, string) error) *MockPlayerDeletePlayerCall {
-	c.Call = c.Call.DoAndReturn(f)
-	return c
-}
-
-// GetPlayer mocks base method.
-func (m *MockPlayer) GetPlayer(ctx context.Context, gameID, userID string) (*domain.Player, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPlayer", ctx, gameID, userID)
-	ret0, _ := ret[0].(*domain.Player)
+	ret := m.ctrl.Call(m, "Create", ctx, player)
+	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetPlayer indicates an expected call of GetPlayer.
-func (mr *MockPlayerMockRecorder) GetPlayer(ctx, gameID, userID any) *MockPlayerGetPlayerCall {
+// Create indicates an expected call of Create.
+func (mr *MockPlayerMockRecorder) Create(ctx, player any) *MockPlayerCreateCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPlayer", reflect.TypeOf((*MockPlayer)(nil).GetPlayer), ctx, gameID, userID)
-	return &MockPlayerGetPlayerCall{Call: call}
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockPlayer)(nil).Create), ctx, player)
+	return &MockPlayerCreateCall{Call: call}
 }
 
-// MockPlayerGetPlayerCall wrap *gomock.Call
-type MockPlayerGetPlayerCall struct {
+// MockPlayerCreateCall wrap *gomock.Call
+type MockPlayerCreateCall struct {
 	*gomock.Call
 }
 
 // Return rewrite *gomock.Call.Return
-func (c *MockPlayerGetPlayerCall) Return(arg0 *domain.Player, arg1 error) *MockPlayerGetPlayerCall {
+func (c *MockPlayerCreateCall) Return(arg0 string, arg1 error) *MockPlayerCreateCall {
 	c.Call = c.Call.Return(arg0, arg1)
 	return c
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockPlayerGetPlayerCall) Do(f func(context.Context, string, string) (*domain.Player, error)) *MockPlayerGetPlayerCall {
+func (c *MockPlayerCreateCall) Do(f func(context.Context, *domain.CreatePlayer) (string, error)) *MockPlayerCreateCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockPlayerGetPlayerCall) DoAndReturn(f func(context.Context, string, string) (*domain.Player, error)) *MockPlayerGetPlayerCall {
+func (c *MockPlayerCreateCall) DoAndReturn(f func(context.Context, *domain.CreatePlayer) (string, error)) *MockPlayerCreateCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }
 
-// GetPlayersByGameID mocks base method.
-func (m *MockPlayer) GetPlayersByGameID(ctx context.Context, gameID string) ([]*domain.Player, error) {
+// Delete mocks base method.
+func (m *MockPlayer) Delete(ctx context.Context, gameID, userID string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPlayersByGameID", ctx, gameID)
+	ret := m.ctrl.Call(m, "Delete", ctx, gameID, userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockPlayerMockRecorder) Delete(ctx, gameID, userID any) *MockPlayerDeleteCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockPlayer)(nil).Delete), ctx, gameID, userID)
+	return &MockPlayerDeleteCall{Call: call}
+}
+
+// MockPlayerDeleteCall wrap *gomock.Call
+type MockPlayerDeleteCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockPlayerDeleteCall) Return(arg0 error) *MockPlayerDeleteCall {
+	c.Call = c.Call.Return(arg0)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockPlayerDeleteCall) Do(f func(context.Context, string, string) error) *MockPlayerDeleteCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockPlayerDeleteCall) DoAndReturn(f func(context.Context, string, string) error) *MockPlayerDeleteCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Filter mocks base method.
+func (m *MockPlayer) Filter(ctx context.Context, filter *domain.FilterPlayer) ([]*domain.Player, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Filter", ctx, filter)
 	ret0, _ := ret[0].([]*domain.Player)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetPlayersByGameID indicates an expected call of GetPlayersByGameID.
-func (mr *MockPlayerMockRecorder) GetPlayersByGameID(ctx, gameID any) *MockPlayerGetPlayersByGameIDCall {
+// Filter indicates an expected call of Filter.
+func (mr *MockPlayerMockRecorder) Filter(ctx, filter any) *MockPlayerFilterCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPlayersByGameID", reflect.TypeOf((*MockPlayer)(nil).GetPlayersByGameID), ctx, gameID)
-	return &MockPlayerGetPlayersByGameIDCall{Call: call}
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Filter", reflect.TypeOf((*MockPlayer)(nil).Filter), ctx, filter)
+	return &MockPlayerFilterCall{Call: call}
 }
 
-// MockPlayerGetPlayersByGameIDCall wrap *gomock.Call
-type MockPlayerGetPlayersByGameIDCall struct {
+// MockPlayerFilterCall wrap *gomock.Call
+type MockPlayerFilterCall struct {
 	*gomock.Call
 }
 
 // Return rewrite *gomock.Call.Return
-func (c *MockPlayerGetPlayersByGameIDCall) Return(arg0 []*domain.Player, arg1 error) *MockPlayerGetPlayersByGameIDCall {
+func (c *MockPlayerFilterCall) Return(arg0 []*domain.Player, arg1 error) *MockPlayerFilterCall {
 	c.Call = c.Call.Return(arg0, arg1)
 	return c
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockPlayerGetPlayersByGameIDCall) Do(f func(context.Context, string) ([]*domain.Player, error)) *MockPlayerGetPlayersByGameIDCall {
+func (c *MockPlayerFilterCall) Do(f func(context.Context, *domain.FilterPlayer) ([]*domain.Player, error)) *MockPlayerFilterCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockPlayerGetPlayersByGameIDCall) DoAndReturn(f func(context.Context, string) ([]*domain.Player, error)) *MockPlayerGetPlayersByGameIDCall {
+func (c *MockPlayerFilterCall) DoAndReturn(f func(context.Context, *domain.FilterPlayer) ([]*domain.Player, error)) *MockPlayerFilterCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }
 
-// UpdatePlayer mocks base method.
-func (m *MockPlayer) UpdatePlayer(ctx context.Context, player *domain.Player) error {
+// Patch mocks base method.
+func (m *MockPlayer) Patch(ctx context.Context, gameID, userID string, player *domain.PatchPlayer) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdatePlayer", ctx, player)
+	ret := m.ctrl.Call(m, "Patch", ctx, gameID, userID, player)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// UpdatePlayer indicates an expected call of UpdatePlayer.
-func (mr *MockPlayerMockRecorder) UpdatePlayer(ctx, player any) *MockPlayerUpdatePlayerCall {
+// Patch indicates an expected call of Patch.
+func (mr *MockPlayerMockRecorder) Patch(ctx, gameID, userID, player any) *MockPlayerPatchCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePlayer", reflect.TypeOf((*MockPlayer)(nil).UpdatePlayer), ctx, player)
-	return &MockPlayerUpdatePlayerCall{Call: call}
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Patch", reflect.TypeOf((*MockPlayer)(nil).Patch), ctx, gameID, userID, player)
+	return &MockPlayerPatchCall{Call: call}
 }
 
-// MockPlayerUpdatePlayerCall wrap *gomock.Call
-type MockPlayerUpdatePlayerCall struct {
+// MockPlayerPatchCall wrap *gomock.Call
+type MockPlayerPatchCall struct {
 	*gomock.Call
 }
 
 // Return rewrite *gomock.Call.Return
-func (c *MockPlayerUpdatePlayerCall) Return(arg0 error) *MockPlayerUpdatePlayerCall {
+func (c *MockPlayerPatchCall) Return(arg0 error) *MockPlayerPatchCall {
 	c.Call = c.Call.Return(arg0)
 	return c
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockPlayerUpdatePlayerCall) Do(f func(context.Context, *domain.Player) error) *MockPlayerUpdatePlayerCall {
+func (c *MockPlayerPatchCall) Do(f func(context.Context, string, string, *domain.PatchPlayer) error) *MockPlayerPatchCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockPlayerUpdatePlayerCall) DoAndReturn(f func(context.Context, *domain.Player) error) *MockPlayerUpdatePlayerCall {
+func (c *MockPlayerPatchCall) DoAndReturn(f func(context.Context, string, string, *domain.PatchPlayer) error) *MockPlayerPatchCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// MockRoute is a mock of Route interface.
+type MockRoute struct {
+	ctrl     *gomock.Controller
+	recorder *MockRouteMockRecorder
+	isgomock struct{}
+}
+
+// MockRouteMockRecorder is the mock recorder for MockRoute.
+type MockRouteMockRecorder struct {
+	mock *MockRoute
+}
+
+// NewMockRoute creates a new mock instance.
+func NewMockRoute(ctrl *gomock.Controller) *MockRoute {
+	mock := &MockRoute{ctrl: ctrl}
+	mock.recorder = &MockRouteMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockRoute) EXPECT() *MockRouteMockRecorder {
+	return m.recorder
+}
+
+// Create mocks base method.
+func (m *MockRoute) Create(ctx context.Context, route *domain.CreateRoute) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", ctx, route)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockRouteMockRecorder) Create(ctx, route any) *MockRouteCreateCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockRoute)(nil).Create), ctx, route)
+	return &MockRouteCreateCall{Call: call}
+}
+
+// MockRouteCreateCall wrap *gomock.Call
+type MockRouteCreateCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockRouteCreateCall) Return(arg0 string, arg1 error) *MockRouteCreateCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockRouteCreateCall) Do(f func(context.Context, *domain.CreateRoute) (string, error)) *MockRouteCreateCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockRouteCreateCall) DoAndReturn(f func(context.Context, *domain.CreateRoute) (string, error)) *MockRouteCreateCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Delete mocks base method.
+func (m *MockRoute) Delete(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockRouteMockRecorder) Delete(ctx, id any) *MockRouteDeleteCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRoute)(nil).Delete), ctx, id)
+	return &MockRouteDeleteCall{Call: call}
+}
+
+// MockRouteDeleteCall wrap *gomock.Call
+type MockRouteDeleteCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockRouteDeleteCall) Return(arg0 error) *MockRouteDeleteCall {
+	c.Call = c.Call.Return(arg0)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockRouteDeleteCall) Do(f func(context.Context, string) error) *MockRouteDeleteCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockRouteDeleteCall) DoAndReturn(f func(context.Context, string) error) *MockRouteDeleteCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Filter mocks base method.
+func (m *MockRoute) Filter(ctx context.Context, filter *domain.FilterRoute) ([]*domain.Route, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Filter", ctx, filter)
+	ret0, _ := ret[0].([]*domain.Route)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Filter indicates an expected call of Filter.
+func (mr *MockRouteMockRecorder) Filter(ctx, filter any) *MockRouteFilterCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Filter", reflect.TypeOf((*MockRoute)(nil).Filter), ctx, filter)
+	return &MockRouteFilterCall{Call: call}
+}
+
+// MockRouteFilterCall wrap *gomock.Call
+type MockRouteFilterCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockRouteFilterCall) Return(arg0 []*domain.Route, arg1 error) *MockRouteFilterCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockRouteFilterCall) Do(f func(context.Context, *domain.FilterRoute) ([]*domain.Route, error)) *MockRouteFilterCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockRouteFilterCall) DoAndReturn(f func(context.Context, *domain.FilterRoute) ([]*domain.Route, error)) *MockRouteFilterCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Patch mocks base method.
+func (m *MockRoute) Patch(ctx context.Context, id string, route *domain.PatchRoute) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Patch", ctx, id, route)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Patch indicates an expected call of Patch.
+func (mr *MockRouteMockRecorder) Patch(ctx, id, route any) *MockRoutePatchCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Patch", reflect.TypeOf((*MockRoute)(nil).Patch), ctx, id, route)
+	return &MockRoutePatchCall{Call: call}
+}
+
+// MockRoutePatchCall wrap *gomock.Call
+type MockRoutePatchCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockRoutePatchCall) Return(arg0 error) *MockRoutePatchCall {
+	c.Call = c.Call.Return(arg0)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockRoutePatchCall) Do(f func(context.Context, string, *domain.PatchRoute) error) *MockRoutePatchCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockRoutePatchCall) DoAndReturn(f func(context.Context, string, *domain.PatchRoute) error) *MockRoutePatchCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// MockTaskPoint is a mock of TaskPoint interface.
+type MockTaskPoint struct {
+	ctrl     *gomock.Controller
+	recorder *MockTaskPointMockRecorder
+	isgomock struct{}
+}
+
+// MockTaskPointMockRecorder is the mock recorder for MockTaskPoint.
+type MockTaskPointMockRecorder struct {
+	mock *MockTaskPoint
+}
+
+// NewMockTaskPoint creates a new mock instance.
+func NewMockTaskPoint(ctrl *gomock.Controller) *MockTaskPoint {
+	mock := &MockTaskPoint{ctrl: ctrl}
+	mock.recorder = &MockTaskPointMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockTaskPoint) EXPECT() *MockTaskPointMockRecorder {
+	return m.recorder
+}
+
+// Create mocks base method.
+func (m *MockTaskPoint) Create(ctx context.Context, taskPoint *domain.CreateTaskPoint) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", ctx, taskPoint)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockTaskPointMockRecorder) Create(ctx, taskPoint any) *MockTaskPointCreateCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockTaskPoint)(nil).Create), ctx, taskPoint)
+	return &MockTaskPointCreateCall{Call: call}
+}
+
+// MockTaskPointCreateCall wrap *gomock.Call
+type MockTaskPointCreateCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockTaskPointCreateCall) Return(arg0 string, arg1 error) *MockTaskPointCreateCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockTaskPointCreateCall) Do(f func(context.Context, *domain.CreateTaskPoint) (string, error)) *MockTaskPointCreateCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockTaskPointCreateCall) DoAndReturn(f func(context.Context, *domain.CreateTaskPoint) (string, error)) *MockTaskPointCreateCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Delete mocks base method.
+func (m *MockTaskPoint) Delete(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockTaskPointMockRecorder) Delete(ctx, id any) *MockTaskPointDeleteCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockTaskPoint)(nil).Delete), ctx, id)
+	return &MockTaskPointDeleteCall{Call: call}
+}
+
+// MockTaskPointDeleteCall wrap *gomock.Call
+type MockTaskPointDeleteCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockTaskPointDeleteCall) Return(arg0 error) *MockTaskPointDeleteCall {
+	c.Call = c.Call.Return(arg0)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockTaskPointDeleteCall) Do(f func(context.Context, string) error) *MockTaskPointDeleteCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockTaskPointDeleteCall) DoAndReturn(f func(context.Context, string) error) *MockTaskPointDeleteCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Filter mocks base method.
+func (m *MockTaskPoint) Filter(ctx context.Context, filter *domain.FilterTaskPoint) ([]*domain.TaskPoint, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Filter", ctx, filter)
+	ret0, _ := ret[0].([]*domain.TaskPoint)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Filter indicates an expected call of Filter.
+func (mr *MockTaskPointMockRecorder) Filter(ctx, filter any) *MockTaskPointFilterCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Filter", reflect.TypeOf((*MockTaskPoint)(nil).Filter), ctx, filter)
+	return &MockTaskPointFilterCall{Call: call}
+}
+
+// MockTaskPointFilterCall wrap *gomock.Call
+type MockTaskPointFilterCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockTaskPointFilterCall) Return(arg0 []*domain.TaskPoint, arg1 error) *MockTaskPointFilterCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockTaskPointFilterCall) Do(f func(context.Context, *domain.FilterTaskPoint) ([]*domain.TaskPoint, error)) *MockTaskPointFilterCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockTaskPointFilterCall) DoAndReturn(f func(context.Context, *domain.FilterTaskPoint) ([]*domain.TaskPoint, error)) *MockTaskPointFilterCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// Patch mocks base method.
+func (m *MockTaskPoint) Patch(ctx context.Context, id string, taskPoint *domain.PatchTaskPoint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Patch", ctx, id, taskPoint)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Patch indicates an expected call of Patch.
+func (mr *MockTaskPointMockRecorder) Patch(ctx, id, taskPoint any) *MockTaskPointPatchCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Patch", reflect.TypeOf((*MockTaskPoint)(nil).Patch), ctx, id, taskPoint)
+	return &MockTaskPointPatchCall{Call: call}
+}
+
+// MockTaskPointPatchCall wrap *gomock.Call
+type MockTaskPointPatchCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockTaskPointPatchCall) Return(arg0 error) *MockTaskPointPatchCall {
+	c.Call = c.Call.Return(arg0)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockTaskPointPatchCall) Do(f func(context.Context, string, *domain.PatchTaskPoint) error) *MockTaskPointPatchCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockTaskPointPatchCall) DoAndReturn(f func(context.Context, string, *domain.PatchTaskPoint) error) *MockTaskPointPatchCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }

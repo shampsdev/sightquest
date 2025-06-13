@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	sq "github.com/Masterminds/squirrel"
 	"github.com/Vaniog/go-postgis"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/shampsdev/sightquest/server/pkg/domain"
@@ -11,6 +12,7 @@ import (
 )
 
 type Player struct {
+	psql     sq.StatementBuilderType
 	db       *pgxpool.Pool
 	userRepo repo.User
 }
@@ -19,59 +21,76 @@ func NewPlayer(db *pgxpool.Pool, userRepo repo.User) *Player {
 	return &Player{
 		db:       db,
 		userRepo: userRepo,
+		psql:     sq.StatementBuilder.PlaceholderFormat(sq.Dollar),
 	}
 }
 
-func (p *Player) CreatePlayer(ctx context.Context, player *domain.Player) error {
-	q := `INSERT INTO "player" ("game_id", "user_id", "role", "score", "location") VALUES ($1, $2, $3, $4, GeomFromEWKB($5))`
-	_, err := p.db.Exec(ctx, q, player.GameID, player.User.ID, player.Role, player.Score, player.Location.ToPostgis())
+func (p *Player) Create(ctx context.Context, player *domain.CreatePlayer) error {
+	q := p.psql.Insert(`"player"`).
+		Columns("game_id", "user_id", "role", "score", "location").
+		Values(player.GameID, player.UserID, player.Role, player.Score, sq.Expr("GeomFromEWKB(?)", player.Location.ToPostgis()))
+
+	sql, args, err := q.ToSql()
+	if err != nil {
+		return fmt.Errorf("error building query: %w", err)
+	}
+
+	_, err = p.db.Exec(ctx, sql, args...)
 	if err != nil {
 		return fmt.Errorf("error creating player: %w", err)
 	}
 	return nil
 }
 
-func (p *Player) DeletePlayer(ctx context.Context, gameID, userID string) error {
-	q := `DELETE FROM "player" WHERE "game_id" = $1 AND "user_id" = $2`
-	_, err := p.db.Exec(ctx, q, gameID, userID)
+func (p *Player) Patch(ctx context.Context, gameID, userID string, patch *domain.PatchPlayer) error {
+	q := p.psql.Update(`"player"`)
+	
+	if patch.Role != nil {
+		q = q.Set("role", *patch.Role)
+	}
+	if patch.Score != nil {
+		q = q.Set("score", *patch.Score)
+	}
+	if patch.Location != nil {
+		q = q.Set("location", sq.Expr("GeomFromEWKB(?)", patch.Location.ToPostgis()))
+	}
+
+	q = q.Where(sq.Eq{"game_id": gameID, "user_id": userID})
+	sql, args, err := q.ToSql()
 	if err != nil {
 		return err
 	}
-	return nil
+	_, err = p.db.Exec(ctx, sql, args...)
+	return err
 }
 
-func (p *Player) GetPlayer(ctx context.Context, gameID, userID string) (*domain.Player, error) {
-	q := `
-	    SELECT p.game_id, p.user_id, p.role, p.score, p.location, u.username, u.avatar, u.background
-        FROM player AS p
-        JOIN "user" AS u ON p.user_id = u.id
-        WHERE p.game_id = $1 AND p.user_id = $2
-	`
+func (p *Player) Filter(ctx context.Context, filter *domain.FilterPlayer) ([]*domain.Player, error) {
+	q := p.psql.Select("p.game_id", "p.user_id", "p.role", "p.score", "p.location", "u.username", "u.avatar", "u.background").
+		From(`"player" AS p`).
+		Join(`"user" AS u ON p.user_id = u.id`)
 
-	player, err := scanPlayer(p.db.QueryRow(ctx, q, gameID, userID))
-	if err != nil {
-		return nil, fmt.Errorf("error getting player: %w", err)
+	if filter.GameID != nil {
+		q = q.Where(sq.Eq{"p.game_id": *filter.GameID})
+	}
+	if filter.UserID != nil {
+		q = q.Where(sq.Eq{"p.user_id": *filter.UserID})
+	}
+	if filter.Role != nil {
+		q = q.Where(sq.Eq{"p.role": *filter.Role})
 	}
 
-	return player, nil
-}
-
-func (p *Player) GetPlayersByGameID(ctx context.Context, gameID string) ([]*domain.Player, error) {
-	q := ` 
-        SELECT p.game_id, p.user_id, p.role, p.score, p.location, u.username, u.avatar, u.background
-        FROM player AS p
-        JOIN "user" AS u ON p.user_id = u.id
-        WHERE p.game_id = $1
-	`
-
-	rows, err := p.db.Query(ctx, q, gameID)
+	sql, args, err := q.ToSql()
 	if err != nil {
-		return nil, fmt.Errorf("error getting players by game ID: %w", err)
+		return nil, fmt.Errorf("error building query: %w", err)
+	}
+
+	rows, err := p.db.Query(ctx, sql, args...)
+	if err != nil {
+		return nil, fmt.Errorf("error filtering players: %w", err)
 	}
 	defer rows.Close()
 
 	players := []*domain.Player{}
-
 	for rows.Next() {
 		player, err := scanPlayer(rows)
 		if err != nil {
@@ -85,6 +104,21 @@ func (p *Player) GetPlayersByGameID(ctx context.Context, gameID string) ([]*doma
 	}
 
 	return players, nil
+}
+
+func (p *Player) Delete(ctx context.Context, gameID, userID string) error {
+	q := p.psql.Delete(`"player"`).Where(sq.Eq{"game_id": gameID, "user_id": userID})
+
+	sql, args, err := q.ToSql()
+	if err != nil {
+		return fmt.Errorf("error building query: %w", err)
+	}
+
+	_, err = p.db.Exec(ctx, sql, args...)
+	if err != nil {
+		return fmt.Errorf("error deleting player: %w", err)
+	}
+	return nil
 }
 
 type Scanner interface {
@@ -112,24 +146,4 @@ func scanPlayer(row Scanner) (*domain.Player, error) {
 
 	player.Location = domain.FromPostgis(loc)
 	return player, nil
-}
-
-func (p *Player) UpdatePlayer(ctx context.Context, player *domain.Player) error {
-	q := `
-        UPDATE player
-        SET role = $1, score = $2, location = GeomFromEWKB($3)
-        WHERE game_id = $4 AND user_id = $5
-    `
-	_, err := p.db.Exec(ctx, q,
-		player.Role,
-		player.Score,
-		player.Location.ToPostgis(),
-		player.GameID,
-		player.User.ID,
-	)
-	if err != nil {
-		return fmt.Errorf("error updating player: %w", err)
-	}
-
-	return nil
 }

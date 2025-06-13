@@ -19,6 +19,17 @@ type CreateGame struct {
 	State   GameState `json:"state"`
 }
 
+type PatchGame struct {
+	State      *GameState `json:"state"`
+	FinishedAt **time.Time `json:"finishedAt"`
+}
+
+type FilterGame struct {
+	ID      *string    `json:"id"`
+	AdminID *string    `json:"adminId"`
+	State   *GameState `json:"state"`
+}
+
 const (
 	GameStateLobby    GameState = "lobby"
 	GameStateGame     GameState = "game"

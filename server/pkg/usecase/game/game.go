@@ -96,14 +96,15 @@ func recordGameActivityMW[E any](c Context, e E, next state.HandlerFunc[*PlayerS
 func (g *Game) OnJoinGame(c Context) error {
 	switch g.game.State {
 	case domain.GameStateLobby:
-		p := &domain.Player{
-			User:   c.S.User,
-			GameID: g.game.ID,
-			Role:   "runner",
-			Score:  0,
+		createPlayer := &domain.CreatePlayer{
+			UserID:   c.S.User.ID,
+			GameID:   g.game.ID,
+			Role:     "runner",
+			Score:    0,
+			Location: domain.Coordinate{}, // Default empty location
 		}
 
-		err := g.playerCase.CreatePlayer(c.Ctx, p)
+		p, err := g.playerCase.CreatePlayer(c.Ctx, createPlayer)
 		if err != nil {
 			return fmt.Errorf("failed to create player: %w", err)
 		}
@@ -154,7 +155,9 @@ func (g *Game) OnStartGame(c Context, _ event.StartGame) error {
 	}
 
 	g.game.State = domain.GameStateGame
-	err := g.gameCase.UpdateGame(c.Ctx, g.game)
+	err := g.gameCase.UpdateGame(c.Ctx, g.game.ID, &domain.PatchGame{
+		State: &g.game.State,
+	})
 	if err != nil {
 		return fmt.Errorf("failed to update game: %w", err)
 	}

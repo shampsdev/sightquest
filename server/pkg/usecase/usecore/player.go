@@ -17,22 +17,27 @@ func NewPlayer(playerRepo repo.Player) *Player {
 	}
 }
 
-func (p *Player) CreatePlayer(ctx context.Context, player *domain.Player) error {
-	return p.playerRepo.CreatePlayer(ctx, player)
+func (p *Player) CreatePlayer(ctx context.Context, player *domain.CreatePlayer) (*domain.Player, error) {
+	err := p.playerRepo.Create(ctx, player)
+	if err != nil {
+		return nil, err
+	}
+
+	return p.GetPlayer(ctx, player.GameID, player.UserID)
 }
 
-func (p *Player) UpdatePlayer(ctx context.Context, player *domain.Player) error {
-	return p.playerRepo.UpdatePlayer(ctx, player)
+func (p *Player) UpdatePlayer(ctx context.Context, gameID, userID string, patch *domain.PatchPlayer) error {
+	return p.playerRepo.Patch(ctx, gameID, userID, patch)
 }
 
 func (p *Player) GetPlayer(ctx context.Context, gameID, userID string) (*domain.Player, error) {
-	return p.playerRepo.GetPlayer(ctx, gameID, userID)
+	return repo.First(p.playerRepo)(ctx, &domain.FilterPlayer{GameID: &gameID, UserID: &userID})
 }
 
 func (p *Player) GetPlayersByGameID(ctx context.Context, gameID string) ([]*domain.Player, error) {
-	return p.playerRepo.GetPlayersByGameID(ctx, gameID)
+	return p.playerRepo.Filter(ctx, &domain.FilterPlayer{GameID: &gameID})
 }
 
 func (p *Player) DeletePlayer(ctx context.Context, gameID, userID string) error {
-	return p.playerRepo.DeletePlayer(ctx, gameID, userID)
+	return p.playerRepo.Delete(ctx, gameID, userID)
 }

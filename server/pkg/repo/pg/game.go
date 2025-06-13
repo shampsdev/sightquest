@@ -6,12 +6,14 @@ import (
 	"math/rand/v2"
 	"time"
 
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/shampsdev/sightquest/server/pkg/domain"
 	"github.com/shampsdev/sightquest/server/pkg/repo"
 )
 
 type Game struct {
+	psql sq.StatementBuilderType
 	db   *pgxpool.Pool
 	ur   repo.User
 	rand *rand.Rand
@@ -19,50 +21,121 @@ type Game struct {
 
 func NewGame(db *pgxpool.Pool, ur repo.User) *Game {
 	return &Game{
+		psql: sq.StatementBuilder.PlaceholderFormat(sq.Dollar),
 		rand: rand.New(rand.NewPCG(uint64(time.Now().UnixNano()), rand.Uint64())),
 		db:   db,
 		ur:   ur,
 	}
 }
 
-func (g *Game) CreateGame(ctx context.Context, game *domain.CreateGame) (string, error) {
+func (g *Game) Create(ctx context.Context, game *domain.CreateGame) (string, error) {
 	gameID := g.generateID()
-	q := `INSERT INTO game (id, admin_id, state) VALUES ($1, $2, $3)`
-	_, err := g.db.Exec(ctx, q, gameID, game.AdminID, game.State)
+	q := g.psql.Insert("game").
+		Columns("id", "admin_id", "state").
+		Values(gameID, game.AdminID, game.State)
+
+	sql, args, err := q.ToSql()
+	if err != nil {
+		return "", fmt.Errorf("failed to build query: %w", err)
+	}
+
+	_, err = g.db.Exec(ctx, sql, args...)
 	if err != nil {
 		return "", fmt.Errorf("failed to create game: %w", err)
 	}
 	return gameID, nil
 }
 
-func (g *Game) GetGameByID(ctx context.Context, gameID string) (*domain.Game, error) {
-	q := `SELECT id, state, admin_id, created_at, finished_at FROM game WHERE id = $1`
-	game := &domain.Game{}
-	game.Admin = &domain.User{}
-	err := g.db.QueryRow(ctx, q, gameID).Scan(&game.ID, &game.State, &game.Admin.ID, &game.CreatedAt, &game.FinishedAt)
-	if err != nil {
-		return nil, err
+func (g *Game) Patch(ctx context.Context, id string, patch *domain.PatchGame) error {
+	q := g.psql.Update("game")
+
+	if patch.State != nil {
+		q = q.Set("state", *patch.State)
 	}
 
-	admin, err := repo.First(g.ur)(ctx, &domain.FilterUser{ID: &game.Admin.ID})
-	if err != nil {
-		return nil, err
+	if patch.FinishedAt != nil {
+		q = q.Set("finished_at", *patch.FinishedAt)
 	}
 
-	return &domain.Game{
-		ID:         game.ID,
-		State:      game.State,
-		Admin:      admin,
-		Players:    []*domain.Player{},
-		CreatedAt:  game.CreatedAt,
-		FinishedAt: game.FinishedAt,
-	}, nil
+	q = q.Where(sq.Eq{"id": id})
+
+	sql, args, err := q.ToSql()
+	if err != nil {
+		return fmt.Errorf("failed to build query: %w", err)
+	}
+
+	_, err = g.db.Exec(ctx, sql, args...)
+	if err != nil {
+		return fmt.Errorf("failed to update game: %w", err)
+	}
+
+	return nil
 }
 
-func (g *Game) UpdateGame(ctx context.Context, game *domain.Game) error {
-	q := `UPDATE game SET state = $1, finished_at = $2 WHERE id = $3`
-	_, err := g.db.Exec(ctx, q, game.State, game.FinishedAt, game.ID)
-	return err
+func (g *Game) Filter(ctx context.Context, filter *domain.FilterGame) ([]*domain.Game, error) {
+	q := g.psql.Select("id", "state", "admin_id", "created_at", "finished_at").
+		From("game")
+
+	if filter.ID != nil {
+		q = q.Where(sq.Eq{"id": *filter.ID})
+	}
+	if filter.AdminID != nil {
+		q = q.Where(sq.Eq{"admin_id": *filter.AdminID})
+	}
+	if filter.State != nil {
+		q = q.Where(sq.Eq{"state": *filter.State})
+	}
+
+	sql, args, err := q.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("failed to build query: %w", err)
+	}
+
+	rows, err := g.db.Query(ctx, sql, args...)
+	if err != nil {
+		return nil, fmt.Errorf("failed to filter games: %w", err)
+	}
+	defer rows.Close()
+
+	games := []*domain.Game{}
+	for rows.Next() {
+		game := &domain.Game{}
+		game.Admin = &domain.User{}
+		err := rows.Scan(&game.ID, &game.State, &game.Admin.ID, &game.CreatedAt, &game.FinishedAt)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan game: %w", err)
+		}
+
+		admin, err := repo.First(g.ur)(ctx, &domain.FilterUser{ID: &game.Admin.ID})
+		if err != nil {
+			return nil, fmt.Errorf("failed to get admin: %w", err)
+		}
+
+		game.Admin = admin
+		game.Players = []*domain.Player{}
+		games = append(games, game)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating game rows: %w", err)
+	}
+
+	return games, nil
+}
+
+func (g *Game) Delete(ctx context.Context, id string) error {
+	q := g.psql.Delete("game").Where(sq.Eq{"id": id})
+
+	sql, args, err := q.ToSql()
+	if err != nil {
+		return fmt.Errorf("failed to build query: %w", err)
+	}
+
+	_, err = g.db.Exec(ctx, sql, args...)
+	if err != nil {
+		return fmt.Errorf("failed to delete game: %w", err)
+	}
+	return nil
 }
 
 var letterRunes = []rune("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
