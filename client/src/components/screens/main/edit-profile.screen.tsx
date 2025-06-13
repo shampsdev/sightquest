@@ -6,6 +6,7 @@ import { TextInput } from "@/components/ui/textinput";
 import { AvatarPicker } from "@/components/widgets/avatar-picker";
 import { AVATARS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
+import { usePatchMe } from "@/shared/api/hooks/usePatchMe";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -17,12 +18,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export const EditProfileScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const insets = useSafeAreaInsets();
-  const { user } = useAuthStore();
+  const { user, setUser } = useAuthStore();
 
   const [username, setUsername] = useState<string>(user?.username || "");
   const [step, setStep] = useState<0 | 1>(0);
   const [selectedAvatar, setSelectedAvatar] = useState<number | null>(
-    AVATARS.find((x) => x.id === Number(user!.avatar))?.src || null
+    AVATARS.find((x) => x.id === Number(user!.avatar))?.id!
   );
 
   const back = () => {
@@ -33,7 +34,21 @@ export const EditProfileScreen = () => {
     setStep(0);
   };
 
-  const handleSubmit = () => {};
+  const patchMe = usePatchMe();
+
+  const handleSubmit = async () => {
+    try {
+      const updatedUser = await patchMe.mutateAsync({
+        username: username,
+        avatar: String(selectedAvatar),
+      });
+      setUser({ ...useAuthStore.getState().user, ...updatedUser });
+      alert("Профиль успешно обновлен");
+      back();
+    } catch (error) {
+      alert("Произошла ошибка при обновлении профиля");
+    }
+  };
   return (
     <SafeAreaView
       className="flex-1 bg-bg_primary"

@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../interfaces/user";
-import { socketManager } from "../socket/socket-manager";
 
 interface AuthState {
   auth: boolean;
@@ -13,6 +12,7 @@ interface AuthState {
 interface AuthActions {
   login: (user: User, token: string) => void;
   logout: () => void;
+  setUser: (user: User) => void;
 }
 
 export const useAuthStore = create<AuthState & AuthActions>()(
@@ -23,6 +23,9 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       user: null,
       login: (user: User, token: string) => {
         set({ auth: true, user, token });
+      },
+      setUser: (user: User) => {
+        set({ user: { ...user } });
       },
       logout: () => set({ auth: false, user: null, token: null }),
     }),
