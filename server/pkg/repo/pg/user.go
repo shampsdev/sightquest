@@ -21,9 +21,9 @@ func NewUser(db *pgxpool.Pool) *User {
 }
 
 func (u *User) Create(ctx context.Context, user *domain.CreateUser) (string, error) {
-	q := `INSERT INTO "user" (username, email, password) VALUES ($1, $2, $3) RETURNING id`
+	q := `INSERT INTO "user" (username, email, password, name) VALUES ($1, $2, $3, $4) RETURNING id`
 	var id string
-	err := u.db.QueryRow(ctx, q, user.Username, user.Email, user.Password).Scan(&id)
+	err := u.db.QueryRow(ctx, q, user.Username, user.Email, user.Password, user.Name).Scan(&id)
 	return id, err
 }
 
@@ -35,7 +35,7 @@ func (u *User) GetPassword(ctx context.Context, userID string) (string, error) {
 }
 
 func (u *User) Filter(ctx context.Context, filter *domain.FilterUser) ([]*domain.User, error) {
-	q := u.psql.Select("id", "username", "avatar", "background").From(`"user"`)
+	q := u.psql.Select("id", "name", "username", "avatar", "background").From(`"user"`)
 	if filter.ID != nil {
 		q = q.Where(sq.Eq{"id": *filter.ID})
 	}
@@ -59,7 +59,7 @@ func (u *User) Filter(ctx context.Context, filter *domain.FilterUser) ([]*domain
 	var users []*domain.User
 	for rows.Next() {
 		var user domain.User
-		err := rows.Scan(&user.ID, &user.Username, &user.Avatar, &user.Background)
+		err := rows.Scan(&user.ID, &user.Name, &user.Username, &user.Avatar, &user.Background)
 		if err != nil {
 			return nil, err
 		}
@@ -70,6 +70,9 @@ func (u *User) Filter(ctx context.Context, filter *domain.FilterUser) ([]*domain
 
 func (u *User) Patch(ctx context.Context, id string, user *domain.PatchUser) error {
 	q := u.psql.Update(`"user"`)
+	if user.Name != nil {
+		q = q.Set("name", *user.Name)
+	}
 	if user.Username != nil {
 		q = q.Set("username", *user.Username)
 	}

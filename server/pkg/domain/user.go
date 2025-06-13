@@ -2,6 +2,7 @@ package domain
 
 type User struct {
 	ID         string `json:"id"`
+	Name       string `json:"name"`
 	Username   string `json:"username"`
 	Avatar     string `json:"avatar"`
 	Background string `json:"background"`
@@ -15,9 +16,11 @@ type UserCredentials struct {
 
 type CreateUser struct {
 	UserCredentials
+	Name string `json:"name"`
 }
 
 type PatchUser struct {
+	Name       *string `json:"name"`
 	Username   *string `json:"username"`
 	Avatar     *string `json:"avatar"`
 	Background *string `json:"background"`
