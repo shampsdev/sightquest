@@ -47,6 +47,15 @@ definitions:
     - GameStateGame
     - GameStatePoll
     - GameStateFinished
+  domain.PatchUser:
+    properties:
+      avatar:
+        type: string
+      background:
+        type: string
+      username:
+        type: string
+    type: object
   domain.Player:
     properties:
       gameId:
@@ -73,8 +82,6 @@ definitions:
       avatar:
         type: string
       background:
-        type: string
-      createdAt:
         type: string
       id:
         type: string
@@ -206,6 +213,48 @@ paths:
       summary: Get game by id
       tags:
       - game
+  /user/me:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Get me
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/domain.PatchUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Patch me
+      tags:
+      - users
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -49,6 +49,26 @@ func (u *User) GetUserByEmail(ctx context.Context, email string) (*domain.User, 
 	return u.queryUser(ctx, sq.Eq{"email": email})
 }
 
+func (u *User) PatchUser(ctx context.Context, id string, user *domain.PatchUser) error {
+	q := u.psql.Update(`"user"`)
+	if user.Username != nil {
+		q = q.Set("username", *user.Username)
+	}
+	if user.Avatar != nil {
+		q = q.Set("avatar", *user.Avatar)
+	}
+	if user.Background != nil {
+		q = q.Set("background", *user.Background)
+	}
+	q = q.Where(sq.Eq{"id": id})
+	sql, args, err := q.ToSql()
+	if err != nil {
+		return err
+	}
+	_, err = u.db.Exec(ctx, sql, args...)
+	return err
+}
+
 func (u *User) queryUser(ctx context.Context, condition sq.Eq) (*domain.User, error) {
 	sql, args, err := u.psql.Select("id", "username", "avatar", "background").
 		From(`"user"`).

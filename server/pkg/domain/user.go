@@ -5,8 +5,6 @@ type User struct {
 	Username   string `json:"username"`
 	Avatar     string `json:"avatar"`
 	Background string `json:"background"`
-
-	CreatedAt string `json:"createdAt"`
 }
 
 type UserCredentials struct {
@@ -18,4 +16,10 @@ type UserCredentials struct {
 type CreateUser struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
+}
+
+type PatchUser struct {
+	Username   *string `json:"username"`
+	Avatar     *string `json:"avatar"`
+	Background *string `json:"background"`
 }
