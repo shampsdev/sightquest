@@ -1,1 +1,1 @@
-export type Role = "cather" | "runner";
+export type Role = "catcher" | "runner";
