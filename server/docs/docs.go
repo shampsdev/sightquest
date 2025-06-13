@@ -42,7 +42,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.wrapToken"
+                            "$ref": "#/definitions/auth.userToken"
                         }
                     },
                     "400": {
@@ -78,7 +78,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.wrapToken"
+                            "$ref": "#/definitions/auth.userToken"
                         }
                     },
                     "400": {
@@ -194,6 +194,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "auth.userToken": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/domain.User"
+                }
+            }
+        },
         "auth.wrapToken": {
             "type": "object",
             "properties": {

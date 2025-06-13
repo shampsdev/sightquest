@@ -14,7 +14,7 @@ import (
 // @Param user body domain.UserCredentials true "User"
 // @Produce json
 // @Schemes http https
-// @Success 200 {object} wrapToken
+// @Success 200 {object} userToken
 // @Failure 400
 // @Router /auth/register [post]
 func Register(cases *usecase.Cases) gin.HandlerFunc {
@@ -28,10 +28,14 @@ func Register(cases *usecase.Cases) gin.HandlerFunc {
 		if ginerr.AbortIfErr(c, err, 400, "failed to register user") {
 			return
 		}
-		c.JSON(200, wrapToken{token})
+		id, err := cases.Auth.ParseToken(token)
+		if ginerr.AbortIfErr(c, err, 400, "failed to parse token") {
+			return
+		}
+		user, err := cases.User.GetUserByID(c, id)
+		if ginerr.AbortIfErr(c, err, 400, "failed to get user") {
+			return
+		}
+		c.JSON(200, userToken{user, token})
 	}
-}
-
-type wrapToken struct {
-	Token string `json:"token"`
 }

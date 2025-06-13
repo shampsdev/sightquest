@@ -35,3 +35,7 @@ func Verify(cases *usecase.Cases) gin.HandlerFunc {
 		c.JSON(200, user)
 	}
 }
+
+type wrapToken struct {
+	Token string `json:"token"`
+}

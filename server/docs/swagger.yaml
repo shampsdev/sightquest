@@ -1,4 +1,11 @@
 definitions:
+  auth.userToken:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/domain.User'
+    type: object
   auth.wrapToken:
     properties:
       token:
@@ -105,7 +112,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.wrapToken'
+            $ref: '#/definitions/auth.userToken'
         "400":
           description: Bad Request
       summary: Login user
@@ -128,7 +135,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.wrapToken'
+            $ref: '#/definitions/auth.userToken'
         "400":
           description: Bad Request
       summary: Register user
