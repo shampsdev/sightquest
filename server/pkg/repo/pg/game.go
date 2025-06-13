@@ -149,10 +149,10 @@ func (g *Game) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
-var letterRunes = []rune("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+var letterRunes = []rune("0123456789")
 
 func (g *Game) generateID() string {
-	b := make([]rune, 5)
+	b := make([]rune, 6)
 	for i := range b {
 		b[i] = letterRunes[g.rand.IntN(len(letterRunes))]
 	}
