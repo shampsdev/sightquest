@@ -192,6 +192,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/game/latest": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "game"
+                ],
+                "summary": "Get last N games for a player",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of games to return",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Game"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
         "/route": {
             "get": {
                 "consumes": [
@@ -408,6 +453,9 @@ const docTemplate = `{
                 "background": {
                     "type": "string"
                 },
+                "name": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
@@ -500,6 +548,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 },
                 "username": {

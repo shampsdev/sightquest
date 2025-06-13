@@ -11,7 +11,7 @@ import (
 
 // Latest godoc
 // @Summary Get last N games for a player
-// @Tags games
+// @Tags game
 // @Accept json
 // @Produce json
 // @Schemes http https
@@ -20,7 +20,7 @@ import (
 // @Success 200 {array} domain.Game
 // @Failure 400
 // @Failure 404
-// @Router /game/player [get]
+// @Router /game/latest [get]
 func Latest(cases *usecase.Cases) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := middlewares.MustUsecaseCtx(c)
