@@ -33,7 +33,7 @@ export const UserPreview = ({
           {name}
         </Text>
         <Text className="text-[#b6b6b6] font-onest-regular text-[16px]">
-          {role}
+          {role == "catcher" ? "Догоняющий" : "Убегающий"}
         </Text>
       </View>
 

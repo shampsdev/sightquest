@@ -141,6 +141,10 @@ export const AccountScreen = () => {
     navigation.goBack();
   };
 
+  const goToEdit = () => {
+    navigation.navigate("EditProfile");
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-bg_primary">
       <ScrollView className="w-full">
@@ -151,7 +155,7 @@ export const AccountScreen = () => {
                 <Icons.Back />
               </IconContainer>
             </Pressable>
-            <Pressable onPress={back}>
+            <Pressable onPress={goToEdit}>
               <IconContainer className="bg-[#222222]">
                 <Icons.Edit />
               </IconContainer>
