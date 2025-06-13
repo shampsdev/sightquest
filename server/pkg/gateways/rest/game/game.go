@@ -11,5 +11,4 @@ func Setup(r *gin.RouterGroup, cases *usecase.Cases) {
 		POST("", Create(cases)).
 		GET("/id/:id", Get(cases)).
 		GET("/latest", Latest(cases))
-
 }

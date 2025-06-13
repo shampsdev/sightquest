@@ -32,8 +32,8 @@ type PatchRoute struct {
 }
 
 type FilterRoute struct {
-	ID               *string `json:"id"`
-	IncludeTaskPoints bool   `json:"includeTaskPoints"`
+	ID                *string `json:"id"`
+	IncludeTaskPoints bool    `json:"includeTaskPoints"`
 }
 
 type CreateTaskPoint struct {

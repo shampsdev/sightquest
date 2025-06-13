@@ -24,8 +24,8 @@ type PatchPlayer struct {
 }
 
 type FilterPlayer struct {
-	GameID *string `json:"gameId"`
-	UserID *string `json:"userId"`
+	GameID *string     `json:"gameId"`
+	UserID *string     `json:"userId"`
 	Role   *PlayerRole `json:"role"`
 }
 

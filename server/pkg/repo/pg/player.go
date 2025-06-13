@@ -44,7 +44,7 @@ func (p *Player) Create(ctx context.Context, player *domain.CreatePlayer) error 
 
 func (p *Player) Patch(ctx context.Context, gameID, userID string, patch *domain.PatchPlayer) error {
 	q := p.psql.Update(`"player"`)
-	
+
 	if patch.Role != nil {
 		q = q.Set("role", *patch.Role)
 	}

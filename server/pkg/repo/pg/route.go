@@ -7,6 +7,7 @@ import (
 	"github.com/Vaniog/go-postgis"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/shampsdev/sightquest/server/pkg/domain"
+	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
 
 type Route struct {
@@ -26,7 +27,12 @@ func (r *Route) Create(ctx context.Context, route *domain.CreateRoute) (string, 
 	if err != nil {
 		return "", err
 	}
-	defer tx.Rollback(ctx)
+	defer func() {
+		err := tx.Rollback(ctx)
+		if err != nil {
+			slogx.Error(ctx, "failed to rollback transaction", err)
+		}
+	}()
 
 	// Create route
 	q := `INSERT INTO "route" (title, description, price_roubles) VALUES ($1, $2, $3) RETURNING id`
@@ -123,7 +129,12 @@ func (r *Route) Patch(ctx context.Context, id string, route *domain.PatchRoute) 
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback(ctx)
+	defer func() {
+		err := tx.Rollback(ctx)
+		if err != nil {
+			slogx.Error(ctx, "failed to rollback transaction", err)
+		}
+	}()
 
 	q := r.psql.Update(`"route"`)
 	if route.Title != nil {
