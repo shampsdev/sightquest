@@ -39,3 +39,20 @@ func (g *Game) UpdateGame(ctx context.Context, gameID string, patch *domain.Patc
 	}
 	return nil
 }
+
+func (g *Game) GetLastGamesByPlayer(ctx context.Context, playerID string, limit int) ([]*domain.Game, error) {
+	if limit <= 0 {
+		return nil, fmt.Errorf("limit must be positive")
+	}
+
+	games, err := g.gameRepo.Filter(ctx, &domain.FilterGame{
+		PlayerID:            &playerID,
+		SortByCreatedAtDesc: true,
+		Limit:               &limit,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get player games: %w", err)
+	}
+
+	return games, nil
+}

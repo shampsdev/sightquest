@@ -73,17 +73,28 @@ func (g *Game) Patch(ctx context.Context, id string, patch *domain.PatchGame) er
 }
 
 func (g *Game) Filter(ctx context.Context, filter *domain.FilterGame) ([]*domain.Game, error) {
-	q := g.psql.Select("id", "state", "admin_id", "created_at", "finished_at").
-		From("game")
+	q := g.psql.Select("g.id", "g.state", "g.admin_id", "g.created_at", "g.finished_at").
+		From("game AS g")
 
+	if filter.PlayerID != nil {
+		q = q.Join("player AS p ON g.id = p.game_id").
+			Where(sq.Eq{"p.user_id": *filter.PlayerID})
+	}
 	if filter.ID != nil {
-		q = q.Where(sq.Eq{"id": *filter.ID})
+		q = q.Where(sq.Eq{"g.id": *filter.ID})
 	}
 	if filter.AdminID != nil {
-		q = q.Where(sq.Eq{"admin_id": *filter.AdminID})
+		q = q.Where(sq.Eq{"g.admin_id": *filter.AdminID})
 	}
 	if filter.State != nil {
-		q = q.Where(sq.Eq{"state": *filter.State})
+		q = q.Where(sq.Eq{"g.state": *filter.State})
+	}
+
+	if filter.SortByCreatedAtDesc {
+		q = q.OrderBy("created_at DESC")
+	}
+	if filter.Limit != nil {
+		q = q.Limit(uint64(*filter.Limit))
 	}
 
 	sql, args, err := q.ToSql()

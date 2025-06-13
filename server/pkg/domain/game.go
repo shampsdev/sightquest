@@ -20,14 +20,17 @@ type CreateGame struct {
 }
 
 type PatchGame struct {
-	State      *GameState `json:"state"`
+	State      *GameState  `json:"state"`
 	FinishedAt **time.Time `json:"finishedAt"`
 }
 
 type FilterGame struct {
-	ID      *string    `json:"id"`
-	AdminID *string    `json:"adminId"`
-	State   *GameState `json:"state"`
+	ID                  *string    `json:"id"`
+	AdminID             *string    `json:"adminId"`
+	PlayerID            *string    `json:"playerId"`
+	State               *GameState `json:"state"`
+	SortByCreatedAtDesc bool       `json:"sortByCreatedAtDesc"`
+	Limit               *int       `json:"limit"`
 }
 
 const (
