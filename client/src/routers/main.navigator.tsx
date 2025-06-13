@@ -8,7 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 export type MainStackParamList = {
   Account: undefined;
   Home: undefined;
-  Lobby: undefined;
+  Lobby: { gameId: string };
   History: { gameId: string };
   Shop: undefined;
 };
