@@ -33,11 +33,11 @@ export const SignUpWidget = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await registerRequest(email, username, password);
+      const response = await registerRequest(email, username, password, name);
       setPendingToken(response.token);
       setStep(1);
     } catch (error: any) {
-      console.error(error);
+      console.error(error, error.response.data);
       Alert.alert("Ошибка регистрации", "Проверьте корректность данных");
     }
   };
@@ -60,7 +60,7 @@ export const SignUpWidget = () => {
       avatar: String(selectedAvatar),
     });
 
-    login({ ...updatedUser, name }, pendingToken);
+    login(updatedUser, pendingToken);
   };
 
   return (

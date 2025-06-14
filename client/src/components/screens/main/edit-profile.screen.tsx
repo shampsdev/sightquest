@@ -18,9 +18,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export const EditProfileScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const insets = useSafeAreaInsets();
-  const { user, setUser, setToken } = useAuthStore();
+  const { user, setUser } = useAuthStore();
 
   const [username, setUsername] = useState<string>(user?.username || "");
+  const [name, setName] = useState<string>(user?.name || "");
+
   const [step, setStep] = useState<0 | 1>(0);
   const [selectedAvatar, setSelectedAvatar] = useState<number | null>(
     AVATARS.find((x) => x.id === Number(user!.avatar))?.id!
@@ -40,6 +42,7 @@ export const EditProfileScreen = () => {
     try {
       const updatedUser = await patchMe.mutateAsync({
         username: username,
+        name: name,
         avatar: String(selectedAvatar),
       });
       setUser({ ...useAuthStore.getState().user, ...updatedUser });
@@ -103,6 +106,13 @@ export const EditProfileScreen = () => {
                 </View>
               </Pressable>
             </View>
+
+            <TextInput
+              placeholder="Имя"
+              value={name}
+              onChangeText={setName}
+              className="w-[90%] mx-auto mt-[24px]"
+            />
 
             <TextInput
               placeholder="Никнейм"
