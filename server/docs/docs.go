@@ -289,6 +289,12 @@ const docTemplate = `{
                         "description": "Style type filter",
                         "name": "type",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Bought filter",
+                        "name": "bought",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -538,7 +544,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "userStyles": {
+                "styles": {
                     "$ref": "#/definitions/domain.UserStyles"
                 },
                 "username": {
@@ -603,6 +609,9 @@ const docTemplate = `{
         "domain.Style": {
             "type": "object",
             "properties": {
+                "bought": {
+                    "type": "boolean"
+                },
                 "id": {
                     "type": "string"
                 },

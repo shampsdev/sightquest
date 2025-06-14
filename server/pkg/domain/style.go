@@ -12,6 +12,8 @@ type Style struct {
 	Title        string    `json:"title"`
 	Style        any       `json:"style"`
 	Type         StyleType `json:"type"`
+
+	Bought *bool `json:"bought,omitempty"`
 }
 
 type CreateStyle struct {
@@ -22,7 +24,7 @@ type CreateStyle struct {
 }
 
 type PatchStyle struct {
-	PriceRoubles *string    `json:"priceRoubles"`
+	PriceRoubles *int       `json:"priceRoubles"`
 	Title        *string    `json:"title"`
 	Style        *any       `json:"style"`
 	Type         *StyleType `json:"type"`
@@ -30,7 +32,8 @@ type PatchStyle struct {
 
 type FilterStyle struct {
 	ID           *string    `json:"id"`
-	PriceRoubles *string    `json:"priceRoubles"`
-	Type         *StyleType `json:"type"`
 	UserID       *string    `json:"userId"`
+	Bought       *bool      `json:"bought"`
+	PriceRoubles *int       `json:"priceRoubles"`
+	Type         *StyleType `json:"type"`
 }

@@ -1,7 +1,6 @@
 package usecore
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
@@ -36,8 +35,16 @@ func (s *Style) BuyStyle(ctx *Context, styleID string) error {
 	return nil
 }
 
-func (s *Style) GetStyles(ctx context.Context, filter *domain.FilterStyle) ([]*domain.Style, error) {
-	return s.styleRepo.Filter(ctx, filter)
+func (s *Style) GetStyles(
+	ctx *Context,
+	styleType *domain.StyleType,
+	bought *bool,
+) ([]*domain.Style, error) {
+	return s.styleRepo.Filter(ctx, &domain.FilterStyle{
+		UserID: &ctx.UserID,
+		Type:   styleType,
+		Bought: bought,
+	})
 }
 
 func (s *Style) SetAvatar(ctx *Context, styleID string) error {
@@ -65,7 +72,7 @@ func (s *Style) SetAvatar(ctx *Context, styleID string) error {
 	styles.AvatarID = styleID
 
 	err = s.userRepo.Patch(ctx, ctx.UserID, &domain.PatchUser{
-		UserStyles: &styles,
+		Styles: &styles,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to update user avatar: %w", err)

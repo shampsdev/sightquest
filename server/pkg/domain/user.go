@@ -19,9 +19,9 @@ type CreateUser struct {
 }
 
 type PatchUser struct {
-	Name       *string     `json:"name"`
-	Username   *string     `json:"username"`
-	UserStyles *UserStyles `json:"userStyles"`
+	Name     *string     `json:"name"`
+	Username *string     `json:"username"`
+	Styles   *UserStyles `json:"styles"`
 }
 
 type FilterUser struct {

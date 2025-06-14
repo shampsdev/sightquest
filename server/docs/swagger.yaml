@@ -57,7 +57,7 @@ definitions:
     properties:
       name:
         type: string
-      userStyles:
+      styles:
         $ref: '#/definitions/domain.UserStyles'
       username:
         type: string
@@ -100,6 +100,8 @@ definitions:
     type: object
   domain.Style:
     properties:
+      bought:
+        type: boolean
       id:
         type: string
       priceRoubles:
@@ -333,6 +335,10 @@ paths:
         in: query
         name: type
         type: string
+      - description: Bought filter
+        in: query
+        name: bought
+        type: boolean
       produces:
       - application/json
       responses:

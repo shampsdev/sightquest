@@ -88,8 +88,8 @@ func (u *User) Patch(ctx context.Context, id string, user *domain.PatchUser) err
 	if user.Username != nil {
 		q = q.Set("username", *user.Username)
 	}
-	if user.UserStyles != nil {
-		stylesData, err := json.Marshal(user.UserStyles)
+	if user.Styles != nil {
+		stylesData, err := json.Marshal(user.Styles)
 		if err != nil {
 			return fmt.Errorf("failed to marshal styles: %w", err)
 		}

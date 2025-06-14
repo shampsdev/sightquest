@@ -280,6 +280,12 @@
                         "description": "Style type filter",
                         "name": "type",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Bought filter",
+                        "name": "bought",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -529,7 +535,7 @@
                 "name": {
                     "type": "string"
                 },
-                "userStyles": {
+                "styles": {
                     "$ref": "#/definitions/domain.UserStyles"
                 },
                 "username": {
@@ -594,6 +600,9 @@
         "domain.Style": {
             "type": "object",
             "properties": {
+                "bought": {
+                    "type": "boolean"
+                },
                 "id": {
                     "type": "string"
                 },

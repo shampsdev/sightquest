@@ -68,9 +68,29 @@ func (r *Style) Filter(ctx context.Context, filter *domain.FilterStyle) ([]*doma
 	if filter.Type != nil {
 		q = q.Where(sq.Eq{"type": *filter.Type})
 	}
+
 	if filter.UserID != nil {
-		q = q.Join(`"user_style" us ON us.style_id = "style".id`)
-		q = q.Where(sq.Eq{"us.user_id": *filter.UserID})
+		if filter.Bought != nil {
+			if *filter.Bought {
+				// Return bought styles OR free styles
+				q = q.LeftJoin(`"user_style" us ON us.style_id = "style".id AND us.user_id = ?`, *filter.UserID)
+				q = q.Where(sq.Or{
+					sq.Eq{"us.user_id": *filter.UserID},
+					sq.Eq{"style.price_roubles": 0},
+				})
+			} else {
+				// Only return unbought paid styles
+				q = q.LeftJoin(`"user_style" us ON us.style_id = "style".id AND us.user_id = ?`, *filter.UserID)
+				q = q.Where(sq.And{
+					sq.Eq{"us.user_id": nil},
+					sq.NotEq{"style.price_roubles": 0},
+				})
+			}
+		} else {
+			// Include bought status for all styles
+			q = q.LeftJoin(`"user_style" us ON us.style_id = "style".id AND us.user_id = ?`, *filter.UserID)
+		}
+		q = q.Column(sq.Alias(sq.Expr("(us.user_id IS NOT NULL) or (style.price_roubles = 0)"), "bought"))
 	}
 
 	sql, args, err := q.ToSql()
@@ -87,8 +107,14 @@ func (r *Style) Filter(ctx context.Context, filter *domain.FilterStyle) ([]*doma
 	styles := []*domain.Style{}
 	for rows.Next() {
 		var s domain.Style
-		if err := rows.Scan(&s.ID, &s.PriceRoubles, &s.Title, &s.Style, &s.Type); err != nil {
-			return nil, err
+		if filter.UserID != nil {
+			if err := rows.Scan(&s.ID, &s.PriceRoubles, &s.Title, &s.Style, &s.Type, &s.Bought); err != nil {
+				return nil, err
+			}
+		} else {
+			if err := rows.Scan(&s.ID, &s.PriceRoubles, &s.Title, &s.Style, &s.Type); err != nil {
+				return nil, err
+			}
 		}
 		styles = append(styles, &s)
 	}
