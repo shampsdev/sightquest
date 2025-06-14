@@ -29,11 +29,11 @@ export const HomeScreen = () => {
   const createGameHandler = async () => {
     const game = await createGameMutation.mutateAsync();
     console.log(game);
-    navigation.navigate("Lobby", { gameId: game.id });
+    navigation.navigate("GameStack", { gameId: game.id });
   };
 
   const joinHandler = async (id: string) => {
-    navigation.navigate("Lobby", { gameId: id });
+    navigation.navigate("GameStack", { gameId: id });
   };
 
   const account = () => {
@@ -55,8 +55,9 @@ export const HomeScreen = () => {
               coordinate={location}
               name={user?.name ?? user.username}
               avatarSrc={
-                user.avatar
-                  ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
+                user.styles.avatarId
+                  ? AVATARS.find((x) => x.id === Number(user.styles.avatarId))
+                      ?.src
                   : AVATARS[0].src
               }
             />
@@ -98,8 +99,9 @@ export const HomeScreen = () => {
               <Avatar
                 className="h-12 w-12"
                 source={
-                  user.avatar
-                    ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
+                  user.styles.avatarId
+                    ? AVATARS.find((x) => x.id === Number(user.styles.avatarId))
+                        ?.src
                     : AVATARS[0].src
                 }
               />

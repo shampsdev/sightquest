@@ -6,7 +6,9 @@ import { TextInput } from "@/components/ui/textinput";
 import { AvatarPicker } from "@/components/widgets/avatar-picker";
 import { AVATARS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
+import { getMe } from "@/shared/api/auth.api";
 import { usePatchMe } from "@/shared/api/hooks/usePatchMe";
+import { setAvatar } from "@/shared/api/styles.api";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -25,7 +27,7 @@ export const EditProfileScreen = () => {
 
   const [step, setStep] = useState<0 | 1>(0);
   const [selectedAvatar, setSelectedAvatar] = useState<number | null>(
-    AVATARS.find((x) => x.id === Number(user!.avatar))?.id!
+    AVATARS.find((x) => x.id === Number(user!.styles.avatarId))?.id!
   );
 
   const back = () => {
@@ -36,16 +38,12 @@ export const EditProfileScreen = () => {
     setStep(0);
   };
 
-  const patchMe = usePatchMe();
-
   const handleSubmit = async () => {
     try {
-      const updatedUser = await patchMe.mutateAsync({
-        username: username,
-        name: name,
-        avatar: String(selectedAvatar),
-      });
-      setUser({ ...useAuthStore.getState().user, ...updatedUser });
+      await setAvatar(selectedAvatar?.toString() ?? "");
+      const updatedUser = await getMe();
+
+      setUser(updatedUser);
       alert("Профиль успешно обновлен");
       back();
     } catch (error) {

@@ -2,14 +2,14 @@ import { AccountScreen } from "@/components/screens/main/account.screen";
 import { EditProfileScreen } from "@/components/screens/main/edit-profile.screen";
 import { HistoryScreen } from "@/components/screens/main/history.screen";
 import { HomeScreen } from "@/components/screens/main/home.screen";
-import { LobbyScreen } from "@/components/screens/main/lobby.screen";
 import { ShopScreen } from "@/components/screens/main/shop.screen";
 import { createStackNavigator } from "@react-navigation/stack";
+import { GameNavigator } from "./game.navigator";
 
 export type MainStackParamList = {
   Account: undefined;
   Home: undefined;
-  Lobby: { gameId: string };
+  GameStack: { gameId: string };
   History: { gameId: string };
   Shop: undefined;
   EditProfile: undefined;
@@ -21,7 +21,6 @@ export const MainNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        gestureEnabled: false,
         headerShown: false,
       }}
     >
@@ -32,7 +31,7 @@ export const MainNavigator = () => {
         component={ShopScreen}
         options={{ gestureDirection: "horizontal-inverted" }}
       />
-      <Stack.Screen name="Lobby" component={LobbyScreen} />
+      <Stack.Screen name="GameStack" component={GameNavigator} />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen name="History" component={HistoryScreen} />
     </Stack.Navigator>

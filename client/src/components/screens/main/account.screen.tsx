@@ -165,8 +165,9 @@ export const AccountScreen = () => {
 
           <UserProfile
             avatar={
-              user?.avatar
-                ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
+              user?.styles.avatarId
+                ? AVATARS.find((x) => x.id === Number(user.styles.avatarId))
+                    ?.src
                 : AVATARS[0].src
             }
             name={user?.name || ""}
@@ -188,7 +189,9 @@ export const AccountScreen = () => {
               />
             ))}
             <Pressable className="mx-auto pt-4" onPress={logout}>
-              <Text className="text-lg text-text_secondary font-onest-medium">Выйти</Text>
+              <Text className="text-lg text-text_secondary font-onest-medium">
+                Выйти
+              </Text>
             </Pressable>
           </View>
         </View>
