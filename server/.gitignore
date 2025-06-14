@@ -31,3 +31,4 @@ __debug**
 .env
 bin
 e2e/*/ERROR_*.json
+nginx-proxy

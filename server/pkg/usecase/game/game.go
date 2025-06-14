@@ -22,6 +22,7 @@ type Game struct {
 
 	playerCase *usecore.Player
 	gameCase   *usecore.Game
+	routeCase  *usecore.Route
 }
 
 func NewGame(
@@ -29,26 +30,23 @@ func NewGame(
 	gameID string,
 	gameCase *usecore.Game,
 	playerCase *usecore.Player,
+	routeCase *usecore.Route,
 ) (*Game, error) {
 	g := &Game{
 		activity:   make(map[string]time.Time),
 		maxIdle:    10 * time.Minute,
 		playerCase: playerCase,
 		gameCase:   gameCase,
+		routeCase:  routeCase,
 	}
 
 	game, err := gameCase.GetGameByID(ctx, gameID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get game: %w", err)
 	}
-
 	g.game = game
 
-	players, err := playerCase.GetPlayersByGameID(ctx, gameID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get players: %w", err)
-	}
-	for _, p := range players {
+	for _, p := range g.game.Players {
 		g.appendPlayer(p)
 	}
 
@@ -176,6 +174,23 @@ func (g *Game) OnBroadcast(c Context, ev event.Broadcast) error {
 	c.Broadcast(event.Broadcasted{
 		From: c.S.Player,
 		Data: ev.Data,
+	})
+	return nil
+}
+
+func (g *Game) OnSetRoute(c Context, ev event.SetRoute) error {
+	if err := g.routeCase.EnsureRouteBought(c.Ctx, c.S.User.ID, ev.RouteID); err != nil {
+		return fmt.Errorf("failed to ensure route is bought: %w", err)
+	}
+
+	route, err := g.routeCase.GetRouteByID(c.Ctx, ev.RouteID)
+	if err != nil {
+		return fmt.Errorf("failed to get route: %w", err)
+	}
+
+	g.game.Route = route
+	c.Broadcast(event.SettedRoute{
+		Route: route,
 	})
 	return nil
 }

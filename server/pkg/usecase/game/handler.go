@@ -55,7 +55,8 @@ func (h *Handler) buildRouter() {
 	gInGame.
 		On(event.LocationUpdateEvent, callGame((*Game).OnLocationUpdate)).
 		On(event.BroadcastEvent, callGame((*Game).OnBroadcast)).
-		On(event.StartGameEvent, callGame((*Game).OnStartGame))
+		On(event.StartGameEvent, callGame((*Game).OnStartGame)).
+		On(event.SetRouteEvent, callGame((*Game).OnSetRoute))
 
 	h.router = g.RootHandler()
 	h.registeredEvents = g.RegisteredEvents()

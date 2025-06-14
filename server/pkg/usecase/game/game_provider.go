@@ -15,16 +15,23 @@ import (
 type InMemoryGameRepo struct {
 	gameCase   *usecore.Game
 	playerCase *usecore.Player
+	routeCase  *usecore.Route
 
 	gamesMutex sync.RWMutex
 	games      map[string]*Game
 }
 
-func NewInMemoryGameRepo(ctx context.Context, gameCase *usecore.Game, playerCase *usecore.Player) *InMemoryGameRepo {
+func NewInMemoryGameRepo(
+	ctx context.Context,
+	gameCase *usecore.Game,
+	playerCase *usecore.Player,
+	routeCase *usecore.Route,
+) *InMemoryGameRepo {
 	r := &InMemoryGameRepo{
 		gameCase:   gameCase,
 		games:      make(map[string]*Game),
 		playerCase: playerCase,
+		routeCase:  routeCase,
 	}
 
 	r.goGC(ctx)
@@ -36,7 +43,7 @@ func (r *InMemoryGameRepo) GetGame(ctx context.Context, id string) (*Game, error
 	defer r.gamesMutex.Unlock()
 	game, ok := r.games[id]
 	if !ok {
-		game, err := NewGame(ctx, id, r.gameCase, r.playerCase)
+		game, err := NewGame(ctx, id, r.gameCase, r.playerCase, r.routeCase)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create game: %w", err)
 		}

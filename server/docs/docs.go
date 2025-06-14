@@ -379,7 +379,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
                     },
                     "400": {
                         "description": "Bad Request"
@@ -518,6 +521,9 @@ const docTemplate = `{
                         "$ref": "#/definitions/domain.Player"
                     }
                 },
+                "route": {
+                    "$ref": "#/definitions/domain.Route"
+                },
                 "state": {
                     "$ref": "#/definitions/domain.GameState"
                 }
@@ -586,6 +592,9 @@ const docTemplate = `{
         "domain.Route": {
             "type": "object",
             "properties": {
+                "bought": {
+                    "type": "boolean"
+                },
                 "description": {
                     "type": "string"
                 },

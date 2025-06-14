@@ -34,10 +34,6 @@ func (p *Player) GetPlayer(ctx context.Context, gameID, userID string) (*domain.
 	return repo.First(p.playerRepo)(ctx, &domain.FilterPlayer{GameID: &gameID, UserID: &userID})
 }
 
-func (p *Player) GetPlayersByGameID(ctx context.Context, gameID string) ([]*domain.Player, error) {
-	return p.playerRepo.Filter(ctx, &domain.FilterPlayer{GameID: &gameID})
-}
-
 func (p *Player) DeletePlayer(ctx context.Context, gameID, userID string) error {
 	return p.playerRepo.Delete(ctx, gameID, userID)
 }

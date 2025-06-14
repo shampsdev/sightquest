@@ -17,7 +17,7 @@ type setAvatarRequest struct {
 // @Accept json
 // @Produce json
 // @Param request body setAvatarRequest true "Style ID"
-// @Success 200
+// @Success 200 {object} domain.User
 // @Failure 400
 // @Router /styles/me/avatar [post]
 // @Security ApiKeyAuth
@@ -32,6 +32,13 @@ func SetAvatar(cases *usecase.Cases) gin.HandlerFunc {
 		if err := cases.Style.SetAvatar(uc, req.StyleID); ginerr.AbortIfErr(c, err, 400, "failed to set avatar style") {
 			return
 		}
+
+		user, err := cases.User.GetUserByID(c, uc.UserID)
+		if ginerr.AbortIfErr(c, err, 400, "failed to get user") {
+			return
+		}
+
+		c.JSON(200, user)
 
 		c.Status(200)
 	}

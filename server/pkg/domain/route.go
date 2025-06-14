@@ -6,6 +6,8 @@ type Route struct {
 	Description  string      `json:"description"`
 	PriceRoubles int         `json:"priceRoubles"`
 	TaskPoints   []TaskPoint `json:"taskPoints"`
+
+	Bought *bool `json:"bought,omitempty"`
 }
 
 type TaskPoint struct {
@@ -33,6 +35,8 @@ type PatchRoute struct {
 
 type FilterRoute struct {
 	ID                *string `json:"id"`
+	UserID            *string `json:"userId"`
+	Bought            *bool   `json:"boughtBy"`
 	IncludeTaskPoints bool    `json:"includeTaskPoints"`
 }
 

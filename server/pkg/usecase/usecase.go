@@ -26,10 +26,10 @@ type Cases struct {
 
 func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases, error) {
 	userRepo := pg.NewUser(pool)
-	gameRepo := pg.NewGame(pool, userRepo)
 	playerRepo := pg.NewPlayer(pool, userRepo)
 	routeRepo := pg.NewRoute(pool)
 	taskPointRepo := pg.NewTaskPoint(pool)
+	gameRepo := pg.NewGame(pool, userRepo, routeRepo)
 
 	auth, err := auth.NewAuther(cfg, userRepo)
 	if err != nil {
@@ -37,12 +37,12 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 	}
 
 	userCase := usecore.NewUser(userRepo)
-	gameCase := usecore.NewGame(gameRepo)
 	playerCase := usecore.NewPlayer(playerRepo)
 	routeCase := usecore.NewRoute(routeRepo)
 	taskPointCase := usecore.NewTaskPoint(taskPointRepo)
+	gameCase := usecore.NewGame(gameRepo, playerRepo)
 
-	gameProvider := game.NewInMemoryGameRepo(ctx, gameCase, playerCase)
+	gameProvider := game.NewInMemoryGameRepo(ctx, gameCase, playerCase, routeCase)
 	gameHandler := game.NewHandler(gameProvider, userCase, auth)
 	styleCase := usecore.NewStyle(pg.NewStyle(pool), pg.NewUserStyle(pool), pg.NewUser(pool))
 

@@ -19,6 +19,7 @@ func TestMain(m *testing.M) {
 		event.GameEvent,
 		event.LocationUpdatedEvent,
 		event.BroadcastedEvent,
+		event.SettedRouteEvent,
 	)
 	fw.TestMain(m)
 }
@@ -46,6 +47,12 @@ func Test(t *testing.T) {
 	fw.Step("Broadcast", func() {
 		cli1.Emit(event.Broadcast{
 			Data: "Shamps are cool!",
+		})
+	}, 2)
+
+	fw.Step("Set route", func() {
+		cli1.Emit(event.SetRoute{
+			RouteID: "route-1-id",
 		})
 	}, 2)
 

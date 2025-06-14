@@ -18,6 +18,8 @@ var AllEvents = map[string]struct{}{
 	event.GameEvent:            {},
 	event.PlayerJoinedEvent:    {},
 	event.PlayerLeftEvent:      {},
+	event.SetRouteEvent:        {},
+	event.SettedRouteEvent:     {},
 	event.StartGameEvent:       {},
 	event.LocationUpdateEvent:  {},
 	event.LocationUpdatedEvent: {},

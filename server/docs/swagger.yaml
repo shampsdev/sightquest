@@ -38,6 +38,8 @@ definitions:
         items:
           $ref: '#/definitions/domain.Player'
         type: array
+      route:
+        $ref: '#/definitions/domain.Route'
       state:
         $ref: '#/definitions/domain.GameState'
     type: object
@@ -85,6 +87,8 @@ definitions:
     - PlayerRoleCatcher
   domain.Route:
     properties:
+      bought:
+        type: boolean
       description:
         type: string
       id:
@@ -393,6 +397,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
         "400":
           description: Bad Request
       security:

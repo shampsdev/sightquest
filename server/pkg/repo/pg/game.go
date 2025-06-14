@@ -16,15 +16,17 @@ type Game struct {
 	psql sq.StatementBuilderType
 	db   *pgxpool.Pool
 	ur   repo.User
+	rr   repo.Route
 	rand *rand.Rand
 }
 
-func NewGame(db *pgxpool.Pool, ur repo.User) *Game {
+func NewGame(db *pgxpool.Pool, ur repo.User, rr repo.Route) *Game {
 	return &Game{
 		psql: sq.StatementBuilder.PlaceholderFormat(sq.Dollar),
 		rand: rand.New(rand.NewPCG(uint64(time.Now().UnixNano()), rand.Uint64())),
 		db:   db,
 		ur:   ur,
+		rr:   rr,
 	}
 }
 
@@ -52,7 +54,9 @@ func (g *Game) Patch(ctx context.Context, id string, patch *domain.PatchGame) er
 	if patch.State != nil {
 		q = q.Set("state", *patch.State)
 	}
-
+	if patch.RouteID != nil {
+		q = q.Set("route_id", *patch.RouteID)
+	}
 	if patch.FinishedAt != nil {
 		q = q.Set("finished_at", *patch.FinishedAt)
 	}
@@ -73,7 +77,14 @@ func (g *Game) Patch(ctx context.Context, id string, patch *domain.PatchGame) er
 }
 
 func (g *Game) Filter(ctx context.Context, filter *domain.FilterGame) ([]*domain.Game, error) {
-	q := g.psql.Select("g.id", "g.state", "g.admin_id", "g.created_at", "g.finished_at").
+	q := g.psql.Select(
+		"g.id",
+		"g.state",
+		"g.admin_id",
+		"g.route_id",
+		"g.created_at",
+		"g.finished_at",
+	).
 		From("game AS g")
 
 	if filter.PlayerID != nil {
@@ -112,17 +123,37 @@ func (g *Game) Filter(ctx context.Context, filter *domain.FilterGame) ([]*domain
 	for rows.Next() {
 		game := &domain.Game{}
 		game.Admin = &domain.User{}
-		err := rows.Scan(&game.ID, &game.State, &game.Admin.ID, &game.CreatedAt, &game.FinishedAt)
+		routeID := new(string)
+		err := rows.Scan(
+			&game.ID,
+			&game.State,
+			&game.Admin.ID,
+			&routeID,
+			&game.CreatedAt,
+			&game.FinishedAt,
+		)
+		if routeID != nil {
+			game.Route = &domain.Route{ID: *routeID}
+		}
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan game: %w", err)
 		}
 
-		admin, err := repo.First(g.ur)(ctx, &domain.FilterUser{ID: &game.Admin.ID})
-		if err != nil {
-			return nil, fmt.Errorf("failed to get admin: %w", err)
+		if filter.IncludeAdmin {
+			admin, err := repo.First(g.ur)(ctx, &domain.FilterUser{ID: &game.Admin.ID})
+			if err != nil {
+				return nil, fmt.Errorf("failed to get admin: %w", err)
+			}
+			game.Admin = admin
+		}
+		if filter.IncludeRoute && game.Route != nil {
+			route, err := repo.First(g.rr)(ctx, &domain.FilterRoute{ID: &game.Route.ID})
+			if err != nil {
+				return nil, fmt.Errorf("failed to get route: %w", err)
+			}
+			game.Route = route
 		}
 
-		game.Admin = admin
 		game.Players = []*domain.Player{}
 		games = append(games, game)
 	}

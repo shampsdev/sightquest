@@ -7,6 +7,8 @@ const (
 	AuthEvent            = "auth"
 	AuthedEvent          = "authed"
 	JoinGameEvent        = "joinGame"
+	SetRouteEvent        = "setRoute"
+	SettedRouteEvent     = "settedRoute"
 	GameEvent            = "game"
 	PlayerJoinedEvent    = "playerJoined"
 	PlayerLeftEvent      = "playerLeft"
@@ -46,6 +48,20 @@ type JoinGame struct {
 }
 
 func (e JoinGame) Event() string { return JoinGameEvent }
+
+// client -> server
+type SetRoute struct {
+	RouteID string `json:"routeId"`
+}
+
+func (e SetRoute) Event() string { return SetRouteEvent }
+
+// server -> client
+type SettedRoute struct {
+	Route *domain.Route `json:"route"`
+}
+
+func (e SettedRoute) Event() string { return SettedRouteEvent }
 
 // server -> client
 type Game struct {

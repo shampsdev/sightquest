@@ -5,6 +5,7 @@ import (
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
 	"github.com/shampsdev/sightquest/server/pkg/repo"
+	"github.com/shampsdev/sightquest/server/pkg/utils"
 )
 
 type Route struct {
@@ -25,6 +26,15 @@ func (r *Route) CreateRoute(ctx context.Context, createRoute *domain.CreateRoute
 
 func (r *Route) GetRouteByID(ctx context.Context, id string) (*domain.Route, error) {
 	return repo.First(r.routeRepo)(ctx, &domain.FilterRoute{ID: &id, IncludeTaskPoints: true})
+}
+
+func (r *Route) EnsureRouteBought(ctx context.Context, userID string, routeID string) error {
+	_, err := repo.First(r.routeRepo)(ctx, &domain.FilterRoute{
+		ID:     &routeID,
+		UserID: &userID,
+		Bought: utils.PtrTo(true),
+	})
+	return err
 }
 
 func (r *Route) GetRoutes(ctx context.Context, filter *domain.FilterRoute) ([]*domain.Route, error) {

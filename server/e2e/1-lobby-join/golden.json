@@ -8,19 +8,19 @@
           "Data": {
             "game": {
               "admin": {
-                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "id": "ce9c7af4-5430-4636-82d1-18374c429c50",
                 "name": "",
                 "styles": {
                   "avatarId": ""
                 },
                 "username": "user1"
               },
-              "createdAt": "2025-06-14T14:07:15.524994Z",
+              "createdAt": "2025-06-14T23:21:41.905718Z",
               "finishedAt": null,
-              "id": "909387",
+              "id": "848561",
               "players": [
                 {
-                  "gameId": "909387",
+                  "gameId": "848561",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -28,7 +28,7 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                    "id": "ce9c7af4-5430-4636-82d1-18374c429c50",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -37,6 +37,7 @@
                   }
                 }
               ],
+              "route": null,
               "state": "lobby"
             }
           }
@@ -52,7 +53,7 @@
           "Event": "playerJoined",
           "Data": {
             "player": {
-              "gameId": "909387",
+              "gameId": "848561",
               "location": {
                 "lat": 0,
                 "lon": 0
@@ -60,7 +61,7 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "id": "85d41ba5-45d1-441d-8ee6-d010196a4896",
+                "id": "b69dfc52-d762-494c-b689-3f0edfb296aa",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -77,19 +78,19 @@
           "Data": {
             "game": {
               "admin": {
-                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "id": "ce9c7af4-5430-4636-82d1-18374c429c50",
                 "name": "",
                 "styles": {
                   "avatarId": ""
                 },
                 "username": "user1"
               },
-              "createdAt": "2025-06-14T14:07:15.524994Z",
+              "createdAt": "2025-06-14T23:21:41.905718Z",
               "finishedAt": null,
-              "id": "909387",
+              "id": "848561",
               "players": [
                 {
-                  "gameId": "909387",
+                  "gameId": "848561",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -97,7 +98,7 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                    "id": "ce9c7af4-5430-4636-82d1-18374c429c50",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -106,7 +107,7 @@
                   }
                 },
                 {
-                  "gameId": "909387",
+                  "gameId": "848561",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -114,7 +115,7 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "id": "85d41ba5-45d1-441d-8ee6-d010196a4896",
+                    "id": "b69dfc52-d762-494c-b689-3f0edfb296aa",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -123,6 +124,7 @@
                   }
                 }
               ],
+              "route": null,
               "state": "lobby"
             }
           }
@@ -142,7 +144,7 @@
               "lon": 1
             },
             "player": {
-              "gameId": "909387",
+              "gameId": "848561",
               "location": {
                 "lat": 2,
                 "lon": 1
@@ -150,7 +152,7 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "id": "ce9c7af4-5430-4636-82d1-18374c429c50",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -172,7 +174,7 @@
           "Data": {
             "data": "Shamps are cool!",
             "player": {
-              "gameId": "909387",
+              "gameId": "848561",
               "location": {
                 "lat": 2,
                 "lon": 1
@@ -180,7 +182,7 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "id": "ce9c7af4-5430-4636-82d1-18374c429c50",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -197,7 +199,7 @@
           "Data": {
             "data": "Shamps are cool!",
             "player": {
-              "gameId": "909387",
+              "gameId": "848561",
               "location": {
                 "lat": 2,
                 "lon": 1
@@ -205,13 +207,92 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "id": "ce9c7af4-5430-4636-82d1-18374c429c50",
                 "name": "",
                 "styles": {
                   "avatarId": ""
                 },
                 "username": "user1"
               }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Set route",
+    "Events": {
+      "user1": [
+        {
+          "Event": "settedRoute",
+          "Data": {
+            "routeId": {
+              "description": "Description for Route 1",
+              "id": "route-1-id",
+              "priceRoubles": 0,
+              "taskPoints": [
+                {
+                  "description": "Description for Taskpoint 1",
+                  "id": "taskpoint-1-id",
+                  "location": {
+                    "lat": 30,
+                    "lon": 40
+                  },
+                  "score": 100,
+                  "task": "Task 1",
+                  "title": "Taskpoint 1"
+                },
+                {
+                  "description": "Description for Taskpoint 2",
+                  "id": "taskpoint-2-id",
+                  "location": {
+                    "lat": 40,
+                    "lon": 50
+                  },
+                  "score": 150,
+                  "task": "Task 2",
+                  "title": "Taskpoint 2"
+                }
+              ],
+              "title": "Route 1"
+            }
+          }
+        }
+      ],
+      "user2": [
+        {
+          "Event": "settedRoute",
+          "Data": {
+            "routeId": {
+              "description": "Description for Route 1",
+              "id": "route-1-id",
+              "priceRoubles": 0,
+              "taskPoints": [
+                {
+                  "description": "Description for Taskpoint 1",
+                  "id": "taskpoint-1-id",
+                  "location": {
+                    "lat": 30,
+                    "lon": 40
+                  },
+                  "score": 100,
+                  "task": "Task 1",
+                  "title": "Taskpoint 1"
+                },
+                {
+                  "description": "Description for Taskpoint 2",
+                  "id": "taskpoint-2-id",
+                  "location": {
+                    "lat": 40,
+                    "lon": 50
+                  },
+                  "score": 150,
+                  "task": "Task 2",
+                  "title": "Taskpoint 2"
+                }
+              ],
+              "title": "Route 1"
             }
           }
         }

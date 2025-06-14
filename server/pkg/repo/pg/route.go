@@ -64,6 +64,31 @@ func (r *Route) Filter(ctx context.Context, filter *domain.FilterRoute) ([]*doma
 	if filter.ID != nil {
 		q = q.Where(sq.Eq{"r.id": *filter.ID})
 	}
+
+	if filter.UserID != nil {
+		if filter.Bought != nil {
+			if *filter.Bought {
+				// Return bought routes OR free routes
+				q = q.LeftJoin(`"user_route" ur ON ur.route_id = r.id AND ur.user_id = ?`, *filter.UserID)
+				q = q.Where(sq.Or{
+					sq.Eq{"ur.user_id": *filter.UserID},
+					sq.Eq{"r.price_roubles": 0},
+				})
+			} else {
+				// Only return unbought paid routes
+				q = q.LeftJoin(`"user_route" ur ON ur.route_id = r.id AND ur.user_id = ?`, *filter.UserID)
+				q = q.Where(sq.And{
+					sq.Eq{"ur.user_id": nil},
+					sq.NotEq{"r.price_roubles": 0},
+				})
+			}
+		} else {
+			// Include bought status for all routes
+			q = q.LeftJoin(`"user_route" ur ON ur.route_id = r.id AND ur.user_id = ?`, *filter.UserID)
+		}
+		q = q.Column(sq.Alias(sq.Expr("(ur.user_id IS NOT NULL) or (r.price_roubles = 0)"), "bought"))
+	}
+
 	sql, args, err := q.ToSql()
 	if err != nil {
 		return nil, err
@@ -78,7 +103,11 @@ func (r *Route) Filter(ctx context.Context, filter *domain.FilterRoute) ([]*doma
 	routes := []*domain.Route{}
 	for rows.Next() {
 		var route domain.Route
-		err := rows.Scan(&route.ID, &route.Title, &route.Description, &route.PriceRoubles)
+		if filter.UserID == nil {
+			err = rows.Scan(&route.ID, &route.Title, &route.Description, &route.PriceRoubles)
+		} else {
+			err = rows.Scan(&route.ID, &route.Title, &route.Description, &route.PriceRoubles, &route.Bought)
+		}
 		if err != nil {
 			return nil, err
 		}

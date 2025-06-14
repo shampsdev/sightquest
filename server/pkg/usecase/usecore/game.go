@@ -9,11 +9,12 @@ import (
 )
 
 type Game struct {
-	gameRepo repo.Game
+	gameRepo   repo.Game
+	playerRepo repo.Player
 }
 
-func NewGame(gameRepo repo.Game) *Game {
-	return &Game{gameRepo: gameRepo}
+func NewGame(gameRepo repo.Game, playerRepo repo.Player) *Game {
+	return &Game{gameRepo: gameRepo, playerRepo: playerRepo}
 }
 
 func (g *Game) CreateGame(ctx *Context) (*domain.Game, error) {
@@ -29,7 +30,19 @@ func (g *Game) CreateGame(ctx *Context) (*domain.Game, error) {
 }
 
 func (g *Game) GetGameByID(ctx context.Context, id string) (*domain.Game, error) {
-	return repo.First(g.gameRepo)(ctx, &domain.FilterGame{ID: &id})
+	game, err := repo.First(g.gameRepo)(ctx, &domain.FilterGame{
+		ID:           &id,
+		IncludeAdmin: true,
+		IncludeRoute: true,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get game: %w", err)
+	}
+	game.Players, err = g.playerRepo.Filter(ctx, &domain.FilterPlayer{GameID: &id})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get game players: %w", err)
+	}
+	return game, nil
 }
 
 func (g *Game) UpdateGame(ctx context.Context, gameID string, patch *domain.PatchGame) error {
@@ -55,4 +68,11 @@ func (g *Game) GetLastGamesByPlayer(ctx context.Context, playerID string, limit 
 	}
 
 	return games, nil
+}
+
+func (g *Game) SetGameRoute(ctx context.Context, gameID string, routeID string) error {
+	g.gameRepo.Patch(ctx, gameID, &domain.PatchGame{
+		RouteID: &routeID,
+	})
+	return nil
 }
