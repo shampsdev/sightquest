@@ -34,18 +34,11 @@ func NewAuther(cfg *config.Config, userRepo repo.User) (*Auth, error) {
 	return a, nil
 }
 
-func (a *Auth) Register(ctx context.Context, creds *domain.UserCredentials) (string, error) {
-	hash, err := a.hashPassword(creds.Password)
+func (a *Auth) Register(ctx context.Context, user *domain.CreateUser) (string, error) {
+	var err error
+	user.Password, err = a.hashPassword(user.Password)
 	if err != nil {
 		return "", fmt.Errorf("failed to hash password: %w", err)
-	}
-
-	user := &domain.CreateUser{
-		UserCredentials: domain.UserCredentials{
-			Username: creds.Username,
-			Email:    creds.Email,
-			Password: hash,
-		},
 	}
 
 	id, err := a.userRepo.Create(ctx, user)

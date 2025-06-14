@@ -8,6 +8,5 @@ import (
 func Setup(r *gin.RouterGroup, cases *usecase.Cases) {
 	r.Group("/auth").
 		POST("/register", Register(cases)).
-		POST("/login", Login(cases)).
-		POST("/verify", Verify(cases))
+		POST("/login", Login(cases))
 }

@@ -6,17 +6,23 @@ definitions:
       user:
         $ref: '#/definitions/domain.User'
     type: object
-  auth.wrapToken:
-    properties:
-      token:
-        type: string
-    type: object
   domain.Coordinate:
     properties:
       lat:
         type: number
       lon:
         type: number
+    type: object
+  domain.CreateUser:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
     type: object
   domain.Game:
     properties:
@@ -169,7 +175,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/domain.UserCredentials'
+          $ref: '#/definitions/domain.CreateUser'
       produces:
       - application/json
       responses:
@@ -180,29 +186,6 @@ paths:
         "400":
           description: Bad Request
       summary: Register user
-      tags:
-      - auth
-  /auth/verify:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: token
-        in: body
-        name: token
-        required: true
-        schema:
-          $ref: '#/definitions/auth.wrapToken'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.User'
-        "400":
-          description: Bad Request
-      summary: Verify token
       tags:
       - auth
   /game:

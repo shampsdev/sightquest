@@ -32,7 +32,11 @@ func TestRegister(t *testing.T) {
 			return "user1", nil
 		}).Times(1)
 
-	token, err := a.Register(ctx, &domain.UserCredentials{Username: "shamp", Email: "shamp@mail.ru", Password: "password"})
+	token, err := a.Register(ctx, &domain.CreateUser{UserCredentials: domain.UserCredentials{
+		Username: "shamp",
+		Email:    "shamp@mail.ru",
+		Password: "password",
+	}})
 	assert.NoError(t, err)
 	assert.NotEmpty(t, token)
 

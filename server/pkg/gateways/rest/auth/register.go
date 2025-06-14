@@ -11,7 +11,7 @@ import (
 // @Summary Register user
 // @Tags auth
 // @Accept json
-// @Param user body domain.UserCredentials true "User"
+// @Param user body domain.CreateUser true "User"
 // @Produce json
 // @Schemes http https
 // @Success 200 {object} userToken
@@ -19,12 +19,12 @@ import (
 // @Router /auth/register [post]
 func Register(cases *usecase.Cases) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		creds := &domain.UserCredentials{}
-		err := c.ShouldBindJSON(creds)
+		cu := &domain.CreateUser{}
+		err := c.ShouldBindJSON(cu)
 		if ginerr.AbortIfErr(c, err, 400, "failed to bind json") {
 			return
 		}
-		token, err := cases.Auth.Register(c, creds)
+		token, err := cases.Auth.Register(c, cu)
 		if ginerr.AbortIfErr(c, err, 400, "failed to register user") {
 			return
 		}
