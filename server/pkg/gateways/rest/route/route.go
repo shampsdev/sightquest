@@ -5,7 +5,7 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/usecase"
 )
 
-func SetupRoutes(r *gin.RouterGroup, cases *usecase.Cases) {
+func Setup(r *gin.RouterGroup, cases *usecase.Cases) {
 	routes := r.Group("/route")
 	{
 		routes.GET("", GetRoutes(cases))

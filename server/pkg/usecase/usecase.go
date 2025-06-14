@@ -19,6 +19,7 @@ type Cases struct {
 	Player    *usecore.Player
 	Route     *usecore.Route
 	TaskPoint *usecore.TaskPoint
+	Style     *usecore.Style
 
 	GameHandler *game.Handler
 }
@@ -43,6 +44,7 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 
 	gameProvider := game.NewInMemoryGameRepo(ctx, gameCase, playerCase)
 	gameHandler := game.NewHandler(gameProvider, userCase, auth)
+	styleCase := usecore.NewStyle(pg.NewStyle(pool), pg.NewUserStyle(pool), pg.NewUser(pool))
 
 	return &Cases{
 		Auth:        auth,
@@ -51,6 +53,7 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 		Player:      playerCase,
 		Route:       routeCase,
 		TaskPoint:   taskPointCase,
+		Style:       styleCase,
 		GameHandler: gameHandler,
 	}, nil
 }

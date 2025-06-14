@@ -9,7 +9,7 @@ import (
 
 // Get godoc
 // @Summary Get me
-// @Tags users
+// @Tags user
 // @Accept json
 // @Produce json
 // @Schemes http https

@@ -55,12 +55,10 @@ definitions:
     - GameStateFinished
   domain.PatchUser:
     properties:
-      avatar:
-        type: string
-      background:
-        type: string
       name:
         type: string
+      userStyles:
+        $ref: '#/definitions/domain.UserStyles'
       username:
         type: string
     type: object
@@ -100,6 +98,24 @@ definitions:
       title:
         type: string
     type: object
+  domain.Style:
+    properties:
+      id:
+        type: string
+      priceRoubles:
+        type: integer
+      style: {}
+      title:
+        type: string
+      type:
+        $ref: '#/definitions/domain.StyleType'
+    type: object
+  domain.StyleType:
+    enum:
+    - avatar
+    type: string
+    x-enum-varnames:
+    - StyleTypeAvatar
   domain.TaskPoint:
     properties:
       description:
@@ -117,14 +133,12 @@ definitions:
     type: object
   domain.User:
     properties:
-      avatar:
-        type: string
-      background:
-        type: string
       id:
         type: string
       name:
         type: string
+      styles:
+        $ref: '#/definitions/domain.UserStyles'
       username:
         type: string
     type: object
@@ -135,6 +149,16 @@ definitions:
       password:
         type: string
       username:
+        type: string
+    type: object
+  domain.UserStyles:
+    properties:
+      avatarId:
+        type: string
+    type: object
+  style.setAvatarRequest:
+    properties:
+      styleId:
         type: string
     type: object
 info:
@@ -275,7 +299,7 @@ paths:
           description: Bad Request
       summary: Get all routes
       tags:
-      - routes
+      - route
   /route/{id}:
     get:
       consumes:
@@ -299,7 +323,77 @@ paths:
           description: Not Found
       summary: Get route by ID
       tags:
-      - routes
+      - route
+  /styles:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Style type filter
+        in: query
+        name: type
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Style'
+            type: array
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Get available styles
+      tags:
+      - style
+  /styles/id/{id}/buy:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Style ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Buy style
+      tags:
+      - style
+  /styles/me/avatar:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Style ID
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/style.setAvatarRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Set avatar style
+      tags:
+      - style
   /user/me:
     get:
       consumes:
@@ -317,7 +411,7 @@ paths:
       - ApiKeyAuth: []
       summary: Get me
       tags:
-      - users
+      - user
     patch:
       consumes:
       - application/json
@@ -341,7 +435,7 @@ paths:
       - ApiKeyAuth: []
       summary: Patch me
       tags:
-      - users
+      - user
 securityDefinitions:
   ApiKeyAuth:
     in: header

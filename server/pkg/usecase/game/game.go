@@ -101,7 +101,7 @@ func (g *Game) OnJoinGame(c Context) error {
 			GameID:   g.game.ID,
 			Role:     "runner",
 			Score:    0,
-			Location: domain.Coordinate{}, // Default empty location
+			Location: domain.Coordinate{},
 		}
 
 		p, err := g.playerCase.CreatePlayer(c.Ctx, createPlayer)

@@ -9,7 +9,7 @@ import (
 
 // GetRoutes godoc
 // @Summary Get all routes
-// @Tags routes
+// @Tags route
 // @Accept json
 // @Produce json
 // @Schemes http https

@@ -10,7 +10,7 @@ import (
 
 // Patch godoc
 // @Summary Patch me
-// @Tags users
+// @Tags user
 // @Accept json
 // @Produce json
 // @Schemes http https

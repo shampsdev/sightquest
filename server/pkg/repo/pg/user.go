@@ -2,6 +2,8 @@ package pg
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -35,7 +37,7 @@ func (u *User) GetPassword(ctx context.Context, userID string) (string, error) {
 }
 
 func (u *User) Filter(ctx context.Context, filter *domain.FilterUser) ([]*domain.User, error) {
-	q := u.psql.Select("id", "name", "username", "avatar", "background").From(`"user"`)
+	q := u.psql.Select("id", "name", "username", "styles").From(`"user"`)
 	if filter.ID != nil {
 		q = q.Where(sq.Eq{"id": *filter.ID})
 	}
@@ -59,7 +61,17 @@ func (u *User) Filter(ctx context.Context, filter *domain.FilterUser) ([]*domain
 	var users []*domain.User
 	for rows.Next() {
 		var user domain.User
-		err := rows.Scan(&user.ID, &user.Name, &user.Username, &user.Avatar, &user.Background)
+		var stylesData []byte
+		err := rows.Scan(&user.ID, &user.Name, &user.Username, &stylesData)
+		if err != nil {
+			return nil, err
+		}
+		if len(stylesData) > 0 {
+			err = json.Unmarshal(stylesData, &user.Styles)
+			if err != nil {
+				return nil, fmt.Errorf("failed to unmarshal styles: %w", err)
+			}
+		}
 		if err != nil {
 			return nil, err
 		}
@@ -76,11 +88,12 @@ func (u *User) Patch(ctx context.Context, id string, user *domain.PatchUser) err
 	if user.Username != nil {
 		q = q.Set("username", *user.Username)
 	}
-	if user.Avatar != nil {
-		q = q.Set("avatar", *user.Avatar)
-	}
-	if user.Background != nil {
-		q = q.Set("background", *user.Background)
+	if user.UserStyles != nil {
+		stylesData, err := json.Marshal(user.UserStyles)
+		if err != nil {
+			return fmt.Errorf("failed to marshal styles: %w", err)
+		}
+		q = q.Set("styles", stylesData)
 	}
 	q = q.Where(sq.Eq{"id": id})
 	sql, args, err := q.ToSql()

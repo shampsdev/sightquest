@@ -65,7 +65,16 @@ func (p *Player) Patch(ctx context.Context, gameID, userID string, patch *domain
 }
 
 func (p *Player) Filter(ctx context.Context, filter *domain.FilterPlayer) ([]*domain.Player, error) {
-	q := p.psql.Select("p.game_id", "p.user_id", "p.role", "p.score", "p.location", "u.username", "u.avatar", "u.background").
+	q := p.psql.Select(
+		"p.game_id",
+		"p.user_id",
+		"p.role",
+		"p.score",
+		"p.location",
+		"u.username",
+		"u.name",
+		"u.styles",
+	).
 		From(`"player" AS p`).
 		Join(`"user" AS u ON p.user_id = u.id`)
 
@@ -137,8 +146,8 @@ func scanPlayer(row Scanner) (*domain.Player, error) {
 		&player.Score,
 		&loc,
 		&player.User.Username,
-		&player.User.Avatar,
-		&player.User.Background,
+		&player.User.Name,
+		&player.User.Styles,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("error scanning player row: %w", err)

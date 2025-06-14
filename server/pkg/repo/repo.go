@@ -26,6 +26,19 @@ type Game interface {
 	Delete(ctx context.Context, id string) error
 }
 
+type Style interface {
+	Create(ctx context.Context, style *domain.CreateStyle) (string, error)
+	Patch(ctx context.Context, id string, style *domain.PatchStyle) error
+	Filter(ctx context.Context, filter *domain.FilterStyle) ([]*domain.Style, error)
+	Delete(ctx context.Context, id string) error
+}
+
+type UserStyle interface {
+	Create(ctx context.Context, userID, styleID string) error
+	Delete(ctx context.Context, userID, styleID string) error
+	Exists(ctx context.Context, userID, styleID string) (bool, error)
+}
+
 type Player interface {
 	Create(ctx context.Context, player *domain.CreatePlayer) error
 	Patch(ctx context.Context, gameID, userID string, player *domain.PatchPlayer) error

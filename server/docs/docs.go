@@ -210,7 +210,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "routes"
+                    "route"
                 ],
                 "summary": "Get all routes",
                 "responses": {
@@ -238,7 +238,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "routes"
+                    "route"
                 ],
                 "summary": "Get route by ID",
                 "parameters": [
@@ -266,6 +266,121 @@ const docTemplate = `{
                 }
             }
         },
+        "/styles": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "style"
+                ],
+                "summary": "Get available styles",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Style type filter",
+                        "name": "type",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Style"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/styles/id/{id}/buy": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "style"
+                ],
+                "summary": "Buy style",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Style ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/styles/me/avatar": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "style"
+                ],
+                "summary": "Set avatar style",
+                "parameters": [
+                    {
+                        "description": "Style ID",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/style.setAvatarRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
         "/user/me": {
             "get": {
                 "security": [
@@ -280,7 +395,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "user"
                 ],
                 "summary": "Get me",
                 "responses": {
@@ -308,7 +423,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "user"
                 ],
                 "summary": "Patch me",
                 "parameters": [
@@ -420,14 +535,11 @@ const docTemplate = `{
         "domain.PatchUser": {
             "type": "object",
             "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "background": {
-                    "type": "string"
-                },
                 "name": {
                     "type": "string"
+                },
+                "userStyles": {
+                    "$ref": "#/definitions/domain.UserStyles"
                 },
                 "username": {
                     "type": "string"
@@ -488,6 +600,33 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.Style": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "priceRoubles": {
+                    "type": "integer"
+                },
+                "style": {},
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/domain.StyleType"
+                }
+            }
+        },
+        "domain.StyleType": {
+            "type": "string",
+            "enum": [
+                "avatar"
+            ],
+            "x-enum-varnames": [
+                "StyleTypeAvatar"
+            ]
+        },
         "domain.TaskPoint": {
             "type": "object",
             "properties": {
@@ -514,17 +653,14 @@ const docTemplate = `{
         "domain.User": {
             "type": "object",
             "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "background": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
+                },
+                "styles": {
+                    "$ref": "#/definitions/domain.UserStyles"
                 },
                 "username": {
                     "type": "string"
@@ -541,6 +677,22 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.UserStyles": {
+            "type": "object",
+            "properties": {
+                "avatarId": {
+                    "type": "string"
+                }
+            }
+        },
+        "style.setAvatarRequest": {
+            "type": "object",
+            "properties": {
+                "styleId": {
                     "type": "string"
                 }
             }
