@@ -165,9 +165,8 @@ export const AccountScreen = () => {
 
           <UserProfile
             avatar={
-              user?.styles.avatarId
-                ? AVATARS.find((x) => x.id === Number(user.styles.avatarId))
-                    ?.src
+              user?.styles!.avatarId
+                ? AVATARS.find((x) => x.id === user.styles!.avatarId)?.src
                 : AVATARS[0].src
             }
             name={user?.name || ""}

@@ -26,8 +26,8 @@ export const EditProfileScreen = () => {
   const [name, setName] = useState<string>(user?.name || "");
 
   const [step, setStep] = useState<0 | 1>(0);
-  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(
-    AVATARS.find((x) => x.id === Number(user!.styles.avatarId))?.id!
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(
+    AVATARS.find((x) => x.id === user!.styles!.avatarId)?.id!
   );
 
   const back = () => {
@@ -38,11 +38,18 @@ export const EditProfileScreen = () => {
     setStep(0);
   };
 
+  const patchMeMutation = usePatchMe();
+
   const handleSubmit = async () => {
     try {
       await setAvatar(selectedAvatar?.toString() ?? "");
-      const updatedUser = await getMe();
 
+      patchMeMutation.mutate({
+        username,
+        name,
+      });
+
+      const updatedUser = await getMe();
       setUser(updatedUser);
       alert("Профиль успешно обновлен");
       back();
@@ -96,9 +103,7 @@ export const EditProfileScreen = () => {
                     intensity={10}
                   />
                   <Avatar
-                    source={
-                      AVATARS.find((x) => x.id === Number(selectedAvatar))?.src
-                    }
+                    source={AVATARS.find((x) => x.id === selectedAvatar)?.src}
                     className="w-[154px] h-[154px]"
                   />
                 </View>
@@ -141,7 +146,18 @@ export const EditProfileScreen = () => {
             </Pressable>
           </View>
           <View className="flex-1 justify-center items-center">
-            <AvatarPicker onSelect={setSelectedAvatar} />
+            <AvatarPicker
+              onSelect={setSelectedAvatar}
+              avatars={AVATARS.flatMap((x) => ({
+                id: x.id,
+                priceRoubles: 0,
+                title: "title",
+                type: "avatar",
+                style: {
+                  url: x.src,
+                },
+              }))}
+            />
           </View>
           <View
             className="absolute left-0 right-0"

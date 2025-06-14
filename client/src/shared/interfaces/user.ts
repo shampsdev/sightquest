@@ -5,5 +5,5 @@ export interface User {
   name: string;
   username: string;
   createdAt?: string;
-  styles: UserStyles;
+  styles?: UserStyles;
 }

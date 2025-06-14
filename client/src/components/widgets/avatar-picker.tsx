@@ -21,7 +21,9 @@ import * as Haptics from "expo-haptics";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 import { AVATARS } from "@/constants";
-type Item = { id: number; src: any };
+import { AvatarStyle } from "@/shared/interfaces/styles";
+
+type Item = AvatarStyle;
 
 const ITEM_WIDTH = 192;
 const SPACER_WIDTH = (SCREEN_WIDTH - ITEM_WIDTH) / 2;
@@ -55,29 +57,49 @@ const AvatarItem = ({
 
   return (
     <Animated.View style={[styles.avatarContainer, animatedStyle]}>
-      <Image source={item.src} style={styles.avatarImage} />
+      <Image
+        source={AVATARS.findIndex((x) => String(x.id) === item.id)}
+        style={styles.avatarImage}
+      />
     </Animated.View>
   );
 };
 
-export const AvatarPicker = ({
-  onSelect,
-}: {
-  onSelect?: (id: number) => void;
-}) => {
+interface AvatarPickerProps {
+  avatars: AvatarStyle[];
+  onSelect?: (id: string) => void;
+}
+
+export const AvatarPicker = ({ avatars, onSelect }: AvatarPickerProps) => {
   const flatListRef = useRef<FlatList<Item>>(null);
   const scrollX = useSharedValue(0);
 
   const data: Item[] = [
-    { id: -1, src: null },
-    ...AVATARS,
-    { id: -1, src: null },
+    {
+      style: {
+        url: "",
+      },
+      id: "-1",
+      priceRoubles: 0,
+      title: "",
+      type: undefined,
+    },
+    ...avatars,
+    {
+      style: {
+        url: "",
+      },
+      id: "-1",
+      priceRoubles: 0,
+      title: "",
+      type: undefined,
+    },
   ];
 
   const lastSelectedIndex = useRef<number | null>(null);
 
   const triggerHapticAndSelect = (index: number) => {
-    const avatar = AVATARS[index];
+    const avatar = avatars[index - 1];
     if (avatar) {
       Haptics.selectionAsync();
       onSelect?.(avatar.id);
@@ -105,7 +127,7 @@ export const AvatarPicker = ({
   });
 
   const renderItem = ({ item, index }: { item: Item; index: number }) => {
-    if (item.src === null) {
+    if (item.id === "-1") {
       return <View style={{ width: SPACER_WIDTH }} />;
     }
 
@@ -138,12 +160,12 @@ export const AvatarPicker = ({
         animated: true,
       });
 
-      onSelect?.(AVATARS[middleIndex].id);
+      onSelect?.(avatars[middleIndex].id);
     });
   };
 
   const keyExtractor = (item: Item, index: number) =>
-    item.src === null ? `spacer-${index}` : `avatar-${item.id}`;
+    item.id === "-1" ? `spacer-${index}` : `avatar-${item.id}`;
 
   const getItemLayout = (
     _: ArrayLike<Item> | null | undefined,

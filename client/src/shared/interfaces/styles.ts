@@ -6,7 +6,7 @@ export interface Style {
   style: any;
 }
 
-export interface AvatarStyle {
+export interface AvatarStyle extends Style {
   style: {
     url: string;
   };

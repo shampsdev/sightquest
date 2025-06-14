@@ -11,6 +11,8 @@ function createSocket(): Sock {
   });
 
   if (__DEV__) {
+    console.info(`[socket] > connecting to ${SOCKET_URL}`);
+
     const originalOnevent = sock.onevent;
     sock.onevent = function (packet: any) {
       const [event, ...args] = packet.data;
