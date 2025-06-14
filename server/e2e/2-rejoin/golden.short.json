@@ -7,10 +7,11 @@
           "Event": "authed",
           "Data": {
             "user": {
-              "avatar": "",
-              "background": "",
-              "createdAt": "",
-              "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+              "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+              "name": "",
+              "styles": {
+                "avatarId": ""
+              },
               "username": "user1"
             }
           }
@@ -20,18 +21,19 @@
           "Data": {
             "game": {
               "admin": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user1"
               },
-              "createdAt": "2025-04-11T17:52:10.832775Z",
+              "createdAt": "2025-06-14T14:07:17.249554Z",
               "finishedAt": null,
-              "id": "XISJX",
+              "id": "894746",
               "players": [
                 {
-                  "gameId": "XISJX",
+                  "gameId": "894746",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -39,10 +41,11 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user1"
                   }
                 }
@@ -62,7 +65,7 @@
           "Event": "playerJoined",
           "Data": {
             "player": {
-              "gameId": "XISJX",
+              "gameId": "894746",
               "location": {
                 "lat": 0,
                 "lon": 0
@@ -70,10 +73,11 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+                "id": "ea0a37b9-1f31-4205-81b2-db603dd65b92",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user2"
               }
             }
@@ -85,10 +89,11 @@
           "Event": "authed",
           "Data": {
             "user": {
-              "avatar": "",
-              "background": "",
-              "createdAt": "",
-              "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+              "id": "ea0a37b9-1f31-4205-81b2-db603dd65b92",
+              "name": "",
+              "styles": {
+                "avatarId": ""
+              },
               "username": "user2"
             }
           }
@@ -98,18 +103,19 @@
           "Data": {
             "game": {
               "admin": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user1"
               },
-              "createdAt": "2025-04-11T17:52:10.832775Z",
+              "createdAt": "2025-06-14T14:07:17.249554Z",
               "finishedAt": null,
-              "id": "XISJX",
+              "id": "894746",
               "players": [
                 {
-                  "gameId": "XISJX",
+                  "gameId": "894746",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -117,15 +123,16 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user1"
                   }
                 },
                 {
-                  "gameId": "XISJX",
+                  "gameId": "894746",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -133,10 +140,11 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+                    "id": "ea0a37b9-1f31-4205-81b2-db603dd65b92",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user2"
                   }
                 }
@@ -156,7 +164,7 @@
           "Event": "playerLeft",
           "Data": {
             "player": {
-              "gameId": "XISJX",
+              "gameId": "894746",
               "location": {
                 "lat": 0,
                 "lon": 0
@@ -164,10 +172,11 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "eb0094a7-e213-4321-b7f8-e26235cb0847",
+                "id": "ea0a37b9-1f31-4205-81b2-db603dd65b92",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user2"
               }
             }
@@ -184,7 +193,7 @@
           "Event": "playerJoined",
           "Data": {
             "player": {
-              "gameId": "XISJX",
+              "gameId": "894746",
               "location": {
                 "lat": 0,
                 "lon": 0
@@ -192,10 +201,11 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+                "id": "4901a319-3034-44d9-b329-37b07c0c0d33",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user3"
               }
             }
@@ -207,10 +217,11 @@
           "Event": "authed",
           "Data": {
             "user": {
-              "avatar": "",
-              "background": "",
-              "createdAt": "",
-              "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+              "id": "4901a319-3034-44d9-b329-37b07c0c0d33",
+              "name": "",
+              "styles": {
+                "avatarId": ""
+              },
               "username": "user3"
             }
           }
@@ -220,18 +231,19 @@
           "Data": {
             "game": {
               "admin": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user1"
               },
-              "createdAt": "2025-04-11T17:52:10.832775Z",
+              "createdAt": "2025-06-14T14:07:17.249554Z",
               "finishedAt": null,
-              "id": "XISJX",
+              "id": "894746",
               "players": [
                 {
-                  "gameId": "XISJX",
+                  "gameId": "894746",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -239,15 +251,16 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user1"
                   }
                 },
                 {
-                  "gameId": "XISJX",
+                  "gameId": "894746",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -255,10 +268,11 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+                    "id": "4901a319-3034-44d9-b329-37b07c0c0d33",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user3"
                   }
                 }
@@ -299,10 +313,11 @@
           "Event": "authed",
           "Data": {
             "user": {
-              "avatar": "",
-              "background": "",
-              "createdAt": "",
-              "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+              "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+              "name": "",
+              "styles": {
+                "avatarId": ""
+              },
               "username": "user1"
             }
           }
@@ -312,18 +327,19 @@
           "Data": {
             "game": {
               "admin": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user1"
               },
-              "createdAt": "2025-04-11T17:52:10.832775Z",
+              "createdAt": "2025-06-14T14:07:17.249554Z",
               "finishedAt": null,
-              "id": "XISJX",
+              "id": "894746",
               "players": [
                 {
-                  "gameId": "XISJX",
+                  "gameId": "894746",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -331,15 +347,16 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "0bfe0e57-db61-408a-b819-d3a4059e100a",
+                    "id": "df0d7d15-a731-44f4-ab72-f4b021ff12e9",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user1"
                   }
                 },
                 {
-                  "gameId": "XISJX",
+                  "gameId": "894746",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -347,10 +364,11 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "938ef644-da0f-441e-b27a-580efb96e0ef",
+                    "id": "4901a319-3034-44d9-b329-37b07c0c0d33",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user3"
                   }
                 }

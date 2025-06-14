@@ -8,18 +8,19 @@
           "Data": {
             "game": {
               "admin": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user1"
               },
-              "createdAt": "2025-04-13T21:56:25.281795Z",
+              "createdAt": "2025-06-14T14:07:15.524994Z",
               "finishedAt": null,
-              "id": "K78TA",
+              "id": "909387",
               "players": [
                 {
-                  "gameId": "K78TA",
+                  "gameId": "909387",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -27,10 +28,11 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                    "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user1"
                   }
                 }
@@ -50,7 +52,7 @@
           "Event": "playerJoined",
           "Data": {
             "player": {
-              "gameId": "K78TA",
+              "gameId": "909387",
               "location": {
                 "lat": 0,
                 "lon": 0
@@ -58,10 +60,11 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "744cfbd2-fd49-49fd-95b1-d525782a743c",
+                "id": "85d41ba5-45d1-441d-8ee6-d010196a4896",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user2"
               }
             }
@@ -74,18 +77,19 @@
           "Data": {
             "game": {
               "admin": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user1"
               },
-              "createdAt": "2025-04-13T21:56:25.281795Z",
+              "createdAt": "2025-06-14T14:07:15.524994Z",
               "finishedAt": null,
-              "id": "K78TA",
+              "id": "909387",
               "players": [
                 {
-                  "gameId": "K78TA",
+                  "gameId": "909387",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -93,15 +97,16 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                    "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user1"
                   }
                 },
                 {
-                  "gameId": "K78TA",
+                  "gameId": "909387",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -109,10 +114,11 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "avatar": "",
-                    "background": "",
-                    "createdAt": "",
-                    "id": "744cfbd2-fd49-49fd-95b1-d525782a743c",
+                    "id": "85d41ba5-45d1-441d-8ee6-d010196a4896",
+                    "name": "",
+                    "styles": {
+                      "avatarId": ""
+                    },
                     "username": "user2"
                   }
                 }
@@ -136,7 +142,7 @@
               "lon": 1
             },
             "player": {
-              "gameId": "K78TA",
+              "gameId": "909387",
               "location": {
                 "lat": 2,
                 "lon": 1
@@ -144,10 +150,11 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user1"
               }
             }
@@ -165,7 +172,7 @@
           "Data": {
             "data": "Shamps are cool!",
             "player": {
-              "gameId": "K78TA",
+              "gameId": "909387",
               "location": {
                 "lat": 2,
                 "lon": 1
@@ -173,10 +180,11 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user1"
               }
             }
@@ -189,7 +197,7 @@
           "Data": {
             "data": "Shamps are cool!",
             "player": {
-              "gameId": "K78TA",
+              "gameId": "909387",
               "location": {
                 "lat": 2,
                 "lon": 1
@@ -197,10 +205,11 @@
               "role": "runner",
               "score": 0,
               "user": {
-                "avatar": "",
-                "background": "",
-                "createdAt": "",
-                "id": "9018e059-78d5-427b-905a-5f7b157691ce",
+                "id": "755584d6-7c35-4e97-8a0f-c9702cf274d2",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
                 "username": "user1"
               }
             }
