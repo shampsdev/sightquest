@@ -7,12 +7,12 @@ interface HeaderProps {
 
 export const Header = ({ mainText, descriptionText }: HeaderProps) => {
   return (
-    <View className="flex flex-col items-center justify-center">
-      <Text className="mx-auto text-text_primary text-[24px] font-bounded-regular">
+    <View className="flex flex-col gap-5 items-center justify-center">
+      <Text className="mx-auto text-text_primary pt-2 text-[24px] font-bounded-medium">
         {mainText}
       </Text>
 
-      <Text className="mx-auto text-[16px] text-text_secondary font-bounded-regular">
+      <Text className="mx-auto text-[14px] text-text_secondary font-bounded-regular">
         {descriptionText}
       </Text>
     </View>

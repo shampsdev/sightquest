@@ -12,12 +12,14 @@ import { Button } from "../ui/button";
 import { TextInput } from "../ui/textinput";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useState } from "react";
-import { register as registerRequest } from "@/shared/api/auth.api";
+import { getMe, register as registerRequest } from "@/shared/api/auth.api";
 import { ProgressBarSteps } from "../ui/progress/progress-bar-steps";
 import { AvatarPicker } from "./avatar-picker";
+import { usePatchMe } from "@/shared/api/hooks/usePatchMe";
+import { setAvatar } from "@/shared/api/styles.api";
 
 export const SignUpWidget = () => {
-  const { login } = useAuthStore();
+  const { user, token, login, setToken, setUser } = useAuthStore();
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -27,31 +29,30 @@ export const SignUpWidget = () => {
   const [step, setStep] = useState<0 | 1>(0);
   const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
 
-  const [pendingToken, setPendingToken] = useState<string | null>(null);
-
   const handleRegister = async () => {
     try {
-      const response = await registerRequest(email, username, password);
-      setPendingToken(response.token);
+      const response = await registerRequest(email, username, password, name);
+      setToken(response.token);
+      setUser(response.user);
       setStep(1);
     } catch (error: any) {
-      console.error(error);
+      console.error(error, error.response.data);
       Alert.alert("Ошибка регистрации", "Проверьте корректность данных");
     }
   };
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (selectedAvatar === null) {
       Alert.alert("Выбор аватара", "Пожалуйста, выбери аватар");
       return;
     }
 
-    if (!pendingToken) {
-      Alert.alert("Ошибка", "Не удалось завершить регистрацию");
-      return;
-    }
+    setAvatar(selectedAvatar.toString());
+    const updatedUser = await getMe();
 
-    login({ username, avatar: `${selectedAvatar}`, name }, pendingToken);
+    if (updatedUser !== null && token !== null) {
+      login(updatedUser, token);
+    }
   };
 
   return (

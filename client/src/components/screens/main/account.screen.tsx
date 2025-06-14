@@ -10,12 +10,13 @@ import { GameStatistics } from "@/shared/interfaces/game-statistics";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { StatusBar } from "expo-status-bar";
 import { Pressable, View, Image, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const AccountScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   const mockGamesStatistics: GameStatistics[] = [
     {
@@ -141,6 +142,10 @@ export const AccountScreen = () => {
     navigation.goBack();
   };
 
+  const goToEdit = () => {
+    navigation.navigate("EditProfile");
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-bg_primary">
       <ScrollView className="w-full">
@@ -151,7 +156,7 @@ export const AccountScreen = () => {
                 <Icons.Back />
               </IconContainer>
             </Pressable>
-            <Pressable onPress={back}>
+            <Pressable onPress={goToEdit}>
               <IconContainer className="bg-[#222222]">
                 <Icons.Edit />
               </IconContainer>
@@ -160,8 +165,9 @@ export const AccountScreen = () => {
 
           <UserProfile
             avatar={
-              user?.avatar
-                ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
+              user?.styles.avatarId
+                ? AVATARS.find((x) => x.id === Number(user.styles.avatarId))
+                    ?.src
                 : AVATARS[0].src
             }
             name={user?.name || ""}
@@ -182,9 +188,15 @@ export const AccountScreen = () => {
                 }}
               />
             ))}
+            <Pressable className="mx-auto pt-4" onPress={logout}>
+              <Text className="text-lg text-text_secondary font-onest-medium">
+                Выйти
+              </Text>
+            </Pressable>
           </View>
         </View>
       </ScrollView>
+      <StatusBar style="light" />
     </SafeAreaView>
   );
 };
