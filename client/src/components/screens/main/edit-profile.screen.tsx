@@ -18,7 +18,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export const EditProfileScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const insets = useSafeAreaInsets();
-  const { user, setUser } = useAuthStore();
+  const { user, setUser, setToken } = useAuthStore();
 
   const [username, setUsername] = useState<string>(user?.username || "");
   const [step, setStep] = useState<0 | 1>(0);

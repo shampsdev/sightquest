@@ -15,9 +15,10 @@ import { useState } from "react";
 import { register as registerRequest } from "@/shared/api/auth.api";
 import { ProgressBarSteps } from "../ui/progress/progress-bar-steps";
 import { AvatarPicker } from "./avatar-picker";
+import { usePatchMe } from "@/shared/api/hooks/usePatchMe";
 
 export const SignUpWidget = () => {
-  const { login } = useAuthStore();
+  const { login, setToken } = useAuthStore();
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -27,6 +28,7 @@ export const SignUpWidget = () => {
   const [step, setStep] = useState<0 | 1>(0);
   const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
 
+  const patchMe = usePatchMe();
   const [pendingToken, setPendingToken] = useState<string | null>(null);
 
   const handleRegister = async () => {
@@ -40,7 +42,7 @@ export const SignUpWidget = () => {
     }
   };
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (selectedAvatar === null) {
       Alert.alert("Выбор аватара", "Пожалуйста, выбери аватар");
       return;
@@ -51,7 +53,14 @@ export const SignUpWidget = () => {
       return;
     }
 
-    login({ username, avatar: `${selectedAvatar}`, name }, pendingToken);
+    setToken(pendingToken);
+
+    const updatedUser = await patchMe.mutateAsync({
+      username: username,
+      avatar: String(selectedAvatar),
+    });
+
+    login({ ...updatedUser, name }, pendingToken);
   };
 
   return (

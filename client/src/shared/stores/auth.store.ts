@@ -13,6 +13,7 @@ interface AuthActions {
   login: (user: User, token: string) => void;
   logout: () => void;
   setUser: (user: User) => void;
+  setToken: (token: string) => void;
 }
 
 export const useAuthStore = create<AuthState & AuthActions>()(
@@ -23,6 +24,9 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       user: null,
       login: (user: User, token: string) => {
         set({ auth: true, user, token });
+      },
+      setToken: (token: string) => {
+        set({ token });
       },
       setUser: (user: User) => {
         set({ user: { ...user } });
