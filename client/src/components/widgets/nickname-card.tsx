@@ -1,30 +1,26 @@
-import { useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  ImageSourcePropType,
-  LayoutChangeEvent,
-  useWindowDimensions,
-  Pressable,
-  Image,
-} from "react-native";
-import { twMerge } from "tailwind-merge";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import {
   Canvas,
   Fill,
-  LinearGradient,
-  vec,
   Group,
-  rrect,
+  LinearGradient,
   rect,
+  rrect,
+  vec,
 } from "@shopify/react-native-skia";
 import { Skia } from "@shopify/react-native-skia/lib/module/skia";
-import { Camera, MapView } from "@rnmapbox/maps";
-import { AVATARS, MAPBOX_STYLE_URL } from "@/constants";
-import { PlayerMarker } from "../ui/map/player-marker";
-import { useAuthStore } from "@/shared/stores/auth.store";
+import { useCallback, useState } from "react";
+import {
+  Image,
+  LayoutChangeEvent,
+  Pressable,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import { twMerge } from "tailwind-merge";
 import { PlayerPreview } from "../ui/player-preview";
-import { useStyles } from "@/shared/api/hooks/useStyles";
 
 export interface NicknameCardProps {
   title: string;

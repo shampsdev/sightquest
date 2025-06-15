@@ -3,17 +3,15 @@ import { Header } from "@/components/ui/header";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import { UserLobbyPreview } from "@/components/widgets/user/user-preview.lobby";
-import { AVATARS } from "@/constants";
 import { GameStackParamList } from "@/routers/game.navigator";
 import { MainStackParamList } from "@/routers/main.navigator";
-import { useGame } from "@/shared/api/hooks/useGame";
+import { useStyles } from "@/shared/api/hooks/useStyles";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
 import { Pressable, View, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -24,6 +22,7 @@ export const LobbyScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const { game } = useGameStore();
   const { user } = useAuthStore();
+  const { data: avatars } = useStyles({ type: "avatar" });
 
   const start = () => {
     emit("startGame");
@@ -67,13 +66,10 @@ export const LobbyScreen = () => {
                   <UserLobbyPreview
                     className="p-0"
                     key={index}
-                    avatar={
-                      player?.user.avatar
-                        ? AVATARS.find(
-                            (x) => x.id === Number(player.user.avatar)
-                          )?.src
-                        : AVATARS[0].src
-                    }
+                    avatar={{
+                      uri: avatars?.find((x) => player?.user.styles?.avatarId)
+                        ?.style.url,
+                    }}
                     name={player.user.name}
                     username={player.user.username}
                   />

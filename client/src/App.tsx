@@ -1,21 +1,17 @@
-import "./global.css";
 import "react-native-reanimated";
+import "./global.css";
 
 import { NavigationContainer } from "@react-navigation/native";
-import * as SplashScreen from "expo-splash-screen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { MainNavigator } from "./routers/main.navigator";
-import { AuthNavigator } from "./routers/auth.navigator";
-import { useAuthStore } from "./shared/stores/auth.store";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AuthNavigator } from "./routers/auth.navigator";
+import { MainNavigator } from "./routers/main.navigator";
 import { useSocket } from "./shared/hooks/useSocket";
-import {
-  useQueryClient,
-  QueryClientProvider,
-  QueryClient,
-} from "@tanstack/react-query";
+import { useAuthStore } from "./shared/stores/auth.store";
 
 SplashScreen.preventAutoHideAsync();
 

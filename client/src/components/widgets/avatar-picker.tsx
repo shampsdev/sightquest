@@ -1,22 +1,21 @@
-import { useRef, useEffect } from "react";
+import * as Haptics from "expo-haptics";
+import { useEffect, useRef } from "react";
 import {
-  FlatList,
   Dimensions,
-  StyleSheet,
+  FlatList,
+  Image,
   Pressable,
-  View,
+  StyleSheet,
 } from "react-native";
-import { Image } from "react-native";
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  useAnimatedScrollHandler,
-  interpolate,
   Extrapolation,
+  interpolate,
   runOnJS,
   SharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
 } from "react-native-reanimated";
-import * as Haptics from "expo-haptics";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 

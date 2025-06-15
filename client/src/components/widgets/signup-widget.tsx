@@ -1,24 +1,22 @@
-import {
-  ScrollView,
-  View,
-  Text,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
-import { Button } from "../ui/button";
-import { TextInput } from "../ui/textinput";
+import { getMe, register as registerRequest } from "@/shared/api/auth.api";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { setAvatar } from "@/shared/api/styles.api";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useState } from "react";
-import { getMe, register as registerRequest } from "@/shared/api/auth.api";
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { Button } from "../ui/button";
 import { ProgressBarSteps } from "../ui/progress/progress-bar-steps";
+import { TextInput } from "../ui/textinput";
 import { AvatarPicker } from "./avatar-picker";
-import { usePatchMe } from "@/shared/api/hooks/usePatchMe";
-import { setAvatar } from "@/shared/api/styles.api";
-import { AvatarStyle } from "@/shared/interfaces/styles";
-import { useStyles } from "@/shared/api/hooks/useStyles";
 
 export const SignUpWidget = () => {
   const { user, token, login, setToken, setUser } = useAuthStore();

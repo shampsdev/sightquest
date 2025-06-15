@@ -1,26 +1,24 @@
-import { useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  ImageSourcePropType,
-  LayoutChangeEvent,
-  useWindowDimensions,
-  Pressable,
-  Image,
-} from "react-native";
-import { Avatar } from "../ui/avatar";
-import { twMerge } from "tailwind-merge";
+import { usePixelColor } from "@/shared/hooks/usePixelColor";
 import {
   Canvas,
   Fill,
-  LinearGradient,
-  vec,
   Group,
-  rrect,
+  LinearGradient,
   rect,
+  rrect,
+  vec,
 } from "@shopify/react-native-skia";
 import { Skia } from "@shopify/react-native-skia/lib/module/skia";
-import { usePixelColor } from "@/shared/hooks/usePixelColor";
+import { useCallback, useState } from "react";
+import {
+  LayoutChangeEvent,
+  Pressable,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import { twMerge } from "tailwind-merge";
+import { Avatar } from "../ui/avatar";
 
 export interface AvatarCardProps {
   avatar: string;
