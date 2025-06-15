@@ -53,7 +53,7 @@ export const EditProfileScreen = () => {
     try {
       await setAvatar(selectedAvatar?.toString() ?? "");
 
-      patchMeMutation.mutate({
+      await patchMeMutation.mutateAsync({
         username,
         name,
       });
