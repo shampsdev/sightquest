@@ -24,9 +24,9 @@ import { AVATARS, MAPBOX_STYLE_URL } from "@/constants";
 import { PlayerMarker } from "../ui/map/player-marker";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { PlayerPreview } from "../ui/player-preview";
+import { useStyles } from "@/shared/api/hooks/useStyles";
 
 export interface NicknameCardProps {
-  avatar: ImageSourcePropType;
   title: string;
   subtitle: string;
   buttonAction?: () => void;
@@ -36,7 +36,6 @@ export interface NicknameCardProps {
 }
 
 export const NicknameCard = ({
-  avatar,
   title,
   subtitle,
   buttonAction,
@@ -45,6 +44,7 @@ export const NicknameCard = ({
   className,
 }: NicknameCardProps) => {
   const { user } = useAuthStore();
+  const { data: avatars } = useStyles({ type: "avatar", bought: true });
 
   const { width } = useWindowDimensions();
   const [cardHeight, setCardHeight] = useState(100);
@@ -74,11 +74,10 @@ export const NicknameCard = ({
         <PlayerPreview
           name={user?.name ?? user!.username}
           nicknameType={"default"}
-          avatar={
-            user!.styles?.avatarId
-              ? AVATARS.find((x) => x.id === user?.styles?.avatarId)?.src
-              : AVATARS[1].src
-          }
+          avatar={{
+            uri: avatars?.find((x) => x.id === user?.styles?.avatarId)?.style
+              .url,
+          }}
           className="absolute top-[20px] z-[100]"
         />
 

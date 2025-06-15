@@ -19,6 +19,7 @@ import { useRef } from "react";
 import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
 import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { useStyles } from "@/shared/api/hooks/useStyles";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -45,6 +46,8 @@ export const HomeScreen = () => {
   };
 
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const { data: avatars } = useStyles({ type: "avatar", bought: true });
 
   return (
     <View className="flex-1">
@@ -97,11 +100,10 @@ export const HomeScreen = () => {
             <Pressable onPress={account}>
               <Avatar
                 className="h-12 w-12"
-                source={
-                  user.styles?.avatarId
-                    ? AVATARS.find((x) => x.id === user.styles!.avatarId)?.src
-                    : AVATARS[0].src
-                }
+                source={{
+                  uri: avatars?.find((x) => x.id === user.styles?.avatarId)
+                    ?.style.url,
+                }}
               />
             </Pressable>
           )}

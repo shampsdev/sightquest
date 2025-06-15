@@ -14,6 +14,8 @@ import { NicknamesWidget } from "@/components/widgets/shop/nicknames";
 import { Header } from "@/components/ui/header";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { useAuthStore } from "@/shared/stores/auth.store";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -24,6 +26,10 @@ export const ShopScreen = () => {
   const insets = useSafeAreaInsets();
 
   const [selectedSeciton, setSelectedSection] = useState<string>("Аватарки");
+
+  const { data: avatars, isFetched: isAvatarsFetched } = useStyles({
+    type: "avatar",
+  });
 
   const cards: AvatarCardProps[] = [
     {
@@ -77,6 +83,8 @@ export const ShopScreen = () => {
     },
   ];
 
+  const { user } = useAuthStore();
+
   const back = () => {
     navigation.goBack();
   };
@@ -109,9 +117,22 @@ export const ShopScreen = () => {
             />
           </View>
 
-          {sectionRef.current?.selectedSection === "Аватарки" && (
-            <AvatarsWidget cards={cards} className="pb-[70px]" />
-          )}
+          {sectionRef.current?.selectedSection === "Аватарки" &&
+            isAvatarsFetched && (
+              <AvatarsWidget
+                cards={avatars!.map((avatar) => ({
+                  avatar: avatar.style.url,
+                  title: avatar.title,
+                  withButton: true,
+                  buttonAction: () => {
+                    alert("Mocked purchase");
+                  },
+                  subtitle: String(avatar.priceRoubles),
+                  disabled: avatar.id === user?.styles?.avatarId,
+                }))}
+                className="pb-[70px]"
+              />
+            )}
 
           {sectionRef.current?.selectedSection === "Маршруты" && (
             <RoutesWidget routes={routes} />

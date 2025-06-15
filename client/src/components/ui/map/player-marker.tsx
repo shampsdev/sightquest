@@ -88,7 +88,11 @@ export const PlayerMarker = ({
 
           <Avatar
             source={avatarSrc}
-            className={pulse ? "border-2 border-accent_primary" : "border-2 border-text_primary"}
+            className={
+              pulse
+                ? "border-2 border-accent_primary"
+                : "border-2 border-text_primary"
+            }
           />
 
           <Image
