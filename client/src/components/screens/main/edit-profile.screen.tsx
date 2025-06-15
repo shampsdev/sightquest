@@ -8,12 +8,13 @@ import { AVATARS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
 import { getMe } from "@/shared/api/auth.api";
 import { usePatchMe } from "@/shared/api/hooks/usePatchMe";
+import { useStyles } from "@/shared/api/hooks/useStyles";
 import { setAvatar } from "@/shared/api/styles.api";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { BlurView } from "expo-blur";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -21,14 +22,23 @@ export const EditProfileScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const insets = useSafeAreaInsets();
   const { user, setUser } = useAuthStore();
+  const {
+    data: avatars,
+    isLoading,
+    isError,
+  } = useStyles({
+    type: "avatar",
+    bought: true,
+  });
 
   const [username, setUsername] = useState<string>(user?.username || "");
   const [name, setName] = useState<string>(user?.name || "");
 
   const [step, setStep] = useState<0 | 1>(0);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(
-    AVATARS.find((x) => x.id === user!.styles!.avatarId)?.id!
+    AVATARS.find((x) => x.id === user?.styles?.avatarId)?.id!
   );
+  useEffect(() => console.log("AVATAR", selectedAvatar), [selectedAvatar]);
 
   const back = () => {
     navigation.goBack();
@@ -57,6 +67,7 @@ export const EditProfileScreen = () => {
       alert("Произошла ошибка при обновлении профиля");
     }
   };
+
   return (
     <SafeAreaView
       className="flex-1 bg-bg_primary"
@@ -148,15 +159,7 @@ export const EditProfileScreen = () => {
           <View className="flex-1 justify-center items-center">
             <AvatarPicker
               onSelect={setSelectedAvatar}
-              avatars={AVATARS.flatMap((x) => ({
-                id: x.id,
-                priceRoubles: 0,
-                title: "title",
-                type: "avatar",
-                style: {
-                  url: x.src,
-                },
-              }))}
+              avatars={avatars ?? []}
             />
           </View>
           <View

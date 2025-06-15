@@ -75,9 +75,9 @@ export const NicknameCard = ({
           name={user?.name ?? user!.username}
           nicknameType={"default"}
           avatar={
-            user!.avatar
-              ? AVATARS.find((x) => x.id === Number(user!.avatar))?.src
-              : AVATARS[0].src
+            user!.styles?.avatarId
+              ? AVATARS.find((x) => x.id === user?.styles?.avatarId)?.src
+              : AVATARS[1].src
           }
           className="absolute top-[20px] z-[100]"
         />

@@ -55,7 +55,7 @@ export const HomeScreen = () => {
               coordinate={location}
               name={user?.name ?? user.username}
               avatarSrc={
-                user.styles!.avatarId
+                user.styles?.avatarId
                   ? AVATARS.find((x) => x.id === user.styles!.avatarId)?.src
                   : AVATARS[0].src
               }
@@ -98,7 +98,7 @@ export const HomeScreen = () => {
               <Avatar
                 className="h-12 w-12"
                 source={
-                  user.styles!.avatarId
+                  user.styles?.avatarId
                     ? AVATARS.find((x) => x.id === user.styles!.avatarId)?.src
                     : AVATARS[0].src
                 }

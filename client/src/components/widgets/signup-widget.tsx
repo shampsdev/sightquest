@@ -17,6 +17,8 @@ import { ProgressBarSteps } from "../ui/progress/progress-bar-steps";
 import { AvatarPicker } from "./avatar-picker";
 import { usePatchMe } from "@/shared/api/hooks/usePatchMe";
 import { setAvatar } from "@/shared/api/styles.api";
+import { AvatarStyle } from "@/shared/interfaces/styles";
+import { useStyles } from "@/shared/api/hooks/useStyles";
 
 export const SignUpWidget = () => {
   const { user, token, login, setToken, setUser } = useAuthStore();
@@ -27,7 +29,12 @@ export const SignUpWidget = () => {
   const [password, setPassword] = useState("");
 
   const [step, setStep] = useState<0 | 1>(0);
-  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+
+  const { data: avatars, isLoading } = useStyles({
+    type: "avatar",
+    bought: true,
+  });
 
   const handleRegister = async () => {
     try {
@@ -147,7 +154,7 @@ export const SignUpWidget = () => {
               Какое лицо покажешь соперникам?
             </Text>
           </View>
-          <AvatarPicker onSelect={setSelectedAvatar} />
+          <AvatarPicker onSelect={setSelectedAvatar} avatars={avatars ?? []} />
           <Button className="mt-32" text={"Готово!"} onPress={handleFinish} />
         </View>
       )}
