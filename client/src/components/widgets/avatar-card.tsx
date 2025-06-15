@@ -1,29 +1,27 @@
-import { useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  ImageSourcePropType,
-  LayoutChangeEvent,
-  useWindowDimensions,
-  Pressable,
-  Image,
-} from "react-native";
-import { Avatar } from "../ui/avatar";
-import { twMerge } from "tailwind-merge";
+import { usePixelColor } from "@/shared/hooks/usePixelColor";
 import {
   Canvas,
   Fill,
-  LinearGradient,
-  vec,
   Group,
-  rrect,
+  LinearGradient,
   rect,
+  rrect,
+  vec,
 } from "@shopify/react-native-skia";
 import { Skia } from "@shopify/react-native-skia/lib/module/skia";
-import { usePixelColor } from "@/shared/hooks/usePixelColor";
+import { useCallback, useState } from "react";
+import {
+  LayoutChangeEvent,
+  Pressable,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import { twMerge } from "tailwind-merge";
+import { Avatar } from "../ui/avatar";
 
 export interface AvatarCardProps {
-  avatar: ImageSourcePropType;
+  avatar: string;
   title: string;
   subtitle: string;
   buttonAction?: () => void;
@@ -54,8 +52,7 @@ export const AvatarCard = ({
     [cardHeight]
   );
 
-  const avatarUri = Image.resolveAssetSource(avatar)?.uri || "";
-  const pixelColor = usePixelColor({ imageUri: avatarUri });
+  const pixelColor = usePixelColor({ imageUri: avatar });
 
   const cardWidth = width * 0.48;
 
@@ -70,7 +67,10 @@ export const AvatarCard = ({
       )}
     >
       <View className="absolute top-0 left-0 w-full flex items-center z-30">
-        <Avatar className="top-[-60px] w-[130px] h-[130px]" source={avatar} />
+        <Avatar
+          className="top-[-60px] w-[130px] h-[130px]"
+          source={{ uri: avatar }}
+        />
       </View>
 
       <View

@@ -1,11 +1,9 @@
-import { UserStats } from "@/shared/interfaces/user-statistics";
+import { UserStyles } from "./styles";
 
 export interface User {
   id?: string;
-  name?: string;
+  name: string;
   username: string;
-  avatar?: string;
-  background?: string;
   createdAt?: string;
-  stats?: UserStats;
+  styles?: UserStyles;
 }

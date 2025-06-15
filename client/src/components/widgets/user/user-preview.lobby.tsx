@@ -9,6 +9,7 @@ interface UserLobbyPreviewProps {
   name: string;
   username: string;
   active?: boolean;
+  className?: string;
 }
 
 export const UserLobbyPreview = ({
@@ -17,15 +18,15 @@ export const UserLobbyPreview = ({
   name,
   username,
   active,
+  className,
 }: UserLobbyPreviewProps) => {
-  const styles =
-    "flex flex-row gap-[21px] py-[20px] px-[28px] justify-between items-center rounded-[20px]";
-
   return (
     <View
-      className={
-        active ? twMerge(styles, " border-[2px] border-accent_primary") : styles
-      }
+      className={twMerge(
+        "flex flex-row gap-[21px] py-[20px] px-[28px] justify-between items-center rounded-[20px]",
+        active && "border-[2px] border-accent_primary",
+        className
+      )}
     >
       <Avatar source={avatar} />
       <View className="flex flex-col flex-1 justify-start gap-[8px]">

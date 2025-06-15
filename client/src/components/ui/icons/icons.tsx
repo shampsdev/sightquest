@@ -61,6 +61,19 @@ export const Icons = {
       </Svg>
     );
   },
+  Copy: () => {
+    return (
+      <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+        <Path
+          d="M7.5 3H14.6C16.8402 3 17.9603 3 18.816 3.43597C19.5686 3.81947 20.1805 4.43139 20.564 5.18404C21 6.03969 21 7.15979 21 9.4V16.5M6.2 21H14.3C15.4201 21 15.9802 21 16.408 20.782C16.7843 20.5903 17.0903 20.2843 17.282 19.908C17.5 19.4802 17.5 18.9201 17.5 17.8V9.7C17.5 8.57989 17.5 8.01984 17.282 7.59202C17.0903 7.21569 16.7843 6.90973 16.408 6.71799C15.9802 6.5 15.4201 6.5 14.3 6.5H6.2C5.0799 6.5 4.51984 6.5 4.09202 6.71799C3.71569 6.90973 3.40973 7.21569 3.21799 7.59202C3 8.01984 3 8.57989 3 9.7V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.0799 21 6.2 21Z"
+          stroke="#878787"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </Svg>
+    );
+  },
   Eye: {
     Striked: ({ fill = "#fff" }: { fill?: string }) => {
       return (
@@ -88,6 +101,27 @@ export const Icons = {
     },
   },
 
+  Camera: () => {
+    return (
+      <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <Path
+          d="M4 16.7544C4 16.0538 4 15.7035 4.02923 15.4084C4.3112 12.5625 6.56254 10.3112 9.40842 10.0292C9.70349 10 10.0727 10 10.8112 10C11.0957 10 11.238 10 11.3588 9.99268C12.9012 9.89927 14.2519 8.92575 14.8283 7.492C14.8734 7.37972 14.9156 7.25314 15 7C15.0844 6.74686 15.1266 6.62028 15.1717 6.508C15.7481 5.07425 17.0988 4.10073 18.6412 4.00732C18.762 4 18.8954 4 19.1623 4H28.8377C29.1046 4 29.238 4 29.3588 4.00732C30.9012 4.10073 32.2519 5.07425 32.8283 6.508C32.8734 6.62028 32.9156 6.74686 33 7C33.0844 7.25314 33.1266 7.37972 33.1717 7.492C33.7481 8.92575 35.0988 9.89927 36.6412 9.99268C36.762 10 36.9043 10 37.1888 10C37.9273 10 38.2965 10 38.5916 10.0292C41.4375 10.3112 43.6888 12.5625 43.9708 15.4084C44 15.7035 44 16.0538 44 16.7544V32.4C44 35.7603 44 37.4405 43.346 38.7239C42.7708 39.8529 41.8529 40.7708 40.7239 41.346C39.4405 42 37.7603 42 34.4 42H13.6C10.2397 42 8.55953 42 7.27606 41.346C6.14708 40.7708 5.2292 39.8529 4.65396 38.7239C4 37.4405 4 35.7603 4 32.4V16.7544Z"
+          stroke="white"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <Path
+          d="M24 33C28.4183 33 32 29.4183 32 25C32 20.5817 28.4183 17 24 17C19.5817 17 16 20.5817 16 25C16 29.4183 19.5817 33 24 33Z"
+          stroke="white"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </Svg>
+    );
+  },
+
   Edit: () => {
     return (
       <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -95,23 +129,23 @@ export const Icons = {
           <Path
             d="M3 21H21"
             stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
           <Path
             d="M7 17V13L17 3L21 7L11 17H7Z"
             stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
           <Path
             d="M14 6L18 10"
             stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </G>
         <Defs>

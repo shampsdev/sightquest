@@ -42,25 +42,25 @@ export const HistoryScreen = () => {
             <UserPreview
               avatar={AVATARS[0].src}
               name={"aboba"}
-              role={"Догоняющий"}
+              role={"catcher"}
               scores={12}
             />
             <UserPreview
               avatar={AVATARS[0].src}
               name={"aboba"}
-              role={"Догоняющий"}
+              role={"catcher"}
               scores={12}
             />
             <UserPreview
               avatar={AVATARS[0].src}
               name={"aboba"}
-              role={"Догоняющий"}
+              role={"catcher"}
               scores={12}
             />
             <UserPreview
               avatar={AVATARS[0].src}
               name={"aboba"}
-              role={"Догоняющий"}
+              role={"runner"}
               active
             />
           </View>

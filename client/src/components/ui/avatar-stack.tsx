@@ -1,4 +1,4 @@
-import { View, Text, ImageSourcePropType } from "react-native";
+import { ImageSourcePropType, Text, View } from "react-native";
 import { Avatar } from "./avatar";
 
 interface AvatarStackProps {
