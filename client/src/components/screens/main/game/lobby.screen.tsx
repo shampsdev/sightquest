@@ -9,10 +9,10 @@ import { useStyles } from "@/shared/api/hooks/useStyles";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import { Pressable, View, Text, ScrollView } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type LobbyRoute = RouteProp<GameStackParamList, "Lobby">;
@@ -67,8 +67,9 @@ export const LobbyScreen = () => {
                     className="p-0"
                     key={index}
                     avatar={{
-                      uri: avatars?.find((x) => player?.user.styles?.avatarId)
-                        ?.style.url,
+                      uri: avatars?.find(
+                        (x) => player?.user.styles?.avatarId === x.id
+                      )?.style.url,
                     }}
                     name={player.user.name}
                     username={player.user.username}
