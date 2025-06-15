@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import {
   FlatList,
   Dimensions,
@@ -25,7 +25,7 @@ import { AvatarStyle } from "@/shared/interfaces/styles";
 type Item = AvatarStyle;
 
 const ITEM_WIDTH = 192;
-const PADDING_HORIZONTAL = (SCREEN_WIDTH - ITEM_WIDTH) / 2;
+const CONTENT_PADDING = (SCREEN_WIDTH - ITEM_WIDTH) / 2;
 
 const AvatarItem = ({
   item,
@@ -37,15 +37,15 @@ const AvatarItem = ({
   scrollX: SharedValue<number>;
 }) => {
   const animatedStyle = useAnimatedStyle(() => {
-    const itemCenterX =
-      index * ITEM_WIDTH + ITEM_WIDTH / 2 + PADDING_HORIZONTAL;
-    const screenCenterX = scrollX.value + SCREEN_WIDTH / 2;
-    const distance = Math.abs(itemCenterX - screenCenterX);
-
+    const inputRange = [
+      (index - 1) * ITEM_WIDTH,
+      index * ITEM_WIDTH,
+      (index + 1) * ITEM_WIDTH,
+    ];
     const scale = interpolate(
-      distance,
-      [0, ITEM_WIDTH],
-      [1.2, 0.85],
+      scrollX.value,
+      inputRange,
+      [0.85, 1.2, 0.85],
       Extrapolation.CLAMP
     );
 
@@ -78,42 +78,58 @@ const AvatarItem = ({
 export const AvatarPicker = ({
   onSelect,
   avatars,
+  className,
 }: {
   onSelect?: (id: string) => void;
   avatars: Item[];
+  className?: string;
 }) => {
   const flatListRef = useRef<FlatList<Item>>(null);
   const scrollX = useSharedValue(0);
-
-  console.log("AvatarPicker avatars:", avatars);
+  const isSelecting = useRef(false);
 
   const data: Item[] = avatars;
 
-  const lastSelectedIndex = useRef<number | null>(null);
+  const lastCenteredIndex = useRef<number | null>(null);
 
   const triggerHapticAndSelect = (index: number) => {
+    if (isSelecting.current) return;
+    isSelecting.current = true;
+
+    if (index < 0 || index >= avatars.length) {
+      console.warn(`Invalid centered index: ${index}`);
+      isSelecting.current = false;
+      return;
+    }
+
     const avatar = avatars[index];
     if (avatar && avatar.type === "avatar") {
       Haptics.selectionAsync();
       onSelect?.(avatar.id);
-      console.log("Selected avatar:", avatar.id);
+      console.log(`Selected centered avatar: id=${avatar.id}, index=${index}`);
     }
+
+    setTimeout(() => {
+      isSelecting.current = false;
+    }, 300); // Debounce selections
   };
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x;
-
-      const centerOffset = event.contentOffset.x + SCREEN_WIDTH / 2;
-      const rawIndex = (centerOffset - PADDING_HORIZONTAL) / ITEM_WIDTH;
+      console.log(`Scrolling: offset=${event.contentOffset.x}`);
+    },
+    onMomentumEnd: (event) => {
+      const offset = event.contentOffset.x;
+      const rawIndex = offset / ITEM_WIDTH;
       const roundedIndex = Math.round(rawIndex);
 
       if (
         roundedIndex >= 0 &&
         roundedIndex < avatars.length &&
-        lastSelectedIndex.current !== roundedIndex
+        lastCenteredIndex.current !== roundedIndex
       ) {
-        lastSelectedIndex.current = roundedIndex;
+        lastCenteredIndex.current = roundedIndex;
         runOnJS(triggerHapticAndSelect)(roundedIndex);
       }
     },
@@ -121,15 +137,14 @@ export const AvatarPicker = ({
 
   const renderItem = ({ item, index }: { item: Item; index: number }) => {
     const onItemPress = () => {
+      const offset = index * ITEM_WIDTH;
       flatListRef.current?.scrollToOffset({
-        offset:
-          index * ITEM_WIDTH +
-          PADDING_HORIZONTAL -
-          (SCREEN_WIDTH - ITEM_WIDTH) / 2,
+        offset,
         animated: true,
       });
-      lastSelectedIndex.current = index;
-      runOnJS(triggerHapticAndSelect)(index);
+      console.log(
+        `Tapped avatar: id=${item.id}, index=${index}, targetOffset=${offset}`
+      );
     };
 
     return (
@@ -139,58 +154,49 @@ export const AvatarPicker = ({
     );
   };
 
-  const snapToOffsets = avatars.map((_, i) => {
-    return (
-      i * ITEM_WIDTH + PADDING_HORIZONTAL - (SCREEN_WIDTH - ITEM_WIDTH) / 2
-    );
-  });
+  const snapToOffsets = avatars.map((_, i) => i * ITEM_WIDTH);
 
-  const onLayout = () => {
-    requestAnimationFrame(() => {
-      if (avatars.length === 0) {
-        console.log("No avatars to scroll to");
-        return;
-      }
-      const middleIndex = Math.floor(avatars.length / 2);
-      flatListRef.current?.scrollToOffset({
-        offset:
-          middleIndex * ITEM_WIDTH +
-          PADDING_HORIZONTAL -
-          (SCREEN_WIDTH - ITEM_WIDTH) / 2,
-        animated: true,
-      });
-      const avatar = avatars[middleIndex];
-      if (avatar) {
-        onSelect?.(avatar.id);
-      }
+  useEffect(() => {
+    if (avatars.length === 0) {
+      console.log("No avatars to scroll to");
+      return;
+    }
+    const middleIndex = Math.floor(avatars.length / 2);
+    const initialOffset = middleIndex * ITEM_WIDTH;
+    flatListRef.current?.scrollToOffset({
+      offset: initialOffset,
+      animated: false,
     });
-  };
+    scrollX.value = initialOffset;
+    lastCenteredIndex.current = middleIndex;
+    triggerHapticAndSelect(middleIndex);
+    console.log(
+      `Initial centered: index=${middleIndex}, offset=${initialOffset}`
+    );
+  }, [avatars]);
 
   const keyExtractor = (item: Item) => `avatar-${item.id}`;
 
   const getItemLayout = (
     _: ArrayLike<Item> | null | undefined,
     index: number
-  ) => {
-    return {
-      length: ITEM_WIDTH,
-      offset: PADDING_HORIZONTAL + index * ITEM_WIDTH,
-      index,
-    };
-  };
+  ) => ({
+    length: ITEM_WIDTH,
+    offset: index * ITEM_WIDTH,
+    index,
+  });
 
   return (
     <Animated.FlatList
       ref={flatListRef}
       data={data}
       horizontal
-      onLayout={onLayout}
       snapToOffsets={snapToOffsets}
+      snapToAlignment="start"
       decelerationRate="fast"
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{
-        paddingHorizontal: PADDING_HORIZONTAL,
-        alignItems: "center",
+        paddingHorizontal: CONTENT_PADDING,
       }}
       style={{ width: SCREEN_WIDTH }}
       keyExtractor={keyExtractor}
@@ -198,6 +204,7 @@ export const AvatarPicker = ({
       getItemLayout={getItemLayout}
       onScroll={scrollHandler}
       scrollEventThrottle={16}
+      className={className}
     />
   );
 };

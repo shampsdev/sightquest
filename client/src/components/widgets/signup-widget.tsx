@@ -135,26 +135,33 @@ export const SignUpWidget = () => {
           </ScrollView>
         </TouchableWithoutFeedback>
       ) : (
-        <View className="flex-1 items-center gap-16">
-          <ProgressBarSteps
-            totalSteps={2}
-            currentStep={1}
-            config={{
-              dotHeight: 6,
-              gap: 3,
-              indicatorWidth: 49,
-              indicatorWidthSm: 27,
-            }}
-          />
-          <View className="gap-2">
-            <Text className="text-center text-3xl text-text_primary font-bounded-semibold">
-              Аватар
-            </Text>
-            <Text className="text-center text-md text-text_secondary font-onest-medium">
-              Какое лицо покажешь соперникам?
-            </Text>
+        <View className="flex h-[100%] items-center flex-col justify-between">
+          <View className="flex-1 items-center gap-16">
+            <ProgressBarSteps
+              totalSteps={2}
+              currentStep={1}
+              config={{
+                dotHeight: 6,
+                gap: 3,
+                indicatorWidth: 49,
+                indicatorWidthSm: 27,
+              }}
+            />
+            <View className="gap-2">
+              <Text className="text-center text-3xl text-text_primary font-bounded-semibold">
+                Аватар
+              </Text>
+              <Text className="text-center text-md text-text_secondary font-onest-medium">
+                Какое лицо покажешь соперникам?
+              </Text>
+            </View>
           </View>
-          <AvatarPicker onSelect={setSelectedAvatar} avatars={avatars ?? []} />
+
+          <AvatarPicker
+            onSelect={setSelectedAvatar}
+            avatars={avatars ?? []}
+            className="mt-[15%]"
+          />
           <Button className="mt-32" text={"Готово!"} onPress={handleFinish} />
         </View>
       )}

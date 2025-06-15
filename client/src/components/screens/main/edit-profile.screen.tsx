@@ -36,9 +36,8 @@ export const EditProfileScreen = () => {
 
   const [step, setStep] = useState<0 | 1>(0);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(
-    AVATARS.find((x) => x.id === user?.styles?.avatarId)?.id!
+    avatars?.find((x) => x.id === user?.styles?.avatarId)?.id!
   );
-  useEffect(() => console.log("AVATAR", selectedAvatar), [selectedAvatar]);
 
   const back = () => {
     navigation.goBack();
@@ -114,7 +113,10 @@ export const EditProfileScreen = () => {
                     intensity={10}
                   />
                   <Avatar
-                    source={AVATARS.find((x) => x.id === selectedAvatar)?.src}
+                    source={{
+                      uri: avatars?.find((x) => x.id === selectedAvatar)?.style
+                        .url,
+                    }}
                     className="w-[154px] h-[154px]"
                   />
                 </View>
@@ -148,7 +150,7 @@ export const EditProfileScreen = () => {
           </View>
         </View>
       ) : (
-        <View className="flex-1">
+        <View className="flex-1 flex-col justify-between">
           <View className="w-[90%] mx-auto" style={{ zIndex: 10 }}>
             <Pressable onPress={handleBackPress}>
               <IconContainer className="bg-[#222222]">
@@ -156,16 +158,13 @@ export const EditProfileScreen = () => {
               </IconContainer>
             </Pressable>
           </View>
-          <View className="flex-1 justify-center items-center">
+          <View className="">
             <AvatarPicker
               onSelect={setSelectedAvatar}
               avatars={avatars ?? []}
             />
           </View>
-          <View
-            className="absolute left-0 right-0"
-            style={{ bottom: insets.bottom + 28 }}
-          >
+          <View style={{ bottom: insets.bottom + 28 }}>
             <Button
               onPress={() => setStep(0)}
               text={"Сохранить"}

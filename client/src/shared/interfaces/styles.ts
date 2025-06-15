@@ -13,3 +13,7 @@ export interface AvatarStyle extends Style {
     url: string;
   };
 }
+
+export interface UserStyles {
+  avatarId: string;
+}
