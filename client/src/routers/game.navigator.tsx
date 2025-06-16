@@ -26,6 +26,7 @@ export const GameNavigator = () => {
   const { gameId } = route.params;
 
   const { emit, reconnect } = useSocket();
+  const location = useGeolocation();
   const { game, setGame } = useGameStore();
   const { data: initialGame, isLoading, error } = useGame(gameId);
 
@@ -45,6 +46,15 @@ export const GameNavigator = () => {
       }
     };
   }, [isLoading, error, initialGame]);
+
+  useEffect(() => {
+    if (location) {
+      console.log("Emit location update");
+      emit("locationUpdate", {
+        location: { lon: location[0], lat: location[1] || 0 },
+      });
+    }
+  }, [location]);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

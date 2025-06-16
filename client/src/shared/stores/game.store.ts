@@ -7,7 +7,7 @@ import { Coords } from "../interfaces/coords";
 
 interface GameState {
   game: Game | null;
-  setGame: (game: Game) => void;
+  setGame: (game: Game | null) => void;
   updateStatus: (newState: GameStatus) => void;
   addPlayer: (player: Player) => void;
   removePlayer: (userId: string) => void;
