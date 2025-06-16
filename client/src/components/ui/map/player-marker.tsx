@@ -11,6 +11,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Avatar } from "../avatar";
+import { Coords } from "@/shared/interfaces/coords";
 
 const AnimatedMarkerView = Animated.createAnimatedComponent(Mapbox.MarkerView);
 
@@ -20,12 +21,15 @@ export const PlayerMarker = ({
   avatarSrc,
   pulse = false,
 }: {
-  coordinate: [number, number];
+  coordinate: Coords;
   name: string;
   avatarSrc: any;
   pulse?: boolean;
 }) => {
-  const [animatedProps, animate] = useAnimatedCoord(coordinate);
+  const [animatedProps, animate] = useAnimatedCoord([
+    coordinate.lon,
+    coordinate.lat,
+  ]);
 
   const pulseScale = useSharedValue(1);
   const pulseOpacity = useSharedValue(0.5);
@@ -50,8 +54,8 @@ export const PlayerMarker = ({
   useEffect(() => {
     if (coordinate) {
       animate({
-        latitude: coordinate[1],
-        longitude: coordinate[0],
+        latitude: coordinate.lat,
+        longitude: coordinate.lon,
         duration: 500,
       });
     }
@@ -64,7 +68,7 @@ export const PlayerMarker = ({
 
   return (
     <AnimatedMarkerView
-      coordinate={coordinate}
+      coordinate={[coordinate.lon, coordinate.lat]}
       anchor={{ x: 0.5, y: 0.5 }}
       animatedProps={animatedProps}
       allowOverlap={false}

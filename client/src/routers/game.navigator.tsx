@@ -10,6 +10,7 @@ import { MainStackParamList } from "./main.navigator";
 import { useEffect } from "react";
 import { useGameStore } from "@/shared/stores/game.store";
 import { useSocket } from "@/shared/hooks/useSocket";
+import { useGeolocation } from "@/shared/hooks/useGeolocation";
 
 export type GameStackParamList = {
   Lobby: undefined;
@@ -21,8 +22,6 @@ type GameStackRoute = RouteProp<MainStackParamList, "GameStack">;
 const Stack = createStackNavigator<GameStackParamList>();
 
 export const GameNavigator = () => {
-  const navigation = useNavigation<StackNavigationProp<GameStackParamList>>();
-
   const route = useRoute<GameStackRoute>();
   const { gameId } = route.params;
 
@@ -46,23 +45,6 @@ export const GameNavigator = () => {
       }
     };
   }, [isLoading, error, initialGame]);
-
-  useEffect(() => {
-    if (!game?.state) return;
-
-    switch (game.state) {
-      case "lobby":
-        navigation.navigate("Lobby");
-        break;
-      case "game":
-        navigation.navigate("Game");
-        break;
-      case "poll":
-        break;
-      case "finished":
-        break;
-    }
-  }, [game?.state]);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

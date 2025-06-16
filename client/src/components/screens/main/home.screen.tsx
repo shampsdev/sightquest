@@ -30,7 +30,9 @@ export const HomeScreen = () => {
   const createGameHandler = async () => {
     const game = await createGameMutation.mutateAsync();
     console.log(game);
-    navigation.navigate("GameStack", { gameId: game.id });
+    navigation.navigate("GameStack", {
+      gameId: game.id,
+    });
   };
 
   const joinHandler = async (id: string) => {
@@ -55,13 +57,12 @@ export const HomeScreen = () => {
         {location && user && (
           <>
             <PlayerMarker
-              coordinate={location}
+              coordinate={{ lon: location[0], lat: location[1] }}
               name={user?.name ?? user.username}
-              avatarSrc={
-                user.styles?.avatarId
-                  ? AVATARS.find((x) => x.id === user.styles!.avatarId)?.src
-                  : AVATARS[0].src
-              }
+              avatarSrc={{
+                uri: avatars?.find((x) => x.id === user.styles?.avatarId)?.style
+                  .url,
+              }}
             />
             <Camera
               defaultSettings={{

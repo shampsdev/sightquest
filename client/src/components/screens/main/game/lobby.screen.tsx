@@ -12,14 +12,15 @@ import { useGameStore } from "@/shared/stores/game.store";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-type LobbyRoute = RouteProp<GameStackParamList, "Lobby">;
+type NavProp = StackNavigationProp<GameStackParamList, "Lobby">;
 
 export const LobbyScreen = () => {
   const { emit } = useSocket();
-  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+  const navigation = useNavigation<NavProp>();
   const { game } = useGameStore();
   const { user } = useAuthStore();
   const { data: avatars } = useStyles({ type: "avatar" });
@@ -31,6 +32,12 @@ export const LobbyScreen = () => {
   const back = () => {
     navigation.goBack();
   };
+
+  useEffect(() => {
+    if (game?.state === "game") {
+      navigation.navigate("Game");
+    }
+  }, [game?.state]);
 
   return (
     <SafeAreaView className="flex-1 bg-bg_primary">

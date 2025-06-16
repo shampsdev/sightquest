@@ -6,7 +6,7 @@ import { AVATARS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { View, Pressable, SafeAreaView, ScrollView, Text } from "react-native";
+import { Pressable, SafeAreaView, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type HistoryRouteProp = RouteProp<MainStackParamList, "History">;

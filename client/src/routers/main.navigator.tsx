@@ -4,12 +4,14 @@ import { HistoryScreen } from "@/components/screens/main/history.screen";
 import { HomeScreen } from "@/components/screens/main/home.screen";
 import { ShopScreen } from "@/components/screens/main/shop.screen";
 import { createStackNavigator } from "@react-navigation/stack";
-import { GameNavigator } from "./game.navigator";
+import { GameNavigator, GameStackParamList } from "./game.navigator";
 
 export type MainStackParamList = {
   Account: undefined;
   Home: undefined;
-  GameStack: { gameId: string };
+  GameStack: {
+    gameId: string;
+  };
   History: { gameId: string };
   Shop: undefined;
   EditProfile: undefined;
