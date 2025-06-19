@@ -1,25 +1,43 @@
 import { ImageSourcePropType, Text, View } from "react-native";
 import { Avatar } from "./avatar";
+import { useEffect } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface AvatarStackProps {
   avatars: ImageSourcePropType[];
+  className?: string;
+  avatarWidth?: number;
 }
 
-export const AvatarStack = ({ avatars }: AvatarStackProps) => {
+export const AvatarStack = ({
+  avatars,
+  className,
+  avatarWidth,
+}: AvatarStackProps) => {
+  const AVATAR_WIDTH = avatarWidth ? avatarWidth : 40;
   const positionClasses = ["left-0 z-1", "left-10 z-10", "left-20 z-20"];
   const DISPLAY_AVATARS = 3;
-  const hiddenAvatarsCount = avatars.length - DISPLAY_AVATARS;
+  const hiddenAvatarsCount = avatars?.length - DISPLAY_AVATARS;
   const showedAvatarsCount =
-    avatars.length >= DISPLAY_AVATARS ? DISPLAY_AVATARS : avatars.length;
+    avatars?.length >= DISPLAY_AVATARS ? DISPLAY_AVATARS : avatars?.length;
 
-  const width = DISPLAY_AVATARS * 40;
-  avatars.length > 2 ? 40 * showedAvatarsCount : 15 * showedAvatarsCount;
+  const width = showedAvatarsCount * AVATAR_WIDTH;
+  avatars?.length > 2
+    ? AVATAR_WIDTH * showedAvatarsCount
+    : 15 * showedAvatarsCount;
 
+  console.log(avatarWidth, avatars);
   return (
-    <View className="flex flex-row h-[48px] relative" style={{ width: width }}>
-      {avatars.slice(0, DISPLAY_AVATARS).map((avatar, index) => (
+    <View
+      className="flex flex-row h-[48px] items-center relative"
+      style={{ width: width }}
+    >
+      {avatars?.slice(0, DISPLAY_AVATARS).map((avatar, index) => (
         <Avatar
-          className={`absolute ${positionClasses[index]}`}
+          className={twMerge(
+            `absolute ${positionClasses[index]} w-[${AVATAR_WIDTH}px]`,
+            className
+          )}
           key={index}
           source={avatar}
         />

@@ -14,12 +14,13 @@ import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
 import { RouteMarker } from "@/components/ui/map/route-marker";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { AVATARS } from "@/constants";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
 import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useStyles } from "@/shared/api/hooks/useStyles";
+import React from "react";
+import { useGameStore } from "@/shared/stores/game.store";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -27,9 +28,10 @@ export const HomeScreen = () => {
   const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
 
+  const { game, setGame } = useGameStore();
+
   const createGameHandler = async () => {
     const game = await createGameMutation.mutateAsync();
-    console.log(game);
     navigation.navigate("GameStack", {
       gameId: game.id,
     });

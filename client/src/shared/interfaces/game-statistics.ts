@@ -1,9 +1,10 @@
+import { ImageSourcePropType } from "react-native";
 import { Route } from "./route";
 
 export interface UserStatistic {
   score: number;
   username: string;
-  avatar: string;
+  avatar: ImageSourcePropType;
 }
 
 export interface GameStatistics {

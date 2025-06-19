@@ -49,7 +49,6 @@ export const GameNavigator = () => {
 
   useEffect(() => {
     if (location) {
-      console.log("Emit location update");
       emit("locationUpdate", {
         location: { lon: location[0], lat: location[1] || 0 },
       });

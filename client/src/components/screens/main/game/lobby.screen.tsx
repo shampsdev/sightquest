@@ -9,7 +9,7 @@ import { useStyles } from "@/shared/api/hooks/useStyles";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
-import { RouteProp, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
@@ -34,7 +34,7 @@ export const LobbyScreen = () => {
   };
 
   useEffect(() => {
-    if (game?.state === "game") {
+    if (game && game?.state === "game") {
       navigation.navigate("Game");
     }
   }, [game?.state]);
