@@ -1,5 +1,5 @@
 import { Avatar } from "@/components/ui/avatar";
-import { AvatarStack } from "@/components/ui/avatar-stack";
+import { AvatarStack, AvatarStackSmall } from "@/components/ui/avatar-stack";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import { PlayerMarker } from "@/components/ui/map/player-marker";
@@ -98,7 +98,7 @@ export const GameScreen = () => {
             onPress={() => leaderboardSheet.current?.snapToIndex(0)}
             className="bg-[#67676780] gap-[10px] items-center flex flex-row justify-center rounded-full px-[20px]"
           >
-            <AvatarStack
+            <AvatarStackSmall
               avatars={
                 players
                   ?.map((player) => ({
