@@ -158,7 +158,7 @@ export const SignUpWidget = () => {
           <AvatarPicker
             onSelect={setSelectedAvatar}
             avatars={avatars ?? []}
-            className="mt-[15%]"
+            className="mt-[15%] z-20"
           />
           <Button className="mt-32" text={"Готово!"} onPress={handleFinish} />
         </View>
