@@ -38,7 +38,6 @@ export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
 
   const scrollViewRef = useRef<ScrollViewType>(null);
 
-  const translateY = useSharedValue(100);
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -50,7 +49,6 @@ export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
   }, [visible]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
     opacity: opacity.value,
   }));
 
