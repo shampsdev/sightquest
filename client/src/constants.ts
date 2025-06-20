@@ -32,3 +32,7 @@ export const ACTIVITIES: Record<"wins" | "matches", ImageSourcePropType> = {
 } as const;
 
 export const SHOP_SECTIONS = ["Аватарки", "Маршруты", "Ник"] as const;
+
+export const DEFAULT_MAP_CAMERA_LOCATION: [number, number] = [
+  30.308354, 59.955536,
+] as const;

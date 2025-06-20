@@ -37,6 +37,8 @@ export default function App() {
     "Onest-Regular": require("./assets/fonts/Onest-Regular.ttf"),
     "Onest-SemiBold": require("./assets/fonts/Onest-SemiBold.ttf"),
     "Onest-Thin": require("./assets/fonts/Onest-Thin.ttf"),
+
+    "Inter-Regular": require("./assets/fonts/Inter-Variable.ttf"),
   });
 
   const { auth, token } = useAuthStore();

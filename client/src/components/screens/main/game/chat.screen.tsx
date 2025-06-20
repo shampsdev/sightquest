@@ -1,0 +1,145 @@
+import { IconContainer } from "@/components/ui/icons/icon-container";
+import { Icons } from "@/components/ui/icons/icons";
+import { PlayerMessageBlock } from "@/components/widgets/player-message-block";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { useSocket } from "@/shared/hooks/useSocket";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { useGameStore } from "@/shared/stores/game.store";
+import { BlurView } from "expo-blur";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+  ScrollView as ScrollViewType,
+  Platform,
+} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { twMerge } from "tailwind-merge";
+
+interface ChatScreenProps {
+  visible?: boolean;
+  onClose: () => void;
+}
+
+export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
+  const { emit } = useSocket();
+  const [message, setMessage] = useState("");
+
+  const { data: avatars } = useStyles({ type: "avatar" });
+  const { chatMessages, game } = useGameStore();
+  const { user } = useAuthStore();
+
+  const scrollViewRef = useRef<ScrollViewType>(null);
+
+  const translateY = useSharedValue(100);
+  const opacity = useSharedValue(0);
+
+  useEffect(() => {
+    if (visible) {
+      opacity.value = withTiming(1, { duration: 300 });
+    } else {
+      opacity.value = withTiming(0, { duration: 300 });
+    }
+  }, [visible]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+    opacity: opacity.value,
+  }));
+
+  const sendMessage = () => {
+    if (message.trim()) {
+      emit("broadcast", {
+        data: message,
+      });
+      setMessage("");
+    }
+  };
+
+  useEffect(() => {
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  }, [chatMessages]);
+
+  return (
+    <Animated.View
+      style={animatedStyle}
+      className="absolute w-full h-full flex justify-end items-center"
+    >
+      <Pressable
+        onPress={onClose}
+        className="absolute top-0 left-0 right-0 bottom-0"
+      />
+      <BlurView
+        intensity={100}
+        tint="dark"
+        className="absolute w-full h-full z-10"
+      />
+      <View
+        className={twMerge(
+          "py-[40px] px-[36px] h-[85%] rounded-[30px] w-full z-30 flex flex-col justify-end gap-8"
+        )}
+      >
+        <ScrollView
+          ref={scrollViewRef}
+          style={{ flex: 1 }}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "flex-end",
+            gap: 24,
+            paddingBottom: 10,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
+          {chatMessages.map((messageGroup, index) => (
+            <PlayerMessageBlock
+              key={index}
+              nickname={
+                messageGroup.playerId !== user?.id
+                  ? game?.players.find(
+                      (player) => player.user.id === messageGroup.playerId
+                    )?.user.name ?? ""
+                  : undefined
+              }
+              avatar={{
+                uri: avatars?.find(
+                  (x) =>
+                    x.id ===
+                    game?.players.find(
+                      (player) => player.user.id === messageGroup.playerId
+                    )?.user.styles?.avatarId
+                )?.style.url,
+              }}
+              messages={messageGroup.messages}
+              alignRight={messageGroup.playerId === user?.id}
+            />
+          ))}
+        </ScrollView>
+
+        <View className="flex flex-row gap-[10px] items-center justify-center w-full">
+          <TextInput
+            className={twMerge(
+              "rounded-full flex-1 border-text_secondary border-[1px] text-[16px] text-[#B6B6B6]  px-[20px]",
+              Platform.OS === "ios" ? "py-[15px]" : ""
+            )}
+            placeholder="Сообщение..."
+            placeholderTextColor="#B6B6B6"
+            value={message}
+            onChangeText={setMessage}
+          />
+          <Pressable onPress={sendMessage}>
+            <IconContainer className="bg-accent_primary">
+              <Icons.Send />
+            </IconContainer>
+          </Pressable>
+        </View>
+      </View>
+    </Animated.View>
+  );
+};

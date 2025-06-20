@@ -17,9 +17,13 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Camera } from "@rnmapbox/maps";
 import { StatusBar } from "expo-status-bar";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 import { ImageSourcePropType, Pressable, Text, View } from "react-native";
+import { ChatScreen } from "./chat.screen";
+import { twMerge } from "tailwind-merge";
+import { Button } from "@/components/ui/button";
+import { DEFAULT_MAP_CAMERA_LOCATION } from "@/constants";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -28,24 +32,28 @@ type NavProp = StackNavigationProp<
 
 export const GameScreen = () => {
   const navigation = useNavigation<NavProp>();
-  const { game, updateStatus } = useGameStore();
+  const { game, updateStatus, resetChat, setGame } = useGameStore();
+
+  const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
+  const [chatOpened, setChatOpened] = useState<boolean>(false);
 
   const { user } = useAuthStore();
 
-  const { emit, isConnected } = useSocket();
+  const { emit } = useSocket();
 
   const { data: avatars } = useStyles({ type: "avatar" });
 
   const location = useGeolocation();
 
-  const players = game?.players;
+  const players = game?.players ?? [];
 
   const leaderboardSheet = useRef<BottomSheet>(null);
 
   const exit = () => {
     emit("leaveGame");
     updateStatus("leaved");
-
+    setGame(null);
+    resetChat();
     navigation.navigate("Home");
   };
 
@@ -55,6 +63,7 @@ export const GameScreen = () => {
         location: { lon: location[0], lat: location[1] },
       });
   }, [location]);
+
   return (
     <View className="flex-1">
       <Map>
@@ -76,26 +85,50 @@ export const GameScreen = () => {
                 }}
               />
             ))}
-            <Camera
-              defaultSettings={{
-                centerCoordinate: location,
-                zoomLevel: 1,
-              }}
-            />
           </>
         )}
+        <Camera
+          defaultSettings={{
+            centerCoordinate: location || DEFAULT_MAP_CAMERA_LOCATION,
+            zoomLevel: 12,
+          }}
+        />
       </Map>
+      {!chatOpened && (
+        <View className="absolute bottom-[36px] flex flex-row left-0 right-0 z-10">
+          <Button
+            onPress={() => {
+              if (leaderboardOpened) {
+                leaderboardSheet.current?.close();
+              }
+              setChatOpened(true);
+            }}
+            text="Chat"
+            className="mx-auto"
+          />
+        </View>
+      )}
 
-      <View className="absolute top-20 w-full">
+      <View className="absolute top-20 w-full z-20">
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
-          <Pressable onPress={exit}>
+          <Pressable onPress={chatOpened ? () => setChatOpened(false) : exit}>
             <IconContainer>
-              <Icons.Exit />
+              {chatOpened && <Icons.Back />}
+              {!chatOpened && <Icons.Exit />}
             </IconContainer>
           </Pressable>
 
           <Pressable
-            onPress={() => leaderboardSheet.current?.snapToIndex(0)}
+            onPress={() => {
+              setChatOpened(false);
+
+              setLeaderboardOpened(!leaderboardOpened);
+              if (leaderboardOpened) {
+                leaderboardSheet.current?.close();
+              } else {
+                leaderboardSheet.current?.snapToIndex(0);
+              }
+            }}
             className="bg-[#67676780] gap-[10px] items-center flex flex-row justify-center rounded-full px-[20px]"
           >
             <AvatarStackSmall
@@ -110,7 +143,6 @@ export const GameScreen = () => {
                     (avatar) => avatar !== undefined
                   ) as ImageSourcePropType[]
               }
-              className="h-[25px]"
               avatarWidth={25}
             />
             <View className="flex flex-row items-center">
@@ -138,6 +170,8 @@ export const GameScreen = () => {
           )}
         </View>
       </View>
+
+      <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
 
       <LeaderboardSheet
         ref={leaderboardSheet}

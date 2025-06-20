@@ -1,23 +1,12 @@
-import React, {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
-import { View, Text as RNText, TextInput as RNTextInput } from "react-native";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { Player } from "@/shared/interfaces/player";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import BottomSheet, {
   BottomSheetProps,
-  BottomSheetTextInput,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import { Button } from "../ui/button";
-import { twMerge } from "tailwind-merge";
-import { TextInput } from "../ui/textinput";
-import { Player } from "@/shared/interfaces/player";
-import { UserLobbyPreview } from "./user/user-preview.lobby";
-import { useStyles } from "@/shared/api/hooks/useStyles";
-import { useAuthStore } from "@/shared/stores/auth.store";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import { View } from "react-native";
 import { UserPreview } from "./user/user-preview";
 
 export interface LeaderboardSheetProps extends BottomSheetProps {

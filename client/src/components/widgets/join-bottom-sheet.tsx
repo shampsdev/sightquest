@@ -5,13 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  View,
-  Text as RNText,
-  TextInput as RNTextInput,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { View, Text as RNText, TextInput as RNTextInput } from "react-native";
 import BottomSheet, {
   BottomSheetProps,
   BottomSheetTextInput,
