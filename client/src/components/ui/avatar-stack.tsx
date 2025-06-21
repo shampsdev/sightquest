@@ -1,14 +1,47 @@
-import { View, Text, ImageSourcePropType } from "react-native";
+import { ImageSourcePropType, Text, View } from "react-native";
 import { Avatar } from "./avatar";
+import { useEffect } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface AvatarStackProps {
   avatars: ImageSourcePropType[];
+  className?: string;
+  avatarWidth?: number;
 }
+
+export const AvatarStackSmall = ({
+  avatars,
+  className,
+  avatarWidth,
+}: AvatarStackProps) => {
+  const AVATAR_WIDTH = avatarWidth ? avatarWidth : 20;
+  const positionClasses = ["left-0 z-1", "left-5 z-10", "left-20 z-20"];
+  const DISPLAY_AVATARS = 2;
+  const showedAvatarsCount =
+    avatars?.length >= DISPLAY_AVATARS ? DISPLAY_AVATARS : avatars?.length;
+
+  const width = showedAvatarsCount * AVATAR_WIDTH;
+
+  return (
+    <View
+      className="flex flex-row h-[48px] items-center relative"
+      style={{ width: width }}
+    >
+      {avatars?.slice(0, DISPLAY_AVATARS).map((avatar, index) => (
+        <Avatar
+          className={twMerge(`absolute ${positionClasses[index]}`, className)}
+          style={{ width: AVATAR_WIDTH, height: AVATAR_WIDTH }}
+          key={index}
+          source={avatar}
+        />
+      ))}
+    </View>
+  );
+};
 
 export const AvatarStack = ({ avatars }: AvatarStackProps) => {
   const positionClasses = ["left-0 z-1", "left-10 z-10", "left-20 z-20"];
   const DISPLAY_AVATARS = 3;
-  const hiddenAvatarsCount = avatars.length - DISPLAY_AVATARS;
   const showedAvatarsCount =
     avatars.length >= DISPLAY_AVATARS ? DISPLAY_AVATARS : avatars.length;
 
@@ -24,13 +57,6 @@ export const AvatarStack = ({ avatars }: AvatarStackProps) => {
           source={avatar}
         />
       ))}
-      {hiddenAvatarsCount > 0 && (
-        <View className="absolute top-[-6px] right-[-10px] rounded-full bg-accent_primary z-40 px-[8px] py-[4px]">
-          <Text className="font-bounded-regular text-text_primary text-[12px]">
-            +{hiddenAvatarsCount}
-          </Text>
-        </View>
-      )}
     </View>
   );
 };

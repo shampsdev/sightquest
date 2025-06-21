@@ -29,7 +29,7 @@ export const SignInScreen = () => {
   const handleLogin = async () => {
     try {
       const response = await loginRequest(username, password);
-      login({ username }, response.token);
+      login(response.user, response.token);
     } catch (error: any) {
       console.error(error);
       Alert.alert("Ошибка входа", "Неверный логин или пароль");

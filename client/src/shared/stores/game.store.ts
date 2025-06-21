@@ -4,15 +4,32 @@ import { Player } from "../interfaces/player";
 import { GameState as GameStatus } from "../interfaces/game-state";
 import { socket } from "../instances/socket.instance";
 import { Coords } from "../interfaces/coords";
+interface ChatMessageGroup {
+  playerId: string;
+  messages: any[];
+}
+
+interface ChatMessage {
+  playerId: string;
+  data: any;
+}
 
 interface GameState {
   game: Game | null;
-  setGame: (game: Game) => void;
+  chatMessages: ChatMessageGroup[];
+  setGame: (game: Game | null) => void;
   updateStatus: (newState: GameStatus) => void;
   addPlayer: (player: Player) => void;
   removePlayer: (userId: string) => void;
   updatePlayerLocation: (userId: string, location: Coords) => void;
+  addMessage: (message: ChatMessage) => void;
+  resetChat: () => void;
 }
+
+const initialState: Pick<GameState, "game" | "chatMessages"> = {
+  game: null,
+  chatMessages: [],
+};
 
 export const useGameStore = create<GameState>((set, get) => {
   const updateStatus = (newState: GameStatus) =>
@@ -61,6 +78,35 @@ export const useGameStore = create<GameState>((set, get) => {
       };
     });
 
+  const addMessage = (message: ChatMessage) =>
+    set((state) => {
+      const lastGroup = state.chatMessages[state.chatMessages.length - 1];
+
+      if (lastGroup && lastGroup.playerId === message.playerId) {
+        const updatedMessages = [...state.chatMessages];
+        updatedMessages[updatedMessages.length - 1] = {
+          ...lastGroup,
+          messages: [...lastGroup.messages, message.data],
+        };
+        return { chatMessages: updatedMessages };
+      }
+
+      return {
+        chatMessages: [
+          ...state.chatMessages,
+          { playerId: message.playerId, messages: [message.data] },
+        ],
+      };
+    });
+
+  const resetChat = () => {
+    set({ chatMessages: [] });
+  };
+
+  socket.on("broadcasted", ({ player, data }) => {
+    addMessage({ playerId: player.user.id ?? "", data: data });
+  });
+
   socket.on("game", ({ game }) => {
     set({ game });
   });
@@ -86,11 +132,13 @@ export const useGameStore = create<GameState>((set, get) => {
   });
 
   return {
-    game: null,
+    ...initialState,
     setGame: (game) => set({ game }),
-    updateStatus: updateStatus,
-    addPlayer: addPlayer,
-    removePlayer: removePlayer,
-    updatePlayerLocation: updatePlayerLocation,
+    updateStatus,
+    addPlayer,
+    removePlayer,
+    updatePlayerLocation,
+    addMessage,
+    resetChat,
   };
 });

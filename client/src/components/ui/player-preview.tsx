@@ -1,9 +1,8 @@
-import { Animated, View, Text, Image, ImageSourcePropType } from "react-native";
-import { PlayerMarker } from "./map/player-marker";
+import { NicknameType } from "@/shared/interfaces/nickname";
+import { Image, ImageSourcePropType, View } from "react-native";
+import { twMerge } from "tailwind-merge";
 import { Avatar } from "./avatar";
 import { Nickname } from "./nickname";
-import { NicknameType } from "@/shared/interfaces/nickname";
-import { twMerge } from "tailwind-merge";
 
 interface PlayerPreviewProps {
   name: string;

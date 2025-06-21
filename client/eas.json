@@ -17,6 +17,7 @@
       "distribution": "internal",
       "autoIncrement": true,
       "env": {
+        "MAPBOX_STYLE_URL": "mapbox://styles/mikedegeofroy/cma57ielt004801s3gkciegzd",
         "API_URL": "https://dev.sightquest.ru/",
         "SOCKET_URL": "wss://dev.sightquest.ru/",
         "MAPBOX_TOKEN": "sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA"
@@ -24,7 +25,11 @@
     },
     "production": {
       "autoIncrement": true,
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
+        "MAPBOX_STYLE_URL": "mapbox://styles/mikedegeofroy/cma57ielt004801s3gkciegzd",
         "API_URL": "https://sightquest.ru/",
         "SOCKET_URL": "wss://sightquest.ru/",
         "MAPBOX_TOKEN": "sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA"

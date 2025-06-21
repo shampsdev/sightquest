@@ -11,6 +11,8 @@ function createSocket(): Sock {
   });
 
   if (__DEV__) {
+    console.info(`[socket] > connecting to ${SOCKET_URL}`);
+
     const originalOnevent = sock.onevent;
     sock.onevent = function (packet: any) {
       const [event, ...args] = packet.data;
@@ -43,6 +45,11 @@ export class SocketManager<S extends EventMap, C extends EventMap> {
 
   disconnect() {
     this.sock.disconnect();
+  }
+
+  reconnect() {
+    this.sock.disconnect();
+    this.sock.connect();
   }
 
   on<K extends keyof S>(event: K, cb: S[K], signal?: AbortSignal): () => void {

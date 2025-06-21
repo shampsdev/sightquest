@@ -1,32 +1,28 @@
-import { useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  ImageSourcePropType,
-  LayoutChangeEvent,
-  useWindowDimensions,
-  Pressable,
-  Image,
-} from "react-native";
-import { twMerge } from "tailwind-merge";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import {
   Canvas,
   Fill,
-  LinearGradient,
-  vec,
   Group,
-  rrect,
+  LinearGradient,
   rect,
+  rrect,
+  vec,
 } from "@shopify/react-native-skia";
 import { Skia } from "@shopify/react-native-skia/lib/module/skia";
-import { Camera, MapView } from "@rnmapbox/maps";
-import { AVATARS, MAPBOX_STYLE_URL } from "@/constants";
-import { PlayerMarker } from "../ui/map/player-marker";
-import { useAuthStore } from "@/shared/stores/auth.store";
+import { useCallback, useState } from "react";
+import {
+  Image,
+  LayoutChangeEvent,
+  Pressable,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import { twMerge } from "tailwind-merge";
 import { PlayerPreview } from "../ui/player-preview";
 
 export interface NicknameCardProps {
-  avatar: ImageSourcePropType;
   title: string;
   subtitle: string;
   buttonAction?: () => void;
@@ -36,7 +32,6 @@ export interface NicknameCardProps {
 }
 
 export const NicknameCard = ({
-  avatar,
   title,
   subtitle,
   buttonAction,
@@ -45,6 +40,7 @@ export const NicknameCard = ({
   className,
 }: NicknameCardProps) => {
   const { user } = useAuthStore();
+  const { data: avatars } = useStyles({ type: "avatar", bought: true });
 
   const { width } = useWindowDimensions();
   const [cardHeight, setCardHeight] = useState(100);
@@ -74,11 +70,10 @@ export const NicknameCard = ({
         <PlayerPreview
           name={user?.name ?? user!.username}
           nicknameType={"default"}
-          avatar={
-            user!.avatar
-              ? AVATARS.find((x) => x.id === Number(user!.avatar))?.src
-              : AVATARS[0].src
-          }
+          avatar={{
+            uri: avatars?.find((x) => x.id === user?.styles?.avatarId)?.style
+              .url,
+          }}
           className="absolute top-[20px] z-[100]"
         />
 

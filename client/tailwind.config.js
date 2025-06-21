@@ -23,6 +23,8 @@ module.exports = {
         "onest-regular": ["Onest-Regular"],
         "onest-semibold": ["Onest-SemiBold"],
         "onest-thin": ["Onest-Thin"],
+
+        "inter-regular": ["Inter-Regular"],
       },
     },
     colors: {

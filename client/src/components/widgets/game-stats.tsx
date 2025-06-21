@@ -1,5 +1,5 @@
 import { GameStatistics } from "@/shared/interfaces/game-statistics";
-import { View, Text, Pressable, ImageSourcePropType } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { AvatarStack } from "../ui/avatar-stack";
 import { Icons } from "../ui/icons/icons";
 
@@ -13,14 +13,12 @@ export const GameStats = ({
   route,
   onPress,
 }: GameStatistics & Pressable) => {
-  const avatars = membersStatistics
-    .map((user) => user.avatar)
-    .filter((avatar) => avatar !== undefined);
+  const avatars = membersStatistics.map((user) => user.avatar);
 
   return (
     <Pressable onPress={onPress}>
       <View className="flex w-full flex-row items-center justify-between py-[20px] px-[27.5px]">
-        <AvatarStack avatars={avatars as ImageSourcePropType[]} />
+        <AvatarStack avatars={avatars} />
         <View className="flex flex-col gap-2">
           <Text className="text-text_primary text-[18px] font-bounded-regular">
             {date.toLocaleDateString("ru-RU")}

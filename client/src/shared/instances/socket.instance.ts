@@ -17,7 +17,7 @@ export interface ServerToClientEvents extends EventMap {
     player: Player;
     location: Coords;
   }) => void;
-  broadcasted: ({ from, data }: { from: Player; data: any }) => void;
+  broadcasted: ({ player, data }: { player: Player; data: any }) => void;
   startGame: () => void;
   endGame: () => void;
   error: ({ error }: { error: string }) => void;

@@ -8,10 +8,17 @@ import { MainStackParamList } from "@/routers/main.navigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useRef, useState } from "react";
-import { View, Pressable, SafeAreaView, ScrollView, Text } from "react-native";
+import { View, Pressable, SafeAreaView, ScrollView } from "react-native";
 import { RoutesWidget, RouteData } from "@/components/widgets/shop/routes";
 import { NicknamesWidget } from "@/components/widgets/shop/nicknames";
 import { Header } from "@/components/ui/header";
+import { StatusBar } from "expo-status-bar";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { setAvatar } from "@/shared/api/styles.api";
+import { getMe } from "@/shared/api/auth.api";
+import { Style } from "@/shared/interfaces/styles";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -19,7 +26,13 @@ export const ShopScreen = () => {
     selectedSection: "Аватарки",
   });
 
+  const insets = useSafeAreaInsets();
+
   const [selectedSeciton, setSelectedSection] = useState<string>("Аватарки");
+
+  const { data: avatars, isFetched: isAvatarsFetched } = useStyles({
+    type: "avatar",
+  });
 
   const cards: AvatarCardProps[] = [
     {
@@ -73,13 +86,32 @@ export const ShopScreen = () => {
     },
   ];
 
+  const { user, setUser } = useAuthStore();
+
   const back = () => {
     navigation.goBack();
   };
 
+  const handleButton = async (avatar: Style) => {
+    if (avatar.bought) {
+      try {
+        await setAvatar(avatar.id);
+        const updatedUser = await getMe();
+        setUser(updatedUser);
+      } catch (error) {
+        alert("Произошла ошибка при установке аватара");
+      }
+    } else {
+      alert("Mocked avatar purchase");
+    }
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-bg_primary">
-      <ScrollView className="w-full pt-[36px]">
+    <SafeAreaView
+      className="flex-1 bg-bg_primary"
+      style={{ paddingTop: insets.top || 20 }}
+    >
+      <ScrollView className="w-full">
         <View className="w-[90%] gap-[36px] relative mx-auto flex-col items-center">
           <View className="absolute w-full flex-row justify-between items-center">
             <Pressable onPress={back}>
@@ -102,18 +134,30 @@ export const ShopScreen = () => {
             />
           </View>
 
-          {sectionRef.current?.selectedSection === "Аватарки" && (
-            <AvatarsWidget cards={cards} className="pb-[70px]" />
-          )}
+          {sectionRef.current?.selectedSection === "Аватарки" &&
+            isAvatarsFetched && (
+              <AvatarsWidget
+                cards={avatars!.map((avatar) => ({
+                  avatar: avatar.style.url,
+                  title: avatar.title,
+                  withButton: true,
+                  bought: avatar.bought,
+                  buttonAction: async () => {
+                    await handleButton(avatar);
+                  },
+                  subtitle: String(avatar.priceRoubles),
+                  disabled: avatar.id === user?.styles?.avatarId,
+                }))}
+                className="pb-[70px]"
+              />
+            )}
 
           {sectionRef.current?.selectedSection === "Маршруты" && (
             <RoutesWidget routes={routes} />
           )}
-          {sectionRef.current?.selectedSection === "Ник" && (
-            <NicknamesWidget cards={cards} className="pb-[70px]" />
-          )}
         </View>
       </ScrollView>
+      <StatusBar style="light" />
     </SafeAreaView>
   );
 };

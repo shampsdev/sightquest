@@ -1,1 +1,1 @@
-export type GameState = "lobby" | "game" | "poll" | "finished";
+export type GameState = "lobby" | "game" | "poll" | "finished" | "leaved";
