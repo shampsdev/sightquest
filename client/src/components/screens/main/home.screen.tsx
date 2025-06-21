@@ -53,6 +53,8 @@ export const HomeScreen = () => {
 
   const { data: avatars } = useStyles({ type: "avatar", bought: true });
 
+  useEffect(() => console.log(location, user), [location, user]);
+
   return (
     <View className="flex-1">
       <Map>

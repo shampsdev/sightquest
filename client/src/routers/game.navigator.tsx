@@ -27,7 +27,7 @@ export const GameNavigator = () => {
 
   const { emit, reconnect } = useSocket();
   const location = useGeolocation();
-  const { game, setGame } = useGameStore();
+  const { game, setGame, resetChat } = useGameStore();
   const { data: initialGame, isLoading, error } = useGame(gameId);
 
   useEffect(() => {
@@ -39,12 +39,6 @@ export const GameNavigator = () => {
       setGame(initialGame);
       emit("joinGame", { gameId: initialGame.id });
     }
-
-    return () => {
-      if (!isLoading && !error && initialGame !== undefined) {
-        reconnect();
-      }
-    };
   }, [isLoading, error, initialGame]);
 
   useEffect(() => {
@@ -54,6 +48,13 @@ export const GameNavigator = () => {
       });
     }
   }, [location]);
+
+  useEffect(() => {
+    return () => {
+      setGame(null);
+      resetChat();
+    };
+  }, []);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

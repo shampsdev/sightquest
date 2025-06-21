@@ -98,7 +98,6 @@ export const PlayerMarker = ({
                 : "border-2 border-text_primary"
             }
           />
-
           <Image
             className="absolute h-20 w-20 opacity-50"
             source={require("@/assets/shadow.png")}
