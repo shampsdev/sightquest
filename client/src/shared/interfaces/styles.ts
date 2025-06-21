@@ -6,6 +6,7 @@ export interface Style {
   title: string;
   type: StyleType;
   style: any;
+  bought: boolean;
 }
 
 export interface AvatarStyle extends Style {

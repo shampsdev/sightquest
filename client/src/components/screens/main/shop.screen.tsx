@@ -16,6 +16,9 @@ import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import { useAuthStore } from "@/shared/stores/auth.store";
+import { setAvatar } from "@/shared/api/styles.api";
+import { getMe } from "@/shared/api/auth.api";
+import { Style } from "@/shared/interfaces/styles";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -83,10 +86,24 @@ export const ShopScreen = () => {
     },
   ];
 
-  const { user } = useAuthStore();
+  const { user, setUser } = useAuthStore();
 
   const back = () => {
     navigation.goBack();
+  };
+
+  const handleButton = async (avatar: Style) => {
+    if (avatar.bought) {
+      try {
+        await setAvatar(avatar.id);
+        const updatedUser = await getMe();
+        setUser(updatedUser);
+      } catch (error) {
+        alert("Произошла ошибка при установке аватара");
+      }
+    } else {
+      alert("Mocked avatar purchase");
+    }
   };
 
   return (
@@ -124,8 +141,9 @@ export const ShopScreen = () => {
                   avatar: avatar.style.url,
                   title: avatar.title,
                   withButton: true,
-                  buttonAction: () => {
-                    alert("Mocked purchase");
+                  bought: avatar.bought,
+                  buttonAction: async () => {
+                    await handleButton(avatar);
                   },
                   subtitle: String(avatar.priceRoubles),
                   disabled: avatar.id === user?.styles?.avatarId,
@@ -136,9 +154,6 @@ export const ShopScreen = () => {
 
           {sectionRef.current?.selectedSection === "Маршруты" && (
             <RoutesWidget routes={routes} />
-          )}
-          {sectionRef.current?.selectedSection === "Ник" && (
-            <NicknamesWidget cards={cards} className="pb-[70px]" />
           )}
         </View>
       </ScrollView>

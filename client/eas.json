@@ -25,6 +25,9 @@
     },
     "production": {
       "autoIncrement": true,
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "MAPBOX_STYLE_URL": "mapbox://styles/mikedegeofroy/cma57ielt004801s3gkciegzd",
         "API_URL": "https://sightquest.ru/",

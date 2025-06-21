@@ -28,6 +28,7 @@ export interface AvatarCardProps {
   disabled?: boolean;
   withButton?: boolean;
   className?: string;
+  bought?: boolean;
 }
 
 export const AvatarCard = ({
@@ -38,6 +39,7 @@ export const AvatarCard = ({
   withButton,
   disabled,
   className,
+  bought,
 }: AvatarCardProps) => {
   const { width } = useWindowDimensions();
   const [cardHeight, setCardHeight] = useState(100);
@@ -138,9 +140,10 @@ export const AvatarCard = ({
             }}
             className="flex w-fit rounded-[40px] px-[20px] py-[9px]"
             disabled={disabled}
+            onPress={buttonAction}
           >
             <Text className="text-[12px] font-bounded-regular text-text_primary">
-              Применить
+              {bought ? "Применить" : "Купить"}
             </Text>
           </Pressable>
         )}
