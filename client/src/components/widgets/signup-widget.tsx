@@ -1,23 +1,25 @@
-import {
-  ScrollView,
-  View,
-  Text,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
-import { Button } from "../ui/button";
-import { TextInput } from "../ui/textinput";
+import { getMe, register as registerRequest } from "@/shared/api/auth.api";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { setAvatar } from "@/shared/api/styles.api";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useState } from "react";
-import { register as registerRequest } from "@/shared/api/auth.api";
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { Button } from "../ui/button";
 import { ProgressBarSteps } from "../ui/progress/progress-bar-steps";
+import { TextInput } from "../ui/textinput";
 import { AvatarPicker } from "./avatar-picker";
 
 export const SignUpWidget = () => {
-  const { login } = useAuthStore();
+  const { user, token, login, setToken, setUser } = useAuthStore();
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -25,33 +27,37 @@ export const SignUpWidget = () => {
   const [password, setPassword] = useState("");
 
   const [step, setStep] = useState<0 | 1>(0);
-  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
 
-  const [pendingToken, setPendingToken] = useState<string | null>(null);
+  const { data: avatars, isLoading } = useStyles({
+    type: "avatar",
+    bought: true,
+  });
 
   const handleRegister = async () => {
     try {
-      const response = await registerRequest(email, username, password);
-      setPendingToken(response.token);
+      const response = await registerRequest(email, username, password, name);
+      setToken(response.token);
+      setUser(response.user);
       setStep(1);
     } catch (error: any) {
-      console.error(error);
+      console.error(error, error.response.data);
       Alert.alert("Ошибка регистрации", "Проверьте корректность данных");
     }
   };
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (selectedAvatar === null) {
       Alert.alert("Выбор аватара", "Пожалуйста, выбери аватар");
       return;
     }
 
-    if (!pendingToken) {
-      Alert.alert("Ошибка", "Не удалось завершить регистрацию");
-      return;
-    }
+    setAvatar(selectedAvatar.toString());
+    const updatedUser = await getMe();
 
-    login({ username, avatar: `${selectedAvatar}`, name }, pendingToken);
+    if (updatedUser !== null && token !== null) {
+      login(updatedUser, token);
+    }
   };
 
   return (
@@ -127,26 +133,33 @@ export const SignUpWidget = () => {
           </ScrollView>
         </TouchableWithoutFeedback>
       ) : (
-        <View className="flex-1 items-center gap-16">
-          <ProgressBarSteps
-            totalSteps={2}
-            currentStep={1}
-            config={{
-              dotHeight: 6,
-              gap: 3,
-              indicatorWidth: 49,
-              indicatorWidthSm: 27,
-            }}
-          />
-          <View className="gap-2">
-            <Text className="text-center text-3xl text-text_primary font-bounded-semibold">
-              Аватар
-            </Text>
-            <Text className="text-center text-md text-text_secondary font-onest-medium">
-              Какое лицо покажешь соперникам?
-            </Text>
+        <View className="flex h-[100%] items-center flex-col justify-between">
+          <View className="flex-1 items-center gap-16">
+            <ProgressBarSteps
+              totalSteps={2}
+              currentStep={1}
+              config={{
+                dotHeight: 6,
+                gap: 3,
+                indicatorWidth: 49,
+                indicatorWidthSm: 27,
+              }}
+            />
+            <View className="gap-2">
+              <Text className="text-center text-3xl text-text_primary font-bounded-semibold">
+                Аватар
+              </Text>
+              <Text className="text-center text-md text-text_secondary font-onest-medium">
+                Какое лицо покажешь соперникам?
+              </Text>
+            </View>
           </View>
-          <AvatarPicker onSelect={setSelectedAvatar} />
+
+          <AvatarPicker
+            onSelect={setSelectedAvatar}
+            avatars={avatars ?? []}
+            className="mt-[15%] z-20"
+          />
           <Button className="mt-32" text={"Готово!"} onPress={handleFinish} />
         </View>
       )}

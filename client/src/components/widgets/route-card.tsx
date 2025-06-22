@@ -1,9 +1,9 @@
-import { Route } from "@/shared/interfaces/route";
-import { Camera, Location, MapView } from "@rnmapbox/maps";
-import { View, Text, Pressable, StyleSheet } from "react-native";
 import { MAPBOX_STYLE_URL } from "@/constants";
-import { BlurView } from "expo-blur";
 import { Coords } from "@/shared/interfaces/coords";
+import { Route } from "@/shared/interfaces/route";
+import { Camera, MapView } from "@rnmapbox/maps";
+import { BlurView } from "expo-blur";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export interface RouteCardProps {
   route: Route;

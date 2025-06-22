@@ -38,6 +38,20 @@ module.exports = {
       },
       edgeToEdgeEnabled: true,
       package: "com.shampsdev.sightquest",
+      permissions: [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.WAKE_LOCK",
+        "android.permission.INTERNET",
+        "android.permission.FOREGROUND_SERVICE",
+      ],
+      notification: {
+        channelId: "sightquest-tracking",
+        name: "SightQuest Tracking",
+        priority: "high",
+      },
     },
     extra: {
       mapboxToken: process.env.MAPBOX_TOKEN,

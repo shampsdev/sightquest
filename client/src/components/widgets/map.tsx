@@ -1,6 +1,5 @@
 import { MAPBOX_STYLE_URL, MAPBOX_TOKEN } from "@/constants";
 import Mapbox, { MapView } from "@rnmapbox/maps";
-import { JSX } from "react";
 import { twMerge } from "tailwind-merge";
 
 Mapbox.setAccessToken(MAPBOX_TOKEN);

@@ -1,6 +1,6 @@
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
-import { View, Pressable, Text } from "react-native";
+import { View, Pressable } from "react-native";
 import { Map } from "@/components/widgets/map";
 import { Button } from "@/components/ui/button";
 import { useNavigation } from "@react-navigation/native";
@@ -14,25 +14,31 @@ import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
 import { RouteMarker } from "@/components/ui/map/route-marker";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { AVATARS } from "@/constants";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
-import BottomSheet from "@gorhom/bottom-sheet";
-import { useSocketStore } from "@/shared/stores/socket.store";
 import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import React from "react";
 import { useGameStore } from "@/shared/stores/game.store";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const location = useGeolocation();
-  const { user, logout } = useAuthStore();
-  const { setGame } = useGameStore();
+  const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
+
+  const { game, setGame } = useGameStore();
 
   const createGameHandler = async () => {
     const game = await createGameMutation.mutateAsync();
-    setGame(game);
-    navigation.navigate("Lobby");
+    navigation.navigate("GameStack", {
+      gameId: game.id,
+    });
+  };
+
+  const joinHandler = async (id: string) => {
+    navigation.navigate("GameStack", { gameId: id });
   };
 
   const account = () => {
@@ -45,19 +51,22 @@ export const HomeScreen = () => {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
+  const { data: avatars } = useStyles({ type: "avatar", bought: true });
+
+  useEffect(() => console.log(location, user), [location, user]);
+
   return (
     <View className="flex-1">
       <Map>
         {location && user && (
           <>
             <PlayerMarker
-              coordinate={location}
+              coordinate={{ lon: location[0], lat: location[1] }}
               name={user?.name ?? user.username}
-              avatarSrc={
-                user.avatar
-                  ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
-                  : AVATARS[0].src
-              }
+              avatarSrc={{
+                uri: avatars?.find((x) => x.id === user.styles?.avatarId)?.style
+                  .url,
+              }}
             />
             <Camera
               defaultSettings={{
@@ -92,19 +101,14 @@ export const HomeScreen = () => {
             </IconContainer>
           </Pressable>
 
-          <Pressable onPress={logout}>
-            <Text>ВЫЙТИ</Text>
-          </Pressable>
-
           {user && (
             <Pressable onPress={account}>
               <Avatar
                 className="h-12 w-12"
-                source={
-                  user.avatar
-                    ? AVATARS.find((x) => x.id === Number(user.avatar))?.src
-                    : AVATARS[0].src
-                }
+                source={{
+                  uri: avatars?.find((x) => x.id === user.styles?.avatarId)
+                    ?.style.url,
+                }}
               />
             </Pressable>
           )}
@@ -124,7 +128,11 @@ export const HomeScreen = () => {
         />
       </View>
 
-      <JoinBottomSheet ref={bottomSheetRef} />
+      <JoinBottomSheet
+        ref={bottomSheetRef}
+        handleJoin={joinHandler}
+        children={undefined}
+      />
 
       <StatusBar style="dark" />
     </View>
