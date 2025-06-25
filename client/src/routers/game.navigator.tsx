@@ -23,18 +23,11 @@ export const GameNavigator = () => {
   const { gameId } = route.params;
 
   const { emit } = useSocket();
-  const { location, startTracking } = useGeolocationStore();
-  const { setGame, resetChat } = useGameStore();
+  const { location } = useGeolocationStore();
+  const { setGame } = useGameStore();
   const { data: initialGame, isLoading, error } = useGame(gameId);
 
-  useEffect(() => {
-    // Запускаем трекинг геолокации при монтировании
-    startTracking();
-
-    return () => {
-      // Не останавливаем трекинг при размонтировании, чтобы он работал в фоне
-    };
-  }, [startTracking]);
+  const { game } = useGameStore();
 
   useEffect(() => {
     if (error !== null) {
@@ -48,19 +41,12 @@ export const GameNavigator = () => {
   }, [isLoading, error, initialGame]);
 
   useEffect(() => {
-    if (location) {
+    if (location && game?.state !== "lobby" && game) {
       emit("locationUpdate", {
         location: { lon: location[0], lat: location[1] || 0 },
       });
     }
   }, [location]);
-
-  useEffect(() => {
-    return () => {
-      setGame(null);
-      resetChat();
-    };
-  }, []);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

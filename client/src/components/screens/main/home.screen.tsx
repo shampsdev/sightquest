@@ -7,8 +7,6 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "@/routers/main.navigator";
 import { Camera } from "@rnmapbox/maps";
-import { useGeolocation } from "@/shared/hooks/useGeolocation";
-
 import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
@@ -20,10 +18,11 @@ import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import React from "react";
+import { useGeolocationStore } from "@/shared/stores/location.store";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const location = useGeolocation();
+  const { location } = useGeolocationStore();
   const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
 
