@@ -29,7 +29,11 @@ export const LobbyScreen = () => {
   const { data: avatars } = useStyles({ type: "avatar" });
 
   const start = () => {
-    emit("startGame");
+    if (game && game?.state === "game") {
+      navigation.navigate("Game");
+    } else {
+      emit("startGame");
+    }
   };
 
   const back = () => {
@@ -41,6 +45,8 @@ export const LobbyScreen = () => {
       navigation.navigate("Game");
     }
   }, [game?.state]);
+
+  useEffect(() => console.log(game?.players), [game]);
 
   const insets = useSafeAreaInsets();
   return (
@@ -92,7 +98,11 @@ export const LobbyScreen = () => {
 
         {game && game.admin.id === user?.id && (
           <View className="absolute bottom-0 left-0 right-0 p-4 bg-bg_primary border-t border-white/10">
-            <Button onPress={start} className="w-full" text="Старт" />
+            <Button
+              onPress={start}
+              className="w-full"
+              text={game && game?.state === "game" ? "К игре" : "Старт"}
+            />
           </View>
         )}
 

@@ -19,18 +19,26 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import React from "react";
 import { useGeolocationStore } from "@/shared/stores/location.store";
+import { useGameStore } from "@/shared/stores/game.store";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const { location } = useGeolocationStore();
   const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
+  const { game: storedGame } = useGameStore();
 
   const createGameHandler = async () => {
-    const game = await createGameMutation.mutateAsync();
-    navigation.navigate("GameStack", {
-      gameId: game.id,
-    });
+    if (storedGame?.id) {
+      navigation.navigate("GameStack", {
+        gameId: storedGame.id,
+      });
+    } else {
+      const game = await createGameMutation.mutateAsync();
+      navigation.navigate("GameStack", {
+        gameId: game.id,
+      });
+    }
   };
 
   const joinHandler = async (id: string) => {

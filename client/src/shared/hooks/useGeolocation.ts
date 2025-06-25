@@ -5,17 +5,16 @@ import { useEffect, useState } from "react";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
-// Конфигурация для foreground и background трекинга
 const foregroundTracking = {
   accuracy: Location.Accuracy.High,
   distanceInterval: 1,
-  timeInterval: 1000, // Интервал в миллисекундах
+  timeInterval: 500,
 };
 
 const backgroundTracking = {
   accuracy: Location.Accuracy.High,
   distanceInterval: 5,
-  timeInterval: 5000, // Более редкие обновления в фоновом режиме
+  timeInterval: 5000,
 };
 
 TaskManager.defineTask<{ locations: Location.LocationObject[] }>(
@@ -34,7 +33,6 @@ TaskManager.defineTask<{ locations: Location.LocationObject[] }>(
     if (locations && locations.length > 0) {
       const loc = locations[0];
       console.log("Background location received:", loc);
-      // Здесь можно отправить данные на сервер или сохранить локально
     }
   }
 );
@@ -84,7 +82,6 @@ export const useGeolocation = () => {
       }
 
       try {
-        // Запускаем foreground трекинг
         const foregroundSubscription = await Location.watchPositionAsync(
           foregroundTracking,
           (loc) => {
@@ -95,7 +92,6 @@ export const useGeolocation = () => {
           }
         );
 
-        // Запускаем background трекинг
         const isTaskRegistered = await TaskManager.isTaskRegisteredAsync(
           LOCATION_TASK_NAME
         );
@@ -104,7 +100,7 @@ export const useGeolocation = () => {
             ...backgroundTracking,
             deferredUpdatesInterval: 5000,
             deferredUpdatesDistance: 5,
-            showsBackgroundLocationIndicator: true, // Показывает индикатор на iOS
+            showsBackgroundLocationIndicator: true,
           });
           console.log("Background location task started");
         }
@@ -118,14 +114,12 @@ export const useGeolocation = () => {
     const listener = AppState.addEventListener("change", (state) => {
       console.log("AppState changed:", state);
       if (state === "active") {
-        // Переключаемся на foreground трекинг
         Location.watchPositionAsync(foregroundTracking, (loc) => {
           if (loc.coords) {
             setLocation([loc.coords.longitude, loc.coords.latitude]);
           }
         });
       } else {
-        // Переключаемся на background трекинг
         Location.startLocationUpdatesAsync(
           LOCATION_TASK_NAME,
           backgroundTracking

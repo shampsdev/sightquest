@@ -8,6 +8,7 @@ import { useSocket } from "@/shared/hooks/useSocket";
 import { useGameStore } from "@/shared/stores/game.store";
 import { MainStackParamList } from "./main.navigator";
 import { useGeolocationStore } from "@/shared/stores/location.store";
+import { useAuthStore } from "@/shared/stores/auth.store";
 
 export type GameStackParamList = {
   Lobby: undefined;
@@ -26,18 +27,19 @@ export const GameNavigator = () => {
   const { location } = useGeolocationStore();
   const { setGame } = useGameStore();
   const { data: initialGame, isLoading, error } = useGame(gameId);
-
+  const { user } = useAuthStore();
   const { game } = useGameStore();
 
   useEffect(() => {
-    if (error !== null) {
-      console.info(error);
+    if (isLoading || !initialGame) return;
+
+    if (!game) setGame(initialGame);
+
+    if (game?.players.some((x) => x.user.id === user?.id)) {
+      return;
     }
 
-    if (!isLoading && !error && initialGame !== undefined) {
-      setGame(initialGame);
-      emit("joinGame", { gameId: initialGame.id });
-    }
+    emit("joinGame", { gameId: initialGame.id });
   }, [isLoading, error, initialGame]);
 
   useEffect(() => {
