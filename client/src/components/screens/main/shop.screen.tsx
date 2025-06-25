@@ -34,44 +34,6 @@ export const ShopScreen = () => {
     type: "avatar",
   });
 
-  const cards: AvatarCardProps[] = [
-    {
-      avatar: AVATARS[1].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: true,
-    },
-    {
-      avatar: AVATARS[0].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: false,
-    },
-    {
-      avatar: AVATARS[0].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: false,
-    },
-    {
-      avatar: AVATARS[0].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: false,
-    },
-    {
-      avatar: AVATARS[0].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: false,
-    },
-  ];
-
   const routes: RouteData[] = [
     {
       coords: { lon: 30.33018, lat: 59.945526 },
