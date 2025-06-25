@@ -7,6 +7,7 @@ module.exports = {
     scheme: "sightquest-scheme",
     icon: "./src/assets/icon.png",
     newArchEnabled: false,
+    userInterfaceStyle: "automatic",
     splash: {
       image: "./src/assets/icon.png",
       resizeMode: "contain",
@@ -89,6 +90,16 @@ module.exports = {
         {
           googlePlayServicesLocationVersion: "21.1.0",
           appCompatVersion: "1.4.2",
+        },
+      ],
+      [
+        "expo-location",
+        {
+          locationAlwaysAndWhenInUsePermission:
+            "To be able to share your location with friends while playing. This app requires location in the background",
+          locationWhenInUsePermission:
+            "To be able to share your location with friends while playing. This app requires location while in use",
+          isAndroidBackgroundLocationEnabled: true,
         },
       ],
       "react-native-background-fetch",

@@ -14,7 +14,10 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
 import { Pressable, View, Image, Text, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 export const AccountScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -31,9 +34,10 @@ export const AccountScreen = () => {
   const goToEdit = () => {
     navigation.navigate("EditProfile");
   };
+  const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView className="flex-1 bg-bg_primary">
+    <View className="flex-1 bg-bg_primary" style={{ paddingTop: insets.top }}>
       <ScrollView className="w-full">
         <View className="w-[90%] gap-[60px] relative mx-auto flex-col items-center">
           <View className="absolute w-full flex-row justify-between items-center">
@@ -93,6 +97,6 @@ export const AccountScreen = () => {
         </View>
       </ScrollView>
       <StatusBar style="light" />
-    </SafeAreaView>
+    </View>
   );
 };

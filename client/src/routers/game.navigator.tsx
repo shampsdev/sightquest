@@ -1,16 +1,13 @@
+import { useEffect } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { GameScreen } from "@/components/screens/main/game/game.screen";
 import { LobbyScreen } from "@/components/screens/main/game/lobby.screen";
 import { useGame } from "@/shared/api/hooks/useGame";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from "@react-navigation/stack";
-import { MainStackParamList } from "./main.navigator";
-import { useEffect } from "react";
-import { useGameStore } from "@/shared/stores/game.store";
 import { useSocket } from "@/shared/hooks/useSocket";
-import { useGeolocation } from "@/shared/hooks/useGeolocation";
+import { useGameStore } from "@/shared/stores/game.store";
+import { MainStackParamList } from "./main.navigator";
+import { useGeolocationStore } from "@/shared/stores/location.store";
 
 export type GameStackParamList = {
   Lobby: undefined;
@@ -25,10 +22,19 @@ export const GameNavigator = () => {
   const route = useRoute<GameStackRoute>();
   const { gameId } = route.params;
 
-  const { emit, reconnect } = useSocket();
-  const location = useGeolocation();
-  const { game, setGame, resetChat } = useGameStore();
+  const { emit } = useSocket();
+  const { location, startTracking } = useGeolocationStore();
+  const { setGame, resetChat } = useGameStore();
   const { data: initialGame, isLoading, error } = useGame(gameId);
+
+  useEffect(() => {
+    // Запускаем трекинг геолокации при монтировании
+    startTracking();
+
+    return () => {
+      // Не останавливаем трекинг при размонтировании, чтобы он работал в фоне
+    };
+  }, [startTracking]);
 
   useEffect(() => {
     if (error !== null) {

@@ -20,15 +20,12 @@ import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import React from "react";
-import { useGameStore } from "@/shared/stores/game.store";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const location = useGeolocation();
   const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
-
-  const { game, setGame } = useGameStore();
 
   const createGameHandler = async () => {
     const game = await createGameMutation.mutateAsync();
