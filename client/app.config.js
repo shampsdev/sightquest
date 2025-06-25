@@ -84,7 +84,6 @@ module.exports = {
             "sk.eyJ1IjoibWlrZWRlZ2VvZnJveSIsImEiOiJjbWJieWlicnUwdzQ2MmlzYjA0b2psdnVuIn0.S6eNlhjph0xm95IqTN-AuA",
         },
       ],
-      "react-native-background-geolocation",
       [
         "expo-gradle-ext-vars",
         {
