@@ -23,6 +23,7 @@ import { GameStackParamList } from "@/routers/game.navigator";
 import { MainStackParamList } from "@/routers/main.navigator";
 import { DEFAULT_MAP_CAMERA_LOCATION } from "@/constants";
 import { useGeolocationStore } from "@/shared/stores/location.store";
+import { ModalCard } from "@/components/widgets/modal-card";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -40,6 +41,7 @@ export const GameScreen = () => {
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
   const [chatOpened, setChatOpened] = useState<boolean>(false);
   const leaderboardSheet = useRef<BottomSheet>(null);
+  const [modalOpened, setModalOpened] = useState<boolean>(false);
 
   const players = game?.players ?? [];
 
@@ -106,7 +108,7 @@ export const GameScreen = () => {
 
       <View className="absolute top-20 w-full z-20">
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
-          <Pressable onPress={chatOpened ? () => setChatOpened(false) : exit}>
+          <Pressable onPress={() => setModalOpened(true)}>
             <IconContainer>
               {chatOpened && <Icons.Back />}
               {!chatOpened && <Icons.Exit />}
@@ -164,6 +166,18 @@ export const GameScreen = () => {
           )}
         </View>
       </View>
+      {modalOpened && (
+        <ModalCard
+          title={"Выйти из игры?"}
+          subtitle={
+            "Вы точно хотите завершить забег? Ваш прогресс будет сохранён, но бегуны разбегутся.."
+          }
+          confirmText="Выйти"
+          rejectText="Отмена"
+          onReject={() => setModalOpened(false)}
+          onConfirm={exit}
+        />
+      )}
 
       <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
 

@@ -6,5 +6,6 @@ export const useGame = (gameId: string) => {
   return useQuery({
     queryFn: () => getGame(gameId),
     queryKey: [`game/${gameId}`],
+    enabled: !!gameId, // Запрос выполняется только если gameId не пустой
   });
 };

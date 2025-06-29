@@ -20,25 +20,49 @@ import { useStyles } from "@/shared/api/hooks/useStyles";
 import React from "react";
 import { useGeolocationStore } from "@/shared/stores/location.store";
 import { useGameStore } from "@/shared/stores/game.store";
+import { ReconnectNotification } from "@/components/ui/notifications/notification";
+import { useGame } from "@/shared/api/hooks/useGame";
+import { ModalCard } from "@/components/widgets/modal-card";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const { location } = useGeolocationStore();
   const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
-  const { game: storedGame } = useGameStore();
+  const { game: storedGame, setGame, resetChat } = useGameStore();
+  const { data, isLoading, refetch, isError, error } = useGame(
+    storedGame?.id || ""
+  );
+
+  const handleAccept = async () => {
+    if (storedGame?.id && storedGame.state) {
+      navigation.navigate("GameStack", { gameId: storedGame.id });
+    } else if (!isLoading) {
+      try {
+        const result = await refetch();
+        if (result.data) {
+          setGame(result.data);
+          navigation.navigate("GameStack", { gameId: storedGame?.id || "" });
+        } else {
+          console.error("Game data not found");
+          setGame(null);
+          resetChat();
+        }
+      } catch (err) {
+        console.error("Error refetching game:", err);
+        setGame(null);
+        resetChat();
+      }
+    }
+  };
 
   const createGameHandler = async () => {
-    if (storedGame?.id) {
-      navigation.navigate("GameStack", {
-        gameId: storedGame.id,
-      });
-    } else {
-      const game = await createGameMutation.mutateAsync();
-      navigation.navigate("GameStack", {
-        gameId: game.id,
-      });
-    }
+    setGame(null);
+    resetChat();
+    const game = await createGameMutation.mutateAsync();
+    navigation.navigate("GameStack", {
+      gameId: game.id,
+    });
   };
 
   const joinHandler = async (id: string) => {
@@ -97,8 +121,8 @@ export const HomeScreen = () => {
         />
       </Map>
 
-      <View className="absolute top-20 w-full">
-        <View className="w-[90%] mx-auto flex-row justify-between items-center">
+      <View className="absolute top-20 w-full flex flex-col gap-[16px]">
+        <View className="w-[90%] mx-auto flex flex-row justify-between items-center">
           <Pressable onPress={shop}>
             <IconContainer>
               <Icons.Store />
@@ -117,8 +141,22 @@ export const HomeScreen = () => {
             </Pressable>
           )}
         </View>
+        <View className="flex flex-col w-[90%] mx-auto">
+          {storedGame?.id && (
+            <ReconnectNotification
+              id={storedGame.id}
+              onAccept={handleAccept}
+              onDecline={() => {
+                setGame(null);
+                resetChat();
+              }}
+            />
+          )}
+        </View>
       </View>
-
+      {isError && !isLoading && (
+        <ModalCard title="Уупс" subtitle={error.message} />
+      )}
       <View className="absolute bottom-12 px-[5%] gap-2 flex flex-1 flex-row items-center">
         <Button
           onPress={() => bottomSheetRef.current?.snapToIndex(0)}
