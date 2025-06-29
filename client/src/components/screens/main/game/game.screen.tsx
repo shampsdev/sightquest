@@ -1,29 +1,29 @@
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useEffect, useRef, useState } from "react";
+import { ImageSourcePropType, Pressable, Text, View } from "react-native";
+import { Camera } from "@rnmapbox/maps";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { StatusBar } from "expo-status-bar";
+import { twMerge } from "tailwind-merge";
 import { Avatar } from "@/components/ui/avatar";
-import { AvatarStack, AvatarStackSmall } from "@/components/ui/avatar-stack";
+import { AvatarStackSmall } from "@/components/ui/avatar-stack";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import { PlayerMarker } from "@/components/ui/map/player-marker";
-import { LeaderboardSheet } from "@/components/widgets/leaderboard-sheet";
+import { Button } from "@/components/ui/button";
 import { Map } from "@/components/widgets/map";
-import { GameStackParamList } from "@/routers/game.navigator";
-import { MainStackParamList } from "@/routers/main.navigator";
+import { LeaderboardSheet } from "@/components/widgets/leaderboard-sheet";
+import { ChatScreen } from "./chat.screen";
 import { useStyles } from "@/shared/api/hooks/useStyles";
-import { useGeolocation } from "@/shared/hooks/useGeolocation";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
-import BottomSheet from "@gorhom/bottom-sheet";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { Camera } from "@rnmapbox/maps";
-import { StatusBar } from "expo-status-bar";
-import React, { useRef, useState } from "react";
-import { useEffect } from "react";
-import { ImageSourcePropType, Pressable, Text, View } from "react-native";
-import { ChatScreen } from "./chat.screen";
-import { twMerge } from "tailwind-merge";
-import { Button } from "@/components/ui/button";
+import { GameStackParamList } from "@/routers/game.navigator";
+import { MainStackParamList } from "@/routers/main.navigator";
 import { DEFAULT_MAP_CAMERA_LOCATION } from "@/constants";
+import { useGeolocationStore } from "@/shared/stores/location.store";
+import { ModalCard } from "@/components/widgets/modal-card";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -33,21 +33,17 @@ type NavProp = StackNavigationProp<
 export const GameScreen = () => {
   const navigation = useNavigation<NavProp>();
   const { game, updateStatus, resetChat, setGame } = useGameStore();
+  const { location } = useGeolocationStore();
+  const { user } = useAuthStore();
+  const { emit } = useSocket();
+  const { data: avatars } = useStyles({ type: "avatar" });
 
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
   const [chatOpened, setChatOpened] = useState<boolean>(false);
-
-  const { user } = useAuthStore();
-
-  const { emit } = useSocket();
-
-  const { data: avatars } = useStyles({ type: "avatar" });
-
-  const location = useGeolocation();
+  const leaderboardSheet = useRef<BottomSheet>(null);
+  const [modalOpened, setModalOpened] = useState<boolean>(false);
 
   const players = game?.players ?? [];
-
-  const leaderboardSheet = useRef<BottomSheet>(null);
 
   const exit = () => {
     emit("leaveGame");
@@ -58,10 +54,11 @@ export const GameScreen = () => {
   };
 
   useEffect(() => {
-    if (location)
+    if (location) {
       emit("locationUpdate", {
         location: { lon: location[0], lat: location[1] },
       });
+    }
   }, [location]);
 
   return (
@@ -111,7 +108,13 @@ export const GameScreen = () => {
 
       <View className="absolute top-20 w-full z-20">
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
-          <Pressable onPress={chatOpened ? () => setChatOpened(false) : exit}>
+          <Pressable
+            onPress={
+              chatOpened
+                ? () => setChatOpened(false)
+                : () => setModalOpened(true)
+            }
+          >
             <IconContainer>
               {chatOpened && <Icons.Back />}
               {!chatOpened && <Icons.Exit />}
@@ -121,7 +124,6 @@ export const GameScreen = () => {
           <Pressable
             onPress={() => {
               setChatOpened(false);
-
               setLeaderboardOpened(!leaderboardOpened);
               if (leaderboardOpened) {
                 leaderboardSheet.current?.close();
@@ -170,6 +172,18 @@ export const GameScreen = () => {
           )}
         </View>
       </View>
+      {modalOpened && (
+        <ModalCard
+          title={"Выйти из игры?"}
+          subtitle={
+            "Вы точно хотите завершить забег? Ваш прогресс будет сохранён, но бегуны разбегутся.."
+          }
+          confirmText="Выйти"
+          rejectText="Отмена"
+          onReject={() => setModalOpened(false)}
+          onConfirm={exit}
+        />
+      )}
 
       <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
 

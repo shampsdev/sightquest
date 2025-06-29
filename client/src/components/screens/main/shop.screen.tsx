@@ -8,9 +8,9 @@ import { MainStackParamList } from "@/routers/main.navigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useRef, useState } from "react";
-import { View, Pressable, SafeAreaView, ScrollView } from "react-native";
+import { View, Pressable, ScrollView } from "react-native";
 import { RoutesWidget, RouteData } from "@/components/widgets/shop/routes";
-import { NicknamesWidget } from "@/components/widgets/shop/nicknames";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "@/components/ui/header";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -33,44 +33,6 @@ export const ShopScreen = () => {
   const { data: avatars, isFetched: isAvatarsFetched } = useStyles({
     type: "avatar",
   });
-
-  const cards: AvatarCardProps[] = [
-    {
-      avatar: AVATARS[1].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: true,
-    },
-    {
-      avatar: AVATARS[0].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: false,
-    },
-    {
-      avatar: AVATARS[0].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: false,
-    },
-    {
-      avatar: AVATARS[0].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: false,
-    },
-    {
-      avatar: AVATARS[0].src,
-      title: "Название",
-      subtitle: "Описание",
-      withButton: true,
-      disabled: false,
-    },
-  ];
 
   const routes: RouteData[] = [
     {
@@ -107,10 +69,7 @@ export const ShopScreen = () => {
   };
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-bg_primary"
-      style={{ paddingTop: insets.top || 20 }}
-    >
+    <SafeAreaView className="flex-1 bg-bg_primary">
       <ScrollView className="w-full">
         <View className="w-[90%] gap-[36px] relative mx-auto flex-col items-center">
           <View className="absolute w-full flex-row justify-between items-center">

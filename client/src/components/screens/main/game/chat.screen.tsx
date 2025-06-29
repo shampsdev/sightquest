@@ -15,6 +15,7 @@ import {
   View,
   ScrollView as ScrollViewType,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -80,9 +81,13 @@ export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
         tint="dark"
         className="absolute w-full h-full z-10"
       />
-      <View
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ zIndex: 30 }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         className={twMerge(
-          "py-[40px] px-[36px] h-[85%] rounded-[30px] w-full z-30 flex flex-col justify-end gap-8"
+          "py-[40px] px-[36px] h-[85%] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-8"
         )}
       >
         <ScrollView
@@ -138,7 +143,7 @@ export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
             </IconContainer>
           </Pressable>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Animated.View>
   );
 };
