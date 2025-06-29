@@ -108,7 +108,13 @@ export const GameScreen = () => {
 
       <View className="absolute top-20 w-full z-20">
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
-          <Pressable onPress={() => setModalOpened(true)}>
+          <Pressable
+            onPress={
+              chatOpened
+                ? () => setChatOpened(false)
+                : () => setModalOpened(true)
+            }
+          >
             <IconContainer>
               {chatOpened && <Icons.Back />}
               {!chatOpened && <Icons.Exit />}
