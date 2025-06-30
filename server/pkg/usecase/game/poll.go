@@ -48,7 +48,7 @@ func (g *Game) checkActivePoll(ctx context.Context) {
 
 func (g *Game) checkActivePollPause(ctx context.Context) {
 	poll := g.game.ActivePoll
-	if poll.CreatedAt.Add(time.Duration(*poll.Duration)*time.Second).Before(time.Now()) ||
+	if poll.CreatedAt.Add(time.Duration(*poll.Duration)*time.Second).Before(time.Now().UTC()) ||
 		len(poll.Votes) > 0 {
 		result := domain.PollResult{Pause: &domain.PollResultPause{}}
 		if len(poll.Votes) > 0 {

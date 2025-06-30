@@ -103,7 +103,7 @@ func (g *Game) Active() bool {
 }
 
 func recordGameActivityMW[E any](c Context, e E, next state.HandlerFunc[*PlayerState, E]) error {
-	c.S.Game.activity[c.S.User.ID] = time.Now()
+	c.S.Game.activity[c.S.User.ID] = time.Now().UTC()
 	return next(c, e)
 }
 
@@ -145,7 +145,7 @@ func (g *Game) OnJoinGame(c Context) error {
 	if g.game.State == domain.GameStateLobby {
 		c.BroadcastToOthers(event.PlayerJoined{Player: c.S.Player})
 	}
-	g.activity[c.S.User.ID] = time.Now()
+	g.activity[c.S.User.ID] = time.Now().UTC()
 	return nil
 }
 
