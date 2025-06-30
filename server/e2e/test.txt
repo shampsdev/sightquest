@@ -1,0 +1,11 @@
+{
+	"id": "asdsd",
+	"type": "taskCompleted",
+	"data": {
+		"taskCompleted": {
+			task: {...},
+			player: {...},
+			
+		}
+	}
+}

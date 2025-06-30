@@ -26,6 +26,11 @@ var AllEvents = map[string]struct{}{
 	event.LeaveGameEvent:       {},
 	event.BroadcastEvent:       {},
 	event.BroadcastedEvent:     {},
+
+	event.PauseEvent:    {},
+	event.PausedEvent:   {},
+	event.UnpauseEvent:  {},
+	event.UnpausedEvent: {},
 }
 
 func isE2ETesting() bool {

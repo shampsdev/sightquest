@@ -59,3 +59,17 @@ type TaskPoint interface {
 	Filter(ctx context.Context, filter *domain.FilterTaskPoint) ([]*domain.TaskPoint, error)
 	Delete(ctx context.Context, id string) error
 }
+
+type Poll interface {
+	Create(ctx context.Context, poll *domain.CreatePoll) (string, error)
+	Patch(ctx context.Context, id string, poll *domain.PatchPoll) error
+	Filter(ctx context.Context, filter *domain.FilterPoll) ([]*domain.Poll, error)
+	Delete(ctx context.Context, id string) error
+}
+
+type Vote interface {
+	Create(ctx context.Context, vote *domain.CreateVote) error
+	Patch(ctx context.Context, pollID, playerID string, vote *domain.PatchVote) error
+	Filter(ctx context.Context, filter *domain.FilterVote) ([]*domain.Vote, error)
+	Delete(ctx context.Context, pollID, playerID string) error
+}

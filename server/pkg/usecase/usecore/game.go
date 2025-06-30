@@ -2,19 +2,33 @@ package usecore
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
 	"github.com/shampsdev/sightquest/server/pkg/repo"
+	"github.com/shampsdev/sightquest/server/pkg/utils"
 )
 
 type Game struct {
 	gameRepo   repo.Game
 	playerRepo repo.Player
+	pollRepo   repo.Poll
+	voteRepo   repo.Vote
 }
 
-func NewGame(gameRepo repo.Game, playerRepo repo.Player) *Game {
-	return &Game{gameRepo: gameRepo, playerRepo: playerRepo}
+func NewGame(
+	gameRepo repo.Game,
+	playerRepo repo.Player,
+	pollRepo repo.Poll,
+	voteRepo repo.Vote,
+) *Game {
+	return &Game{
+		gameRepo:   gameRepo,
+		playerRepo: playerRepo,
+		pollRepo:   pollRepo,
+		voteRepo:   voteRepo,
+	}
 }
 
 func (g *Game) CreateGame(ctx *Context) (*domain.Game, error) {
@@ -42,7 +56,34 @@ func (g *Game) GetGameByID(ctx context.Context, id string) (*domain.Game, error)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get game players: %w", err)
 	}
+	game.ActivePoll, err = g.getActivePoll(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get game active poll: %w", err)
+	}
+
 	return game, nil
+}
+
+func (g *Game) getActivePoll(ctx context.Context, gameID string) (*domain.Poll, error) {
+	poll, err := repo.First(g.pollRepo)(ctx, &domain.FilterPoll{
+		GameID:              &gameID,
+		SortByCreatedAtDesc: true,
+		Limit:               utils.PtrTo(1),
+	})
+	if errors.Is(err, repo.ErrNotFound) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("failed to get polls: %w", err)
+	}
+	poll.Votes, err = g.voteRepo.Filter(ctx, &domain.FilterVote{
+		PollID: &poll.ID,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get poll votes: %w", err)
+	}
+
+	return poll, nil
 }
 
 func (g *Game) UpdateGame(ctx context.Context, gameID string, patch *domain.PatchGame) error {

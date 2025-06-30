@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"sync"
 	"time"
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
+	"github.com/shampsdev/sightquest/server/pkg/repo"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/event"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/state"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
@@ -14,6 +16,8 @@ import (
 )
 
 type Game struct {
+	lock sync.Mutex
+
 	game *domain.Game
 
 	// playerID to last activity, empty if disconnected
@@ -23,6 +27,10 @@ type Game struct {
 	playerCase *usecore.Player
 	gameCase   *usecore.Game
 	routeCase  *usecore.Route
+	pollRepo   repo.Poll
+	voteRepo   repo.Vote
+
+	server state.Server[*PlayerState]
 }
 
 func NewGame(
@@ -31,6 +39,9 @@ func NewGame(
 	gameCase *usecore.Game,
 	playerCase *usecore.Player,
 	routeCase *usecore.Route,
+	pollRepo repo.Poll,
+	voteRepo repo.Vote,
+	server state.Server[*PlayerState],
 ) (*Game, error) {
 	g := &Game{
 		activity:   make(map[string]time.Time),
@@ -38,6 +49,9 @@ func NewGame(
 		playerCase: playerCase,
 		gameCase:   gameCase,
 		routeCase:  routeCase,
+		pollRepo:   pollRepo,
+		voteRepo:   voteRepo,
+		server:     server,
 	}
 
 	game, err := gameCase.GetGameByID(ctx, gameID)
@@ -49,6 +63,8 @@ func NewGame(
 	for _, p := range g.game.Players {
 		g.appendPlayer(p)
 	}
+
+	go g.pollObserver(ctx)
 
 	return g, nil
 }
@@ -88,6 +104,12 @@ func (g *Game) Active() bool {
 
 func recordGameActivityMW[E any](c Context, e E, next state.HandlerFunc[*PlayerState, E]) error {
 	c.S.Game.activity[c.S.User.ID] = time.Now()
+	return next(c, e)
+}
+
+func lockGameMW[E any](c Context, e E, next state.HandlerFunc[*PlayerState, E]) error {
+	c.S.Game.lock.Lock()
+	defer c.S.Game.lock.Unlock()
 	return next(c, e)
 }
 
@@ -175,6 +197,64 @@ func (g *Game) OnBroadcast(c Context, ev event.Broadcast) error {
 		From: c.S.Player,
 		Data: ev.Data,
 	})
+	return nil
+}
+
+func (g *Game) OnPause(c Context, ev event.Pause) error {
+	if g.game.ActivePoll != nil {
+		return fmt.Errorf("can't set pause, game is in poll")
+	}
+
+	pausePollCreate := &domain.CreatePoll{
+		GameID:   g.game.ID,
+		Type:     domain.PollTypePause,
+		Duration: &ev.Duration,
+		Data: &domain.PollData{
+			Pause: &domain.PollDataPause{
+				PausedBy: c.S.Player,
+				Duration: ev.Duration,
+			},
+		},
+	}
+
+	id, err := g.pollRepo.Create(c.Ctx, pausePollCreate)
+	if err != nil {
+		return fmt.Errorf("failed to create poll: %w", err)
+	}
+	poll, err := repo.First(g.pollRepo)(c.Ctx, &domain.FilterPoll{
+		ID: &id,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to get poll: %w", err)
+	}
+	g.game.ActivePoll = poll
+
+	c.Broadcast(event.Paused{
+		PollDataPause: *pausePollCreate.Data.Pause,
+	})
+
+	return nil
+}
+
+func (g *Game) OnUnpause(c Context, _ event.Unpause) error {
+	if g.game.ActivePoll == nil {
+		return fmt.Errorf("can't unpause, game is not in pause")
+	}
+	if g.game.ActivePoll.Type != domain.PollTypePause {
+		return fmt.Errorf("can't unpause, game is not in pause")
+	}
+
+	c.Broadcast(event.Unpaused{
+		UnpausedBy: c.S.Player,
+	})
+
+	err := g.voteInActive(c, domain.VoteTypeUnpause, nil)
+	if err != nil {
+		return fmt.Errorf("failed to vote in active: %w", err)
+	}
+
+	g.game.ActivePoll = nil
+
 	return nil
 }
 

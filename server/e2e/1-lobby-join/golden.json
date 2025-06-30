@@ -37,7 +37,6 @@
                   }
                 }
               ],
-              "route": null,
               "state": "lobby"
             }
           }
@@ -124,7 +123,6 @@
                   }
                 }
               ],
-              "route": null,
               "state": "lobby"
             }
           }
@@ -227,7 +225,7 @@
         {
           "Event": "settedRoute",
           "Data": {
-            "routeId": {
+            "route": {
               "description": "Description for Route 1",
               "id": "route-1-id",
               "priceRoubles": 0,
@@ -264,7 +262,7 @@
         {
           "Event": "settedRoute",
           "Data": {
-            "routeId": {
+            "route": {
               "description": "Description for Route 1",
               "id": "route-1-id",
               "priceRoubles": 0,

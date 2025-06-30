@@ -3,11 +3,12 @@ package domain
 import "time"
 
 type Game struct {
-	ID      string    `json:"id"`
-	Admin   *User     `json:"admin"`
-	State   GameState `json:"state"`
-	Route   *Route    `json:"route"`
-	Players []*Player `json:"players"`
+	ID         string    `json:"id"`
+	Admin      *User     `json:"admin"`
+	State      GameState `json:"state"`
+	Route      *Route    `json:"route,omitempty"`
+	Players    []*Player `json:"players"`
+	ActivePoll *Poll     `json:"activePoll,omitempty"`
 
 	CreatedAt  time.Time  `json:"createdAt"`
 	FinishedAt *time.Time `json:"finishedAt"`

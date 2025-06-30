@@ -1,0 +1,118 @@
+[
+  {
+    "Name": "User1 joining game",
+    "Events": {}
+  },
+  {
+    "Name": "User2 joining game",
+    "Events": {}
+  },
+  {
+    "Name": "Pause",
+    "Events": {
+      "user1": [
+        {
+          "Event": "paused",
+          "Data": {
+            "duration": 0,
+            "pausedBy": {
+              "gameId": "532780",
+              "location": {
+                "lat": 0,
+                "lon": 0
+              },
+              "role": "runner",
+              "score": 0,
+              "user": {
+                "id": "d5b23a08-418a-4084-a68f-5b02079b4e93",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
+                "username": "user1"
+              }
+            }
+          }
+        }
+      ],
+      "user2": [
+        {
+          "Event": "paused",
+          "Data": {
+            "duration": 0,
+            "pausedBy": {
+              "gameId": "532780",
+              "location": {
+                "lat": 0,
+                "lon": 0
+              },
+              "role": "runner",
+              "score": 0,
+              "user": {
+                "id": "d5b23a08-418a-4084-a68f-5b02079b4e93",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
+                "username": "user1"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Unpause",
+    "Events": {
+      "user1": [
+        {
+          "Event": "unpaused",
+          "Data": {
+            "unpausedBy": {
+              "gameId": "532780",
+              "location": {
+                "lat": 0,
+                "lon": 0
+              },
+              "role": "runner",
+              "score": 0,
+              "user": {
+                "id": "d6d8e4db-1cfa-421d-bfcd-29090fdbffbb",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
+                "username": "user2"
+              }
+            }
+          }
+        }
+      ],
+      "user2": [
+        {
+          "Event": "unpaused",
+          "Data": {
+            "unpausedBy": {
+              "gameId": "532780",
+              "location": {
+                "lat": 0,
+                "lon": 0
+              },
+              "role": "runner",
+              "score": 0,
+              "user": {
+                "id": "d6d8e4db-1cfa-421d-bfcd-29090fdbffbb",
+                "name": "",
+                "styles": {
+                  "avatarId": ""
+                },
+                "username": "user2"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

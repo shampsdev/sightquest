@@ -51,12 +51,15 @@ func (h *Handler) buildRouter() {
 
 	gInGame := state.GroupMW(g, h.checkInGameMW)
 	gInGame = state.GroupMW(gInGame, recordGameActivityMW)
+	gInGame = state.GroupMW(gInGame, lockGameMW)
 
 	gInGame.
 		On(event.LocationUpdateEvent, callGame((*Game).OnLocationUpdate)).
 		On(event.BroadcastEvent, callGame((*Game).OnBroadcast)).
 		On(event.StartGameEvent, callGame((*Game).OnStartGame)).
-		On(event.SetRouteEvent, callGame((*Game).OnSetRoute))
+		On(event.SetRouteEvent, callGame((*Game).OnSetRoute)).
+		On(event.PauseEvent, callGame((*Game).OnPause)).
+		On(event.UnpauseEvent, callGame((*Game).OnUnpause))
 
 	h.router = g.RootHandler()
 	h.registeredEvents = g.RegisteredEvents()
@@ -140,7 +143,7 @@ func (h *Handler) OnJoinGame(c Context, ev event.JoinGame) error {
 	if c.S.User == nil {
 		return fmt.Errorf("user not authenticated")
 	}
-	game, err := h.gameProvider.GetGame(c.Ctx, ev.GameID)
+	game, err := h.gameProvider.GetGame(c.Ctx, ev.GameID, c.Server())
 	if err != nil {
 		return err
 	}

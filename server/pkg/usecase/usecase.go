@@ -30,6 +30,10 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 	routeRepo := pg.NewRoute(pool)
 	taskPointRepo := pg.NewTaskPoint(pool)
 	gameRepo := pg.NewGame(pool, userRepo, routeRepo)
+	styleRepo := pg.NewStyle(pool)
+	userStyleRepo := pg.NewUserStyle(pool)
+	voteRepo := pg.NewVote(pool)
+	pollRepo := pg.NewPoll(pool, voteRepo)
 
 	auth, err := auth.NewAuther(cfg, userRepo)
 	if err != nil {
@@ -40,11 +44,11 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 	playerCase := usecore.NewPlayer(playerRepo)
 	routeCase := usecore.NewRoute(routeRepo)
 	taskPointCase := usecore.NewTaskPoint(taskPointRepo)
-	gameCase := usecore.NewGame(gameRepo, playerRepo)
+	gameCase := usecore.NewGame(gameRepo, playerRepo, pollRepo, voteRepo)
 
-	gameProvider := game.NewInMemoryGameRepo(ctx, gameCase, playerCase, routeCase)
+	gameProvider := game.NewInMemoryGameRepo(ctx, gameCase, playerCase, routeCase, pollRepo, voteRepo)
 	gameHandler := game.NewHandler(gameProvider, userCase, auth)
-	styleCase := usecore.NewStyle(pg.NewStyle(pool), pg.NewUserStyle(pool), pg.NewUser(pool))
+	styleCase := usecore.NewStyle(styleRepo, userStyleRepo, userRepo)
 
 	return &Cases{
 		Auth:        auth,
