@@ -18,7 +18,7 @@ import (
 // @Router /route [get]
 func GetRoutes(cases *usecase.Cases) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		filter := &domain.FilterRoute{}
+		filter := &domain.FilterRoute{IncludeTaskPoints: true}
 
 		routes, err := cases.Route.GetRoutes(c, filter)
 		if ginerr.AbortIfErr(c, err, 400, "failed to get routes") {
