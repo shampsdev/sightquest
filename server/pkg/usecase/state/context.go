@@ -101,9 +101,6 @@ func (c *Context[S]) Error(err error) {
 		c.errorMW(c, err)
 	}
 	c.conn.Emit("error", err.Error())
-	if err = c.conn.Close(); err != nil {
-		slog.Error("error closing connection", slogx.Err(err))
-	}
 }
 
 func (c *Context[S]) WithS(s S) *Context[S] {

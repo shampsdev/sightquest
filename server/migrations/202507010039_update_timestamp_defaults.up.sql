@@ -2,7 +2,7 @@ ALTER TABLE "user" ALTER COLUMN "created_at" SET DEFAULT (now() at time zone 'ut
 ALTER TABLE "game" ALTER COLUMN "created_at" SET DEFAULT (now() at time zone 'utc');
 ALTER TABLE "player" ALTER COLUMN "created_at" SET DEFAULT (now() at time zone 'utc');
 ALTER TABLE "route" ALTER COLUMN "created_at" SET DEFAULT (now() at time zone 'utc');
-ALTER TABLE "task_point" ALTER COLUMN "created_at" SET DEFAULT (now() at time zone 'utc');
+ALTER TABLE "taskpoint" ALTER COLUMN "created_at" SET DEFAULT (now() at time zone 'utc');
 ALTER TABLE "style" ALTER COLUMN "created_at" SET DEFAULT (now() at time zone 'utc');
 ALTER TABLE "user_style" ALTER COLUMN "created_at" SET DEFAULT (now() at time zone 'utc');
 ALTER TABLE "user_route" ALTER COLUMN "created_at" SET DEFAULT (now() at time zone 'utc');
