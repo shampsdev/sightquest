@@ -124,7 +124,6 @@ export const AvatarPicker = ({
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x;
-      logger.log("ui", `Scrolling: offset=${event.contentOffset.x}`);
     },
     onMomentumEnd: (event) => {
       const offset = event.contentOffset.x;

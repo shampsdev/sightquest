@@ -308,7 +308,7 @@ export const RouteScreen = () => {
           )}
         />
 
-        {game && game.admin.id === user?.id && false ? (
+        {game && game.admin.id === user?.id ? (
           <Button
             onPress={choose}
             className="mt-4 flex-1 w-[90%] mx-auto "

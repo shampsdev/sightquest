@@ -23,6 +23,7 @@ import { MainStackParamList } from "@/routers/main.navigator";
 import { DEFAULT_MAP_CAMERA_LOCATION } from "@/constants";
 import { useGeolocationStore } from "@/shared/stores/location.store";
 import { ModalCard } from "@/components/widgets/modal-card";
+import { BlurView } from "expo-blur";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -91,7 +92,7 @@ export const GameScreen = () => {
         />
       </Map>
       {!chatOpened && (
-        <View className="absolute bottom-[36px] flex flex-row left-0 right-0 z-10">
+        <View className="absolute bottom-12 flex flex-row left-0 right-0 z-10">
           <Button
             onPress={() => {
               if (leaderboardOpened) {
@@ -130,32 +131,38 @@ export const GameScreen = () => {
                 leaderboardSheet.current?.snapToIndex(0);
               }
             }}
-            className="bg-[#67676780] gap-[10px] items-center flex flex-row justify-center rounded-full px-[20px]"
+            className="bg-[#67676780] overflow-hidden rounded-full"
           >
-            <AvatarStackSmall
-              avatars={
-                players
-                  ?.map((player) => ({
-                    uri: avatars?.find(
-                      (x) => x.id === player.user.styles?.avatarId
-                    )?.style.url,
-                  }))
-                  .filter(
-                    (avatar) => avatar !== undefined
-                  ) as ImageSourcePropType[]
-              }
-              avatarWidth={25}
-            />
-            <View className="flex flex-row items-center">
-              <Text className="font-bounded-regular text-[#FFF]">
-                Таблица игроков
-              </Text>
-              <View className="relative w-[20px]">
-                <View className="absolute bottom-[-12px]">
-                  <Icons.DownArrow />
+            <BlurView
+              experimentalBlurMethod="dimezisBlurView"
+              className="gap-[10px] px-[20px] items-center flex flex-row justify-center"
+              intensity={10}
+            >
+              <AvatarStackSmall
+                avatars={
+                  players
+                    ?.map((player) => ({
+                      uri: avatars?.find(
+                        (x) => x.id === player.user.styles?.avatarId
+                      )?.style.url,
+                    }))
+                    .filter(
+                      (avatar) => avatar !== undefined
+                    ) as ImageSourcePropType[]
+                }
+                avatarWidth={25}
+              />
+              <View className="flex flex-row items-center">
+                <Text className="font-bounded-regular text-[#FFF]">
+                  Таблица игроков
+                </Text>
+                <View className="relative w-[20px]">
+                  <View className="absolute bottom-[-12px]">
+                    <Icons.DownArrow />
+                  </View>
                 </View>
               </View>
-            </View>
+            </BlurView>
           </Pressable>
 
           {user && (

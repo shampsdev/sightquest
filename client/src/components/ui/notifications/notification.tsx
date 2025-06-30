@@ -2,7 +2,6 @@ import { View, Text, Pressable } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { BlurView } from "expo-blur";
 import { StyleSheet } from "react-native";
-import { Button } from "../button";
 
 interface ReconnectNotificationProps {
   id: string;
@@ -29,6 +28,7 @@ export const ReconnectNotification = ({
           ...StyleSheet.absoluteFillObject,
           borderRadius: 20,
         }}
+        experimentalBlurMethod="dimezisBlurView"
         tint="dark"
         intensity={10}
       />
