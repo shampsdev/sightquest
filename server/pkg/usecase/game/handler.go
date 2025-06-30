@@ -40,11 +40,10 @@ func NewHandler(gameProvider *InMemoryGameRepo, userCase *usecore.User, auth *au
 }
 
 func (h *Handler) buildRouter() {
-	g := state.GroupMW(
-		state.NewGroup[*PlayerState, state.AnyEvent](),
-		h.logMW)
+	g := state.NewGroup[*PlayerState, state.AnyEvent]()
+	gLog := state.GroupMW(g, h.logMW)
 
-	g.
+	gLog.
 		On(event.AuthEvent, state.WrapT(h.OnAuth)).
 		On(event.JoinGameEvent, state.WrapT(h.OnJoinGame)).
 		On(event.LeaveGameEvent, state.WrapT(h.OnLeaveGame))
@@ -53,6 +52,10 @@ func (h *Handler) buildRouter() {
 	gInGame = state.GroupMW(gInGame, recordGameActivityMW)
 	gInGame = state.GroupMW(gInGame, lockGameMW)
 
+	// no logs
+	gInGame.On(event.LocationUpdateEvent, callGame((*Game).OnLocationUpdate))
+
+	gInGame = state.GroupMW(gInGame, h.logMW)
 	gInGame.
 		On(event.LocationUpdateEvent, callGame((*Game).OnLocationUpdate)).
 		On(event.BroadcastEvent, callGame((*Game).OnBroadcast)).
