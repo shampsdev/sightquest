@@ -4,6 +4,7 @@ import * as TaskManager from "expo-task-manager";
 import { LocationObject, LocationSubscription } from "expo-location";
 import { TaskManagerTaskBody } from "expo-task-manager";
 import { Linking, Platform } from "react-native";
+import { logger } from "../instances/logger.instance";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
@@ -41,7 +42,7 @@ TaskManager.defineTask<{ locations: LocationObject[] }>(
     const { locations } = data;
     if (locations && locations.length > 0) {
       const loc = locations[0];
-      console.log("Background location received:", loc);
+      logger.log("geo", "backgorund >", loc);
       useGeolocationStore
         .getState()
         .setLocation([loc.coords.longitude, loc.coords.latitude]);
@@ -59,10 +60,10 @@ export const useGeolocationStore = create<GeolocationState>((set, get) => ({
     const { isTracking } = get();
     if (isTracking) return;
 
-    console.log("Starting geolocation tracking");
+    logger.log("geo", "started tracking");
     const hasPermissions = await requestPermissions();
     if (!hasPermissions) {
-      console.log("Permissions not granted");
+      logger.log("geo", "Permissions not granted");
       return;
     }
 
@@ -86,19 +87,19 @@ export const useGeolocationStore = create<GeolocationState>((set, get) => ({
           deferredUpdatesDistance: 5,
           showsBackgroundLocationIndicator: true,
         });
-        console.log("Background location task started");
+        logger.log("geo", "Background task started");
       }
 
       set({ isTracking: true, foregroundSubscription });
     } catch (error) {
-      console.error("expo-location error:", error);
+      logger.error("geo", error);
     }
   },
   stopTracking: async () => {
     const { isTracking, foregroundSubscription } = get();
     if (!isTracking) return;
 
-    console.log("Stopping geolocation tracking");
+    logger.log("geo", "Stopping tracking");
     if (foregroundSubscription) {
       foregroundSubscription.remove();
     }
@@ -113,9 +114,13 @@ const requestPermissions = async () => {
       await Location.requestForegroundPermissionsAsync();
     const { status: backgroundStatus } =
       await Location.requestBackgroundPermissionsAsync();
-    console.log("Android permissions:", { foregroundStatus, backgroundStatus });
+
+    logger.log("geo", ": Android permissions:", {
+      foregroundStatus,
+      backgroundStatus,
+    });
     if (foregroundStatus !== "granted" || backgroundStatus !== "granted") {
-      console.log("Redirecting to settings");
+      logger.log("geo", ": Redirecting to settings");
       Linking.openSettings();
       return false;
     }
@@ -125,12 +130,13 @@ const requestPermissions = async () => {
       await Location.requestForegroundPermissionsAsync();
     const { status: backgroundStatus } =
       await Location.requestBackgroundPermissionsAsync();
-    console.log("iOS permission status:", {
+
+    logger.log("geo", "iOS permissions:", {
       foregroundStatus,
       backgroundStatus,
     });
     if (foregroundStatus !== "granted" || backgroundStatus !== "granted") {
-      console.log("Redirecting to settings");
+      logger.log("geo", ": Redirecting to settings");
       Linking.openSettings();
       return false;
     }

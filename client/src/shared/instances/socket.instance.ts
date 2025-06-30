@@ -2,7 +2,7 @@ import { Coords } from "../interfaces/coords";
 import { Game } from "../interfaces/game";
 import { Player } from "../interfaces/player";
 import { User } from "../interfaces/user";
-import { EventMap, SocketManager } from "../socket/socket-manager";
+import { EventMap, SocketManager } from "../custom/socket-manager";
 
 export interface ServerToClientEvents extends EventMap {
   chatMessage: (msg: string) => void;

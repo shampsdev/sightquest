@@ -19,7 +19,7 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 export default function App() {
-  const { startTracking } = useGeolocationStore();
+  const { startTracking, stopTracking } = useGeolocationStore();
 
   const [loaded, error] = useFonts({
     "Bounded-Black": require("./assets/fonts/Bounded-Black.ttf"),
@@ -45,11 +45,12 @@ export default function App() {
   });
 
   const { auth, token } = useAuthStore();
-  const { isConnected, emit } = useSocket();
+  // const { isConnected, emit } = useSocket();
 
   useEffect(() => {
     startTracking();
-  }, [startTracking]);
+    // stopTracking();
+  }, []);
 
   useEffect(() => {
     if (loaded || error) {
@@ -57,11 +58,11 @@ export default function App() {
     }
   }, [loaded, error]);
 
-  useEffect(() => {
-    if (token && isConnected) {
-      emit("auth", { token });
-    }
-  }, [emit, isConnected]);
+  // useEffect(() => {
+  //   if (token && isConnected) {
+  //     emit("auth", { token });
+  //   }
+  // }, [emit, isConnected]);
 
   if (!loaded && !error) {
     return null;
