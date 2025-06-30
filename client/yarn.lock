@@ -4461,11 +4461,6 @@ expo-linking@~7.1.5:
     expo-constants "~17.1.6"
     invariant "^2.2.4"
 
-expo-location@~18.1.5:
-  version "18.1.5"
-  resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-18.1.5.tgz#c809b88ca26d47b254c24a5a09dea6ec8039bda2"
-  integrity sha512-/ugxS4Ort9DbKD0Do6xn4TjeHaA/by5vv0p0PrY5Zbcez1S0AfrQn/4JG/8PLT2imngMwZU9TDKrgxqJQ4RuPQ==
-
 expo-manifests@~0.16.5:
   version "0.16.5"
   resolved "https://registry.yarnpkg.com/expo-manifests/-/expo-manifests-0.16.5.tgz#bb57ceff3db4eb74679d4a155b2ca2050375ce10"
