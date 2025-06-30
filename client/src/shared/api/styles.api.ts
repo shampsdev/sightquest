@@ -9,6 +9,13 @@ export const getStyles = async (params: {
   return response.data;
 };
 
+export const buyStyle = async (styleId: string) => {
+  const response = await api.post(`api/v1/styles/id/${styleId}/buy`, {
+    styleId,
+  });
+  return response.data;
+};
+
 export const setAvatar = async (styleId: string): Promise<void> => {
   const response = await api.post("api/v1/styles/me/avatar", {
     styleId,

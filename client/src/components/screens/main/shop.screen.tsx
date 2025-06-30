@@ -30,21 +30,35 @@ export const ShopScreen = () => {
 
   const [selectedSeciton, setSelectedSection] = useState<string>("Аватарки");
 
-  const { data: avatars, isFetched: isAvatarsFetched } = useStyles({
+  const {
+    data: avatars,
+    isFetched: isAvatarsFetched,
+    buyStyle,
+  } = useStyles({
     type: "avatar",
   });
 
   const routes: RouteData[] = [
     {
       coords: { lon: 30.33018, lat: 59.945526 },
-      route: "A",
-      title: "ABOBA",
+      route: {
+        id: "",
+        title: "Kletka",
+        description: "",
+        priceRoubles: 0,
+        taskPoints: [],
+      },
       disabled: true,
     },
     {
       coords: { lon: 30.33018, lat: 59.945526 },
-      route: "A",
-      title: "ABIBA",
+      route: {
+        id: "",
+        title: "Peter I",
+        description: "",
+        priceRoubles: 0,
+        taskPoints: [],
+      },
     },
   ];
 
@@ -64,7 +78,7 @@ export const ShopScreen = () => {
         alert("Произошла ошибка при установке аватара");
       }
     } else {
-      alert("Mocked avatar purchase");
+      await buyStyle(avatar.id);
     }
   };
 
