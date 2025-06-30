@@ -1,23 +1,72 @@
-import { AppState } from "react-native";
-import BackgroundGeolocation from "react-native-background-geolocation";
+import { AppState, Platform, Linking } from "react-native";
+import * as Location from "expo-location";
+import * as TaskManager from "expo-task-manager";
 import { useEffect, useState } from "react";
 
+const LOCATION_TASK_NAME = "background-location-task";
+
 const foregroundTracking = {
-  desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-  distanceFilter: 1,
-  notification: {
-    title: "Tracking",
-    text: "You're moving",
-  },
+  accuracy: Location.Accuracy.High,
+  distanceInterval: 1,
+  timeInterval: 500,
 };
 
 const backgroundTracking = {
-  desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-  distanceFilter: 5,
-  notification: {
-    title: "Tracking",
-    text: "In background",
-  },
+  accuracy: Location.Accuracy.High,
+  distanceInterval: 5,
+  timeInterval: 5000,
+};
+
+TaskManager.defineTask<{ locations: Location.LocationObject[] }>(
+  LOCATION_TASK_NAME,
+  async ({
+    data,
+    error,
+  }: TaskManager.TaskManagerTaskBody<{
+    locations: Location.LocationObject[];
+  }>): Promise<void> => {
+    if (error) {
+      console.error("Background location task error:", error);
+      return;
+    }
+    const { locations } = data;
+    if (locations && locations.length > 0) {
+      const loc = locations[0];
+      console.log("Background location received:", loc);
+    }
+  }
+);
+
+const requestPermissions = async () => {
+  if (Platform.OS === "android") {
+    const { status: foregroundStatus } =
+      await Location.requestForegroundPermissionsAsync();
+    const { status: backgroundStatus } =
+      await Location.requestBackgroundPermissionsAsync();
+    console.log("Android permissions:", { foregroundStatus, backgroundStatus });
+    if (foregroundStatus !== "granted" || backgroundStatus !== "granted") {
+      console.log("Redirecting to settings");
+      Linking.openSettings();
+      return false;
+    }
+    return true;
+  } else if (Platform.OS === "ios") {
+    const { status: foregroundStatus } =
+      await Location.requestForegroundPermissionsAsync();
+    const { status: backgroundStatus } =
+      await Location.requestBackgroundPermissionsAsync();
+    console.log("iOS permission status:", {
+      foregroundStatus,
+      backgroundStatus,
+    });
+    if (foregroundStatus !== "granted" || backgroundStatus !== "granted") {
+      console.log("Redirecting to settings");
+      Linking.openSettings();
+      return false;
+    }
+    return true;
+  }
+  return false;
 };
 
 export const useGeolocation = () => {
@@ -25,40 +74,63 @@ export const useGeolocation = () => {
 
   useEffect(() => {
     const configure = async () => {
-      await BackgroundGeolocation.ready({
-        logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-        ...foregroundTracking,
-      });
+      console.log("Configuring expo-location");
+      const hasPermissions = await requestPermissions();
+      if (!hasPermissions) {
+        console.log("Permissions not granted");
+        return;
+      }
 
-      BackgroundGeolocation.start();
-
-      BackgroundGeolocation.onMotionChange(({ isMoving }) => {
-        BackgroundGeolocation.setConfig(
-          isMoving ? foregroundTracking : backgroundTracking
+      try {
+        const foregroundSubscription = await Location.watchPositionAsync(
+          foregroundTracking,
+          (loc) => {
+            console.log("Foreground location received:", loc);
+            if (loc.coords) {
+              setLocation([loc.coords.longitude, loc.coords.latitude]);
+            }
+          }
         );
-      });
+
+        const isTaskRegistered = await TaskManager.isTaskRegisteredAsync(
+          LOCATION_TASK_NAME
+        );
+        if (!isTaskRegistered) {
+          await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+            ...backgroundTracking,
+            deferredUpdatesInterval: 5000,
+            deferredUpdatesDistance: 5,
+            showsBackgroundLocationIndicator: true,
+          });
+          console.log("Background location task started");
+        }
+      } catch (error) {
+        console.error("expo-location error:", error);
+      }
     };
 
     configure();
 
-    const unsubscribe = BackgroundGeolocation.onLocation((loc) => {
-      if (loc.coords) {
-        setLocation([loc.coords.longitude, loc.coords.latitude]);
-      }
-    });
-
     const listener = AppState.addEventListener("change", (state) => {
+      console.log("AppState changed:", state);
       if (state === "active") {
-        BackgroundGeolocation.setConfig(foregroundTracking);
+        Location.watchPositionAsync(foregroundTracking, (loc) => {
+          if (loc.coords) {
+            setLocation([loc.coords.longitude, loc.coords.latitude]);
+          }
+        });
       } else {
-        BackgroundGeolocation.setConfig(backgroundTracking);
+        Location.startLocationUpdatesAsync(
+          LOCATION_TASK_NAME,
+          backgroundTracking
+        );
       }
     });
 
     return () => {
-      BackgroundGeolocation.removeListeners();
+      console.log("Cleaning up expo-location");
+      Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
       listener.remove();
-      unsubscribe.remove();
     };
   }, []);
 

@@ -22,11 +22,7 @@ export const EditProfileScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const insets = useSafeAreaInsets();
   const { user, setUser } = useAuthStore();
-  const {
-    data: avatars,
-    isLoading,
-    isError,
-  } = useStyles({
+  const { data: avatars } = useStyles({
     type: "avatar",
     bought: true,
   });
@@ -70,7 +66,7 @@ export const EditProfileScreen = () => {
   return (
     <SafeAreaView
       className="flex-1 bg-bg_primary"
-      style={{ paddingTop: insets.top || 20 }}
+      style={{ paddingTop: insets.top }}
     >
       {step === 0 ? (
         <View className="flex-1">

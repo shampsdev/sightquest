@@ -14,7 +14,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 type NavProp = StackNavigationProp<GameStackParamList, "Lobby">;
 
@@ -26,7 +29,11 @@ export const LobbyScreen = () => {
   const { data: avatars } = useStyles({ type: "avatar" });
 
   const start = () => {
-    emit("startGame");
+    if (game && game?.state === "game") {
+      navigation.navigate("Game");
+    } else {
+      emit("startGame");
+    }
   };
 
   const back = () => {
@@ -39,8 +46,11 @@ export const LobbyScreen = () => {
     }
   }, [game?.state]);
 
+  useEffect(() => console.log(game?.players), [game]);
+
+  const insets = useSafeAreaInsets();
   return (
-    <SafeAreaView className="flex-1 bg-bg_primary">
+    <View className="flex-1 bg-bg_primary" style={{ paddingTop: insets.top }}>
       <View className="flex-1 w-full">
         <ScrollView
           className="w-full flex-1"
@@ -88,12 +98,16 @@ export const LobbyScreen = () => {
 
         {game && game.admin.id === user?.id && (
           <View className="absolute bottom-0 left-0 right-0 p-4 bg-bg_primary border-t border-white/10">
-            <Button onPress={start} className="w-full" text="Старт" />
+            <Button
+              onPress={start}
+              className="w-full"
+              text={game && game?.state === "game" ? "К игре" : "Старт"}
+            />
           </View>
         )}
 
         <StatusBar style="light" />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
