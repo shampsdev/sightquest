@@ -31,7 +31,7 @@ export const HomeScreen = () => {
   const { location } = useGeolocationStore();
   const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
-  const { game: storedGame, setGame, resetChat } = useGameStore();
+  const { game: storedGame, setGame, resetChat, setRoute } = useGameStore();
   const { data, isLoading, refetch, isError, error } = useGame(
     storedGame?.id || ""
   );
@@ -152,6 +152,7 @@ export const HomeScreen = () => {
               id={storedGame.id}
               onAccept={handleAccept}
               onDecline={() => {
+                setRoute(null);
                 setGame(null);
                 resetChat();
               }}

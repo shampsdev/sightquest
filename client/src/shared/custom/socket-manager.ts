@@ -17,7 +17,6 @@ function createSocket(): Sock {
     const originalOnevent = sock.onevent;
     sock.onevent = function (packet: any) {
       const [event, ...args] = packet.data;
-
       logger.log("socket", `< ${event}`, ...args);
       return originalOnevent.call(this, packet);
     };

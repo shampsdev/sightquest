@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Dimensions,
   FlatList,
@@ -177,7 +183,7 @@ export const RouteScreen = () => {
   const insets = useSafeAreaInsets();
   const { emit } = useSocket();
 
-  const { game } = useGameStore();
+  const { game, routeId } = useGameStore();
   const { user } = useAuthStore();
   const routes = mockRoutes;
 
@@ -187,10 +193,10 @@ export const RouteScreen = () => {
 
   const back = () => navigation.goBack();
 
-  const choose = useCallback(() => {
-    const selected = routes[index];
+  const selected = useMemo(() => routes[index], [index]);
 
-    // emit select route / settings update
+  const choose = useCallback(() => {
+    emit("setRoute", { routeId: selected.id });
     back();
     logger.log("ui", `selected route with id ${selected.id}`);
   }, [index, routes]);

@@ -6,6 +6,7 @@ import { EventMap, SocketManager } from "../custom/socket-manager";
 
 export interface ServerToClientEvents extends EventMap {
   chatMessage: (msg: string) => void;
+  settedRoute: (routeId: string) => void;
   authed: ({ user }: { user: User }) => void;
   game: ({ game }: { game: Game }) => void;
   playerJoined: ({ player }: { player: Player }) => void;
@@ -27,6 +28,7 @@ export interface ClientToServerEvents extends EventMap {
   auth: ({ token }: { token: string }) => void;
   joinGame: ({ gameId }: { gameId: string }) => void;
   locationUpdate: ({ location }: { location: Coords }) => void;
+  setRoute: ({ routeId }: { routeId: string }) => void;
   broadcast: ({ data }: { data: any }) => void;
   startGame: () => void;
   endGame: () => void;

@@ -20,6 +20,7 @@ interface ChatMessage {
 interface GameState {
   game: Game | null;
   chatMessages: ChatMessageGroup[];
+  routeId: string | null;
   setGame: (game: Game | null) => void;
   updateStatus: (newState: GameStatus) => void;
   addPlayer: (player: Player) => void;
@@ -27,12 +28,14 @@ interface GameState {
   updatePlayerLocation: (userId: string, location: Coords) => void;
   addMessage: (message: ChatMessage) => void;
   resetChat: () => void;
+  setRoute: (routeId: string | null) => void;
 }
 
 export const useGameStore = create<GameState>()(
   persist(
     (set, get) => ({
       game: null,
+      routeId: null,
       chatMessages: [],
       setGame: (game) => set({ game }),
       updateStatus: (newState) =>
@@ -90,6 +93,7 @@ export const useGameStore = create<GameState>()(
           };
         }),
       resetChat: () => set({ chatMessages: [] }),
+      setRoute: (routeId) => set({ routeId }),
     }),
     {
       name: "game-storage",
@@ -109,8 +113,12 @@ const {
   removePlayer,
   updatePlayerLocation,
   addMessage,
+  setRoute,
 } = useGameStore.getState();
 
+socket.on("settedRoute", (routeId) => {
+  setRoute(routeId);
+});
 socket.on("broadcasted", ({ player, data }) => {
   addMessage({ playerId: player.user.id ?? "", data: data });
 });
