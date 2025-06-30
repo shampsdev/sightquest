@@ -24,6 +24,7 @@ import { ReconnectNotification } from "@/components/ui/notifications/notificatio
 import { useGame } from "@/shared/api/hooks/useGame";
 import { ModalCard } from "@/components/widgets/modal-card";
 import { logger } from "@/shared/instances/logger.instance";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -82,6 +83,8 @@ export const HomeScreen = () => {
 
   const { data: avatars } = useStyles({ type: "avatar", bought: true });
 
+  const insets = useSafeAreaInsets();
+
   return (
     <View className="flex-1">
       <Map>
@@ -120,7 +123,10 @@ export const HomeScreen = () => {
         />
       </Map>
 
-      <View className="absolute top-20 w-full flex flex-col gap-[16px]">
+      <View
+        style={{ top: insets.top }}
+        className="absolute z-20 w-full flex flex-col gap-[16px]"
+      >
         <View className="w-[90%] mx-auto flex flex-row justify-between items-center">
           <Pressable onPress={shop}>
             <IconContainer>

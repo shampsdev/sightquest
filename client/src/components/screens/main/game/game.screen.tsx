@@ -5,7 +5,6 @@ import { ImageSourcePropType, Pressable, Text, View } from "react-native";
 import { Camera } from "@rnmapbox/maps";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { StatusBar } from "expo-status-bar";
-import { twMerge } from "tailwind-merge";
 import { Avatar } from "@/components/ui/avatar";
 import { AvatarStackSmall } from "@/components/ui/avatar-stack";
 import { IconContainer } from "@/components/ui/icons/icon-container";

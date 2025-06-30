@@ -24,7 +24,7 @@ export const GameStats = ({
             {date.toLocaleDateString("ru-RU")}
           </Text>
           <Text className="text-[#b6b6b6] font-onest-regular text-[16px]">
-            Маршрут: {route}
+            Маршрут: {route.title}
           </Text>
         </View>
         <Icons.Eye.Default />

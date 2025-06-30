@@ -36,6 +36,10 @@ export const LobbyScreen = () => {
     navigation.goBack();
   };
 
+  const routes = () => {
+    navigation.navigate("Route");
+  };
+
   useEffect(() => {
     if (game && game?.state === "game") {
       navigation.navigate("Game");
@@ -93,11 +97,12 @@ export const LobbyScreen = () => {
         </ScrollView>
 
         {game && game.admin.id === user?.id && (
-          <View className="absolute bottom-12 left-0 right-0 p-4">
+          <View className="absolute bottom-12 px-[5%] gap-2 flex flex-1 flex-row items-center">
+            <Button onPress={routes} className="flex-1 w-auto" text="Маршрут" />
             <Button
               onPress={start}
-              className="w-full"
-              text={game && game?.state === "game" ? "К игре" : "Старт"}
+              className="flex-1 w-auto bg-navigation"
+              text={game && game?.state === "game" ? "К игре" : "Начать"}
             />
           </View>
         )}

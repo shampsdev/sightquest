@@ -11,9 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
 import { Pressable, View, Text, ScrollView } from "react-native";
-import {
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export const AccountScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -77,7 +75,13 @@ export const AccountScreen = () => {
                       },
                     };
                   })}
-                  route={"A"}
+                  route={{
+                    id: "",
+                    title: "Петр I",
+                    description: "",
+                    priceRoubles: 0,
+                    taskPoints: [],
+                  }}
                   date={new Date(game.createdAt)}
                   onPress={() => {
                     navigation.navigate("History", { gameId: game.id });
