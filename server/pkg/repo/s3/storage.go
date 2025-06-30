@@ -43,7 +43,7 @@ func NewStorage(cfg config.S3Config) (*Storage, error) {
 	}, nil
 }
 
-func (s *Storage) SaveImageByURL(_ context.Context, imageURL string, destDir string) (string, error) {
+func (s *Storage) SaveImageByURL(_ context.Context, imageURL, destDir string) (string, error) {
 	imageData, err := downloadFromURL(imageURL)
 	if err != nil {
 		return "", fmt.Errorf("failed to download image: %w", err)
