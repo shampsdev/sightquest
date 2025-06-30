@@ -2,10 +2,8 @@ package state
 
 import (
 	"context"
-	"log/slog"
 
 	"github.com/google/uuid"
-	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
 
 type Event interface {
