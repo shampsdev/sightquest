@@ -70,9 +70,12 @@ func (g *Game) GetLastGamesByPlayer(ctx context.Context, playerID string, limit 
 	return games, nil
 }
 
-func (g *Game) SetGameRoute(ctx context.Context, gameID string, routeID string) error {
-	g.gameRepo.Patch(ctx, gameID, &domain.PatchGame{
+func (g *Game) SetGameRoute(ctx context.Context, gameID, routeID string) error {
+	err := g.gameRepo.Patch(ctx, gameID, &domain.PatchGame{
 		RouteID: &routeID,
 	})
+	if err != nil {
+		return fmt.Errorf("failed to set game route: %w", err)
+	}
 	return nil
 }

@@ -28,7 +28,7 @@ func (r *Route) GetRouteByID(ctx context.Context, id string) (*domain.Route, err
 	return repo.First(r.routeRepo)(ctx, &domain.FilterRoute{ID: &id, IncludeTaskPoints: true})
 }
 
-func (r *Route) EnsureRouteBought(ctx context.Context, userID string, routeID string) error {
+func (r *Route) EnsureRouteBought(ctx context.Context, userID, routeID string) error {
 	_, err := repo.First(r.routeRepo)(ctx, &domain.FilterRoute{
 		ID:     &routeID,
 		UserID: &userID,
