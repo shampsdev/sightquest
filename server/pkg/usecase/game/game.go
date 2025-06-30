@@ -208,6 +208,7 @@ func (g *Game) OnPause(c Context, ev event.Pause) error {
 	pausePollCreate := &domain.CreatePoll{
 		GameID:   g.game.ID,
 		Type:     domain.PollTypePause,
+		State:    domain.PollStateActive,
 		Duration: &ev.Duration,
 		Data: &domain.PollData{
 			Pause: &domain.PollDataPause{
@@ -229,9 +230,7 @@ func (g *Game) OnPause(c Context, ev event.Pause) error {
 	}
 	g.game.ActivePoll = poll
 
-	c.Broadcast(event.Paused{
-		PollDataPause: *pausePollCreate.Data.Pause,
-	})
+	c.Broadcast(event.Poll{Poll: poll})
 
 	return nil
 }
@@ -244,16 +243,10 @@ func (g *Game) OnUnpause(c Context, _ event.Unpause) error {
 		return fmt.Errorf("can't unpause, game is not in pause")
 	}
 
-	c.Broadcast(event.Unpaused{
-		UnpausedBy: c.S.Player,
-	})
-
 	err := g.voteInActive(c, domain.VoteTypeUnpause, nil)
 	if err != nil {
 		return fmt.Errorf("failed to vote in active: %w", err)
 	}
-
-	g.game.ActivePoll = nil
 
 	return nil
 }

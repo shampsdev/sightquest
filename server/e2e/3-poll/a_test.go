@@ -15,9 +15,8 @@ func TestMain(m *testing.M) {
 	fw.RecordEvents(
 		event.ErrorEvent,
 		event.PauseEvent,
-		event.PausedEvent,
 		event.UnpauseEvent,
-		event.UnpausedEvent,
+		event.PollEvent,
 	)
 	fw.TestMain(m)
 }
@@ -34,11 +33,18 @@ func Test(t *testing.T) {
 	}, 3)
 
 	fw.Step("Pause", func() {
-		cli1.Emit(event.Pause{})
+		cli1.Emit(event.Pause{Duration: 100})
 	}, 2)
 
 	fw.Step("Unpause", func() {
 		cli2.Emit(event.Unpause{})
+	}, 2)
+
+	fw.Step("Small pause", func() {
+		cli1.Emit(event.Pause{Duration: 3})
+	}, 2)
+
+	fw.Step("Wait for small pause end", func() {
 	}, 2)
 
 	assert.NoError(t, cli1.Close())

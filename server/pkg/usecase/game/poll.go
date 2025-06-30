@@ -8,6 +8,7 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/domain"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/event"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/state"
+	"github.com/shampsdev/sightquest/server/pkg/utils"
 	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
 
@@ -40,17 +41,41 @@ func (g *Game) checkActivePoll(ctx context.Context) {
 
 	switch activePoll.Type {
 	case domain.PollTypePause:
-		g.checkActivePollPause(ctx, activePoll)
+		g.checkActivePollPause(ctx)
 	case domain.PollTypeTaskCompleted:
 	}
 }
 
-func (g *Game) checkActivePollPause(ctx context.Context, poll *domain.Poll) {
-	if poll.CreatedAt.Add(time.Duration(*poll.Duration) * time.Second).Before(time.Now()) {
-		g.game.ActivePoll = nil
-		g.broadcast(event.Unpaused{})
-		slogx.Info(ctx, "poll finished", "poll_id", poll.ID)
+func (g *Game) checkActivePollPause(ctx context.Context) {
+	poll := g.game.ActivePoll
+	if poll.CreatedAt.Add(time.Duration(*poll.Duration)*time.Second).Before(time.Now()) ||
+		len(poll.Votes) > 0 {
+		err := g.finishActive(ctx)
+		if err != nil {
+			slogx.Error(ctx, "failed to finish poll", "poll_id", poll.ID, "err", err)
+			return
+		}
+		return
 	}
+}
+
+func (g *Game) finishActive(ctx context.Context) error {
+	poll := g.game.ActivePoll
+	err := g.pollRepo.Patch(ctx, poll.ID, &domain.PatchPoll{
+		State: utils.PtrTo(domain.PollStateFinished),
+	})
+	if err != nil {
+		return fmt.Errorf("failed to patch poll: %w", err)
+	}
+
+	poll.State = domain.PollStateFinished
+
+	g.broadcast(event.Poll{
+		Poll: poll,
+	})
+	g.game.ActivePoll = nil
+	slogx.Info(ctx, "poll finished", "poll_id", poll.ID)
+	return nil
 }
 
 func (g *Game) broadcast(ev state.Event) {

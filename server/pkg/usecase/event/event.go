@@ -18,10 +18,9 @@ const (
 	LeaveGameEvent       = "leaveGame"
 
 	// polls
-	PauseEvent    = "pause"
-	PausedEvent   = "paused"
-	UnpauseEvent  = "unpause"
-	UnpausedEvent = "unpaused"
+	PauseEvent   = "pause"
+	UnpauseEvent = "unpause"
+	PollEvent    = "poll"
 
 	BroadcastEvent   = "broadcast"
 	BroadcastedEvent = "broadcasted"
@@ -90,6 +89,21 @@ type PlayerLeft struct {
 
 func (e PlayerLeft) Event() string { return PlayerLeftEvent }
 
+// server -> client
+type Poll struct {
+	Poll *domain.Poll `json:"poll"`
+}
+
+type PollStatus string
+
+const (
+	PollStatusStarted  PollStatus = "started"
+	PollStatusUpdated  PollStatus = "updated"
+	PollStatusFinished PollStatus = "finished"
+)
+
+func (e Poll) Event() string { return PollEvent }
+
 // client -> server
 type Pause struct {
 	Duration int `json:"duration"`
@@ -97,23 +111,10 @@ type Pause struct {
 
 func (e Pause) Event() string { return PauseEvent }
 
-type Paused struct {
-	domain.PollDataPause `json:",inline"`
-}
-
-func (e Paused) Event() string { return PausedEvent }
-
 // client -> server
 type Unpause struct{}
 
 func (e Unpause) Event() string { return UnpauseEvent }
-
-// server -> client
-type Unpaused struct {
-	UnpausedBy *domain.Player `json:"unpausedBy"`
-}
-
-func (e Unpaused) Event() string { return UnpausedEvent }
 
 // client -> server
 type LocationUpdate struct {

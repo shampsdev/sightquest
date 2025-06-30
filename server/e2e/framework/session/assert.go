@@ -34,6 +34,8 @@ func isIgnoredMapEntry(key string, _ any) bool {
 	return slices.Contains([]string{
 		"id",
 		"gameId",
+		"pollId",
+		"playerId",
 		"createdAt",
 		"updatedAt",
 	}, key)
