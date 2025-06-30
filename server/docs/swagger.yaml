@@ -26,6 +26,8 @@ definitions:
     type: object
   domain.Game:
     properties:
+      activePoll:
+        $ref: '#/definitions/domain.Poll'
       admin:
         $ref: '#/definitions/domain.User'
       createdAt:
@@ -85,6 +87,78 @@ definitions:
     x-enum-varnames:
     - PlayerRoleRunner
     - PlayerRoleCatcher
+  domain.Poll:
+    properties:
+      createdAt:
+        type: string
+      data:
+        $ref: '#/definitions/domain.PollData'
+      duration:
+        type: integer
+      gameId:
+        type: string
+      id:
+        type: string
+      result:
+        $ref: '#/definitions/domain.PollResult'
+      state:
+        $ref: '#/definitions/domain.PollState'
+      type:
+        $ref: '#/definitions/domain.PollType'
+      votes:
+        items:
+          $ref: '#/definitions/domain.Vote'
+        type: array
+    type: object
+  domain.PollData:
+    properties:
+      pause:
+        $ref: '#/definitions/domain.PollDataPause'
+      taskCompleted:
+        $ref: '#/definitions/domain.PollDataTaskCompleted'
+    type: object
+  domain.PollDataPause:
+    properties:
+      duration:
+        type: integer
+      pausedBy:
+        $ref: '#/definitions/domain.Player'
+    type: object
+  domain.PollDataTaskCompleted:
+    properties:
+      photo:
+        type: string
+      player:
+        $ref: '#/definitions/domain.Player'
+      task:
+        $ref: '#/definitions/domain.TaskPoint'
+    type: object
+  domain.PollResult:
+    properties:
+      pause:
+        $ref: '#/definitions/domain.PollResultPause'
+    type: object
+  domain.PollResultPause:
+    properties:
+      pausedBy:
+        $ref: '#/definitions/domain.Player'
+    type: object
+  domain.PollState:
+    enum:
+    - active
+    - finished
+    type: string
+    x-enum-varnames:
+    - PollStateActive
+    - PollStateFinished
+  domain.PollType:
+    enum:
+    - pause
+    - taskCompleted
+    type: string
+    x-enum-varnames:
+    - PollTypePause
+    - PollTypeTaskCompleted
   domain.Route:
     properties:
       bought:
@@ -160,6 +234,34 @@ definitions:
   domain.UserStyles:
     properties:
       avatarId:
+        type: string
+    type: object
+  domain.Vote:
+    properties:
+      createdAt:
+        type: string
+      data:
+        $ref: '#/definitions/domain.VoteData'
+      gameId:
+        type: string
+      playerId:
+        type: string
+      pollId:
+        type: string
+      type:
+        $ref: '#/definitions/domain.VoteType'
+    type: object
+  domain.VoteData:
+    type: object
+  domain.VoteType:
+    enum:
+    - unpause
+    type: string
+    x-enum-varnames:
+    - VoteTypeUnpause
+  image.UploadResponse:
+    properties:
+      url:
         type: string
     type: object
   style.setAvatarRequest:
@@ -288,6 +390,39 @@ paths:
       summary: Get last N games for a player
       tags:
       - game
+  /images/upload/by_file:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Image data
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Directory in s3 storage
+        in: query
+        name: dir
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: A url to the stored image
+          schema:
+            $ref: '#/definitions/image.UploadResponse'
+        "400":
+          description: Parsing error
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      summary: Upload file to s3
+      tags:
+      - images
   /route:
     get:
       consumes:

@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"errors"
+	"io"
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
 )
@@ -72,4 +73,8 @@ type Vote interface {
 	Patch(ctx context.Context, pollID, playerID string, vote *domain.PatchVote) error
 	Filter(ctx context.Context, filter *domain.FilterVote) ([]*domain.Vote, error)
 	Delete(ctx context.Context, pollID, playerID string) error
+}
+
+type ImageStorage interface {
+	SaveImageByReader(ctx context.Context, imageData io.Reader, destDir string) (string, error)
 }

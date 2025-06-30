@@ -36,6 +36,7 @@ require (
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
@@ -72,6 +73,7 @@ require (
 require (
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/Vaniog/go-postgis v0.0.0-20240619200434-9c2eb8ed621e
+	github.com/aws/aws-sdk-go v1.55.7
 	github.com/gin-contrib/pprof v1.5.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.2

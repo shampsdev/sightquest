@@ -201,6 +201,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/images/upload/by_file": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "images"
+                ],
+                "summary": "Upload file to s3",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Image data",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Directory in s3 storage",
+                        "name": "dir",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A url to the stored image",
+                        "schema": {
+                            "$ref": "#/definitions/image.UploadResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Parsing error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
         "/route": {
             "get": {
                 "consumes": [
@@ -503,6 +555,9 @@ const docTemplate = `{
         "domain.Game": {
             "type": "object",
             "properties": {
+                "activePoll": {
+                    "$ref": "#/definitions/domain.Poll"
+                },
                 "admin": {
                     "$ref": "#/definitions/domain.User"
                 },
@@ -587,6 +642,115 @@ const docTemplate = `{
             "x-enum-varnames": [
                 "PlayerRoleRunner",
                 "PlayerRoleCatcher"
+            ]
+        },
+        "domain.Poll": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/domain.PollData"
+                },
+                "duration": {
+                    "type": "integer"
+                },
+                "gameId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "result": {
+                    "$ref": "#/definitions/domain.PollResult"
+                },
+                "state": {
+                    "$ref": "#/definitions/domain.PollState"
+                },
+                "type": {
+                    "$ref": "#/definitions/domain.PollType"
+                },
+                "votes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Vote"
+                    }
+                }
+            }
+        },
+        "domain.PollData": {
+            "type": "object",
+            "properties": {
+                "pause": {
+                    "$ref": "#/definitions/domain.PollDataPause"
+                },
+                "taskCompleted": {
+                    "$ref": "#/definitions/domain.PollDataTaskCompleted"
+                }
+            }
+        },
+        "domain.PollDataPause": {
+            "type": "object",
+            "properties": {
+                "duration": {
+                    "type": "integer"
+                },
+                "pausedBy": {
+                    "$ref": "#/definitions/domain.Player"
+                }
+            }
+        },
+        "domain.PollDataTaskCompleted": {
+            "type": "object",
+            "properties": {
+                "photo": {
+                    "type": "string"
+                },
+                "player": {
+                    "$ref": "#/definitions/domain.Player"
+                },
+                "task": {
+                    "$ref": "#/definitions/domain.TaskPoint"
+                }
+            }
+        },
+        "domain.PollResult": {
+            "type": "object",
+            "properties": {
+                "pause": {
+                    "$ref": "#/definitions/domain.PollResultPause"
+                }
+            }
+        },
+        "domain.PollResultPause": {
+            "type": "object",
+            "properties": {
+                "pausedBy": {
+                    "$ref": "#/definitions/domain.Player"
+                }
+            }
+        },
+        "domain.PollState": {
+            "type": "string",
+            "enum": [
+                "active",
+                "finished"
+            ],
+            "x-enum-varnames": [
+                "PollStateActive",
+                "PollStateFinished"
+            ]
+        },
+        "domain.PollType": {
+            "type": "string",
+            "enum": [
+                "pause",
+                "taskCompleted"
+            ],
+            "x-enum-varnames": [
+                "PollTypePause",
+                "PollTypeTaskCompleted"
             ]
         },
         "domain.Route": {
@@ -703,6 +867,49 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "avatarId": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Vote": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/domain.VoteData"
+                },
+                "gameId": {
+                    "type": "string"
+                },
+                "playerId": {
+                    "type": "string"
+                },
+                "pollId": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/domain.VoteType"
+                }
+            }
+        },
+        "domain.VoteData": {
+            "type": "object"
+        },
+        "domain.VoteType": {
+            "type": "string",
+            "enum": [
+                "unpause"
+            ],
+            "x-enum-varnames": [
+                "VoteTypeUnpause"
+            ]
+        },
+        "image.UploadResponse": {
+            "type": "object",
+            "properties": {
+                "url": {
                     "type": "string"
                 }
             }
