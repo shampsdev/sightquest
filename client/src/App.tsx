@@ -13,6 +13,7 @@ import { MainNavigator } from "./routers/main.navigator";
 import { useSocket } from "./shared/hooks/useSocket";
 import { useAuthStore } from "./shared/stores/auth.store";
 import { useGeolocationStore } from "./shared/stores/location.store";
+import { logger } from "./shared/instances/logger.instance";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,11 +46,10 @@ export default function App() {
   });
 
   const { auth, token } = useAuthStore();
-  // const { isConnected, emit } = useSocket();
+  const { isConnected, emit } = useSocket();
 
   useEffect(() => {
     startTracking();
-    // stopTracking();
   }, []);
 
   useEffect(() => {
@@ -58,11 +58,11 @@ export default function App() {
     }
   }, [loaded, error]);
 
-  // useEffect(() => {
-  //   if (token && isConnected) {
-  //     emit("auth", { token });
-  //   }
-  // }, [emit, isConnected]);
+  useEffect(() => {
+    if (token && isConnected) {
+      emit("auth", { token });
+    }
+  }, [token, isConnected]);
 
   if (!loaded && !error) {
     return null;
