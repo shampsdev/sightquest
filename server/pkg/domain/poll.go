@@ -19,8 +19,8 @@ type Poll struct {
 type PollType string
 
 const (
-	PollTypePause         PollType = "pause"
-	PollTypeTaskCompleted PollType = "taskCompleted"
+	PollTypePause        PollType = "pause"
+	PollTypeTaskComplete PollType = "taskComplete"
 )
 
 type PollState string
@@ -31,8 +31,8 @@ const (
 )
 
 type PollData struct {
-	Pause         *PollDataPause         `json:"pause,omitempty"`
-	TaskCompleted *PollDataTaskCompleted `json:"taskCompleted,omitempty"`
+	Pause        *PollDataPause        `json:"pause,omitempty"`
+	TaskComplete *PollDataTaskComplete `json:"taskComplete,omitempty"`
 }
 
 type PollDataPause struct {
@@ -40,18 +40,23 @@ type PollDataPause struct {
 	PausedBy *Player `json:"pausedBy"`
 }
 
-type PollDataTaskCompleted struct {
+type PollDataTaskComplete struct {
 	Task   *TaskPoint `json:"task"`
 	Player *Player    `json:"player"`
 	Photo  string     `json:"photo"`
 }
 
 type PollResult struct {
-	Pause *PollResultPause `json:"pause,omitempty"`
+	Pause        *PollResultPause        `json:"pause,omitempty"`
+	TaskComplete *PollResultTaskComplete `json:"taskComplete,omitempty"`
 }
 
 type PollResultPause struct {
-	PausedBy *Player `json:"pausedBy"`
+	UnpausedBy *Player `json:"unpausedBy"`
+}
+
+type PollResultTaskComplete struct {
+	Approved bool `json:"approved"`
 }
 
 type CreatePoll struct {

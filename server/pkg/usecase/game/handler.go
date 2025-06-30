@@ -61,7 +61,10 @@ func (h *Handler) buildRouter() {
 		On(event.StartGameEvent, callGame((*Game).OnStartGame)).
 		On(event.SetRouteEvent, callGame((*Game).OnSetRoute)).
 		On(event.PauseEvent, callGame((*Game).OnPause)).
-		On(event.UnpauseEvent, callGame((*Game).OnUnpause))
+		On(event.UnpauseEvent, callGame((*Game).OnUnpause)).
+		On(event.TaskCompleteEvent, callGame((*Game).OnTaskComplete)).
+		On(event.TaskApproveEvent, callGame((*Game).OnTaskApprove)).
+		On(event.TaskRejectEvent, callGame((*Game).OnTaskReject))
 
 	h.router = g.RootHandler()
 	h.registeredEvents = g.RegisteredEvents()

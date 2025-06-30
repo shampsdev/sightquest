@@ -125,7 +125,7 @@ func (r *Route) Filter(ctx context.Context, filter *domain.FilterRoute) ([]*doma
 	return routes, nil
 }
 
-func (r *Route) getTaskPointsForRoute(ctx context.Context, routeID string) ([]domain.TaskPoint, error) {
+func (r *Route) getTaskPointsForRoute(ctx context.Context, routeID string) ([]*domain.TaskPoint, error) {
 	q := `
 		SELECT tp.id, tp.title, tp.description, tp.task, tp.location, tp.score
 		FROM "taskpoint" tp
@@ -139,9 +139,9 @@ func (r *Route) getTaskPointsForRoute(ctx context.Context, routeID string) ([]do
 	}
 	defer rows.Close()
 
-	taskPoints := []domain.TaskPoint{}
+	taskPoints := []*domain.TaskPoint{}
 	for rows.Next() {
-		var tp domain.TaskPoint
+		tp := &domain.TaskPoint{}
 		location := postgis.PointS{}
 		err := rows.Scan(&tp.ID, &tp.Title, &tp.Description, &tp.Task, &location, &tp.Score)
 		if err != nil {

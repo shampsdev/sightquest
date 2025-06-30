@@ -12,6 +12,7 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/usecase/event"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/state"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
+	"github.com/shampsdev/sightquest/server/pkg/utils"
 	"github.com/shampsdev/sightquest/server/pkg/utils/slogx"
 )
 
@@ -205,7 +206,7 @@ func (g *Game) OnPause(c Context, ev event.Pause) error {
 		return fmt.Errorf("can't set pause, game is in poll")
 	}
 
-	pausePollCreate := &domain.CreatePoll{
+	_, err := g.createActivePoll(c, &domain.CreatePoll{
 		GameID:   g.game.ID,
 		Type:     domain.PollTypePause,
 		State:    domain.PollStateActive,
@@ -216,38 +217,115 @@ func (g *Game) OnPause(c Context, ev event.Pause) error {
 				Duration: ev.Duration,
 			},
 		},
-	}
-
-	id, err := g.pollRepo.Create(c.Ctx, pausePollCreate)
-	if err != nil {
-		return fmt.Errorf("failed to create poll: %w", err)
-	}
-	poll, err := repo.First(g.pollRepo)(c.Ctx, &domain.FilterPoll{
-		ID: &id,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to get poll: %w", err)
+		return fmt.Errorf("failed to create active poll: %w", err)
 	}
-	g.game.ActivePoll = poll
-
-	c.Broadcast(event.Poll{Poll: poll})
 
 	return nil
 }
 
 func (g *Game) OnUnpause(c Context, _ event.Unpause) error {
-	if g.game.ActivePoll == nil {
-		return fmt.Errorf("can't unpause, game is not in pause")
+	return g.onVote(c,
+		domain.PollTypePause,
+		domain.VoteTypeUnpause,
+		nil,
+	)
+}
+
+func (g *Game) OnTaskComplete(c Context, ev event.TaskComplete) error {
+	var task *domain.TaskPoint
+
+	for _, t := range g.game.Route.TaskPoints {
+		if t.ID == ev.TaskID {
+			task = t
+			break
+		}
 	}
-	if g.game.ActivePoll.Type != domain.PollTypePause {
-		return fmt.Errorf("can't unpause, game is not in pause")
+	if task == nil {
+		return fmt.Errorf("task not found")
 	}
 
-	err := g.voteInActive(c, domain.VoteTypeUnpause, nil)
+	if ev.PollDuration == nil {
+		ev.PollDuration = utils.PtrTo(45)
+	}
+
+	_, err := g.createActivePoll(c, &domain.CreatePoll{
+		GameID:   g.game.ID,
+		Type:     domain.PollTypeTaskComplete,
+		State:    domain.PollStateActive,
+		Duration: ev.PollDuration,
+		Data: &domain.PollData{
+			TaskComplete: &domain.PollDataTaskComplete{
+				Task:   task,
+				Player: c.S.Player,
+				Photo:  ev.Photo,
+			},
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create active poll: %w", err)
+	}
+
+	return nil
+}
+
+func (g *Game) OnTaskApprove(c Context, ev event.TaskApprove) error {
+	return g.onVote(c,
+		domain.PollTypeTaskComplete,
+		domain.VoteTypeTaskApprove,
+		&domain.VoteData{
+			Comment: ev.Comment,
+		},
+	)
+}
+
+func (g *Game) OnTaskReject(c Context, ev event.TaskReject) error {
+	return g.onVote(c,
+		domain.PollTypeTaskComplete,
+		domain.VoteTypeTaskReject,
+		&domain.VoteData{
+			Comment: ev.Comment,
+		},
+	)
+}
+
+func (g *Game) onVote(c Context, pollType domain.PollType, voteType domain.VoteType, data *domain.VoteData) error {
+	if err := g.ensurePollType(pollType); err != nil {
+		return fmt.Errorf("failed to ensure poll type: %w", err)
+	}
+
+	err := g.voteInActive(c, voteType, data)
 	if err != nil {
 		return fmt.Errorf("failed to vote in active: %w", err)
 	}
 
+	return nil
+}
+
+func (g *Game) createActivePoll(c Context, poll *domain.CreatePoll) (*domain.Poll, error) {
+	id, err := g.pollRepo.Create(c.Ctx, poll)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create poll: %w", err)
+	}
+	created, err := repo.First(g.pollRepo)(c.Ctx, &domain.FilterPoll{
+		ID: &id,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get poll: %w", err)
+	}
+	g.game.ActivePoll = created
+	c.Broadcast(event.Poll{Poll: created})
+	return created, nil
+}
+
+func (g *Game) ensurePollType(pollType domain.PollType) error {
+	if g.game.ActivePoll == nil {
+		return fmt.Errorf("game is not in poll")
+	}
+	if g.game.ActivePoll.Type != pollType {
+		return fmt.Errorf("game is not in poll of type %s", pollType)
+	}
 	return nil
 }
 

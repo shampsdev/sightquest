@@ -1,11 +1,11 @@
 package domain
 
 type Route struct {
-	ID           string      `json:"id"`
-	Title        string      `json:"title"`
-	Description  string      `json:"description"`
-	PriceRoubles int         `json:"priceRoubles"`
-	TaskPoints   []TaskPoint `json:"taskPoints"`
+	ID           string       `json:"id"`
+	Title        string       `json:"title"`
+	Description  string       `json:"description"`
+	PriceRoubles int          `json:"priceRoubles"`
+	TaskPoints   []*TaskPoint `json:"taskPoints"`
 
 	Bought *bool `json:"bought,omitempty"`
 }

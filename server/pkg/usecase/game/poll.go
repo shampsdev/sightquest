@@ -42,14 +42,15 @@ func (g *Game) checkActivePoll(ctx context.Context) {
 	switch activePoll.Type {
 	case domain.PollTypePause:
 		g.checkActivePollPause(ctx)
-	case domain.PollTypeTaskCompleted:
+	case domain.PollTypeTaskComplete:
+		g.checkActivePollTaskComplete(ctx)
 	}
 }
 
 func (g *Game) checkActivePollPause(ctx context.Context) {
 	poll := g.game.ActivePoll
-	if poll.CreatedAt.Add(time.Duration(*poll.Duration)*time.Second).Before(time.Now().UTC()) ||
-		len(poll.Votes) > 0 {
+
+	if g.pollExpired() || len(poll.Votes) > 0 {
 		result := domain.PollResult{Pause: &domain.PollResultPause{}}
 		if len(poll.Votes) > 0 {
 			player, ok := g.getPlayer(poll.Votes[0].PlayerID)
@@ -57,10 +58,9 @@ func (g *Game) checkActivePollPause(ctx context.Context) {
 				slogx.Error(ctx, "failed to get player", "player_id", poll.Votes[0].PlayerID)
 				return
 			}
-			result.Pause.PausedBy = player
+			result.Pause.UnpausedBy = player
 		}
-		g.game.ActivePoll.Result = &result
-		err := g.finishActive(ctx)
+		err := g.finishActive(ctx, result)
 		if err != nil {
 			slogx.Error(ctx, "failed to finish poll", "poll_id", poll.ID, "err", err)
 			return
@@ -69,8 +69,40 @@ func (g *Game) checkActivePollPause(ctx context.Context) {
 	}
 }
 
-func (g *Game) finishActive(ctx context.Context) error {
+func (g *Game) checkActivePollTaskComplete(ctx context.Context) {
 	poll := g.game.ActivePoll
+	approved := false
+	for _, vote := range poll.Votes {
+		if vote.Type == domain.VoteTypeTaskApprove {
+			approved = true
+			break
+		}
+	}
+
+	if g.pollExpired() || !approved {
+		result := domain.PollResult{TaskComplete: &domain.PollResultTaskComplete{
+			Approved: approved,
+		}}
+
+		err := g.finishActive(ctx, result)
+		if err != nil {
+			slogx.Error(ctx, "failed to finish poll", "poll_id", poll.ID, "err", err)
+			return
+		}
+		return
+	}
+}
+
+func (g *Game) pollExpired() bool {
+	if g.game.ActivePoll.Duration == nil {
+		return false
+	}
+	return g.game.ActivePoll.CreatedAt.Add(time.Duration(*g.game.ActivePoll.Duration) * time.Second).Before(time.Now().UTC())
+}
+
+func (g *Game) finishActive(ctx context.Context, result domain.PollResult) error {
+	poll := g.game.ActivePoll
+	poll.Result = &result
 	err := g.pollRepo.Patch(ctx, poll.ID, &domain.PatchPoll{
 		State:  utils.PtrTo(domain.PollStateFinished),
 		Result: &poll.Result,
@@ -81,9 +113,7 @@ func (g *Game) finishActive(ctx context.Context) error {
 
 	poll.State = domain.PollStateFinished
 
-	g.broadcast(event.Poll{
-		Poll: poll,
-	})
+	g.broadcast(event.Poll{Poll: poll})
 	g.game.ActivePoll = nil
 	slogx.Info(ctx, "poll finished", "poll_id", poll.ID)
 	return nil
@@ -96,6 +126,17 @@ func (g *Game) broadcast(ev state.Event) {
 }
 
 func (g *Game) voteInActive(c Context, t domain.VoteType, data *domain.VoteData) error {
+	alreadyVoted := false
+	for _, vote := range g.game.ActivePoll.Votes {
+		if vote.PlayerID == c.S.User.ID {
+			alreadyVoted = true
+			break
+		}
+	}
+	if alreadyVoted {
+		return fmt.Errorf("already voted")
+	}
+
 	vote := &domain.Vote{
 		Type:     t,
 		Data:     data,
@@ -116,5 +157,6 @@ func (g *Game) voteInActive(c Context, t domain.VoteType, data *domain.VoteData)
 	if err != nil {
 		return fmt.Errorf("failed to create vote: %w", err)
 	}
+	g.broadcast(event.Poll{Poll: g.game.ActivePoll})
 	return nil
 }

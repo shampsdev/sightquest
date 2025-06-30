@@ -1,0 +1,726 @@
+[
+  {
+    "Name": "User1 joining game",
+    "Events": {}
+  },
+  {
+    "Name": "User2 joining game",
+    "Events": {}
+  },
+  {
+    "Name": "Set route",
+    "Events": {}
+  },
+  {
+    "Name": "User1 completes task",
+    "Events": {
+      "user1": [
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:19.475255Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "cot-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 1",
+                    "id": "taskpoint-1-id",
+                    "location": {
+                      "lat": 30,
+                      "lon": 40
+                    },
+                    "score": 100,
+                    "task": "Task 1",
+                    "title": "Taskpoint 1"
+                  }
+                }
+              },
+              "duration": 3,
+              "gameId": "511363",
+              "id": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+              "result": null,
+              "state": "active",
+              "type": "taskComplete"
+            }
+          }
+        }
+      ],
+      "user2": [
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:19.475255Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "cot-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 1",
+                    "id": "taskpoint-1-id",
+                    "location": {
+                      "lat": 30,
+                      "lon": 40
+                    },
+                    "score": 100,
+                    "task": "Task 1",
+                    "title": "Taskpoint 1"
+                  }
+                }
+              },
+              "duration": 3,
+              "gameId": "511363",
+              "id": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+              "result": null,
+              "state": "active",
+              "type": "taskComplete"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Vote and wait for end",
+    "Events": {
+      "user1": [
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:19.475255Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "cot-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 1",
+                    "id": "taskpoint-1-id",
+                    "location": {
+                      "lat": 30,
+                      "lon": 40
+                    },
+                    "score": 100,
+                    "task": "Task 1",
+                    "title": "Taskpoint 1"
+                  }
+                }
+              },
+              "duration": 3,
+              "gameId": "511363",
+              "id": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+              "result": null,
+              "state": "active",
+              "type": "taskComplete",
+              "votes": [
+                {
+                  "createdAt": "0001-01-01T00:00:00Z",
+                  "data": {
+                    "comment": "Cool!"
+                  },
+                  "gameId": "511363",
+                  "playerId": "ef55eb57-62f8-4aec-b84a-f7b108320f94",
+                  "pollId": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+                  "type": "taskApprove"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:19.475255Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "cot-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 1",
+                    "id": "taskpoint-1-id",
+                    "location": {
+                      "lat": 30,
+                      "lon": 40
+                    },
+                    "score": 100,
+                    "task": "Task 1",
+                    "title": "Taskpoint 1"
+                  }
+                }
+              },
+              "duration": 3,
+              "gameId": "511363",
+              "id": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+              "result": {
+                "taskComplete": {
+                  "approved": true
+                }
+              },
+              "state": "finished",
+              "type": "taskComplete",
+              "votes": [
+                {
+                  "createdAt": "0001-01-01T00:00:00Z",
+                  "data": {
+                    "comment": "Cool!"
+                  },
+                  "gameId": "511363",
+                  "playerId": "ef55eb57-62f8-4aec-b84a-f7b108320f94",
+                  "pollId": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+                  "type": "taskApprove"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "user2": [
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:19.475255Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "cot-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 1",
+                    "id": "taskpoint-1-id",
+                    "location": {
+                      "lat": 30,
+                      "lon": 40
+                    },
+                    "score": 100,
+                    "task": "Task 1",
+                    "title": "Taskpoint 1"
+                  }
+                }
+              },
+              "duration": 3,
+              "gameId": "511363",
+              "id": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+              "result": null,
+              "state": "active",
+              "type": "taskComplete",
+              "votes": [
+                {
+                  "createdAt": "0001-01-01T00:00:00Z",
+                  "data": {
+                    "comment": "Cool!"
+                  },
+                  "gameId": "511363",
+                  "playerId": "ef55eb57-62f8-4aec-b84a-f7b108320f94",
+                  "pollId": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+                  "type": "taskApprove"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:19.475255Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "cot-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 1",
+                    "id": "taskpoint-1-id",
+                    "location": {
+                      "lat": 30,
+                      "lon": 40
+                    },
+                    "score": 100,
+                    "task": "Task 1",
+                    "title": "Taskpoint 1"
+                  }
+                }
+              },
+              "duration": 3,
+              "gameId": "511363",
+              "id": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+              "result": {
+                "taskComplete": {
+                  "approved": true
+                }
+              },
+              "state": "finished",
+              "type": "taskComplete",
+              "votes": [
+                {
+                  "createdAt": "0001-01-01T00:00:00Z",
+                  "data": {
+                    "comment": "Cool!"
+                  },
+                  "gameId": "511363",
+                  "playerId": "ef55eb57-62f8-4aec-b84a-f7b108320f94",
+                  "pollId": "664b6e56-b0be-4c76-be40-2fedf5eb4e89",
+                  "type": "taskApprove"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "User2 completes task",
+    "Events": {
+      "user1": [
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:23.076406Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "dag-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 2",
+                    "id": "taskpoint-2-id",
+                    "location": {
+                      "lat": 40,
+                      "lon": 50
+                    },
+                    "score": 150,
+                    "task": "Task 2",
+                    "title": "Taskpoint 2"
+                  }
+                }
+              },
+              "duration": 100,
+              "gameId": "511363",
+              "id": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+              "result": null,
+              "state": "active",
+              "type": "taskComplete"
+            }
+          }
+        }
+      ],
+      "user2": [
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:23.076406Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "dag-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 2",
+                    "id": "taskpoint-2-id",
+                    "location": {
+                      "lat": 40,
+                      "lon": 50
+                    },
+                    "score": 150,
+                    "task": "Task 2",
+                    "title": "Taskpoint 2"
+                  }
+                }
+              },
+              "duration": 100,
+              "gameId": "511363",
+              "id": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+              "result": null,
+              "state": "active",
+              "type": "taskComplete"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Reject and wait for end",
+    "Events": {
+      "user1": [
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:23.076406Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "dag-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 2",
+                    "id": "taskpoint-2-id",
+                    "location": {
+                      "lat": 40,
+                      "lon": 50
+                    },
+                    "score": 150,
+                    "task": "Task 2",
+                    "title": "Taskpoint 2"
+                  }
+                }
+              },
+              "duration": 100,
+              "gameId": "511363",
+              "id": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+              "result": null,
+              "state": "active",
+              "type": "taskComplete",
+              "votes": [
+                {
+                  "createdAt": "0001-01-01T00:00:00Z",
+                  "data": {
+                    "comment": "Not cool!"
+                  },
+                  "gameId": "511363",
+                  "playerId": "ef55eb57-62f8-4aec-b84a-f7b108320f94",
+                  "pollId": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+                  "type": "taskReject"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:23.076406Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "dag-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 2",
+                    "id": "taskpoint-2-id",
+                    "location": {
+                      "lat": 40,
+                      "lon": 50
+                    },
+                    "score": 150,
+                    "task": "Task 2",
+                    "title": "Taskpoint 2"
+                  }
+                }
+              },
+              "duration": 100,
+              "gameId": "511363",
+              "id": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+              "result": {
+                "taskComplete": {
+                  "approved": false
+                }
+              },
+              "state": "finished",
+              "type": "taskComplete",
+              "votes": [
+                {
+                  "createdAt": "0001-01-01T00:00:00Z",
+                  "data": {
+                    "comment": "Not cool!"
+                  },
+                  "gameId": "511363",
+                  "playerId": "ef55eb57-62f8-4aec-b84a-f7b108320f94",
+                  "pollId": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+                  "type": "taskReject"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "user2": [
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:23.076406Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "dag-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 2",
+                    "id": "taskpoint-2-id",
+                    "location": {
+                      "lat": 40,
+                      "lon": 50
+                    },
+                    "score": 150,
+                    "task": "Task 2",
+                    "title": "Taskpoint 2"
+                  }
+                }
+              },
+              "duration": 100,
+              "gameId": "511363",
+              "id": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+              "result": null,
+              "state": "active",
+              "type": "taskComplete",
+              "votes": [
+                {
+                  "createdAt": "0001-01-01T00:00:00Z",
+                  "data": {
+                    "comment": "Not cool!"
+                  },
+                  "gameId": "511363",
+                  "playerId": "ef55eb57-62f8-4aec-b84a-f7b108320f94",
+                  "pollId": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+                  "type": "taskReject"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-06-30T23:04:23.076406Z",
+              "data": {
+                "taskComplete": {
+                  "photo": "dag-photo",
+                  "player": {
+                    "gameId": "511363",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "fff71d9d-5579-43a3-a860-5882d127648c",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  },
+                  "task": {
+                    "description": "Description for Taskpoint 2",
+                    "id": "taskpoint-2-id",
+                    "location": {
+                      "lat": 40,
+                      "lon": 50
+                    },
+                    "score": 150,
+                    "task": "Task 2",
+                    "title": "Taskpoint 2"
+                  }
+                }
+              },
+              "duration": 100,
+              "gameId": "511363",
+              "id": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+              "result": {
+                "taskComplete": {
+                  "approved": false
+                }
+              },
+              "state": "finished",
+              "type": "taskComplete",
+              "votes": [
+                {
+                  "createdAt": "0001-01-01T00:00:00Z",
+                  "data": {
+                    "comment": "Not cool!"
+                  },
+                  "gameId": "511363",
+                  "playerId": "ef55eb57-62f8-4aec-b84a-f7b108320f94",
+                  "pollId": "085079cd-f46a-48c9-be5b-4a0a37afa9cf",
+                  "type": "taskReject"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+]

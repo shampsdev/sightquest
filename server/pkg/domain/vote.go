@@ -14,10 +14,17 @@ type Vote struct {
 type VoteType string
 
 const (
+	// pause
 	VoteTypeUnpause VoteType = "unpause"
+
+	// task
+	VoteTypeTaskApprove VoteType = "taskApprove"
+	VoteTypeTaskReject  VoteType = "taskReject"
 )
 
-type VoteData struct{}
+type VoteData struct {
+	Comment string `json:"comment,omitzero"`
+}
 
 type CreateVote struct {
 	PollID   string    `json:"pollId"`

@@ -29,6 +29,9 @@ var AllEvents = map[string]struct{}{
 	event.PollEvent:            {},
 	event.PauseEvent:           {},
 	event.UnpauseEvent:         {},
+	event.TaskCompleteEvent:    {},
+	event.TaskApproveEvent:     {},
+	event.TaskRejectEvent:      {},
 }
 
 func isE2ETesting() bool {

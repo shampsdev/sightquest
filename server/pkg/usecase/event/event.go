@@ -16,11 +16,12 @@ const (
 	LocationUpdateEvent  = "locationUpdate"
 	LocationUpdatedEvent = "locationUpdated"
 	LeaveGameEvent       = "leaveGame"
-
-	// polls
-	PauseEvent   = "pause"
-	UnpauseEvent = "unpause"
-	PollEvent    = "poll"
+	PauseEvent           = "pause"
+	UnpauseEvent         = "unpause"
+	TaskCompleteEvent    = "taskComplete"
+	TaskApproveEvent     = "taskApprove"
+	TaskRejectEvent      = "taskReject"
+	PollEvent            = "poll"
 
 	BroadcastEvent   = "broadcast"
 	BroadcastedEvent = "broadcasted"
@@ -107,6 +108,29 @@ func (e Pause) Event() string { return PauseEvent }
 type Unpause struct{}
 
 func (e Unpause) Event() string { return UnpauseEvent }
+
+// client -> server
+type TaskComplete struct {
+	PollDuration *int   `json:"pollDuration"`
+	TaskID       string `json:"taskId"`
+	Photo        string `json:"photo"`
+}
+
+func (e TaskComplete) Event() string { return TaskCompleteEvent }
+
+// client -> server
+type TaskApprove struct {
+	Comment string `json:"comment"`
+}
+
+func (e TaskApprove) Event() string { return TaskApproveEvent }
+
+// client -> server
+type TaskReject struct {
+	Comment string `json:"comment"`
+}
+
+func (e TaskReject) Event() string { return TaskRejectEvent }
 
 // client -> server
 type LocationUpdate struct {
