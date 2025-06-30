@@ -94,14 +94,6 @@ type Poll struct {
 	Poll *domain.Poll `json:"poll"`
 }
 
-type PollStatus string
-
-const (
-	PollStatusStarted  PollStatus = "started"
-	PollStatusUpdated  PollStatus = "updated"
-	PollStatusFinished PollStatus = "finished"
-)
-
 func (e Poll) Event() string { return PollEvent }
 
 // client -> server

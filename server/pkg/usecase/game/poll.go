@@ -50,6 +50,16 @@ func (g *Game) checkActivePollPause(ctx context.Context) {
 	poll := g.game.ActivePoll
 	if poll.CreatedAt.Add(time.Duration(*poll.Duration)*time.Second).Before(time.Now()) ||
 		len(poll.Votes) > 0 {
+		result := domain.PollResult{Pause: &domain.PollResultPause{}}
+		if len(poll.Votes) > 0 {
+			player, ok := g.getPlayer(poll.Votes[0].PlayerID)
+			if !ok {
+				slogx.Error(ctx, "failed to get player", "player_id", poll.Votes[0].PlayerID)
+				return
+			}
+			result.Pause.PausedBy = player
+		}
+		g.game.ActivePoll.Result = &result
 		err := g.finishActive(ctx)
 		if err != nil {
 			slogx.Error(ctx, "failed to finish poll", "poll_id", poll.ID, "err", err)
@@ -62,7 +72,8 @@ func (g *Game) checkActivePollPause(ctx context.Context) {
 func (g *Game) finishActive(ctx context.Context) error {
 	poll := g.game.ActivePoll
 	err := g.pollRepo.Patch(ctx, poll.ID, &domain.PatchPoll{
-		State: utils.PtrTo(domain.PollStateFinished),
+		State:  utils.PtrTo(domain.PollStateFinished),
+		Result: &poll.Result,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to patch poll: %w", err)

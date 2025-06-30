@@ -1,1 +1,2 @@
-ALTER TABLE "poll" ADD COLUMN "state" varchar(255) NOT NULL DEFAULT 'finished'  ;
+ALTER TABLE "poll" ADD COLUMN "state" varchar(255) NOT NULL DEFAULT 'finished';
+ALTER TABLE "poll" ALTER COLUMN "state" DROP DEFAULT;
