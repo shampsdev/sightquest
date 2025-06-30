@@ -20,6 +20,7 @@ import Animated, {
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 import { AvatarStyle } from "@/shared/interfaces/styles";
+import { logger } from "@/shared/instances/logger.instance";
 
 type Item = AvatarStyle;
 
@@ -54,7 +55,10 @@ const AvatarItem = ({
   });
 
   if (!item.style.url || item.style.url === "") {
-    console.warn(`Invalid image URL for item ${item.id}: ${item.style.url}`);
+    logger.warn(
+      "ui",
+      `Invalid image URL for item ${item.id}: ${item.style.url}`
+    );
     return null;
   }
 
@@ -64,7 +68,8 @@ const AvatarItem = ({
         source={{ uri: item.style.url }}
         style={styles.avatarImage}
         onError={(e) =>
-          console.error(
+          logger.error(
+            "ui",
             `Image failed to load: ${item.style.url}`,
             e.nativeEvent.error
           )
@@ -96,7 +101,7 @@ export const AvatarPicker = ({
     isSelecting.current = true;
 
     if (index < 0 || index >= avatars.length) {
-      console.warn(`Invalid centered index: ${index}`);
+      logger.warn("ui", `Invalid centered index: ${index}`);
       isSelecting.current = false;
       return;
     }
@@ -105,7 +110,10 @@ export const AvatarPicker = ({
     if (avatar && avatar.type === "avatar") {
       Haptics.selectionAsync();
       onSelect?.(avatar.id);
-      console.log(`Selected centered avatar: id=${avatar.id}, index=${index}`);
+      logger.log(
+        "ui",
+        `Selected centered avatar: id=${avatar.id}, index=${index}`
+      );
     }
 
     setTimeout(() => {
@@ -116,7 +124,7 @@ export const AvatarPicker = ({
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x;
-      console.log(`Scrolling: offset=${event.contentOffset.x}`);
+      logger.log("ui", `Scrolling: offset=${event.contentOffset.x}`);
     },
     onMomentumEnd: (event) => {
       const offset = event.contentOffset.x;
@@ -141,7 +149,8 @@ export const AvatarPicker = ({
         offset,
         animated: true,
       });
-      console.log(
+      logger.log(
+        "ui",
         `Tapped avatar: id=${item.id}, index=${index}, targetOffset=${offset}`
       );
     };
@@ -157,7 +166,7 @@ export const AvatarPicker = ({
 
   useEffect(() => {
     if (avatars.length === 0) {
-      console.log("No avatars to scroll to");
+      logger.log("ui", "No avatars to scroll to");
       return;
     }
     const middleIndex = Math.floor(avatars.length / 2);
@@ -169,7 +178,8 @@ export const AvatarPicker = ({
     scrollX.value = initialOffset;
     lastCenteredIndex.current = middleIndex;
     triggerHapticAndSelect(middleIndex);
-    console.log(
+    logger.log(
+      "ui",
       `Initial centered: index=${middleIndex}, offset=${initialOffset}`
     );
   }, [avatars]);

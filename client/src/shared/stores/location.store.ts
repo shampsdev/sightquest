@@ -36,7 +36,7 @@ TaskManager.defineTask<{ locations: LocationObject[] }>(
     error,
   }: TaskManagerTaskBody<{ locations: LocationObject[] }>): Promise<void> => {
     if (error) {
-      console.error("Background location task error:", error);
+      logger.error("geo", "Background location task error:", error);
       return;
     }
     const { locations } = data;

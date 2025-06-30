@@ -24,7 +24,7 @@ function createSocket(): Sock {
 
     const originalEmit = sock.emit.bind(sock);
     sock.emit = function (ev: string, ...args: any[]) {
-      console.info(`[socket] > ${ev}`, ...args);
+      logger.log("socket", `> ${ev}`, ...args);
       return originalEmit.call(this, ev, ...args);
     };
   }

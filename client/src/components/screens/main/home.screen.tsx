@@ -23,6 +23,7 @@ import { useGameStore } from "@/shared/stores/game.store";
 import { ReconnectNotification } from "@/components/ui/notifications/notification";
 import { useGame } from "@/shared/api/hooks/useGame";
 import { ModalCard } from "@/components/widgets/modal-card";
+import { logger } from "@/shared/instances/logger.instance";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -44,12 +45,12 @@ export const HomeScreen = () => {
           setGame(result.data);
           navigation.navigate("GameStack", { gameId: storedGame?.id || "" });
         } else {
-          console.error("Game data not found");
+          logger.error("game", "Game data not found");
           setGame(null);
           resetChat();
         }
       } catch (err) {
-        console.error("Error refetching game:", err);
+        logger.error("game", "Error refetching game:");
         setGame(null);
         resetChat();
       }
