@@ -1,4 +1,4 @@
-import { NicknameType } from "@/shared/interfaces/nickname";
+import { NicknameType } from "@/shared/interfaces/styles/nickname";
 import { BlurView } from "expo-blur";
 import { View, Text } from "react-native";
 

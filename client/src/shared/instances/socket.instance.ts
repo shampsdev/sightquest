@@ -1,14 +1,16 @@
 import { Coords } from "../interfaces/coords";
-import { Game } from "../interfaces/game";
-import { Player } from "../interfaces/player";
+import { Game } from "../interfaces/game/game";
+import { Player } from "../interfaces/game/player";
 import { User } from "../interfaces/user";
 import { EventMap, SocketManager } from "../custom/socket-manager";
+import { Route } from "../interfaces/route";
+import { Poll } from "../interfaces/polls/poll";
 
 export interface ServerToClientEvents extends EventMap {
-  chatMessage: (msg: string) => void;
-  settedRoute: (routeId: string) => void;
   authed: ({ user }: { user: User }) => void;
   game: ({ game }: { game: Game }) => void;
+  settedRoute: ({ route }: { route: Route }) => void;
+  chatMessage: (msg: string) => void;
   playerJoined: ({ player }: { player: Player }) => void;
   playerLeft: ({ player }: { player: Player }) => void;
   locationUpdated: ({
@@ -22,6 +24,7 @@ export interface ServerToClientEvents extends EventMap {
   startGame: () => void;
   endGame: () => void;
   error: ({ error }: { error: string }) => void;
+  poll: ({ poll }: { poll: Poll }) => void;
 }
 
 export interface ClientToServerEvents extends EventMap {
@@ -33,6 +36,8 @@ export interface ClientToServerEvents extends EventMap {
   startGame: () => void;
   endGame: () => void;
   leaveGame: () => void;
+  pause: ({ duration }: { duration: number }) => void;
+  unpause: () => void;
 }
 
 export const socket = new SocketManager<

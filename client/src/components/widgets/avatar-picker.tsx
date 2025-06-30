@@ -19,7 +19,7 @@ import Animated, {
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-import { AvatarStyle } from "@/shared/interfaces/styles";
+import { AvatarStyle } from "@/shared/interfaces/styles/styles";
 import { logger } from "@/shared/instances/logger.instance";
 
 type Item = AvatarStyle;

@@ -1,4 +1,4 @@
-import { Style, StyleType } from "@/shared/interfaces/styles";
+import { Style, StyleType } from "@/shared/interfaces/styles/styles";
 import { buyStyle, getStyles } from "../styles.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 

@@ -1,4 +1,4 @@
-import { NicknameType } from "@/shared/interfaces/nickname";
+import { NicknameType } from "@/shared/interfaces/styles/nickname";
 import { Image, ImageSourcePropType, View } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { Avatar } from "./avatar";

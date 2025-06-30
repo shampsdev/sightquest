@@ -44,14 +44,6 @@ export const GameNavigator = () => {
     emit("joinGame", { gameId: initialGame.id });
   }, [isLoading, error, initialGame]);
 
-  useEffect(() => {
-    if (location && game?.state !== "lobby" && game) {
-      emit("locationUpdate", {
-        location: { lon: location[0], lat: location[1] || 0 },
-      });
-    }
-  }, [location]);
-
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Lobby" component={LobbyScreen} />

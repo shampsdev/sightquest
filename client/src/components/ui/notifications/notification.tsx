@@ -26,16 +26,16 @@ export const ReconnectNotification = ({
       <BlurView
         style={{
           ...StyleSheet.absoluteFillObject,
-          borderRadius: 20,
+          borderRadius: 10,
         }}
         experimentalBlurMethod="dimezisBlurView"
         tint="dark"
-        intensity={10}
+        intensity={90}
       />
       <View
+        className="bg-bg_secondary"
         style={{
           ...StyleSheet.absoluteFillObject,
-          backgroundColor: "rgba(34, 34, 34, 0.8)",
           borderRadius: 20,
         }}
       />

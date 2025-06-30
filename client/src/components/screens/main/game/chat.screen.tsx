@@ -69,7 +69,7 @@ export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
   return (
     <Animated.View
       style={animatedStyle}
-      className="absolute w-full h-full flex justify-end items-center"
+      className="absolute w-full h-full flex justify-end items-center z-30"
       pointerEvents={visible ? "auto" : "none"}
     >
       <Pressable

@@ -18,7 +18,7 @@ import { useStyles } from "@/shared/api/hooks/useStyles";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { setAvatar } from "@/shared/api/styles.api";
 import { getMe } from "@/shared/api/auth.api";
-import { Style } from "@/shared/interfaces/styles";
+import { Style } from "@/shared/interfaces/styles/styles";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();

@@ -1,7 +1,7 @@
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { createGame } from "../game.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Game } from "@/shared/interfaces/game";
+import { Game } from "@/shared/interfaces/game/game";
 
 export const useCreateGame = () => {
   const queryClient = useQueryClient();

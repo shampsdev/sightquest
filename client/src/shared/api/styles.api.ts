@@ -1,5 +1,5 @@
 import { api } from "../instances/axios.instance";
-import { Style, StyleType } from "../interfaces/styles";
+import { Style, StyleType } from "../interfaces/styles/styles";
 
 export const getStyles = async (params: {
   type?: StyleType;

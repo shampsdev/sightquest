@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ImageSourcePropType, Pressable, Text, View } from "react-native";
 import { Camera } from "@rnmapbox/maps";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -24,6 +24,9 @@ import { DEFAULT_MAP_CAMERA_LOCATION } from "@/constants";
 import { useGeolocationStore } from "@/shared/stores/location.store";
 import { ModalCard } from "@/components/widgets/modal-card";
 import { BlurView } from "expo-blur";
+import { RouteMarker } from "@/components/ui/map/route-marker";
+import { PauseScreen } from "./pause.screen";
+import { isPause } from "@/shared/interfaces/polls/pause";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -39,9 +42,33 @@ export const GameScreen = () => {
   const { data: avatars } = useStyles({ type: "avatar" });
 
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
-  const [chatOpened, setChatOpened] = useState<boolean>(false);
   const leaderboardSheet = useRef<BottomSheet>(null);
   const [modalOpened, setModalOpened] = useState<boolean>(false);
+
+  const [chatOpened, setChatOpened] = useState<boolean>(false);
+  const [pauseOpened, setPauseOpened] = useState<boolean>(false);
+
+  const togglePauseGame = useCallback(() => {
+    if (!game) return;
+
+    if (
+      game.activePoll &&
+      game.activePoll.state === "active" &&
+      isPause(game.activePoll)
+    ) {
+      emit("unpause");
+    } else {
+      emit("pause", { duration: 5 });
+    }
+  }, [game]);
+
+  useEffect(() => {
+    if (!game || !game.activePoll) return;
+    const poll = game.activePoll;
+
+    if (isPause(poll) && poll.state === "active") setPauseOpened(true);
+    if (isPause(poll) && poll.state === "finished") setPauseOpened(false);
+  }, [game]);
 
   const players = game?.players ?? [];
 
@@ -53,7 +80,15 @@ export const GameScreen = () => {
     navigation.navigate("Home");
   };
 
+  const openChat = () => {
+    if (leaderboardOpened) {
+      leaderboardSheet.current?.close();
+    }
+    setChatOpened(true);
+  };
+
   useEffect(() => {
+    if (!game) return;
     if (location) {
       emit("locationUpdate", {
         location: { lon: location[0], lat: location[1] },
@@ -84,6 +119,19 @@ export const GameScreen = () => {
             ))}
           </>
         )}
+
+        {game && game?.route && (
+          <RouteMarker
+            points={game.route.taskPoints.map((x) => [
+              x.location.lon,
+              x.location.lat,
+            ])}
+            path={game.route.taskPoints.map((x) => [
+              x.location.lon,
+              x.location.lat,
+            ])}
+          />
+        )}
         <Camera
           defaultSettings={{
             centerCoordinate: location || DEFAULT_MAP_CAMERA_LOCATION,
@@ -92,21 +140,22 @@ export const GameScreen = () => {
         />
       </Map>
       {!chatOpened && (
-        <View className="absolute bottom-12 flex flex-row left-0 right-0 z-10">
-          <Button
-            onPress={() => {
-              if (leaderboardOpened) {
-                leaderboardSheet.current?.close();
-              }
-              setChatOpened(true);
-            }}
-            text="Chat"
-            className="mx-auto"
-          />
+        <View className="absolute px-[5%] gap-4 bottom-12 flex items-center flex-row left-0 right-0 z-10">
+          <Pressable onPress={togglePauseGame}>
+            <IconContainer>
+              {pauseOpened ? <Icons.Play /> : <Icons.Pause />}
+            </IconContainer>
+          </Pressable>
+          <Button text="Поймать" className="flex-1" />
+          <Pressable onPress={openChat}>
+            <IconContainer>
+              <Icons.Chat />
+            </IconContainer>
+          </Pressable>
         </View>
       )}
 
-      <View className="absolute top-20 w-full z-20">
+      <View className="absolute top-20 w-full z-40">
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
           <Pressable
             onPress={
@@ -192,6 +241,7 @@ export const GameScreen = () => {
       )}
 
       <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
+      <PauseScreen visible={pauseOpened} />
 
       <LeaderboardSheet
         ref={leaderboardSheet}

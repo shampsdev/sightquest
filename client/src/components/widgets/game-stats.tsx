@@ -1,4 +1,4 @@
-import { GameStatistics } from "@/shared/interfaces/game-statistics";
+import { GameStatistics } from "@/shared/interfaces/stats/game-statistics";
 import { View, Text, Pressable } from "react-native";
 import { AvatarStack } from "../ui/avatar-stack";
 import { Icons } from "../ui/icons/icons";

@@ -1,5 +1,5 @@
 import { useStyles } from "@/shared/api/hooks/useStyles";
-import { Player } from "@/shared/interfaces/player";
+import { Player } from "@/shared/interfaces/game/player";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import BottomSheet, {
   BottomSheetBackgroundProps,

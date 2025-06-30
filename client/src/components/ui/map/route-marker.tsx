@@ -3,14 +3,14 @@ import { PlaceMarker } from "./place-marker";
 
 type Point = [number, number];
 
-export interface Route {
+export interface RouteProps {
   points: Point[];
   path: Point[];
   disabled?: boolean;
   routeId?: string;
 }
 
-export const RouteMarker = ({ points, path, disabled = false, routeId }: Route) => {
+export const RouteMarker = ({ points, path, disabled = false, routeId }: RouteProps) => {
   function interpolate(p1: Point, p2: Point, t: number): Point {
     return [p1[0] + (p2[0] - p1[0]) * t, p1[1] + (p2[1] - p1[1]) * t];
   }

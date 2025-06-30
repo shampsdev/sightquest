@@ -1,5 +1,5 @@
 import { ImageSourcePropType } from "react-native";
-import { Route } from "./route";
+import { Route } from "../route";
 
 export interface UserStatistic {
   score: number;
