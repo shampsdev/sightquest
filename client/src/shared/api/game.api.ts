@@ -1,4 +1,4 @@
-import { Game } from "../interfaces/game";
+import { Game } from "../interfaces/game/game";
 import { api } from "../instances/axios.instance";
 
 export const createGame = async (): Promise<Game> => {

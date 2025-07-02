@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useImage, Skia, SkImage } from "@shopify/react-native-skia";
 import { ImageRequireSource } from "react-native";
+import { logger } from '../instances/logger.instance';
 
 interface RGBA {
   r: number;
@@ -77,7 +78,7 @@ export const usePixelColor = ({
           setPixelColor(null);
         }
       } catch (error) {
-        console.error("Error reading pixel:", error);
+        logger.error("ui", "Error reading pixel:", error);
         setPixelColor(null);
       }
     }

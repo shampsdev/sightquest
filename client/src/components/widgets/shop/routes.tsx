@@ -6,7 +6,6 @@ import { Route } from "@/shared/interfaces/route";
 export interface RouteData {
   coords: Coords;
   route: Route;
-  title: string;
   disabled?: boolean;
 }
 
@@ -20,7 +19,7 @@ export const RoutesWidget = (props: RoutesWidgetProps) => {
       {props.routes.map((route, index) => (
         <RouteCard
           key={index}
-          title={route.title}
+          title={route.route.title}
           route={route.route}
           coords={route.coords}
           disabled={route.disabled}

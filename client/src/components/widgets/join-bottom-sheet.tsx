@@ -29,7 +29,6 @@ export const JoinBottomSheet = forwardRef<BottomSheet, JoinBottomSheetProps>(
     const [code, setCode] = useState("");
 
     useImperativeHandle(ref, () => localRef.current!);
-    const [focus, setFocus] = useState<boolean>(false);
 
     const handleChangeText = useCallback((text: string) => {
       setCode(text);
@@ -39,7 +38,7 @@ export const JoinBottomSheet = forwardRef<BottomSheet, JoinBottomSheetProps>(
       <BottomSheet
         ref={localRef}
         index={-1}
-        snapPoints={focus ? ["80%"] : ["40%"]}
+        snapPoints={["40%"]}
         enableDynamicSizing={false}
         enablePanDownToClose
         backgroundStyle={{ backgroundColor: "#222323" }}
@@ -62,8 +61,6 @@ export const JoinBottomSheet = forwardRef<BottomSheet, JoinBottomSheetProps>(
               InputComponent={BottomSheetTextInput}
               value={formatCode(code)}
               onChangeText={handleChangeText}
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
               maxLength={7}
             />
             <Button

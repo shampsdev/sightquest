@@ -3,13 +3,14 @@ import { PlaceMarker } from "./place-marker";
 
 type Point = [number, number];
 
-export interface Route {
+export interface RouteProps {
   points: Point[];
   path: Point[];
   disabled?: boolean;
+  routeId?: string;
 }
 
-export const RouteMarker = ({ points, path, disabled = false }: Route) => {
+export const RouteMarker = ({ points, path, disabled = false, routeId }: RouteProps) => {
   function interpolate(p1: Point, p2: Point, t: number): Point {
     return [p1[0] + (p2[0] - p1[0]) * t, p1[1] + (p2[1] - p1[1]) * t];
   }
@@ -67,9 +68,9 @@ export const RouteMarker = ({ points, path, disabled = false }: Route) => {
       {points.map((coords, id) => {
         return <PlaceMarker key={id} disabled={disabled} coordinate={coords} />;
       })}
-      <ShapeSource id="route" shape={routeGeoJSON}>
+      <ShapeSource id={`route${routeId}`} shape={routeGeoJSON}>
         <LineLayer
-          id="routeLine"
+          id={`routeLine${routeId}`}
           style={{
             lineColor: disabled ? "#975DFF80" : "#975DFF",
             lineWidth: 4,

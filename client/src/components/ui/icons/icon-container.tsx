@@ -1,3 +1,4 @@
+import { BlurView } from "expo-blur";
 import { JSX } from "react";
 import { View, ViewProps } from "react-native";
 import { twMerge } from "tailwind-merge";
@@ -11,11 +12,16 @@ export const IconContainer = ({
   return (
     <View
       className={twMerge(
-        "items-center justify-center h-12 w-12 rounded-full bg-[#67676780]",
+        "h-12 w-12 rounded-full overflow-hidden bg-[#67676780]",
         className
       )}
     >
-      {icon}
+      <BlurView
+        className="h-full w-full items-center justify-center"
+        intensity={10}
+      >
+        {icon}
+      </BlurView>
     </View>
   );
 };

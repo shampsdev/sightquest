@@ -18,6 +18,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { logger } from "@/shared/instances/logger.instance";
 
 export const SignInScreen = () => {
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
@@ -31,7 +32,7 @@ export const SignInScreen = () => {
       const response = await loginRequest(username, password);
       login(response.user, response.token);
     } catch (error: any) {
-      console.error(error);
+      logger.error("ui", error);
       Alert.alert("Ошибка входа", "Неверный логин или пароль");
     }
   };

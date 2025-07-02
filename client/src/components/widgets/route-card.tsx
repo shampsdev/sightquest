@@ -43,6 +43,7 @@ export const RouteCard = ({
       <View className="w-full absolute flex flex-row items-center bottom-[8px] mx-auto justify-center">
         <View className="w-[95%] flex flex-row px-[20px] py-[8px] items-center justify-between overflow-hidden rounded-[40px]">
           <BlurView
+            experimentalBlurMethod="dimezisBlurView"
             style={{
               position: "absolute",
               top: 0,

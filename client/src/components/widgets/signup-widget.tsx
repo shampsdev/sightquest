@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 import { ProgressBarSteps } from "../ui/progress/progress-bar-steps";
 import { TextInput } from "../ui/textinput";
 import { AvatarPicker } from "./avatar-picker";
+import { logger } from "@/shared/instances/logger.instance";
 
 export const SignUpWidget = () => {
   const { user, token, login, setToken, setUser } = useAuthStore();
@@ -41,7 +42,7 @@ export const SignUpWidget = () => {
       setUser(response.user);
       setStep(1);
     } catch (error: any) {
-      console.error(error, error.response.data);
+      logger.error("ui", error, error.response.data);
       Alert.alert("Ошибка регистрации", "Проверьте корректность данных");
     }
   };

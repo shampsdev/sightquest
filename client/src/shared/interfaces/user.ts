@@ -1,4 +1,4 @@
-import { UserStyles } from "./styles";
+import { UserStyles } from "./styles/styles";
 
 export interface User {
   id?: string;

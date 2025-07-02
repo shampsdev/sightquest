@@ -13,13 +13,14 @@ import { MainNavigator } from "./routers/main.navigator";
 import { useSocket } from "./shared/hooks/useSocket";
 import { useAuthStore } from "./shared/stores/auth.store";
 import { useGeolocationStore } from "./shared/stores/location.store";
+import { logger } from "./shared/instances/logger.instance";
 
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
 export default function App() {
-  const { startTracking } = useGeolocationStore();
+  const { startTracking, stopTracking } = useGeolocationStore();
 
   const [loaded, error] = useFonts({
     "Bounded-Black": require("./assets/fonts/Bounded-Black.ttf"),
@@ -49,7 +50,7 @@ export default function App() {
 
   useEffect(() => {
     startTracking();
-  }, [startTracking]);
+  }, []);
 
   useEffect(() => {
     if (loaded || error) {
@@ -61,7 +62,7 @@ export default function App() {
     if (token && isConnected) {
       emit("auth", { token });
     }
-  }, [emit, isConnected]);
+  }, [token, isConnected]);
 
   if (!loaded && !error) {
     return null;

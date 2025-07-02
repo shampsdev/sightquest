@@ -1,6 +1,6 @@
-import { Coords } from "./coords";
+import { Coords } from "../coords";
 import { Role } from "./role";
-import { User } from "./user";
+import { User } from "../user";
 
 export interface Player {
   location: Coords;

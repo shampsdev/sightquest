@@ -95,6 +95,7 @@ export const EditProfileScreen = () => {
                     <Icons.Camera />
                   </IconContainer>
                   <BlurView
+                    experimentalBlurMethod="dimezisBlurView"
                     className="absolute top-0 left-0 right-0 bottom-0 z-10 rounded-full w-[154px] overflow-hidden h-[154px]"
                     style={{
                       position: "absolute",
