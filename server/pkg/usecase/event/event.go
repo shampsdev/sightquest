@@ -22,7 +22,13 @@ const (
 	TaskApproveEvent     = "taskApprove"
 	TaskRejectEvent      = "taskReject"
 	ScoreUpdatedEvent    = "scoreUpdated"
-	PollEvent            = "poll"
+
+	PlayerCatchEvent        = "playerCatch"
+	PlayerCatchApproveEvent = "playerCatchApprove"
+	PlayerCatchRejectEvent  = "playerCatchReject"
+	PlayerRoleUpdatedEvent  = "roleUpdated"
+
+	PollEvent = "poll"
 
 	BroadcastEvent   = "broadcast"
 	BroadcastedEvent = "broadcasted"
@@ -142,6 +148,37 @@ type ScoreUpdated struct {
 }
 
 func (e ScoreUpdated) Event() string { return ScoreUpdatedEvent }
+
+// client -> server
+type PlayerCatch struct {
+	PlayerID     string `json:"playerId"`
+	Photo        string `json:"photo"`
+	PollDuration *int   `json:"pollDuration"`
+}
+
+func (e PlayerCatch) Event() string { return PlayerCatchEvent }
+
+// client -> server
+type PlayerCatchApprove struct {
+	Comment string `json:"comment"`
+}
+
+func (e PlayerCatchApprove) Event() string { return PlayerCatchApproveEvent }
+
+// client -> server
+type PlayerCatchReject struct {
+	Comment string `json:"comment"`
+}
+
+func (e PlayerCatchReject) Event() string { return PlayerCatchRejectEvent }
+
+// server -> client
+type PlayerRoleUpdated struct {
+	Player *domain.Player    `json:"player"`
+	Role   domain.PlayerRole `json:"role"`
+}
+
+func (e PlayerRoleUpdated) Event() string { return PlayerRoleUpdatedEvent }
 
 // client -> server
 type LocationUpdate struct {

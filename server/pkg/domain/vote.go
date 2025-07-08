@@ -20,6 +20,10 @@ const (
 	// task
 	VoteTypeTaskApprove VoteType = "taskApprove"
 	VoteTypeTaskReject  VoteType = "taskReject"
+
+	// player catch
+	VoteTypePlayerCatchApprove VoteType = "playerCatchApprove"
+	VoteTypePlayerCatchReject  VoteType = "playerCatchReject"
 )
 
 type VoteData struct {
