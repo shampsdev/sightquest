@@ -1,13 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ImageSourcePropType, Pressable, Text, View } from "react-native";
 import { Camera } from "@rnmapbox/maps";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -20,7 +13,6 @@ import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { Button } from "@/components/ui/button";
 import { Map } from "@/components/widgets/map";
 import { LeaderboardSheet } from "@/components/widgets/leaderboard-sheet";
-import { ChatScreen } from "./chat.screen";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { useAuthStore } from "@/shared/stores/auth.store";
@@ -31,14 +23,16 @@ import { DEFAULT_MAP_CAMERA_LOCATION } from "@/constants";
 import { useGeolocationStore } from "@/shared/stores/location.store";
 import { BlurView } from "expo-blur";
 import { RouteMarker } from "@/components/ui/map/route-marker";
-import { PauseScreen } from "./pause.screen";
 import { isPause } from "@/shared/interfaces/polls/pause";
-import { CameraOverlay } from "@/components/overlays/camera";
+import { CameraOverlay } from "@/components/overlays/camera.overlay";
 import { useCamera } from "@/shared/hooks/useCamera";
-import { SendPhotoOverlay } from "@/components/overlays/send-photo";
+import { SendPhotoOverlay } from "@/components/overlays/send-photo.overlay";
 import { ModalCardProps } from "@/components/widgets/modal-card";
 import { useModal } from "@/shared/hooks/useModal";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
+import { Chat } from "@/components/overlays/chat.overlay";
+import { useGameOverlays } from "@/shared/hooks/useGameOverlays";
+import { PauseOverlay } from "@/components/overlays/pause.overlay";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -46,6 +40,14 @@ type NavProp = StackNavigationProp<
 >;
 
 export const GameScreen = () => {
+  const {
+    openedOverlay,
+    openOverlay,
+    closeOverlay,
+    isOverlayOpen,
+    isAnyOverlayOpen,
+  } = useGameOverlays();
+
   const navigation = useNavigation<NavProp>();
   const { game, updateStatus, resetChat, setGame } = useGameStore();
   const { location } = useGeolocationStore();
@@ -56,18 +58,10 @@ export const GameScreen = () => {
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
   const leaderboardSheet = useRef<BottomSheet>(null);
 
-  const [chatOpened, setChatOpened] = useState<boolean>(false);
-  const [pauseOpened, setPauseOpened] = useState<boolean>(false);
-  const [cameraOverlayOpened, setCameraOverlayOpened] =
-    useState<boolean>(false);
-  const [sendPhotoOverlayOpened, setSendPhotoOverlayOpened] =
-    useState<boolean>(false);
-
   const { setModalOpen } = useModal();
 
   const togglePauseGame = useCallback(() => {
     if (!game) return;
-
     if (
       game.activePoll &&
       game.activePoll.state === "active" &&
@@ -85,8 +79,8 @@ export const GameScreen = () => {
 
     if (isTaskPoll(poll)) console.info(poll.data);
 
-    if (isPause(poll) && poll.state === "active") setPauseOpened(true);
-    if (isPause(poll) && poll.state === "finished") setPauseOpened(false);
+    if (isPause(poll) && poll.state === "active") openOverlay("pause");
+    if (isPause(poll) && poll.state === "finished") closeOverlay();
   }, [game]);
 
   const players = game?.players ?? [];
@@ -104,7 +98,7 @@ export const GameScreen = () => {
     if (leaderboardOpened) {
       leaderboardSheet.current?.close();
     }
-    setChatOpened(true);
+    openOverlay("chat");
   };
 
   useEffect(() => {
@@ -136,7 +130,7 @@ export const GameScreen = () => {
 
   return (
     <View className="flex-1">
-      {!cameraOverlayOpened && !sendPhotoOverlayOpened && (
+      {!isOverlayOpen("camera") && (
         <Map>
           {location && players && (
             <>
@@ -179,17 +173,17 @@ export const GameScreen = () => {
           />
         </Map>
       )}
-      {!chatOpened && (
+      {!isOverlayOpen("chat") && (
         <View className="absolute px-[5%] gap-4 bottom-12 flex items-center flex-row left-0 right-0 z-10">
           <Pressable onPress={togglePauseGame}>
             <IconContainer>
-              {pauseOpened ? <Icons.Play /> : <Icons.Pause />}
+              {isOverlayOpen("pause") ? <Icons.Play /> : <Icons.Pause />}
             </IconContainer>
           </Pressable>
 
           <Button
             onPress={() => {
-              setCameraOverlayOpened(true);
+              openOverlay("camera");
             }}
             text="Поймать"
             className="flex-1"
@@ -201,33 +195,21 @@ export const GameScreen = () => {
           </Pressable>
         </View>
       )}
-
       <View className="absolute top-20 w-full z-40">
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
           <Pressable
             onPress={
-              chatOpened || cameraOverlayOpened || sendPhotoOverlayOpened
-                ? () => {
-                    setChatOpened(false);
-                    setCameraOverlayOpened(false);
-                    setSendPhotoOverlayOpened(false);
-                  }
-                : () => setModalOpen(modalOptions)
+              isAnyOverlayOpen ? closeOverlay : () => setModalOpen(modalOptions)
             }
           >
             <IconContainer>
-              {(chatOpened ||
-                cameraOverlayOpened ||
-                sendPhotoOverlayOpened) && <Icons.Back />}
-              {!chatOpened &&
-                !cameraOverlayOpened &&
-                !sendPhotoOverlayOpened && <Icons.Exit />}
+              {isAnyOverlayOpen ? <Icons.Back /> : <Icons.Exit />}
             </IconContainer>
           </Pressable>
 
           <Pressable
             onPress={() => {
-              setChatOpened(false);
+              closeOverlay();
               setLeaderboardOpened(!leaderboardOpened);
               if (leaderboardOpened) {
                 leaderboardSheet.current?.close();
@@ -282,30 +264,19 @@ export const GameScreen = () => {
           )}
         </View>
       </View>
-
-      {chatOpened && (
-        <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
-      )}
-      {pauseOpened && <PauseScreen visible={pauseOpened} />}
-
-      {cameraOverlayOpened && (
-        <CameraOverlay
-          visible={cameraOverlayOpened}
-          onClose={() => setCameraOverlayOpened(false)}
-          onSucces={() => {
-            setCameraOverlayOpened(false);
-            setSendPhotoOverlayOpened(true);
-          }}
-        />
-      )}
-
-      {sendPhotoOverlayOpened && (
-        <SendPhotoOverlay
-          visible={sendPhotoOverlayOpened}
-          onClose={() => setSendPhotoOverlayOpened(false)}
-        />
-      )}
-
+      <Chat visible={isOverlayOpen("chat")} onClose={closeOverlay} />
+      <PauseOverlay visible={isOverlayOpen("pause")} />
+      <CameraOverlay
+        visible={isOverlayOpen("camera")}
+        onClose={closeOverlay}
+        onSucces={() => {
+          openOverlay("sendPhoto");
+        }}
+      />
+      <SendPhotoOverlay
+        visible={isOverlayOpen("sendPhoto")}
+        onClose={closeOverlay}
+      />
       <LeaderboardSheet
         ref={leaderboardSheet}
         players={game?.players ?? []}

@@ -1,5 +1,3 @@
-import { IconContainer } from "@/components/ui/icons/icon-container";
-import { Icons } from "@/components/ui/icons/icons";
 import { BlurView } from "expo-blur";
 import React, { useEffect, useState } from "react";
 import {
@@ -8,7 +6,6 @@ import {
   Platform,
   KeyboardAvoidingView,
   StyleSheet,
-  Text,
   Image,
 } from "react-native";
 import Animated, {
@@ -21,10 +18,9 @@ import { Button } from "../ui/button";
 import { useCameraStore } from "@/shared/stores/camera.store";
 import { uploadImageToS3 } from "@/shared/api/s3.api";
 import { logger } from "@/shared/instances/logger.instance";
-import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
-import { Role } from "@/shared/interfaces/game/role";
 import { useSocket } from "@/shared/hooks/useSocket";
+import { usePlayer } from "@/shared/hooks/usePlayer";
 
 interface CameraOverlayProps {
   visible?: boolean;
@@ -35,8 +31,8 @@ export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
   const { photo } = useCameraStore();
   const { emit } = useSocket();
 
+  const { player } = usePlayer();
   const { game } = useGameStore();
-  const { user } = useAuthStore();
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -46,12 +42,6 @@ export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
       opacity.value = withTiming(0, { duration: 300 });
     }
   }, [visible]);
-
-  const [role, setRole] = useState<Role>("catcher");
-  useEffect(() => {
-    const userRole = game?.players.find((x) => x.user.id === user?.id)?.role;
-    if (userRole) setRole(userRole);
-  }, [game]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -79,7 +69,7 @@ export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
         style={{ zIndex: 30 }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         className={twMerge(
-          "py-[40px] px-[36px] h-[85%] mb-[80px] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
+          "py-[40px] h-[85%] mb-[80px] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
         )}
       >
         <View className="flex flex-col justify-center">
@@ -101,14 +91,14 @@ export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
                 "games"
               );
 
-              if (role === "catcher") {
+              if (player?.role === "catcher") {
                 emit("taskComplete", {
                   taskId: game?.route?.taskPoints[0].id ?? "",
                   photo: result.url,
                 });
               }
 
-              if (role === "runner") {
+              if (player?.role === "runner") {
                 emit("taskComplete", {
                   taskId: game?.route?.taskPoints[0].id ?? "",
                   photo: result.url,

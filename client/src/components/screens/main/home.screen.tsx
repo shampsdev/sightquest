@@ -24,7 +24,7 @@ import { ModalCardProps } from "@/components/widgets/modal-card";
 import { logger } from "@/shared/instances/logger.instance";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { CameraOverlay } from "@/components/overlays/camera";
+import { CameraOverlay } from "@/components/overlays/camera.overlay";
 
 import { useModal } from "@/shared/hooks/useModal";
 
