@@ -29,7 +29,7 @@ interface ChatScreenProps {
   onClose: () => void;
 }
 
-export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
+export const Chat = ({ visible, onClose }: ChatScreenProps) => {
   const { emit } = useSocket();
   const [message, setMessage] = useState("");
 
