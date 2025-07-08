@@ -187,6 +187,17 @@ func (g *Game) OnStartGame(c Context, _ event.StartGame) error {
 		return fmt.Errorf("failed to update game: %w", err)
 	}
 	c.Broadcast(event.StartGame{})
+
+	runner := g.game.Players[rand.Intn(len(g.game.Players))]
+	runner.Role = domain.PlayerRoleRunner
+	err = g.playerCase.UpdatePlayer(c.Ctx, runner.GameID, runner.User.ID, &domain.PatchPlayer{Role: &runner.Role})
+	if err != nil {
+		return fmt.Errorf("failed to update player: %w", err)
+	}
+	c.Broadcast(event.PlayerRoleUpdated{
+		Player: runner,
+		Role:   runner.Role,
+	})
 	return nil
 }
 
