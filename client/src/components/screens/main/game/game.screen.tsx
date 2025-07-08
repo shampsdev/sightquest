@@ -115,6 +115,17 @@ export const GameScreen = () => {
     if (isPause(poll) && poll.state === "finished") closeOverlay();
   }, [game?.activePoll]);
 
+  // on("playerRoleUpdated", ({ player, role }) => {
+  //   if (role === "runner") {
+  //     setPlayer(player);
+  //     openOverlay("updateRole");
+  //     setTimeout(() => {
+  //       closeOverlay();
+  //       resetUpdateRoleStore();
+  //     }, 4000);
+  //   }
+  // });
+
   const players = game?.players ?? [];
 
   const exit = () => {
