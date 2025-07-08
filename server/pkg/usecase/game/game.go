@@ -178,6 +178,9 @@ func (g *Game) OnStartGame(c Context, _ event.StartGame) error {
 	if g.game.State != domain.GameStateLobby {
 		return fmt.Errorf("can't start game, game is not in lobby")
 	}
+	if g.game.Route == nil {
+		return fmt.Errorf("can't start game, route is not set")
+	}
 
 	g.game.State = domain.GameStateGame
 	err := g.gameCase.UpdateGame(c.Ctx, g.game.ID, &domain.PatchGame{
