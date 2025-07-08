@@ -27,8 +27,10 @@ type Handler struct {
 	registeredEvents []string
 }
 
-type Context = *state.Context[*PlayerState]
-type Middleware = state.MiddlewareFunc[*PlayerState, *PlayerState, state.AnyEvent, state.AnyEvent]
+type (
+	Context    = *state.Context[*PlayerState]
+	Middleware = state.MiddlewareFunc[*PlayerState, *PlayerState, state.AnyEvent, state.AnyEvent]
+)
 
 func NewHandler(gameProvider *InMemoryGameRepo, userCase *usecore.User, auth *auth.Auth) *Handler {
 	h := &Handler{
