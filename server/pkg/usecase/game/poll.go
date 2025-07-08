@@ -139,7 +139,7 @@ func (g *Game) finishActive(ctx context.Context, result domain.PollResult) error
 
 	g.broadcast(event.Poll{Poll: poll})
 	g.game.ActivePoll = nil
-	slogx.Info(ctx, "poll finished", "poll_id", poll.ID)
+	slogx.Info(ctx, "poll finished", "poll", poll)
 	return nil
 }
 

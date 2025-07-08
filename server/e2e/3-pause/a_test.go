@@ -38,7 +38,7 @@ func Test(t *testing.T) {
 
 	fw.Step("Unpause", func() {
 		cli2.Emit(event.Unpause{})
-	}, 2)
+	}, 4)
 
 	fw.Step("Small pause", func() {
 		cli1.Emit(event.Pause{Duration: 3})

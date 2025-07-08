@@ -15,12 +15,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-06-30T20:27:42.688556Z",
+              "createdAt": "2025-07-08T17:15:46.442781Z",
               "data": {
                 "pause": {
                   "duration": 100,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -28,7 +28,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "1ed347d8-3a7c-40c6-bc18-ec41235ad59b",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -39,8 +39,8 @@
                 }
               },
               "duration": 100,
-              "gameId": "288707",
-              "id": "0a4d42ba-a898-48b2-bbff-b83799a58a83",
+              "gameId": "159176",
+              "id": "72e32b9a-551c-49ea-96a5-469e2e77c626",
               "result": null,
               "state": "active",
               "type": "pause"
@@ -53,12 +53,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-06-30T20:27:42.688556Z",
+              "createdAt": "2025-07-08T17:15:46.442781Z",
               "data": {
                 "pause": {
                   "duration": 100,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -66,7 +66,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "1ed347d8-3a7c-40c6-bc18-ec41235ad59b",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -77,8 +77,8 @@
                 }
               },
               "duration": 100,
-              "gameId": "288707",
-              "id": "0a4d42ba-a898-48b2-bbff-b83799a58a83",
+              "gameId": "159176",
+              "id": "72e32b9a-551c-49ea-96a5-469e2e77c626",
               "result": null,
               "state": "active",
               "type": "pause"
@@ -96,12 +96,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-06-30T20:27:42.688556Z",
+              "createdAt": "2025-07-08T17:15:46.442781Z",
               "data": {
                 "pause": {
                   "duration": 100,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -109,7 +109,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "1ed347d8-3a7c-40c6-bc18-ec41235ad59b",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -120,12 +120,34 @@
                 }
               },
               "duration": 100,
-              "gameId": "288707",
-              "id": "0a4d42ba-a898-48b2-bbff-b83799a58a83",
-              "result": {
+              "gameId": "159176",
+              "id": "72e32b9a-551c-49ea-96a5-469e2e77c626",
+              "result": null,
+              "state": "active",
+              "type": "pause",
+              "votes": [
+                {
+                  "createdAt": "2025-07-08T17:15:46.642306089Z",
+                  "data": null,
+                  "gameId": "159176",
+                  "playerId": "ad0baf60-1ca3-479a-8f18-05eadc5d4c37",
+                  "pollId": "72e32b9a-551c-49ea-96a5-469e2e77c626",
+                  "type": "unpause"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-07-08T17:15:46.442781Z",
+              "data": {
                 "pause": {
+                  "duration": 100,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -133,7 +155,31 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "dd0e7938-c5a1-478e-9ff7-32f733277329",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  }
+                }
+              },
+              "duration": 100,
+              "gameId": "159176",
+              "id": "72e32b9a-551c-49ea-96a5-469e2e77c626",
+              "result": {
+                "pause": {
+                  "unpausedBy": {
+                    "gameId": "159176",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "ad0baf60-1ca3-479a-8f18-05eadc5d4c37",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -147,11 +193,11 @@
               "type": "pause",
               "votes": [
                 {
-                  "createdAt": "0001-01-01T00:00:00Z",
+                  "createdAt": "2025-07-08T17:15:46.642306089Z",
                   "data": null,
-                  "gameId": "288707",
-                  "playerId": "dd0e7938-c5a1-478e-9ff7-32f733277329",
-                  "pollId": "0a4d42ba-a898-48b2-bbff-b83799a58a83",
+                  "gameId": "159176",
+                  "playerId": "ad0baf60-1ca3-479a-8f18-05eadc5d4c37",
+                  "pollId": "72e32b9a-551c-49ea-96a5-469e2e77c626",
                   "type": "unpause"
                 }
               ]
@@ -164,12 +210,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-06-30T20:27:42.688556Z",
+              "createdAt": "2025-07-08T17:15:46.442781Z",
               "data": {
                 "pause": {
                   "duration": 100,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -177,7 +223,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "1ed347d8-3a7c-40c6-bc18-ec41235ad59b",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -188,12 +234,34 @@
                 }
               },
               "duration": 100,
-              "gameId": "288707",
-              "id": "0a4d42ba-a898-48b2-bbff-b83799a58a83",
-              "result": {
+              "gameId": "159176",
+              "id": "72e32b9a-551c-49ea-96a5-469e2e77c626",
+              "result": null,
+              "state": "active",
+              "type": "pause",
+              "votes": [
+                {
+                  "createdAt": "2025-07-08T17:15:46.642306089Z",
+                  "data": null,
+                  "gameId": "159176",
+                  "playerId": "ad0baf60-1ca3-479a-8f18-05eadc5d4c37",
+                  "pollId": "72e32b9a-551c-49ea-96a5-469e2e77c626",
+                  "type": "unpause"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Event": "poll",
+          "Data": {
+            "poll": {
+              "createdAt": "2025-07-08T17:15:46.442781Z",
+              "data": {
                 "pause": {
+                  "duration": 100,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -201,7 +269,31 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "dd0e7938-c5a1-478e-9ff7-32f733277329",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
+                      "name": "",
+                      "styles": {
+                        "avatarId": ""
+                      },
+                      "username": "user1"
+                    }
+                  }
+                }
+              },
+              "duration": 100,
+              "gameId": "159176",
+              "id": "72e32b9a-551c-49ea-96a5-469e2e77c626",
+              "result": {
+                "pause": {
+                  "unpausedBy": {
+                    "gameId": "159176",
+                    "location": {
+                      "lat": 0,
+                      "lon": 0
+                    },
+                    "role": "runner",
+                    "score": 0,
+                    "user": {
+                      "id": "ad0baf60-1ca3-479a-8f18-05eadc5d4c37",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -215,11 +307,11 @@
               "type": "pause",
               "votes": [
                 {
-                  "createdAt": "0001-01-01T00:00:00Z",
+                  "createdAt": "2025-07-08T17:15:46.642306089Z",
                   "data": null,
-                  "gameId": "288707",
-                  "playerId": "dd0e7938-c5a1-478e-9ff7-32f733277329",
-                  "pollId": "0a4d42ba-a898-48b2-bbff-b83799a58a83",
+                  "gameId": "159176",
+                  "playerId": "ad0baf60-1ca3-479a-8f18-05eadc5d4c37",
+                  "pollId": "72e32b9a-551c-49ea-96a5-469e2e77c626",
                   "type": "unpause"
                 }
               ]
@@ -237,12 +329,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-06-30T20:27:43.490164Z",
+              "createdAt": "2025-07-08T17:15:47.243549Z",
               "data": {
                 "pause": {
                   "duration": 3,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -250,7 +342,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "1ed347d8-3a7c-40c6-bc18-ec41235ad59b",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -261,8 +353,8 @@
                 }
               },
               "duration": 3,
-              "gameId": "288707",
-              "id": "52147fce-5e2c-405b-8356-936935b7631a",
+              "gameId": "159176",
+              "id": "69e58596-3f2f-4eb6-bb90-c6659d6a030e",
               "result": null,
               "state": "active",
               "type": "pause"
@@ -275,12 +367,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-06-30T20:27:43.490164Z",
+              "createdAt": "2025-07-08T17:15:47.243549Z",
               "data": {
                 "pause": {
                   "duration": 3,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -288,7 +380,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "1ed347d8-3a7c-40c6-bc18-ec41235ad59b",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -299,8 +391,8 @@
                 }
               },
               "duration": 3,
-              "gameId": "288707",
-              "id": "52147fce-5e2c-405b-8356-936935b7631a",
+              "gameId": "159176",
+              "id": "69e58596-3f2f-4eb6-bb90-c6659d6a030e",
               "result": null,
               "state": "active",
               "type": "pause"
@@ -318,12 +410,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-06-30T20:27:43.490164Z",
+              "createdAt": "2025-07-08T17:15:47.243549Z",
               "data": {
                 "pause": {
                   "duration": 3,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -331,7 +423,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "1ed347d8-3a7c-40c6-bc18-ec41235ad59b",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -342,11 +434,11 @@
                 }
               },
               "duration": 3,
-              "gameId": "288707",
-              "id": "52147fce-5e2c-405b-8356-936935b7631a",
+              "gameId": "159176",
+              "id": "69e58596-3f2f-4eb6-bb90-c6659d6a030e",
               "result": {
                 "pause": {
-                  "pausedBy": null
+                  "unpausedBy": null
                 }
               },
               "state": "finished",
@@ -360,12 +452,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-06-30T20:27:43.490164Z",
+              "createdAt": "2025-07-08T17:15:47.243549Z",
               "data": {
                 "pause": {
                   "duration": 3,
                   "pausedBy": {
-                    "gameId": "288707",
+                    "gameId": "159176",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -373,7 +465,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "1ed347d8-3a7c-40c6-bc18-ec41235ad59b",
+                      "id": "00eb899c-eeed-4e0f-a0ec-f5f3614229a3",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -384,11 +476,11 @@
                 }
               },
               "duration": 3,
-              "gameId": "288707",
-              "id": "52147fce-5e2c-405b-8356-936935b7631a",
+              "gameId": "159176",
+              "id": "69e58596-3f2f-4eb6-bb90-c6659d6a030e",
               "result": {
                 "pause": {
-                  "pausedBy": null
+                  "unpausedBy": null
                 }
               },
               "state": "finished",
