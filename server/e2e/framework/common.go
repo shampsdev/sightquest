@@ -32,6 +32,7 @@ var AllEvents = map[string]struct{}{
 	event.TaskCompleteEvent:    {},
 	event.TaskApproveEvent:     {},
 	event.TaskRejectEvent:      {},
+	event.ScoreUpdatedEvent:    {},
 }
 
 func isE2ETesting() bool {

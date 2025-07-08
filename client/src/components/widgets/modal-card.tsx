@@ -3,36 +3,24 @@ import { BlurView } from "expo-blur";
 import { twMerge } from "tailwind-merge";
 import { Button } from "../ui/button";
 
-const Z = () => {
-  return <Text>Goida</Text>;
-};
-
-const O = () => {
-  return <Text>Bratya</Text>;
-};
-
-const V = () => {
-  return <Text>I SESTRIII</Text>;
-};
+interface ModalOption {
+  text: string;
+  type: "primary" | "secondary";
+  onClick: () => void;
+}
 
 export interface ModalCardProps {
   className?: string;
   title: string;
   subtitle: string;
-  confirmText?: string;
-  rejectText?: string;
-  onConfirm?: () => void;
-  onReject?: () => void;
+  buttons: [ModalOption] | [ModalOption, ModalOption];
 }
 
 export const ModalCard = ({
   className,
   title,
   subtitle,
-  confirmText,
-  rejectText,
-  onConfirm,
-  onReject,
+  buttons,
 }: ModalCardProps) => {
   return (
     <View className="absolute w-full h-full z-20 flex justify-center items-center">
@@ -44,7 +32,7 @@ export const ModalCard = ({
       />
       <View
         className={twMerge(
-          "bg-[#FFF] py-[40px] px-[36px]  rounded-[30px] w-[90%]  flex flex-col justify-center items-center gap-8",
+          "bg-[#FFF] pt-[40px] pb-[20px] px-[36px]  rounded-[30px] w-[90%] flex flex-col justify-center items-center gap-8",
           className
         )}
       >
@@ -61,22 +49,19 @@ export const ModalCard = ({
           )}
         </View>
         <View className="flex flex-col gap-[20px] justify-center ">
-          {confirmText && (
+          {buttons.map((btn, index) => (
             <Button
-              text={confirmText}
-              onPress={onConfirm}
-              className="w-fit px-[57px] py-[19px]"
+              key={`modal_button_${index}`}
+              text={btn.text}
+              className={
+                btn.type == "primary"
+                  ? "w-[200px] px-[57px] py-[19px] mx-auto"
+                  : "font-bounded-regular text-text_secondary"
+              }
+              variant={btn.type == "primary" ? "default" : "invisible"}
+              onPress={btn.onClick}
             />
-          )}
-          {rejectText && (
-            <Pressable onPress={onReject}>
-              <View className="items-center">
-                <Text className="font-bounded-regular text-text_secondary">
-                  {rejectText}
-                </Text>
-              </View>
-            </Pressable>
-          )}
+          ))}
         </View>
       </View>
     </View>

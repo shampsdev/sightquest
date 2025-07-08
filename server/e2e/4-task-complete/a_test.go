@@ -16,6 +16,7 @@ func TestMain(m *testing.M) {
 	fw.RecordEvents(
 		event.ErrorEvent,
 		event.PollEvent,
+		event.ScoreUpdatedEvent,
 	)
 	fw.TestMain(m)
 }
@@ -47,7 +48,7 @@ func Test(t *testing.T) {
 
 	fw.Step("Vote and wait for end", func() {
 		cli2.Emit(event.TaskApprove{Comment: "Cool!"})
-	}, 4)
+	}, 6)
 
 	fw.Step("User2 completes task", func() {
 		cli1.Emit(event.TaskComplete{
@@ -60,6 +61,19 @@ func Test(t *testing.T) {
 	fw.Step("Reject and wait for end", func() {
 		cli2.Emit(event.TaskReject{Comment: "Not cool!"})
 	}, 4)
+
+	fw.Step("User1 completes task", func() {
+		cli1.Emit(event.TaskComplete{
+			PollDuration: utils.PtrTo(100),
+			TaskID:       "taskpoint-3-id",
+			Photo:        "bird-photo",
+		})
+	}, 2)
+
+	fw.Step("Both approve", func() {
+		cli1.Emit(event.TaskApprove{Comment: "Cool!"})
+		cli2.Emit(event.TaskApprove{Comment: "Cool!"})
+	}, 8)
 
 	assert.NoError(t, cli1.Close())
 	assert.NoError(t, cli2.Close())

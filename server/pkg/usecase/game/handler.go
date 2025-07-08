@@ -49,8 +49,8 @@ func (h *Handler) buildRouter() {
 		On(event.LeaveGameEvent, state.WrapT(h.OnLeaveGame))
 
 	gInGame := state.GroupMW(g, h.checkInGameMW)
-	gInGame = state.GroupMW(gInGame, recordGameActivityMW)
 	gInGame = state.GroupMW(gInGame, lockGameMW)
+	gInGame = state.GroupMW(gInGame, recordGameActivityMW)
 
 	// no logs
 	gInGame.On(event.LocationUpdateEvent, callGame((*Game).OnLocationUpdate))

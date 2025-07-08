@@ -24,9 +24,9 @@ func NewPoll(db *pgxpool.Pool, vr *Vote) *Poll {
 }
 
 func (p *Poll) Create(ctx context.Context, poll *domain.CreatePoll) (string, error) {
-	q := `INSERT INTO "poll" (type, state, duration, data, game_id) VALUES ($1, $2, $3, $4, $5) RETURNING id`
+	q := `INSERT INTO "poll" (type, state, duration, data, game_id, finished_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
 	var id string
-	err := p.db.QueryRow(ctx, q, poll.Type, poll.State, poll.Duration, poll.Data, poll.GameID).Scan(&id)
+	err := p.db.QueryRow(ctx, q, poll.Type, poll.State, poll.Duration, poll.Data, poll.GameID, nil).Scan(&id)
 	if err != nil {
 		return "", fmt.Errorf("failed to create poll: %w", err)
 	}
@@ -50,6 +50,9 @@ func (p *Poll) Patch(ctx context.Context, id string, patch *domain.PatchPoll) er
 	}
 	if patch.State != nil {
 		q = q.Set("state", *patch.State)
+	}
+	if patch.FinishedAt != nil {
+		q = q.Set("finished_at", *patch.FinishedAt)
 	}
 
 	q = q.Where(sq.Eq{"id": id})
@@ -75,6 +78,7 @@ func (p *Poll) Filter(ctx context.Context, filter *domain.FilterPoll) ([]*domain
 		"data",
 		"result",
 		"game_id",
+		"finished_at",
 	).From(`"poll"`)
 
 	if filter.ID != nil {
@@ -121,6 +125,7 @@ func (p *Poll) Filter(ctx context.Context, filter *domain.FilterPoll) ([]*domain
 			&poll.Data,
 			&poll.Result,
 			&poll.GameID,
+			&poll.FinishedAt,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan poll: %w", err)

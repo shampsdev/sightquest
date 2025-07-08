@@ -5,15 +5,16 @@ import (
 )
 
 type Poll struct {
-	ID        string      `json:"id"`
-	GameID    string      `json:"gameId"`
-	Type      PollType    `json:"type"`
-	State     PollState   `json:"state"`
-	CreatedAt time.Time   `json:"createdAt"`
-	Duration  *int        `json:"duration"`
-	Data      *PollData   `json:"data"`
-	Result    *PollResult `json:"result"`
-	Votes     []*Vote     `json:"votes,omitempty"`
+	ID         string      `json:"id"`
+	GameID     string      `json:"gameId"`
+	Type       PollType    `json:"type"`
+	State      PollState   `json:"state"`
+	Duration   *int        `json:"duration"`
+	Data       *PollData   `json:"data"`
+	Result     *PollResult `json:"result"`
+	Votes      []*Vote     `json:"votes,omitempty"`
+	CreatedAt  time.Time   `json:"createdAt"`
+	FinishedAt *time.Time  `json:"finishedAt,omitempty"`
 }
 
 type PollType string
@@ -56,7 +57,8 @@ type PollResultPause struct {
 }
 
 type PollResultTaskComplete struct {
-	Approved bool `json:"approved"`
+	Approved           bool                `json:"approved"`
+	CompletedTaskPoint *CompletedTaskPoint `json:"completedTaskPoint,omitempty"`
 }
 
 type CreatePoll struct {
@@ -68,11 +70,12 @@ type CreatePoll struct {
 }
 
 type PatchPoll struct {
-	Type     *PollType    `json:"type"`
-	State    *PollState   `json:"state"`
-	Duration *int         `json:"duration"`
-	Data     **PollData   `json:"data"`
-	Result   **PollResult `json:"result"`
+	Type       *PollType    `json:"type"`
+	State      *PollState   `json:"state"`
+	Duration   *int         `json:"duration"`
+	Data       **PollData   `json:"data"`
+	Result     **PollResult `json:"result"`
+	FinishedAt **time.Time  `json:"finishedAt"`
 }
 
 type FilterPoll struct {

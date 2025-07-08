@@ -75,6 +75,13 @@ type Vote interface {
 	Delete(ctx context.Context, pollID, playerID string) error
 }
 
+type CompletedTaskPoint interface {
+	Create(ctx context.Context, completedTaskPoint *domain.CreateCompletedTaskPoint) error
+	Patch(ctx context.Context, playerID, gameID, pointID string, completedTaskPoint *domain.PatchCompletedTaskPoint) error
+	Filter(ctx context.Context, filter *domain.FilterCompletedTaskPoint) ([]*domain.CompletedTaskPoint, error)
+	Delete(ctx context.Context, playerID, gameID, pointID string) error
+}
+
 type ImageStorage interface {
 	SaveImageByReader(ctx context.Context, imageData io.Reader, destDir string) (string, error)
 }

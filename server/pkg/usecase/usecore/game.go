@@ -11,10 +11,11 @@ import (
 )
 
 type Game struct {
-	gameRepo   repo.Game
-	playerRepo repo.Player
-	pollRepo   repo.Poll
-	voteRepo   repo.Vote
+	gameRepo               repo.Game
+	playerRepo             repo.Player
+	pollRepo               repo.Poll
+	voteRepo               repo.Vote
+	completedTaskPointRepo repo.CompletedTaskPoint
 }
 
 func NewGame(
@@ -22,12 +23,14 @@ func NewGame(
 	playerRepo repo.Player,
 	pollRepo repo.Poll,
 	voteRepo repo.Vote,
+	completedTaskPointRepo repo.CompletedTaskPoint,
 ) *Game {
 	return &Game{
-		gameRepo:   gameRepo,
-		playerRepo: playerRepo,
-		pollRepo:   pollRepo,
-		voteRepo:   voteRepo,
+		gameRepo:               gameRepo,
+		playerRepo:             playerRepo,
+		pollRepo:               pollRepo,
+		voteRepo:               voteRepo,
+		completedTaskPointRepo: completedTaskPointRepo,
 	}
 }
 
@@ -59,6 +62,11 @@ func (g *Game) GetGameByID(ctx context.Context, id string) (*domain.Game, error)
 	game.ActivePoll, err = g.getActivePoll(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get game active poll: %w", err)
+	}
+
+	game.CompletedTaskPoints, err = g.completedTaskPointRepo.Filter(ctx, &domain.FilterCompletedTaskPoint{GameID: &id})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get game completed task points: %w", err)
 	}
 
 	return game, nil

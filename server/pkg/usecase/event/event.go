@@ -21,6 +21,7 @@ const (
 	TaskCompleteEvent    = "taskComplete"
 	TaskApproveEvent     = "taskApprove"
 	TaskRejectEvent      = "taskReject"
+	ScoreUpdatedEvent    = "scoreUpdated"
 	PollEvent            = "poll"
 
 	BroadcastEvent   = "broadcast"
@@ -131,6 +132,16 @@ type TaskReject struct {
 }
 
 func (e TaskReject) Event() string { return TaskRejectEvent }
+
+// server -> client
+type ScoreUpdated struct {
+	Player     *domain.Player `json:"player"`
+	Score      int            `json:"score"`
+	Reason     string         `json:"reason"`
+	DeltaScore int            `json:"deltaScore"`
+}
+
+func (e ScoreUpdated) Event() string { return ScoreUpdatedEvent }
 
 // client -> server
 type LocationUpdate struct {

@@ -1,6 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { ImageSourcePropType, Pressable, Text, View } from "react-native";
 import { Camera } from "@rnmapbox/maps";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -22,7 +29,6 @@ import { GameStackParamList } from "@/routers/game.navigator";
 import { MainStackParamList } from "@/routers/main.navigator";
 import { DEFAULT_MAP_CAMERA_LOCATION } from "@/constants";
 import { useGeolocationStore } from "@/shared/stores/location.store";
-import { ModalCard } from "@/components/widgets/modal-card";
 import { BlurView } from "expo-blur";
 import { RouteMarker } from "@/components/ui/map/route-marker";
 import { PauseScreen } from "./pause.screen";
@@ -30,6 +36,10 @@ import { isPause } from "@/shared/interfaces/polls/pause";
 import { CameraOverlay } from "@/components/overlays/camera";
 import { useCamera } from "@/shared/hooks/useCamera";
 import { SendPhotoOverlay } from "@/components/overlays/send-photo";
+import { ModalCardProps } from "@/components/widgets/modal-card";
+import { useModal } from "@/shared/hooks/useModal";
+import { isTaskPoll } from '@/shared/interfaces/polls/task-poll';
+
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -46,7 +56,6 @@ export const GameScreen = () => {
 
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
   const leaderboardSheet = useRef<BottomSheet>(null);
-  const [modalOpened, setModalOpened] = useState<boolean>(false);
 
   const [chatOpened, setChatOpened] = useState<boolean>(false);
   const [pauseOpened, setPauseOpened] = useState<boolean>(false);
@@ -54,6 +63,8 @@ export const GameScreen = () => {
     useState<boolean>(false);
   const [sendPhotoOverlayOpened, setSendPhotoOverlayOpened] =
     useState<boolean>(false);
+
+  const { setModalOpen } = useModal();
 
   const togglePauseGame = useCallback(() => {
     if (!game) return;
@@ -73,6 +84,8 @@ export const GameScreen = () => {
     if (!game || !game.activePoll) return;
     const poll = game.activePoll;
 
+    if (isTaskPoll(poll)) console.info(poll.data)
+
     if (isPause(poll) && poll.state === "active") setPauseOpened(true);
     if (isPause(poll) && poll.state === "finished") setPauseOpened(false);
   }, [game]);
@@ -80,6 +93,7 @@ export const GameScreen = () => {
   const players = game?.players ?? [];
 
   const exit = () => {
+    setModalOpen(false);
     emit("leaveGame");
     updateStatus("leaved");
     setGame(null);
@@ -102,6 +116,31 @@ export const GameScreen = () => {
       });
     }
   }, [location]);
+
+  const modalOptions: ModalCardProps = {
+    title: "Выйти из игры?",
+    subtitle:
+      "Вы точно хотите завершить забег? Ваш прогресс будет сохранён, но бегуны разбегутся..",
+    buttons: [
+      {
+        text: "Выйти",
+        type: "primary",
+        onClick: exit,
+      },
+      {
+        text: "Отмена",
+        type: "secondary",
+        onClick: () => setModalOpen(false),
+      },
+    ],
+  };
+
+  const completeTask = () => {
+    emit("taskComplete", {
+      taskId: game?.route?.taskPoints[0].id ?? "",
+      photo: "penis",
+    });
+  };
 
   return (
     <View className="flex-1">
@@ -156,12 +195,8 @@ export const GameScreen = () => {
             </IconContainer>
           </Pressable>
 
-          <Button
-            text="Поймать"
-            className="flex-1"
-            onPress={() => setCameraOverlayOpened(true)}
-          />
 
+          <Button onPress={() => {completeTask(); setCameraOverlayOpened(true)}} text="Поймать" className="flex-1" />
           <Pressable onPress={openChat}>
             <IconContainer>
               <Icons.Chat />
@@ -180,7 +215,7 @@ export const GameScreen = () => {
                     setCameraOverlayOpened(false);
                     setSendPhotoOverlayOpened(false);
                   }
-                : () => setModalOpened(true)
+                : () => setModalOpen(modalOptions)
             }
           >
             <IconContainer>
@@ -250,18 +285,6 @@ export const GameScreen = () => {
           )}
         </View>
       </View>
-      {modalOpened && (
-        <ModalCard
-          title={"Выйти из игры?"}
-          subtitle={
-            "Вы точно хотите завершить забег? Ваш прогресс будет сохранён, но бегуны разбегутся.."
-          }
-          confirmText="Выйти"
-          rejectText="Отмена"
-          onReject={() => setModalOpened(false)}
-          onConfirm={exit}
-        />
-      )}
 
       {chatOpened && (
         <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />

@@ -14,6 +14,7 @@ import { useSocket } from "./shared/hooks/useSocket";
 import { useAuthStore } from "./shared/stores/auth.store";
 import { useGeolocationStore } from "./shared/stores/location.store";
 import { logger } from "./shared/instances/logger.instance";
+import { ModalProvider } from "./shared/providers/modal-provider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -73,7 +74,9 @@ export default function App() {
       <GestureHandlerRootView>
         <SafeAreaProvider>
           <NavigationContainer>
-            {auth ? <MainNavigator /> : <AuthNavigator />}
+            <ModalProvider>
+              {auth ? <MainNavigator /> : <AuthNavigator />}
+            </ModalProvider>
           </NavigationContainer>
         </SafeAreaProvider>
       </GestureHandlerRootView>
