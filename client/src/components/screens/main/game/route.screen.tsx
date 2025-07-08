@@ -35,6 +35,7 @@ import { useSocket } from "@/shared/hooks/useSocket";
 import { useGameStore } from "@/shared/stores/game.store";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useRoutes } from "@/shared/api/hooks/useRoutes";
+import { PlaceMarker } from "@/components/ui/map/place-marker";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = PixelRatio.roundToNearestPixel(SCREEN_WIDTH * 0.9);
@@ -153,8 +154,13 @@ export const RouteScreen = () => {
         {routes.map((x) => (
           <RouteMarker
             key={`route_marker_${x.id}`}
-            points={x.taskPoints.map((x) => [x.location.lon, x.location.lat])}
-            path={x.taskPoints.map((x) => [x.location.lon, x.location.lat])}
+            shapes={x.taskPoints.map((point) => (
+              <PlaceMarker
+                key={point.id}
+                coordinate={[point.location.lon, point.location.lat]}
+              />
+            ))}
+            path={x.taskPoints}
             routeId={x.id}
           ></RouteMarker>
         ))}
@@ -203,13 +209,13 @@ export const RouteScreen = () => {
             onPress={choose}
             className="mt-4 flex-1 w-[90%] mx-auto "
             text="Выбрать"
-            disabled={routes.length === 0}
+            variant={routes.length === 0 ? "disabled" : "default"}
           />
         ) : (
           <Button
             className="mt-4 flex-1 w-[90%] mx-auto bg-accent_secondary"
             text={game?.route?.id == selected.id ? "Выбран" : "Выбрать"}
-            disabled
+            variant={"disabled"}
           />
         )}
       </View>

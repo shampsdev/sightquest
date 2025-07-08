@@ -1,18 +1,26 @@
 import { LineLayer, ShapeSource } from "@rnmapbox/maps";
-import { PlaceMarker } from "./place-marker";
-
-type Point = [number, number];
+import { Point } from "@/shared/interfaces/route";
 
 export interface RouteProps {
-  points: Point[];
+  shapes: React.ReactNode[];
   path: Point[];
   disabled?: boolean;
   routeId?: string;
 }
 
-export const RouteMarker = ({ points, path, disabled = false, routeId }: RouteProps) => {
+export const RouteMarker = ({
+  shapes: points,
+  path,
+  disabled = false,
+  routeId,
+}: RouteProps) => {
   function interpolate(p1: Point, p2: Point, t: number): Point {
-    return [p1[0] + (p2[0] - p1[0]) * t, p1[1] + (p2[1] - p1[1]) * t];
+    return {
+      location: {
+        lon: p1.location.lon + (p2.location.lon - p1.location.lon) * t,
+        lat: p1.location.lat + (p2.location.lat - p1.location.lat) * t,
+      },
+    };
   }
 
   const smoothCorners = (
@@ -29,21 +37,23 @@ export const RouteMarker = ({ points, path, disabled = false, routeId }: RoutePr
       const curr = path[i];
       const next = path[i + 1];
 
-      // Trimmed points near the corner
       const before = interpolate(curr, prev, radius);
       const after = interpolate(curr, next, radius);
 
-      // Arc interpolation between before and after
       for (let j = 0; j <= resolution; j++) {
         const t = j / resolution;
-        const arcPoint: Point = [
-          (1 - t) * (1 - t) * before[0] +
-            2 * (1 - t) * t * curr[0] +
-            t * t * after[0],
-          (1 - t) * (1 - t) * before[1] +
-            2 * (1 - t) * t * curr[1] +
-            t * t * after[1],
-        ];
+        const arcPoint: Point = {
+          location: {
+            lon:
+              (1 - t) * (1 - t) * before.location.lon +
+              2 * (1 - t) * t * curr.location.lon +
+              t * t * after.location.lon,
+            lat:
+              (1 - t) * (1 - t) * before.location.lat +
+              2 * (1 - t) * t * curr.location.lat +
+              t * t * after.location.lat,
+          },
+        };
         result.push(arcPoint);
       }
     }
@@ -58,16 +68,14 @@ export const RouteMarker = ({ points, path, disabled = false, routeId }: RoutePr
     type: "Feature" as const,
     geometry: {
       type: "LineString" as const,
-      coordinates: smoothed,
+      coordinates: smoothed.map((p) => [p.location.lon, p.location.lat]),
     },
     properties: {},
   };
 
   return (
     <>
-      {points.map((coords, id) => {
-        return <PlaceMarker key={id} disabled={disabled} coordinate={coords} />;
-      })}
+      {points}
       <ShapeSource id={`route${routeId}`} shape={routeGeoJSON}>
         <LineLayer
           id={`routeLine${routeId}`}

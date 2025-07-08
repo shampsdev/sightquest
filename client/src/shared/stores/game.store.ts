@@ -10,6 +10,7 @@ import { Coords } from "../interfaces/coords";
 import { Route } from "../interfaces/route";
 import { socket } from "../instances/socket.instance";
 import { Poll } from "../interfaces/polls/poll";
+import { CompletedTaskPoint } from "../interfaces/game/completed-task-point";
 
 interface ChatMessageGroup {
   playerId: string;
@@ -35,6 +36,8 @@ interface StoreState {
   resetChat: () => void;
   setRoute: (route: Route | null) => void;
   setPoll: (poll: Poll | null) => void;
+
+  addCompletedTaskPoint: (taskPoint: CompletedTaskPoint) => void;
 }
 
 export const useGameStore = create<StoreState>()(
@@ -97,6 +100,11 @@ export const useGameStore = create<StoreState>()(
                 messages: [data],
               });
             }
+          }),
+
+        addCompletedTaskPoint: (taskPoint) =>
+          set((state) => {
+            state.game?.completedTaskPoints.push(taskPoint);
           }),
 
         resetChat: () =>
