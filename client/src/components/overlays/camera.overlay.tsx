@@ -61,7 +61,7 @@ export const CameraOverlay = ({
   return (
     <Animated.View
       style={animatedStyle}
-      className="absolute w-full h-full flex justify-end items-center z-30"
+      className="absolute w-full mx-auto h-full z-30"
       pointerEvents={visible ? "auto" : "none"}
     >
       <Pressable
@@ -80,17 +80,17 @@ export const CameraOverlay = ({
         style={{ zIndex: 30 }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         className={twMerge(
-          "py-[40px] px-[36px] h-[85%] mb-[80px] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
+          "py-[40px] px-[36px] h-[85%] mb-[80px] mx-auto flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
         )}
       >
-        <View className="flex flex-col justify-center">
+        <View className="flex flex-col w-full justify-center mx-auto">
           {!permission.granted && (
             <Button
               text={"Дать разрешение на использование камеры"}
               onPress={requestPermission}
             />
           )}
-          <View className="w-[360px] h-[360px] rounded-[16px] z-10 overflow-hidden">
+          <View className=" h-[360px] mx-auto rounded-[16px] z-10 overflow-hidden">
             {permission.granted && visible && (
               <CameraView
                 style={styles.camera}
@@ -133,33 +133,11 @@ export const CameraOverlay = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  message: {
-    textAlign: "center",
-    paddingBottom: 10,
-  },
   camera: {
     flex: 1,
     width: 360,
     height: 360,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "transparent",
-    margin: 64,
-  },
-  button: {
-    flex: 1,
-    alignSelf: "flex-end",
-    alignItems: "center",
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 });
