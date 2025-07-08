@@ -1,27 +1,43 @@
 import { useCallback, useState } from "react";
-import { GameOverlay } from "../interfaces/game/game-overlays";
+import { OverlayPropsMap } from "../interfaces/game/game-overlays";
+
+export type OverlayKey = keyof OverlayPropsMap;
 
 export const useGameOverlays = () => {
-  const [openedOverlay, setOpenedOverlay] = useState<GameOverlay>(null);
+  const [openedOverlay, setOpenedOverlay] = useState<OverlayKey | null>(null);
+  const [overlayProps, setOverlayProps] = useState<
+    Partial<OverlayPropsMap[keyof OverlayPropsMap]>
+  >({});
 
-  const openOverlay = useCallback((overlay: Exclude<GameOverlay, null>) => {
+  function openOverlay<T extends OverlayKey>(
+    overlay: T,
+    props: OverlayPropsMap[T]
+  ) {
     setOpenedOverlay(overlay);
-  }, []);
+    setOverlayProps(props);
+  }
 
   const closeOverlay = useCallback(() => {
     setOpenedOverlay(null);
+    setOverlayProps({});
   }, []);
 
-  const isOverlayOpen = (overlay: Exclude<GameOverlay, null>) =>
-    openedOverlay === overlay;
+  const isOverlayOpen = useCallback(
+    <T extends OverlayKey>(overlay: T): boolean => openedOverlay === overlay,
+    [openedOverlay]
+  );
 
-  const isAnyOverlayOpen = openedOverlay !== null;
+  function getOverlayProps<T extends OverlayKey>(): OverlayPropsMap[T] {
+    return overlayProps as OverlayPropsMap[T];
+  }
 
   return {
     openedOverlay,
+    overlayProps,
     openOverlay,
     closeOverlay,
     isOverlayOpen,
-    isAnyOverlayOpen,
+    isAnyOverlayOpen: openedOverlay !== null,
+    getOverlayProps,
   };
 };

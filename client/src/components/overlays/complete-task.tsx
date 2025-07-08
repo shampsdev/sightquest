@@ -21,6 +21,7 @@ import { useGameStore } from "@/shared/stores/game.store";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { usePlayer } from "@/shared/hooks/usePlayer";
 import { useTaskCompletionStore } from "@/shared/stores/camera.store";
+import { useGameOverlays } from "@/shared/hooks/useGameOverlays";
 
 interface CompleteTaskOverlayProps {
   visible?: boolean;
@@ -31,12 +32,14 @@ export const CompleteTaskOverlay = ({
   visible,
   onClose,
 }: CompleteTaskOverlayProps) => {
-  const { photo, taskId } = useTaskCompletionStore();
+  const { getOverlayProps } = useGameOverlays();
+  const { photo, taskId } = getOverlayProps<"completeTask">();
   const { emit } = useSocket();
 
   const { player } = usePlayer();
   const opacity = useSharedValue(0);
 
+  useEffect(() => console.log(photo), [photo]);
   useEffect(() => {
     if (visible) {
       opacity.value = withTiming(1, { duration: 300 });

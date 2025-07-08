@@ -20,6 +20,7 @@ import { Button } from "../ui/button";
 import { logger } from "@/shared/instances/logger.instance";
 import { useCamera } from "@/shared/hooks/useCamera";
 import { CameraView } from "expo-camera";
+import { useGameOverlays } from "@/shared/hooks/useGameOverlays";
 
 interface CameraOverlayProps {
   visible?: boolean;
@@ -41,6 +42,9 @@ export const CameraOverlay = ({
     takePhoto,
   } = useCamera();
 
+  const { getOverlayProps, closeOverlay, openOverlay } = useGameOverlays();
+
+  const { destinationOverlay } = getOverlayProps<"camera">();
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -111,7 +115,8 @@ export const CameraOverlay = ({
             onPress={async () => {
               try {
                 const photo = await takePhoto();
-                onSucces();
+                closeOverlay();
+                openOverlay(destinationOverlay, { photo });
               } catch (error) {
                 logger.error("ui", "Error taking photo");
               }
