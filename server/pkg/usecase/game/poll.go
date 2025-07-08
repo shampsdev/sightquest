@@ -200,7 +200,6 @@ func (g *Game) voteInActive(c Context, t domain.VoteType, data *domain.VoteData)
 	})
 	if err != nil {
 		return fmt.Errorf("failed to create vote: %w", err)
-
 	}
 	vote, err := repo.First(g.voteRepo)(c.Ctx, &domain.FilterVote{
 		PlayerID: &c.S.User.ID,
