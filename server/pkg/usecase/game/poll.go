@@ -25,31 +25,46 @@ loop:
 		case <-ctx.Done():
 			break loop
 		case <-ticker.C:
-			g.checkActivePoll(ctx)
+			err := g.checkActivePoll(ctx)
+			if err != nil {
+				slogx.Error(ctx, "failed to check active poll", err)
+			}
 		}
 	}
 
 	slogx.Info(ctx, "poll observer stopped")
 }
 
-func (g *Game) checkActivePoll(ctx context.Context) {
+func (g *Game) checkActivePoll(ctx context.Context) error {
 	g.lock.Lock()
 	defer g.lock.Unlock()
 
 	activePoll := g.game.ActivePoll
 	if activePoll == nil {
-		return
+		return nil
 	}
 
 	switch activePoll.Type {
 	case domain.PollTypePause:
-		g.checkActivePollPause(ctx)
+		err := g.checkActivePollPause(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to check active poll pause: %w", err)
+		}
 	case domain.PollTypeTaskComplete:
-		g.checkActivePollTaskComplete(ctx)
+		err := g.checkActivePollTaskComplete(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to check active poll task complete: %w", err)
+		}
+	case domain.PollTypePlayerCatch:
+		err := g.checkActivePollPlayerCatch(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to check active poll player catch: %w", err)
+		}
 	}
+	return nil
 }
 
-func (g *Game) checkActivePollPause(ctx context.Context) {
+func (g *Game) checkActivePollPause(ctx context.Context) error {
 	poll := g.game.ActivePoll
 
 	if g.pollFinished() || len(poll.Votes) > 0 {
@@ -57,21 +72,20 @@ func (g *Game) checkActivePollPause(ctx context.Context) {
 		if len(poll.Votes) > 0 {
 			player, ok := g.getPlayer(poll.Votes[0].PlayerID)
 			if !ok {
-				slogx.Error(ctx, "failed to get player", "player_id", poll.Votes[0].PlayerID)
-				return
+				return fmt.Errorf("failed to get player")
 			}
 			result.Pause.UnpausedBy = player
 		}
 		err := g.finishActive(ctx, result)
 		if err != nil {
-			slogx.Error(ctx, "failed to finish poll", "poll_id", poll.ID, "err", err)
-			return
+			return fmt.Errorf("failed to finish poll: %w", err)
 		}
-		return
 	}
+
+	return nil
 }
 
-func (g *Game) checkActivePollTaskComplete(ctx context.Context) {
+func (g *Game) checkActivePollTaskComplete(ctx context.Context) error {
 	poll := g.game.ActivePoll
 	approved := true
 	for _, vote := range poll.Votes {
@@ -81,67 +95,111 @@ func (g *Game) checkActivePollTaskComplete(ctx context.Context) {
 		}
 	}
 
-	if g.pollFinished() || !approved {
-		result := domain.PollResult{TaskComplete: &domain.PollResultTaskComplete{
-			Approved: approved,
-		}}
+	if !g.pollFinished() && approved {
+		return nil
+	}
 
-		var scoreUpdated *event.ScoreUpdated
+	result := domain.PollResult{TaskComplete: &domain.PollResultTaskComplete{
+		Approved: approved,
+	}}
 
-		if approved {
-			pollData := poll.Data.TaskComplete
-			player, ok := g.getPlayer(pollData.Player.User.ID)
-			if !ok {
-				slogx.Error(ctx, "failed to get player", "player_id", pollData.Player.User.ID)
-				return
-			}
-
-			deltaScore := pollData.Task.Score - 20 + rand.Intn(40)
-			player.Score += deltaScore
-
-			scoreUpdated = &event.ScoreUpdated{
-				Player:     player,
-				Reason:     fmt.Sprintf("Игрок выполнил задание \"%s\"!", pollData.Task.Title),
-				Score:      player.Score,
-				DeltaScore: deltaScore,
-			}
-
-			err := g.completedTaskPointRepo.Create(ctx, &domain.CreateCompletedTaskPoint{
-				GameID:   g.game.ID,
-				PlayerID: player.User.ID,
-				PointID:  pollData.Task.ID,
-				Photo:    pollData.Photo,
-				Score:    deltaScore,
-			})
-			if err != nil {
-				slogx.Error(ctx, "failed to create completed task point", "err", err)
-				return
-			}
-			completedTaskPoint, err := repo.First(g.completedTaskPointRepo)(ctx, &domain.FilterCompletedTaskPoint{
-				GameID:   &g.game.ID,
-				PlayerID: &player.User.ID,
-				PointID:  &pollData.Task.ID,
-			})
-			if err != nil {
-				slogx.Error(ctx, "failed to get completed task point", "err", err)
-				return
-			}
-			g.game.CompletedTaskPoints = append(g.game.CompletedTaskPoints, completedTaskPoint)
-			result.TaskComplete.CompletedTaskPoint = completedTaskPoint
-		}
-
+	if !approved {
 		err := g.finishActive(ctx, result)
 		if err != nil {
-			slogx.Error(ctx, "failed to finish poll", "poll_id", poll.ID, "err", err)
-			return
+			return fmt.Errorf("failed to finish poll: %w", err)
 		}
-
-		if scoreUpdated != nil {
-			g.broadcast(*scoreUpdated)
-		}
-
-		return
+		return nil
 	}
+
+	// finished and approved
+
+	pollData := poll.Data.TaskComplete
+	player, ok := g.getPlayer(pollData.Player.User.ID)
+	if !ok {
+		return fmt.Errorf("failed to get player")
+	}
+
+	deltaScore := pollData.Task.Score - 20 + rand.Intn(40)
+	player.Score += deltaScore
+
+	err := g.completedTaskPointRepo.Create(ctx, &domain.CreateCompletedTaskPoint{
+		GameID:   g.game.ID,
+		PlayerID: player.User.ID,
+		PointID:  pollData.Task.ID,
+		Photo:    pollData.Photo,
+		Score:    deltaScore,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create completed task point: %w", err)
+	}
+	completedTaskPoint, err := repo.First(g.completedTaskPointRepo)(ctx, &domain.FilterCompletedTaskPoint{
+		GameID:   &g.game.ID,
+		PlayerID: &player.User.ID,
+		PointID:  &pollData.Task.ID,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to get completed task point: %w", err)
+	}
+	g.game.CompletedTaskPoints = append(g.game.CompletedTaskPoints, completedTaskPoint)
+	result.TaskComplete.CompletedTaskPoint = completedTaskPoint
+
+	err = g.finishActive(ctx, result)
+	if err != nil {
+		return fmt.Errorf("failed to finish poll: %w", err)
+	}
+
+	g.broadcast(&event.ScoreUpdated{
+		Player:     player,
+		Reason:     fmt.Sprintf("Игрок выполнил задание \"%s\"!", pollData.Task.Title),
+		Score:      player.Score,
+		DeltaScore: deltaScore,
+	})
+
+	return nil
+}
+
+func (g *Game) checkActivePollPlayerCatch(ctx context.Context) error {
+	poll := g.game.ActivePoll
+
+	approved := true
+	for _, vote := range poll.Votes {
+		if vote.Type == domain.VoteTypePlayerCatchReject {
+			approved = false
+			break
+		}
+	}
+
+	if !g.pollFinished() && approved {
+		return nil
+	}
+
+	if !approved {
+		err := g.finishActive(ctx, domain.PollResult{PlayerCatch: &domain.PollResultPlayerCatch{
+			Approved: approved,
+		}})
+		if err != nil {
+			return fmt.Errorf("failed to finish poll: %w", err)
+		}
+		return nil
+	}
+
+	// finished and approved
+	catcherReward, newRunner, err := g.doRotation(ctx, poll.Data.PlayerCatch.Runner, poll.Data.PlayerCatch.CatchedBy)
+	if err != nil {
+		return fmt.Errorf("failed to do rotation: %w", err)
+	}
+	err = g.finishActive(ctx, domain.PollResult{
+		PlayerCatch: &domain.PollResultPlayerCatch{
+			Approved:      approved,
+			CatcherReward: catcherReward,
+			NewRunner:     newRunner,
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("failed to finish poll: %w", err)
+	}
+
+	return nil
 }
 
 func (g *Game) pollFinished() bool {

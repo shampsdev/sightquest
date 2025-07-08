@@ -3,6 +3,7 @@ package game
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"slices"
 	"sync"
 	"time"
@@ -291,6 +292,113 @@ func (g *Game) OnTaskReject(c Context, ev event.TaskReject) error {
 			Comment: ev.Comment,
 		},
 	)
+}
+
+func (g *Game) OnPlayerCatch(c Context, ev event.PlayerCatch) error {
+	player, ok := g.getPlayer(ev.PlayerID)
+	if !ok {
+		return fmt.Errorf("player not found")
+	}
+	if player.Role != domain.PlayerRoleRunner {
+		return fmt.Errorf("player is not a runner")
+	}
+
+	if ev.PollDuration == nil {
+		ev.PollDuration = utils.PtrTo(45)
+	}
+
+	_, err := g.createActivePoll(c, &domain.CreatePoll{
+		GameID:   g.game.ID,
+		Type:     domain.PollTypePlayerCatch,
+		State:    domain.PollStateActive,
+		Duration: ev.PollDuration,
+		Data: &domain.PollData{
+			PlayerCatch: &domain.PollDataPlayerCatch{
+				Runner:    player,
+				CatchedBy: c.S.Player,
+				Photo:     ev.Photo,
+			},
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create active poll: %w", err)
+	}
+
+	return nil
+}
+
+func (g *Game) OnPlayerCatchApprove(c Context, ev event.PlayerCatchApprove) error {
+	return g.onVote(c,
+		domain.PollTypePlayerCatch,
+		domain.VoteTypePlayerCatchApprove,
+		&domain.VoteData{
+			Comment: ev.Comment,
+		},
+	)
+}
+
+func (g *Game) OnPlayerCatchReject(c Context, ev event.PlayerCatchReject) error {
+	return g.onVote(c,
+		domain.PollTypePlayerCatch,
+		domain.VoteTypePlayerCatchReject,
+		&domain.VoteData{
+			Comment: ev.Comment,
+		},
+	)
+}
+
+func (g *Game) doRotation(
+	ctx context.Context, runner, catchedBy *domain.Player,
+) (catcherReward int, newRunner *domain.Player, err error) {
+	catcherReward, newRunner = g.rotation(runner, catchedBy)
+
+	runner.Role = domain.PlayerRoleCatcher
+	err = g.playerCase.UpdatePlayer(ctx, runner.GameID, runner.User.ID, &domain.PatchPlayer{Role: utils.PtrTo(domain.PlayerRoleCatcher)})
+	if err != nil {
+		return 0, nil, fmt.Errorf("failed to update player: %w", err)
+	}
+	g.broadcast(event.PlayerRoleUpdated{Player: runner, Role: domain.PlayerRoleCatcher})
+
+	catchedBy.Score += catcherReward
+	err = g.playerCase.UpdatePlayer(ctx, catchedBy.GameID, catchedBy.User.ID, &domain.PatchPlayer{Score: utils.PtrTo(catchedBy.Score)})
+	if err != nil {
+		return 0, nil, fmt.Errorf("failed to update player: %w", err)
+	}
+	g.broadcast(event.ScoreUpdated{
+		Player:     catchedBy,
+		DeltaScore: catcherReward,
+		Score:      catchedBy.Score,
+		Reason:     fmt.Sprintf("Игрок %s поймал игрока %s", runner.User.Name, catchedBy.User.Name),
+	})
+
+	newRunner.Role = domain.PlayerRoleRunner
+	err = g.playerCase.UpdatePlayer(ctx, newRunner.GameID, newRunner.User.ID, &domain.PatchPlayer{Role: utils.PtrTo(domain.PlayerRoleRunner)})
+	if err != nil {
+		return 0, nil, fmt.Errorf("failed to update player: %w", err)
+	}
+	g.broadcast(event.PlayerRoleUpdated{Player: newRunner, Role: domain.PlayerRoleRunner})
+
+	return catcherReward, newRunner, nil
+}
+
+func (g *Game) rotation(
+	runner, catchedBy *domain.Player,
+) (catcherReward int, newRunner *domain.Player) {
+	playersWeights := make([]int, len(g.game.Players))
+	for i, p := range g.game.Players {
+		switch p.User.ID {
+		case runner.User.ID:
+			playersWeights[i] = 1
+		case catchedBy.User.ID:
+			playersWeights[i] = 25
+		default:
+			playersWeights[i] = 5
+		}
+	}
+
+	newRunner = utils.RandomChoice(g.game.Players, playersWeights)
+	catcherReward = 80 + rand.Intn(40)
+	return catcherReward, newRunner
 }
 
 func (g *Game) onVote(c Context, pollType domain.PollType, voteType domain.VoteType, data *domain.VoteData) error {
