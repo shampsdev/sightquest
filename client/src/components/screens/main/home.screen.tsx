@@ -12,7 +12,7 @@ import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
 import { RouteMarker } from "@/components/ui/map/route-marker";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
 import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -25,6 +25,7 @@ import { useGame } from "@/shared/api/hooks/useGame";
 import { ModalCard } from "@/components/widgets/modal-card";
 import { logger } from "@/shared/instances/logger.instance";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { CameraOverlay } from "@/components/overlays/camera";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -85,9 +86,12 @@ export const HomeScreen = () => {
 
   const insets = useSafeAreaInsets();
 
+  const [cameraOverlayVisible, setCameraOverlayVisible] =
+    useState<boolean>(false);
+
   return (
     <View className="flex-1">
-      <Map>
+      {/* <Map>
         {location && user && (
           <>
             <PlayerMarker
@@ -121,7 +125,7 @@ export const HomeScreen = () => {
             [30.344544, 59.958102],
           ]}
         />
-      </Map>
+      </Map> */}
 
       <View
         style={{ top: insets.top }}
@@ -131,6 +135,12 @@ export const HomeScreen = () => {
           <Pressable onPress={shop}>
             <IconContainer>
               <Icons.Store />
+            </IconContainer>
+          </Pressable>
+
+          <Pressable onPress={() => setCameraOverlayVisible(true)}>
+            <IconContainer>
+              <Icons.Camera />
             </IconContainer>
           </Pressable>
 
@@ -180,6 +190,11 @@ export const HomeScreen = () => {
         ref={bottomSheetRef}
         handleJoin={joinHandler}
         children={undefined}
+      />
+
+      <CameraOverlay
+        visible={cameraOverlayVisible}
+        onClose={() => setCameraOverlayVisible(false)}
       />
 
       <StatusBar style="dark" />

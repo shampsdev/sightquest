@@ -27,6 +27,7 @@ import { BlurView } from "expo-blur";
 import { RouteMarker } from "@/components/ui/map/route-marker";
 import { PauseScreen } from "./pause.screen";
 import { isPause } from "@/shared/interfaces/polls/pause";
+import { CameraOverlay } from "@/components/overlays/camera";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -47,6 +48,8 @@ export const GameScreen = () => {
 
   const [chatOpened, setChatOpened] = useState<boolean>(false);
   const [pauseOpened, setPauseOpened] = useState<boolean>(false);
+  const [cameraOverlayVisible, setCameraOverlayVisible] =
+    useState<boolean>(false);
 
   const togglePauseGame = useCallback(() => {
     if (!game) return;
@@ -152,6 +155,11 @@ export const GameScreen = () => {
               <Icons.Chat />
             </IconContainer>
           </Pressable>
+          <Pressable onPress={() => setCameraOverlayVisible(true)}>
+            <IconContainer>
+              <Icons.Camera />
+            </IconContainer>
+          </Pressable>
         </View>
       )}
 
@@ -242,6 +250,10 @@ export const GameScreen = () => {
 
       <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
       <PauseScreen visible={pauseOpened} />
+      <CameraOverlay
+        visible={cameraOverlayVisible}
+        onClose={() => setCameraOverlayVisible(false)}
+      />
 
       <LeaderboardSheet
         ref={leaderboardSheet}
