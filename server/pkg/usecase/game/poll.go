@@ -3,6 +3,7 @@ package game
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
@@ -50,7 +51,7 @@ func (g *Game) checkActivePoll(ctx context.Context) {
 func (g *Game) checkActivePollPause(ctx context.Context) {
 	poll := g.game.ActivePoll
 
-	if g.pollExpired() || len(poll.Votes) > 0 {
+	if g.pollFinished() || len(poll.Votes) > 0 {
 		result := domain.PollResult{Pause: &domain.PollResultPause{}}
 		if len(poll.Votes) > 0 {
 			player, ok := g.getPlayer(poll.Votes[0].PlayerID)
@@ -79,7 +80,7 @@ func (g *Game) checkActivePollTaskComplete(ctx context.Context) {
 		}
 	}
 
-	if g.pollExpired() || !approved {
+	if g.pollFinished() || !approved {
 		result := domain.PollResult{TaskComplete: &domain.PollResultTaskComplete{
 			Approved: approved,
 		}}
@@ -89,11 +90,34 @@ func (g *Game) checkActivePollTaskComplete(ctx context.Context) {
 			slogx.Error(ctx, "failed to finish poll", "poll_id", poll.ID, "err", err)
 			return
 		}
+
+		if approved {
+			pollData := poll.Data.TaskComplete
+			player, ok := g.getPlayer(pollData.Player.User.ID)
+			if !ok {
+				slogx.Error(ctx, "failed to get player", "player_id", pollData.Player.User.ID)
+				return
+			}
+
+			deltaScore := 80 + rand.Intn(40)
+			player.Score += deltaScore
+
+			g.broadcast(event.ScoreUpdated{
+				Player:     player,
+				Reason:     fmt.Sprintf("Игрок выполнил задание \"%s\"!", pollData.Task.Title),
+				Score:      player.Score,
+				DeltaScore: deltaScore,
+			})
+		}
+
 		return
 	}
 }
 
-func (g *Game) pollExpired() bool {
+func (g *Game) pollFinished() bool {
+	if len(g.game.ActivePoll.Votes) == len(g.game.Players) {
+		return true
+	}
 	if g.game.ActivePoll.Duration == nil {
 		return false
 	}
@@ -138,11 +162,12 @@ func (g *Game) voteInActive(c Context, t domain.VoteType, data *domain.VoteData)
 	}
 
 	vote := &domain.Vote{
-		Type:     t,
-		Data:     data,
-		PlayerID: c.S.User.ID,
-		GameID:   g.game.ID,
-		PollID:   g.game.ActivePoll.ID,
+		Type:      t,
+		Data:      data,
+		PlayerID:  c.S.User.ID,
+		GameID:    g.game.ID,
+		PollID:    g.game.ActivePoll.ID,
+		CreatedAt: time.Now().UTC(),
 	}
 
 	g.game.ActivePoll.Votes = append(g.game.ActivePoll.Votes, vote)
