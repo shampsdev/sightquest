@@ -48,6 +48,10 @@ func Test(t *testing.T) {
 		cli3.JoinGame(game)
 	}, 3)
 
+	fw.Step("Set route", func() {
+		cli1.Emit(event.SetRoute{RouteID: "route-1-id"})
+	}, 2)
+
 	fw.Step("Start game", func() {
 		cli1.Emit(event.StartGame{})
 	}, 4)
