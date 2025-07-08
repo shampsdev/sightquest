@@ -23,7 +23,6 @@ import { DEFAULT_MAP_CAMERA_LOCATION } from "@/constants";
 import { useGeolocationStore } from "@/shared/stores/location.store";
 import { BlurView } from "expo-blur";
 import { RouteMarker } from "@/components/ui/map/route-marker";
-import { PauseScreen } from "./pause.screen";
 import { isPause } from "@/shared/interfaces/polls/pause";
 import { CameraOverlay } from "@/components/overlays/camera.overlay";
 import { useCamera } from "@/shared/hooks/useCamera";
@@ -33,6 +32,7 @@ import { useModal } from "@/shared/hooks/useModal";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
 import { Chat } from "@/components/overlays/chat.overlay";
 import { useGameOverlays } from "@/shared/hooks/useGameOverlays";
+import { PauseOverlay } from "@/components/overlays/pause.overlay";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -265,7 +265,7 @@ export const GameScreen = () => {
         </View>
       </View>
       <Chat visible={isOverlayOpen("chat")} onClose={closeOverlay} />
-      <PauseScreen visible={isOverlayOpen("pause")} />
+      <PauseOverlay visible={isOverlayOpen("pause")} />
       <CameraOverlay
         visible={isOverlayOpen("camera")}
         onClose={closeOverlay}

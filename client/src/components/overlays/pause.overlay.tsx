@@ -12,7 +12,7 @@ interface PaueScreenProps {
   visible?: boolean;
 }
 
-export const PauseScreen = ({ visible }: PaueScreenProps) => {
+export const PauseOverlay = ({ visible }: PaueScreenProps) => {
   const opacity = useSharedValue(0);
 
   useEffect(() => {
