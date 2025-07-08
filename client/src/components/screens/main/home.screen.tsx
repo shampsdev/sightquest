@@ -23,13 +23,15 @@ import { useGameStore } from "@/shared/stores/game.store";
 import { ReconnectNotification } from "@/components/ui/notifications/notification";
 import { useGame } from "@/shared/api/hooks/useGame";
 import { ModalCard } from "@/components/widgets/modal-card";
+import { logger } from "@/shared/instances/logger.instance";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const { location } = useGeolocationStore();
   const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
-  const { game: storedGame, setGame, resetChat } = useGameStore();
+  const { game: storedGame, setGame, resetChat, setRoute } = useGameStore();
   const { data, isLoading, refetch, isError, error } = useGame(
     storedGame?.id || ""
   );
@@ -44,12 +46,12 @@ export const HomeScreen = () => {
           setGame(result.data);
           navigation.navigate("GameStack", { gameId: storedGame?.id || "" });
         } else {
-          console.error("Game data not found");
+          logger.error("game", "Game data not found");
           setGame(null);
           resetChat();
         }
       } catch (err) {
-        console.error("Error refetching game:", err);
+        logger.error("game", "Error refetching game:");
         setGame(null);
         resetChat();
       }
@@ -81,7 +83,7 @@ export const HomeScreen = () => {
 
   const { data: avatars } = useStyles({ type: "avatar", bought: true });
 
-  useEffect(() => console.log(location, user), [location, user]);
+  const insets = useSafeAreaInsets();
 
   return (
     <View className="flex-1">
@@ -121,7 +123,10 @@ export const HomeScreen = () => {
         />
       </Map>
 
-      <View className="absolute top-20 w-full flex flex-col gap-[16px]">
+      <View
+        style={{ top: insets.top }}
+        className="absolute z-20 w-full flex flex-col gap-[16px]"
+      >
         <View className="w-[90%] mx-auto flex flex-row justify-between items-center">
           <Pressable onPress={shop}>
             <IconContainer>
@@ -147,6 +152,7 @@ export const HomeScreen = () => {
               id={storedGame.id}
               onAccept={handleAccept}
               onDecline={() => {
+                setRoute(null);
                 setGame(null);
                 resetChat();
               }}

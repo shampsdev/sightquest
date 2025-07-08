@@ -4,7 +4,6 @@ import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import { UserLobbyPreview } from "@/components/widgets/user/user-preview.lobby";
 import { GameStackParamList } from "@/routers/game.navigator";
-import { MainStackParamList } from "@/routers/main.navigator";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { useAuthStore } from "@/shared/stores/auth.store";
@@ -14,10 +13,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type NavProp = StackNavigationProp<GameStackParamList, "Lobby">;
 
@@ -38,6 +34,10 @@ export const LobbyScreen = () => {
 
   const back = () => {
     navigation.goBack();
+  };
+
+  const routes = () => {
+    navigation.navigate("Route");
   };
 
   useEffect(() => {
@@ -97,11 +97,12 @@ export const LobbyScreen = () => {
         </ScrollView>
 
         {game && game.admin.id === user?.id && (
-          <View className="absolute bottom-0 left-0 right-0 p-4 bg-bg_primary border-t border-white/10">
+          <View className="absolute bottom-12 px-[5%] gap-2 flex flex-1 flex-row items-center">
+            <Button onPress={routes} className="flex-1 w-auto" text="Маршрут" />
             <Button
               onPress={start}
-              className="w-full"
-              text={game && game?.state === "game" ? "К игре" : "Старт"}
+              className="flex-1 w-auto bg-navigation"
+              text={game && game?.state === "game" ? "К игре" : "Начать"}
             />
           </View>
         )}

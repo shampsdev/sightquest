@@ -1,4 +1,4 @@
-import { GameStatistics } from "@/shared/interfaces/game-statistics";
+import { GameStatistics } from "@/shared/interfaces/stats/game-statistics";
 import { View, Text, Pressable } from "react-native";
 import { AvatarStack } from "../ui/avatar-stack";
 import { Icons } from "../ui/icons/icons";
@@ -24,7 +24,7 @@ export const GameStats = ({
             {date.toLocaleDateString("ru-RU")}
           </Text>
           <Text className="text-[#b6b6b6] font-onest-regular text-[16px]">
-            Маршрут: {route}
+            Маршрут: {route.title}
           </Text>
         </View>
         <Icons.Eye.Default />

@@ -1,4 +1,4 @@
-import { NicknameType } from "@/shared/interfaces/nickname";
+import { NicknameType } from "@/shared/interfaces/styles/nickname";
 import { BlurView } from "expo-blur";
 import { View, Text } from "react-native";
 
@@ -13,6 +13,7 @@ export const Nickname = ({ type, name }: NicknameProps) => {
       return (
         <View className="rounded-full z-20 overflow-hidden">
           <BlurView
+            experimentalBlurMethod="dimezisBlurView"
             intensity={10}
             tint="dark"
             className="px-2 py-1 rounded-full"

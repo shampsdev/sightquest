@@ -36,7 +36,12 @@ export const ModalCard = ({
 }: ModalCardProps) => {
   return (
     <View className="absolute w-full h-full z-20 flex justify-center items-center">
-      <BlurView intensity={80} tint="dark" className="absolute w-full h-full" />
+      <BlurView
+        experimentalBlurMethod="dimezisBlurView"
+        intensity={80}
+        tint="dark"
+        className="absolute w-full h-full"
+      />
       <View
         className={twMerge(
           "bg-[#FFF] py-[40px] px-[36px]  rounded-[30px] w-[90%]  flex flex-col justify-center items-center gap-8",

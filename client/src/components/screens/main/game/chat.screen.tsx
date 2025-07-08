@@ -69,7 +69,7 @@ export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
   return (
     <Animated.View
       style={animatedStyle}
-      className="absolute w-full h-full flex justify-end items-center"
+      className="absolute w-full h-full flex justify-end items-center z-30"
       pointerEvents={visible ? "auto" : "none"}
     >
       <Pressable
@@ -77,6 +77,7 @@ export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
         className="absolute top-0 left-0 right-0 bottom-0"
       />
       <BlurView
+        experimentalBlurMethod="dimezisBlurView"
         intensity={100}
         tint="dark"
         className="absolute w-full h-full z-10"
@@ -126,7 +127,7 @@ export const ChatScreen = ({ visible, onClose }: ChatScreenProps) => {
           ))}
         </ScrollView>
 
-        <View className="flex flex-row gap-[10px] items-center justify-center w-full">
+        <View className="flex flex-row gap-[10px] pb-12 items-center justify-center w-full">
           <TextInput
             className={twMerge(
               "rounded-full flex-1 border-text_secondary border-[1px] text-[16px] text-[#B6B6B6]  px-[20px]",

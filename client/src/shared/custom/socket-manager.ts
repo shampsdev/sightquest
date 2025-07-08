@@ -1,5 +1,6 @@
 import { SOCKET_URL } from "@/constants";
 import io from "socket.io-client";
+import { logger } from "../instances/logger.instance";
 
 export type Sock = any;
 
@@ -11,18 +12,18 @@ function createSocket(): Sock {
   });
 
   if (__DEV__) {
-    console.info(`[socket] > connecting to ${SOCKET_URL}`);
+    logger.log("socket", `> connecting to ${SOCKET_URL}`);
 
     const originalOnevent = sock.onevent;
     sock.onevent = function (packet: any) {
       const [event, ...args] = packet.data;
-      console.info(`[socket] < ${event}`, ...args);
+      logger.log("socket", `< ${event}`, ...args);
       return originalOnevent.call(this, packet);
     };
 
     const originalEmit = sock.emit.bind(sock);
     sock.emit = function (ev: string, ...args: any[]) {
-      console.info(`[socket] > ${ev}`, ...args);
+      logger.log("socket", `> ${ev}`, ...args);
       return originalEmit.call(this, ev, ...args);
     };
   }

@@ -1,5 +1,5 @@
 import { Avatar } from "@/components/ui/avatar";
-import { Role } from "@/shared/interfaces/role";
+import { Role } from "@/shared/interfaces/game/role";
 import { ImageSourcePropType, View, Text } from "react-native";
 import { twMerge } from "tailwind-merge";
 
