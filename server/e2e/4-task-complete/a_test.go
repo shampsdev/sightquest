@@ -38,6 +38,10 @@ func Test(t *testing.T) {
 		})
 	}, 2)
 
+	fw.Step("Start game", func() {
+		cli1.Emit(event.StartGame{})
+	}, 4)
+
 	fw.Step("User1 completes task", func() {
 		cli1.Emit(event.TaskComplete{
 			PollDuration: utils.PtrTo(3),

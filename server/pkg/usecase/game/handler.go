@@ -28,6 +28,7 @@ type Handler struct {
 }
 
 type Context = *state.Context[*PlayerState]
+type Middleware = state.MiddlewareFunc[*PlayerState, *PlayerState, state.AnyEvent, state.AnyEvent]
 
 func NewHandler(gameProvider *InMemoryGameRepo, userCase *usecore.User, auth *auth.Auth) *Handler {
 	h := &Handler{
@@ -41,9 +42,9 @@ func NewHandler(gameProvider *InMemoryGameRepo, userCase *usecore.User, auth *au
 
 func (h *Handler) buildRouter() {
 	g := state.NewGroup[*PlayerState, state.AnyEvent]()
-	gLog := state.GroupMW(g, h.logMW)
+	g = state.GroupMW(g, h.logMW(event.LocationUpdateEvent))
 
-	gLog.
+	g.
 		On(event.AuthEvent, state.WrapT(h.OnAuth)).
 		On(event.JoinGameEvent, state.WrapT(h.OnJoinGame)).
 		On(event.LeaveGameEvent, state.WrapT(h.OnLeaveGame))
@@ -52,20 +53,28 @@ func (h *Handler) buildRouter() {
 	gInGame = state.GroupMW(gInGame, lockGameMW)
 	gInGame = state.GroupMW(gInGame, recordGameActivityMW)
 
-	// no logs
-	gInGame.On(event.LocationUpdateEvent, callGame((*Game).OnLocationUpdate))
-
-	gInGame = state.GroupMW(gInGame, h.logMW)
+	// any state
 	gInGame.
-		On(event.BroadcastEvent, callGame((*Game).OnBroadcast)).
+		On(event.LocationUpdateEvent, callGame((*Game).OnLocationUpdate)).
+		On(event.BroadcastEvent, callGame((*Game).OnBroadcast))
+
+	// in lobby
+	state.GroupMW(gInGame, h.checkGameStateMW(domain.GameStateLobby)).
 		On(event.StartGameEvent, callGame((*Game).OnStartGame)).
-		On(event.SetRouteEvent, callGame((*Game).OnSetRoute)).
+		On(event.SetRouteEvent, callGame((*Game).OnSetRoute))
+
+	// in game
+	state.GroupMW(gInGame, h.checkGameStateMW(domain.GameStateGame)).
 		On(event.PauseEvent, callGame((*Game).OnPause)).
-		On(event.UnpauseEvent, callGame((*Game).OnUnpause)).
+		On(event.PlayerCatchEvent, callGame((*Game).OnPlayerCatch)).
 		On(event.TaskCompleteEvent, callGame((*Game).OnTaskComplete)).
+		On(event.FinishGameEvent, callGame((*Game).OnFinishGame))
+
+	// in poll
+	state.GroupMW(gInGame, h.checkGameStateMW(domain.GameStatePoll)).
+		On(event.UnpauseEvent, callGame((*Game).OnUnpause)).
 		On(event.TaskApproveEvent, callGame((*Game).OnTaskApprove)).
 		On(event.TaskRejectEvent, callGame((*Game).OnTaskReject)).
-		On(event.PlayerCatchEvent, callGame((*Game).OnPlayerCatch)).
 		On(event.PlayerCatchApproveEvent, callGame((*Game).OnPlayerCatchApprove)).
 		On(event.PlayerCatchRejectEvent, callGame((*Game).OnPlayerCatchReject))
 
@@ -108,14 +117,20 @@ func (h *Handler) Handle(c Context, e state.AnyEvent) error {
 	return h.router(c, e)
 }
 
-func (h *Handler) logMW(
-	c Context,
-	e state.AnyEvent,
-	next state.HandlerFunc[*PlayerState, state.AnyEvent],
-) error {
-	log := slogx.FromCtx(c.Ctx).With("received_event", e.Event())
-	log.Debug("Received event")
-	return next(c.WithCtx(slogx.NewCtx(c.Ctx, log)), e)
+func (h *Handler) logMW(ignored ...string) Middleware {
+	ignoredMap := make(map[string]struct{})
+	for _, e := range ignored {
+		ignoredMap[e] = struct{}{}
+	}
+
+	return func(c Context, e state.AnyEvent, next state.HandlerFunc[*PlayerState, state.AnyEvent]) error {
+		if _, ignored := ignoredMap[e.Event()]; ignored {
+			return next(c, e)
+		}
+		log := slogx.FromCtx(c.Ctx).With("received_event", e.Event())
+		log.Debug("Received event")
+		return next(c.WithCtx(slogx.NewCtx(c.Ctx, log)), e)
+	}
 }
 
 func (h *Handler) checkInGameMW(
@@ -130,6 +145,17 @@ func (h *Handler) checkInGameMW(
 		return fmt.Errorf("user not in game")
 	}
 	return next(c, e)
+}
+
+func (h *Handler) checkGameStateMW(
+	gameState domain.GameState,
+) Middleware {
+	return func(c Context, event state.AnyEvent, next state.HandlerFunc[*PlayerState, state.AnyEvent]) error {
+		if c.S.Game.game.State != gameState {
+			return fmt.Errorf(`unexpected event "%s" in state "%s" (expected in state "%s")`, event.Event(), c.S.Game.game.State, gameState)
+		}
+		return next(c, event)
+	}
 }
 
 func (h *Handler) OnAuth(c Context, ev event.Auth) error {

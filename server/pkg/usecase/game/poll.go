@@ -60,6 +60,11 @@ func (g *Game) checkActivePoll(ctx context.Context) error {
 		if err != nil {
 			return fmt.Errorf("failed to check active poll player catch: %w", err)
 		}
+	case domain.PollTypeFinishGame:
+		err := g.checkActivePollFinishGame(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to check active poll finish game: %w", err)
+		}
 	}
 	return nil
 }
@@ -202,6 +207,42 @@ func (g *Game) checkActivePollPlayerCatch(ctx context.Context) error {
 	return nil
 }
 
+func (g *Game) checkActivePollFinishGame(ctx context.Context) error {
+	poll := g.game.ActivePoll
+
+	approved := true
+	for _, vote := range poll.Votes {
+		if vote.Type == domain.VoteTypeFinishGameReject {
+			approved = false
+			break
+		}
+	}
+
+	if !g.pollFinished() && approved {
+		return nil
+	}
+
+	if len(poll.Votes) != len(g.game.Players) {
+		approved = false
+	}
+
+	err := g.finishActive(ctx, domain.PollResult{FinishGame: &domain.PollResultFinishGame{
+		Approved: approved,
+	}})
+	if err != nil {
+		return fmt.Errorf("failed to finish poll: %w", err)
+	}
+
+	if approved {
+		err := g.finishGame(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to finish game: %w", err)
+		}
+	}
+
+	return nil
+}
+
 func (g *Game) pollFinished() bool {
 	if len(g.game.ActivePoll.Votes) == len(g.game.Players) {
 		return true
@@ -230,6 +271,14 @@ func (g *Game) finishActive(ctx context.Context, result domain.PollResult) error
 	g.broadcast(event.Poll{Poll: poll})
 	g.game.ActivePoll = nil
 	slogx.Info(ctx, "poll finished", "poll", poll)
+
+	g.game.State = domain.GameStateGame
+	err = g.gameCase.UpdateGame(ctx, g.game.ID, &domain.PatchGame{
+		State: &g.game.State,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to update game: %w", err)
+	}
 	return nil
 }
 

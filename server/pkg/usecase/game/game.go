@@ -220,19 +220,15 @@ func (g *Game) OnBroadcast(c Context, ev event.Broadcast) error {
 }
 
 func (g *Game) OnPause(c Context, ev event.Pause) error {
-	if g.game.ActivePoll != nil {
-		return fmt.Errorf("can't set pause, game is in poll")
-	}
-
 	_, err := g.createActivePoll(c, &domain.CreatePoll{
 		GameID:   g.game.ID,
 		Type:     domain.PollTypePause,
 		State:    domain.PollStateActive,
-		Duration: &ev.Duration,
+		Duration: &ev.PollDuration,
 		Data: &domain.PollData{
 			Pause: &domain.PollDataPause{
 				PausedBy: c.S.Player,
-				Duration: ev.Duration,
+				Duration: ev.PollDuration,
 			},
 		},
 	})
@@ -361,6 +357,44 @@ func (g *Game) OnPlayerCatchReject(c Context, ev event.PlayerCatchReject) error 
 	)
 }
 
+func (g *Game) OnFinishGame(c Context, ev event.FinishGame) error {
+	duration := utils.PtrTo(45)
+	if ev.PollDuration != nil {
+		duration = ev.PollDuration
+	}
+	_, err := g.createActivePoll(c, &domain.CreatePoll{
+		GameID:   g.game.ID,
+		Type:     domain.PollTypeFinishGame,
+		State:    domain.PollStateActive,
+		Duration: duration,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create active poll: %w", err)
+	}
+
+	return nil
+}
+
+func (g *Game) OnFinishGameApprove(c Context, ev event.FinishGameApprove) error {
+	return g.onVote(c,
+		domain.PollTypeFinishGame,
+		domain.VoteTypeFinishGameApprove,
+		&domain.VoteData{
+			Comment: ev.Comment,
+		},
+	)
+}
+
+func (g *Game) OnFinishGameReject(c Context, ev event.FinishGameReject) error {
+	return g.onVote(c,
+		domain.PollTypeFinishGame,
+		domain.VoteTypeFinishGameReject,
+		&domain.VoteData{
+			Comment: ev.Comment,
+		},
+	)
+}
+
 func (g *Game) doRotation(
 	ctx context.Context, runner, catchedBy *domain.Player,
 ) (catcherReward int, newRunner *domain.Player, err error) {
@@ -415,6 +449,19 @@ func (g *Game) rotation(
 	return catcherReward, newRunner
 }
 
+func (g *Game) finishGame(ctx context.Context) error {
+	g.game.State = domain.GameStateFinished
+	err := g.gameCase.UpdateGame(ctx, g.game.ID, &domain.PatchGame{
+		State: &g.game.State,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to update game: %w", err)
+	}
+
+	g.broadcast(event.FinishedGame{})
+	return nil
+}
+
 func (g *Game) onVote(c Context, pollType domain.PollType, voteType domain.VoteType, data *domain.VoteData) error {
 	if err := g.ensurePollType(pollType); err != nil {
 		return fmt.Errorf("failed to ensure poll type: %w", err)
@@ -429,6 +476,9 @@ func (g *Game) onVote(c Context, pollType domain.PollType, voteType domain.VoteT
 }
 
 func (g *Game) createActivePoll(c Context, poll *domain.CreatePoll) (*domain.Poll, error) {
+	if g.game.ActivePoll != nil {
+		return nil, fmt.Errorf("game is in poll")
+	}
 	id, err := g.pollRepo.Create(c.Ctx, poll)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create poll: %w", err)
@@ -441,6 +491,14 @@ func (g *Game) createActivePoll(c Context, poll *domain.CreatePoll) (*domain.Pol
 	}
 	g.game.ActivePoll = created
 	c.Broadcast(event.Poll{Poll: created})
+	g.game.State = domain.GameStatePoll
+	err = g.gameCase.UpdateGame(c.Ctx, g.game.ID, &domain.PatchGame{
+		State: &g.game.State,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to update game: %w", err)
+	}
+
 	return created, nil
 }
 

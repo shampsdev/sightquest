@@ -18,15 +18,21 @@ const (
 	LeaveGameEvent       = "leaveGame"
 	PauseEvent           = "pause"
 	UnpauseEvent         = "unpause"
-	TaskCompleteEvent    = "taskComplete"
-	TaskApproveEvent     = "taskApprove"
-	TaskRejectEvent      = "taskReject"
-	ScoreUpdatedEvent    = "scoreUpdated"
+
+	TaskCompleteEvent = "taskComplete"
+	TaskApproveEvent  = "taskApprove"
+	TaskRejectEvent   = "taskReject"
+	ScoreUpdatedEvent = "scoreUpdated"
 
 	PlayerCatchEvent        = "playerCatch"
 	PlayerCatchApproveEvent = "playerCatchApprove"
 	PlayerCatchRejectEvent  = "playerCatchReject"
 	PlayerRoleUpdatedEvent  = "roleUpdated"
+
+	FinishGameEvent        = "finishGame"
+	FinishGameApproveEvent = "finishGameApprove"
+	FinishGameRejectEvent  = "finishGameReject"
+	FinishedGameEvent      = "finishedGame"
 
 	PollEvent = "poll"
 
@@ -106,7 +112,7 @@ func (e Poll) Event() string { return PollEvent }
 
 // client -> server
 type Pause struct {
-	Duration int `json:"duration"`
+	PollDuration int `json:"pollDuration"`
 }
 
 func (e Pause) Event() string { return PauseEvent }
@@ -215,6 +221,33 @@ func (e Broadcasted) Event() string { return BroadcastedEvent }
 type StartGame struct{}
 
 func (e StartGame) Event() string { return StartGameEvent }
+
+// client -> server
+type FinishGame struct {
+	Comment      string `json:"comment"`
+	PollDuration *int   `json:"pollDuration"`
+}
+
+func (e FinishGame) Event() string { return FinishGameEvent }
+
+// client -> server
+type FinishGameApprove struct {
+	Comment string `json:"comment"`
+}
+
+func (e FinishGameApprove) Event() string { return FinishGameApproveEvent }
+
+// client -> server
+type FinishGameReject struct {
+	Comment string `json:"comment"`
+}
+
+func (e FinishGameReject) Event() string { return FinishGameRejectEvent }
+
+// server -> client
+type FinishedGame struct{}
+
+func (e FinishedGame) Event() string { return FinishedGameEvent }
 
 // client -> server
 type LeaveGame struct{}
