@@ -30,6 +30,7 @@ interface StoreState {
   addPlayer: (p: Player) => void;
   removePlayer: (userId: string) => void;
   updatePlayerLocation: (userId: string, loc: Coords) => void;
+  updatePlayerScore: (userId: string, score: number) => void;
   addMessage: (msg: ChatMessage) => void;
   resetChat: () => void;
   setRoute: (route: Route | null) => void;
@@ -77,6 +78,14 @@ export const useGameStore = create<StoreState>()(
             if (player) player.location = loc;
           }),
 
+        updatePlayerScore: (userId, score) =>
+          set((state) => {
+            const player = state.game?.players.find(
+              (p) => p.user.id === userId
+            );
+            if (player) player.score = score;
+          }),
+
         addMessage: ({ playerId, data }) =>
           set((state) => {
             const last = state.chatMessages.at(-1);
@@ -116,6 +125,7 @@ const {
   addPlayer,
   removePlayer,
   updatePlayerLocation,
+  updatePlayerScore,
   addMessage,
   setRoute,
   setPoll,
@@ -148,4 +158,7 @@ socket.on("playerLeft", ({ player }) => {
 });
 socket.on("locationUpdated", ({ player, location }) => {
   updatePlayerLocation(player.user.id!, location);
+});
+socket.on("scoreUpdated", ({ player, score }) => {
+  updatePlayerScore(player.user.id!, score);
 });

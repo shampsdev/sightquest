@@ -20,6 +20,7 @@ export interface ServerToClientEvents extends EventMap {
     player: Player;
     location: Coords;
   }) => void;
+  scoreUpdated: ({ player, score }: { player: Player; score: number }) => void;
   broadcasted: ({ player, data }: { player: Player; data: any }) => void;
   startGame: () => void;
   endGame: () => void;
@@ -36,6 +37,7 @@ export interface ClientToServerEvents extends EventMap {
   startGame: () => void;
   endGame: () => void;
   leaveGame: () => void;
+  taskComplete: ({ taskId, photo }: { taskId: string; photo: string }) => void;
   pause: ({ duration }: { duration: number }) => void;
   unpause: () => void;
 }
