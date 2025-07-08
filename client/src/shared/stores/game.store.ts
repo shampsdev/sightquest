@@ -11,6 +11,7 @@ import { Route } from "../interfaces/route";
 import { socket } from "../instances/socket.instance";
 import { Poll } from "../interfaces/polls/poll";
 import { CompletedTaskPoint } from "../interfaces/game/completed-task-point";
+import { Role } from "../interfaces/game/role";
 
 interface ChatMessageGroup {
   playerId: string;
@@ -32,6 +33,7 @@ interface StoreState {
   removePlayer: (userId: string) => void;
   updatePlayerLocation: (userId: string, loc: Coords) => void;
   updatePlayerScore: (userId: string, score: number) => void;
+  updatePlayerRole: (userId: string, role: Role) => void;
   addMessage: (msg: ChatMessage) => void;
   resetChat: () => void;
   setRoute: (route: Route | null) => void;
@@ -88,6 +90,13 @@ export const useGameStore = create<StoreState>()(
             );
             if (player) player.score = score;
           }),
+        updatePlayerRole: (userId, role) =>
+          set((state) => {
+            const player = state.game?.players.find(
+              (p) => p.user.id === userId
+            );
+            if (player) player.role = role;
+          }),
 
         addMessage: ({ playerId, data }) =>
           set((state) => {
@@ -134,6 +143,7 @@ const {
   removePlayer,
   updatePlayerLocation,
   updatePlayerScore,
+  updatePlayerRole,
   addMessage,
   setRoute,
   setPoll,
@@ -169,4 +179,7 @@ socket.on("locationUpdated", ({ player, location }) => {
 });
 socket.on("scoreUpdated", ({ player, score }) => {
   updatePlayerScore(player.user.id!, score);
+});
+socket.on("playerRoleUpdated", ({ player, role }) => {
+  updatePlayerRole(player.user.id!, role);
 });
