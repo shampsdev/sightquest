@@ -157,9 +157,11 @@ func (g *Game) pollFinished() bool {
 func (g *Game) finishActive(ctx context.Context, result domain.PollResult) error {
 	poll := g.game.ActivePoll
 	poll.Result = &result
+	poll.FinishedAt = utils.PtrTo(time.Now().UTC())
 	err := g.pollRepo.Patch(ctx, poll.ID, &domain.PatchPoll{
-		State:  utils.PtrTo(domain.PollStateFinished),
-		Result: &poll.Result,
+		State:      utils.PtrTo(domain.PollStateFinished),
+		Result:     &poll.Result,
+		FinishedAt: &poll.FinishedAt,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to patch poll: %w", err)
