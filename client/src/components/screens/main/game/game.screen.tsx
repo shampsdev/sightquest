@@ -26,7 +26,6 @@ import { RouteMarker } from "@/components/ui/map/route-marker";
 import { isPause } from "@/shared/interfaces/polls/pause";
 import { CameraOverlay } from "@/components/overlays/camera.overlay";
 import { useCamera } from "@/shared/hooks/useCamera";
-import { SendPhotoOverlay } from "@/components/overlays/send-photo.overlay";
 import { ModalCardProps } from "@/components/widgets/modal-card";
 import { useModal } from "@/shared/hooks/useModal";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
@@ -34,7 +33,7 @@ import { Chat } from "@/components/overlays/chat.overlay";
 import { useGameOverlays } from "@/shared/hooks/useGameOverlays";
 import { PauseOverlay } from "@/components/overlays/pause.overlay";
 import { PlaceMarker } from "@/components/ui/map/place-marker";
-
+import { CompleteTaskOverlay } from "@/components/overlays/complete-task";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -283,7 +282,7 @@ export const GameScreen = () => {
           openOverlay("sendPhoto");
         }}
       />
-      <SendPhotoOverlay
+      <CompleteTaskOverlay
         visible={isOverlayOpen("sendPhoto")}
         onClose={closeOverlay}
       />

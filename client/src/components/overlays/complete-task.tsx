@@ -15,24 +15,26 @@ import Animated, {
 } from "react-native-reanimated";
 import { twMerge } from "tailwind-merge";
 import { Button } from "../ui/button";
-import { useCameraStore } from "@/shared/stores/camera.store";
 import { uploadImageToS3 } from "@/shared/api/s3.api";
 import { logger } from "@/shared/instances/logger.instance";
 import { useGameStore } from "@/shared/stores/game.store";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { usePlayer } from "@/shared/hooks/usePlayer";
+import { useTaskCompletionStore } from "@/shared/stores/camera.store";
 
-interface CameraOverlayProps {
+interface CompleteTaskOverlayProps {
   visible?: boolean;
   onClose: () => void;
 }
 
-export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
-  const { photo } = useCameraStore();
+export const CompleteTaskOverlay = ({
+  visible,
+  onClose,
+}: CompleteTaskOverlayProps) => {
+  const { photo, taskId } = useTaskCompletionStore();
   const { emit } = useSocket();
 
   const { player } = usePlayer();
-  const { game } = useGameStore();
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -93,14 +95,14 @@ export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
 
               if (player?.role === "catcher") {
                 emit("taskComplete", {
-                  taskId: game?.route?.taskPoints[0].id ?? "",
+                  taskId: taskId ?? "",
                   photo: result.url,
                 });
               }
 
               if (player?.role === "runner") {
                 emit("taskComplete", {
-                  taskId: game?.route?.taskPoints[0].id ?? "",
+                  taskId: taskId ?? "",
                   photo: result.url,
                 });
               }
@@ -114,36 +116,3 @@ export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
     </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  message: {
-    textAlign: "center",
-    paddingBottom: 10,
-  },
-  camera: {
-    zIndex: 1000,
-    flex: 1,
-    width: 360,
-    height: 360,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "transparent",
-    margin: 64,
-  },
-  button: {
-    flex: 1,
-    alignSelf: "flex-end",
-    alignItems: "center",
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-  },
-});
