@@ -33,9 +33,13 @@ import { BlurView } from "expo-blur";
 import { RouteMarker } from "@/components/ui/map/route-marker";
 import { PauseScreen } from "./pause.screen";
 import { isPause } from "@/shared/interfaces/polls/pause";
+import { CameraOverlay } from "@/components/overlays/camera";
+import { useCamera } from "@/shared/hooks/useCamera";
+import { SendPhotoOverlay } from "@/components/overlays/send-photo";
 import { ModalCardProps } from "@/components/widgets/modal-card";
 import { useModal } from "@/shared/hooks/useModal";
 import { isTaskPoll } from '@/shared/interfaces/polls/task-poll';
+
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -55,6 +59,10 @@ export const GameScreen = () => {
 
   const [chatOpened, setChatOpened] = useState<boolean>(false);
   const [pauseOpened, setPauseOpened] = useState<boolean>(false);
+  const [cameraOverlayOpened, setCameraOverlayOpened] =
+    useState<boolean>(false);
+  const [sendPhotoOverlayOpened, setSendPhotoOverlayOpened] =
+    useState<boolean>(false);
 
   const { setModalOpen } = useModal();
 
@@ -136,47 +144,49 @@ export const GameScreen = () => {
 
   return (
     <View className="flex-1">
-      <Map>
-        {location && players && (
-          <>
-            {players?.map((player, index) => (
-              <PlayerMarker
-                key={index}
-                coordinate={
-                  player.user.id === user?.id
-                    ? { lon: location[0], lat: location[1] }
-                    : player.location
-                }
-                name={player?.user.name ?? player.user.username}
-                avatarSrc={{
-                  uri: avatars?.find(
-                    (x) => x.id === player.user.styles?.avatarId
-                  )?.style.url,
-                }}
-              />
-            ))}
-          </>
-        )}
+      {!cameraOverlayOpened && !sendPhotoOverlayOpened && (
+        <Map>
+          {location && players && (
+            <>
+              {players?.map((player, index) => (
+                <PlayerMarker
+                  key={index}
+                  coordinate={
+                    player.user.id === user?.id
+                      ? { lon: location[0], lat: location[1] }
+                      : player.location
+                  }
+                  name={player?.user.name ?? player.user.username}
+                  avatarSrc={{
+                    uri: avatars?.find(
+                      (x) => x.id === player.user.styles?.avatarId
+                    )?.style.url,
+                  }}
+                />
+              ))}
+            </>
+          )}
 
-        {game && game?.route && (
-          <RouteMarker
-            points={game.route.taskPoints.map((x) => [
-              x.location.lon,
-              x.location.lat,
-            ])}
-            path={game.route.taskPoints.map((x) => [
-              x.location.lon,
-              x.location.lat,
-            ])}
+          {game && game?.route && (
+            <RouteMarker
+              points={game.route.taskPoints.map((x) => [
+                x.location.lon,
+                x.location.lat,
+              ])}
+              path={game.route.taskPoints.map((x) => [
+                x.location.lon,
+                x.location.lat,
+              ])}
+            />
+          )}
+          <Camera
+            defaultSettings={{
+              centerCoordinate: location || DEFAULT_MAP_CAMERA_LOCATION,
+              zoomLevel: 12,
+            }}
           />
-        )}
-        <Camera
-          defaultSettings={{
-            centerCoordinate: location || DEFAULT_MAP_CAMERA_LOCATION,
-            zoomLevel: 12,
-          }}
-        />
-      </Map>
+        </Map>
+      )}
       {!chatOpened && (
         <View className="absolute px-[5%] gap-4 bottom-12 flex items-center flex-row left-0 right-0 z-10">
           <Pressable onPress={togglePauseGame}>
@@ -184,7 +194,9 @@ export const GameScreen = () => {
               {pauseOpened ? <Icons.Play /> : <Icons.Pause />}
             </IconContainer>
           </Pressable>
-          <Button onPress={completeTask} text="Поймать" className="flex-1" />
+
+
+          <Button onPress={() => {completeTask(); setCameraOverlayOpened(true)}} text="Поймать" className="flex-1" />
           <Pressable onPress={openChat}>
             <IconContainer>
               <Icons.Chat />
@@ -197,14 +209,22 @@ export const GameScreen = () => {
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
           <Pressable
             onPress={
-              chatOpened
-                ? () => setChatOpened(false)
+              chatOpened || cameraOverlayOpened || sendPhotoOverlayOpened
+                ? () => {
+                    setChatOpened(false);
+                    setCameraOverlayOpened(false);
+                    setSendPhotoOverlayOpened(false);
+                  }
                 : () => setModalOpen(modalOptions)
             }
           >
             <IconContainer>
-              {chatOpened && <Icons.Back />}
-              {!chatOpened && <Icons.Exit />}
+              {(chatOpened ||
+                cameraOverlayOpened ||
+                sendPhotoOverlayOpened) && <Icons.Back />}
+              {!chatOpened &&
+                !cameraOverlayOpened &&
+                !sendPhotoOverlayOpened && <Icons.Exit />}
             </IconContainer>
           </Pressable>
 
@@ -266,8 +286,28 @@ export const GameScreen = () => {
         </View>
       </View>
 
-      <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
-      <PauseScreen visible={pauseOpened} />
+      {chatOpened && (
+        <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
+      )}
+      {pauseOpened && <PauseScreen visible={pauseOpened} />}
+
+      {cameraOverlayOpened && (
+        <CameraOverlay
+          visible={cameraOverlayOpened}
+          onClose={() => setCameraOverlayOpened(false)}
+          onSucces={() => {
+            setCameraOverlayOpened(false);
+            setSendPhotoOverlayOpened(true);
+          }}
+        />
+      )}
+
+      {sendPhotoOverlayOpened && (
+        <SendPhotoOverlay
+          visible={sendPhotoOverlayOpened}
+          onClose={() => setSendPhotoOverlayOpened(false)}
+        />
+      )}
 
       <LeaderboardSheet
         ref={leaderboardSheet}

@@ -11,7 +11,7 @@ import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
 import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -23,6 +23,9 @@ import { useGame } from "@/shared/api/hooks/useGame";
 import { ModalCardProps } from "@/components/widgets/modal-card";
 import { logger } from "@/shared/instances/logger.instance";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { CameraOverlay } from "@/components/overlays/camera";
+
 import { useModal } from "@/shared/hooks/useModal";
 
 export const HomeScreen = () => {
@@ -103,6 +106,9 @@ export const HomeScreen = () => {
   const { data: avatars } = useStyles({ type: "avatar", bought: true });
 
   const insets = useSafeAreaInsets();
+
+  const [cameraOverlayVisible, setCameraOverlayVisible] =
+    useState<boolean>(false);
 
   return (
     <View className="flex-1">

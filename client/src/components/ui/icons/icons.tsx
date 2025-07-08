@@ -1,5 +1,5 @@
 import { ViewStyle } from "react-native";
-import Svg, { ClipPath, Defs, G, Path, Rect } from "react-native-svg";
+import Svg, { Circle, ClipPath, Defs, G, Path, Rect } from "react-native-svg";
 
 export const Icons = {
   Store: () => {
@@ -241,6 +241,36 @@ export const Icons = {
             <Rect width="24" height="24" fill="white" />
           </ClipPath>
         </Defs>
+      </Svg>
+    );
+  },
+
+  TakePhoto: () => {
+    return (
+      <Svg width="92" height="92" viewBox="0 0 92 92" fill="none">
+        <Rect
+          x="1.5"
+          y="1.5"
+          width="89"
+          height="89"
+          rx="44.5"
+          stroke="white"
+          strokeWidth="3"
+        />
+        <Circle x="46.32" cy="46.0002" r="40.32" fill="#975DFF" />
+      </Svg>
+    );
+  },
+  Revert: () => {
+    return (
+      <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+        <Path
+          d="M26.401 11.4009C25.6119 9.00013 24.0849 6.90972 22.0379 5.42776C19.9908 3.94581 17.5282 3.14795 15.001 3.14795C12.4738 3.14795 10.0111 3.94581 7.96407 5.42776C5.91702 6.90972 4.39009 9.00013 3.60098 11.4009M3.00098 6.60095V11.4009H7.80098M22.201 18.6009H27.001V23.4009M3.60098 18.6009C4.39009 21.0018 5.91702 23.0922 7.96407 24.5741C10.0111 26.0561 12.4738 26.8539 15.001 26.8539C17.5282 26.8539 19.9908 26.0561 22.0379 24.5741C24.0849 23.0922 25.6119 21.0018 26.401 18.6009"
+          stroke="white"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </Svg>
     );
   },
