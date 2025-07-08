@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   Image,
+  Text,
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -14,16 +15,22 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { twMerge } from "tailwind-merge";
+import { AvatarCard } from "../widgets/avatar-card";
+import { useUpdateRoleStore } from "@/shared/stores/update-role.store";
+import { useGameStore } from "@/shared/stores/game.store";
+import { useStyles } from "@/shared/api/hooks/useStyles";
 
-interface CompleteTaskOverlayProps {
+interface UpdateRoleOverlayProps {
   visible?: boolean;
   onClose: () => void;
 }
 
-export const CompleteTaskOverlay = ({
+export const UpdateRoleOverlay = ({
   visible,
   onClose,
-}: CompleteTaskOverlayProps) => {
+}: UpdateRoleOverlayProps) => {
+  const { player } = useUpdateRoleStore();
+  const { game } = useGameStore();
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -37,6 +44,8 @@ export const CompleteTaskOverlay = ({
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
+
+  const { data: avatars } = useStyles({ type: "avatar" });
 
   return (
     <Animated.View
@@ -63,7 +72,23 @@ export const CompleteTaskOverlay = ({
           "py-[40px] h-[85%] mb-[80px] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
         )}
       >
-        <View className="flex flex-col justify-center"></View>
+        <View className="flex flex-col justify-center">
+          <View>
+            <Text>Новый убегающий!</Text>
+            <View>
+              <Text>Голосование завершено!</Text>
+              <Text>Назначена новая цель</Text>
+            </View>
+          </View>
+          <AvatarCard
+            avatar={
+              avatars?.find((x) => x.id === player?.user.styles?.avatarId)
+                ?.style.url
+            }
+            title={player?.user.name ?? ""}
+            subtitle={`@${player?.user.id}`}
+          />
+        </View>
       </KeyboardAvoidingView>
     </Animated.View>
   );
