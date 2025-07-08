@@ -91,7 +91,7 @@ export const HomeScreen = () => {
 
   return (
     <View className="flex-1">
-      {/* <Map>
+      <Map>
         {location && user && (
           <>
             <PlayerMarker
@@ -125,7 +125,7 @@ export const HomeScreen = () => {
             [30.344544, 59.958102],
           ]}
         />
-      </Map> */}
+      </Map>
 
       <View
         style={{ top: insets.top }}
@@ -135,12 +135,6 @@ export const HomeScreen = () => {
           <Pressable onPress={shop}>
             <IconContainer>
               <Icons.Store />
-            </IconContainer>
-          </Pressable>
-
-          <Pressable onPress={() => setCameraOverlayVisible(true)}>
-            <IconContainer>
-              <Icons.Camera />
             </IconContainer>
           </Pressable>
 
@@ -190,11 +184,6 @@ export const HomeScreen = () => {
         ref={bottomSheetRef}
         handleJoin={joinHandler}
         children={undefined}
-      />
-
-      <CameraOverlay
-        visible={cameraOverlayVisible}
-        onClose={() => setCameraOverlayVisible(false)}
       />
 
       <StatusBar style="dark" />

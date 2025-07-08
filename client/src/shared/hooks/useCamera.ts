@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { CameraType, useCameraPermissions, CameraView } from "expo-camera";
-import { CameraCapturedPicture } from "expo-camera/src/Camera.types";
-
+import { useCameraStore } from "../stores/camera.store";
 export const useCamera = () => {
   const [permission, requestPermission] = useCameraPermissions();
   const [facing, setFacing] = useState<CameraType>("back");
-  const [photo, setPhoto] = useState<CameraCapturedPicture | null>(null);
+
+  const { setPhoto: setStorePhoto } = useCameraStore();
 
   const ref = useRef<CameraView>(null);
 
@@ -16,8 +16,10 @@ export const useCamera = () => {
   const takePhoto = async () => {
     if (ref.current) {
       const result = await ref.current.takePictureAsync();
-      setPhoto(result);
-      return result;
+      if (result) {
+        setStorePhoto(result);
+        return result;
+      }
     }
   };
 
@@ -28,6 +30,5 @@ export const useCamera = () => {
     facing,
     toggleFacing,
     takePhoto,
-    photo,
   };
 };

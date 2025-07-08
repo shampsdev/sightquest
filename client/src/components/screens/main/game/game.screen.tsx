@@ -28,6 +28,8 @@ import { RouteMarker } from "@/components/ui/map/route-marker";
 import { PauseScreen } from "./pause.screen";
 import { isPause } from "@/shared/interfaces/polls/pause";
 import { CameraOverlay } from "@/components/overlays/camera";
+import { useCamera } from "@/shared/hooks/useCamera";
+import { SendPhotoOverlay } from "@/components/overlays/send-photo";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -49,6 +51,8 @@ export const GameScreen = () => {
   const [chatOpened, setChatOpened] = useState<boolean>(false);
   const [pauseOpened, setPauseOpened] = useState<boolean>(false);
   const [cameraOverlayOpened, setCameraOverlayOpened] =
+    useState<boolean>(false);
+  const [sendPhotoOverlayOpened, setSendPhotoOverlayOpened] =
     useState<boolean>(false);
 
   const togglePauseGame = useCallback(() => {
@@ -101,7 +105,7 @@ export const GameScreen = () => {
 
   return (
     <View className="flex-1">
-      {!cameraOverlayOpened && (
+      {!cameraOverlayOpened && !sendPhotoOverlayOpened && (
         <Map>
           {location && players && (
             <>
@@ -151,19 +155,16 @@ export const GameScreen = () => {
               {pauseOpened ? <Icons.Play /> : <Icons.Pause />}
             </IconContainer>
           </Pressable>
+
           <Button
             text="Поймать"
             className="flex-1"
             onPress={() => setCameraOverlayOpened(true)}
           />
+
           <Pressable onPress={openChat}>
             <IconContainer>
               <Icons.Chat />
-            </IconContainer>
-          </Pressable>
-          <Pressable onPress={() => setCameraOverlayOpened(true)}>
-            <IconContainer>
-              <Icons.Camera />
             </IconContainer>
           </Pressable>
         </View>
@@ -173,17 +174,22 @@ export const GameScreen = () => {
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
           <Pressable
             onPress={
-              chatOpened || cameraOverlayOpened
+              chatOpened || cameraOverlayOpened || sendPhotoOverlayOpened
                 ? () => {
                     setChatOpened(false);
                     setCameraOverlayOpened(false);
+                    setSendPhotoOverlayOpened(false);
                   }
                 : () => setModalOpened(true)
             }
           >
             <IconContainer>
-              {(chatOpened || cameraOverlayOpened) && <Icons.Back />}
-              {!chatOpened && !cameraOverlayOpened && <Icons.Exit />}
+              {(chatOpened ||
+                cameraOverlayOpened ||
+                sendPhotoOverlayOpened) && <Icons.Back />}
+              {!chatOpened &&
+                !cameraOverlayOpened &&
+                !sendPhotoOverlayOpened && <Icons.Exit />}
             </IconContainer>
           </Pressable>
 
@@ -257,12 +263,28 @@ export const GameScreen = () => {
         />
       )}
 
-      <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
-      <PauseScreen visible={pauseOpened} />
-      <CameraOverlay
-        visible={cameraOverlayOpened}
-        onClose={() => setCameraOverlayOpened(false)}
-      />
+      {chatOpened && (
+        <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
+      )}
+      {pauseOpened && <PauseScreen visible={pauseOpened} />}
+
+      {cameraOverlayOpened && (
+        <CameraOverlay
+          visible={cameraOverlayOpened}
+          onClose={() => setCameraOverlayOpened(false)}
+          onSucces={() => {
+            setCameraOverlayOpened(false);
+            setSendPhotoOverlayOpened(true);
+          }}
+        />
+      )}
+
+      {sendPhotoOverlayOpened && (
+        <SendPhotoOverlay
+          visible={sendPhotoOverlayOpened}
+          onClose={() => setSendPhotoOverlayOpened(false)}
+        />
+      )}
 
       <LeaderboardSheet
         ref={leaderboardSheet}

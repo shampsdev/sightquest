@@ -1,14 +1,15 @@
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import { BlurView } from "expo-blur";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Pressable,
   View,
-  ScrollView as ScrollViewType,
   Platform,
   KeyboardAvoidingView,
   StyleSheet,
+  Text,
+  Image,
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -17,30 +18,24 @@ import Animated, {
 } from "react-native-reanimated";
 import { twMerge } from "tailwind-merge";
 import { Button } from "../ui/button";
+import { useCameraStore } from "@/shared/stores/camera.store";
+import { uploadImageToS3 } from "@/shared/api/s3.api";
 import { logger } from "@/shared/instances/logger.instance";
-import { useCamera } from "@/shared/hooks/useCamera";
-import { CameraView } from "expo-camera";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { useGameStore } from "@/shared/stores/game.store";
+import { Role } from "@/shared/interfaces/game/role";
 
 interface CameraOverlayProps {
   visible?: boolean;
   onClose: () => void;
-  onSucces: () => void;
 }
 
-export const CameraOverlay = ({
-  visible,
-  onClose,
-  onSucces,
-}: CameraOverlayProps) => {
-  const {
-    cameraRef,
-    permission,
-    requestPermission,
-    facing,
-    toggleFacing,
-    takePhoto,
-  } = useCamera();
+export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
+  const { photo } = useCameraStore();
+  const { token } = useAuthStore();
 
+  const { game } = useGameStore();
+  const { user } = useAuthStore();
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -51,13 +46,16 @@ export const CameraOverlay = ({
     }
   }, [visible]);
 
+  const [role, setRole] = useState<Role>("catcher");
+  useEffect(() => {
+    const userRole = game?.players.find((x) => x.user.id === user?.id)?.role;
+    if (userRole) setRole(userRole);
+  }, [game]);
+
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
 
-  if (!permission) {
-    return <View />;
-  }
   return (
     <Animated.View
       style={animatedStyle}
@@ -84,48 +82,32 @@ export const CameraOverlay = ({
         )}
       >
         <View className="flex flex-col justify-center">
-          {!permission.granted && (
-            <Button
-              text={"Дать разрешение на использование камеры"}
-              onPress={requestPermission}
+          <View className="w-[360px] h-[360px] rounded-[16px] overflow-hidden">
+            <Image
+              source={{ uri: photo?.uri }}
+              style={{ width: 360, height: 360 }}
             />
-          )}
-          <View className="w-[360px] h-[360px] rounded-[16px] z-10 overflow-hidden">
-            {permission.granted && visible && (
-              <CameraView
-                style={styles.camera}
-                ref={cameraRef}
-                facing={facing}
-              />
-            )}
           </View>
         </View>
 
         <View className="flex flex-row gap-[53px] pb-12 items-center justify-center w-full">
-          <Pressable onPress={() => {}} className="opacity-0">
-            <IconContainer className="bg-accent_primary">
-              <Icons.Camera />
-            </IconContainer>
-          </Pressable>
-          <Pressable
+          <Button
+            text="Отправить"
             onPress={async () => {
-              try {
-                const photo = await takePhoto();
-                onSucces();
-              } catch (error) {
-                logger.error("ui", "Error taking photo");
+              const result = await uploadImageToS3(
+                photo?.uri ?? "",
+                undefined,
+                "games"
+              );
+
+              if (role === "catcher") {
               }
+              if (role === "runner") {
+              }
+
+              logger.log("ui", result.url);
             }}
-          >
-            <IconContainer className="bg-accent_primary border-[3px] border-[#FFF] w-[86px] h-[86px]">
-              <Icons.TakePhoto />
-            </IconContainer>
-          </Pressable>
-          <Pressable onPress={toggleFacing}>
-            <IconContainer className="bg-primary p-[13px]">
-              <Icons.Revert />
-            </IconContainer>
-          </Pressable>
+          />
         </View>
       </KeyboardAvoidingView>
     </Animated.View>
@@ -142,6 +124,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   camera: {
+    zIndex: 1000,
     flex: 1,
     width: 360,
     height: 360,
