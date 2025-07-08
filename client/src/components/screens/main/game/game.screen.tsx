@@ -33,6 +33,8 @@ import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
 import { Chat } from "@/components/overlays/chat.overlay";
 import { useGameOverlays } from "@/shared/hooks/useGameOverlays";
 import { PauseOverlay } from "@/components/overlays/pause.overlay";
+import { PlaceMarker } from "@/components/ui/map/place-marker";
+
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -49,7 +51,8 @@ export const GameScreen = () => {
   } = useGameOverlays();
 
   const navigation = useNavigation<NavProp>();
-  const { game, updateStatus, resetChat, setGame } = useGameStore();
+  const { game, updateStatus, resetChat, setGame, addCompletedTaskPoint } =
+    useGameStore();
   const { location } = useGeolocationStore();
   const { user } = useAuthStore();
   const { emit } = useSocket();
@@ -77,11 +80,14 @@ export const GameScreen = () => {
     if (!game || !game.activePoll) return;
     const poll = game.activePoll;
 
-    if (isTaskPoll(poll)) console.info(poll.data);
+    if (isTaskPoll(poll) && poll.state === "finished") {
+      if (poll.result.taskComplete.approved)
+        addCompletedTaskPoint(poll.result.taskComplete.completedTaskPoint);
+    }
 
     if (isPause(poll) && poll.state === "active") openOverlay("pause");
     if (isPause(poll) && poll.state === "finished") closeOverlay();
-  }, [game]);
+  }, [game?.activePoll]);
 
   const players = game?.players ?? [];
 
@@ -155,14 +161,18 @@ export const GameScreen = () => {
 
           {game && game?.route && (
             <RouteMarker
-              points={game.route.taskPoints.map((x) => [
-                x.location.lon,
-                x.location.lat,
-              ])}
-              path={game.route.taskPoints.map((x) => [
-                x.location.lon,
-                x.location.lat,
-              ])}
+              path={game.route.taskPoints}
+              shapes={game.route.taskPoints.map((point) => (
+                <PlaceMarker
+                  key={point.id}
+                  coordinate={[point.location.lon, point.location.lat]}
+                  disabled={
+                    game.completedTaskPoints.find(
+                      (x) => x.pointId === point.id
+                    ) !== undefined
+                  }
+                />
+              ))}
             />
           )}
           <Camera

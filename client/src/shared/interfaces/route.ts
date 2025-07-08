@@ -1,10 +1,13 @@
 import { Coords } from "./coords";
 
-export interface TaskPoint {
+export interface Point {
+  location: Coords;
+}
+
+export interface TaskPoint extends Point {
   id: string;
   title: string;
   description: string;
-  location: Coords;
   score: number;
   task: string;
 }
