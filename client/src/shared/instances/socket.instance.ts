@@ -5,6 +5,7 @@ import { User } from "../interfaces/user";
 import { EventMap, SocketManager } from "../custom/socket-manager";
 import { Route } from "../interfaces/route";
 import { Poll } from "../interfaces/polls/poll";
+import { Role } from "../interfaces/game/role";
 
 export interface ServerToClientEvents extends EventMap {
   authed: ({ user }: { user: User }) => void;
@@ -26,6 +27,7 @@ export interface ServerToClientEvents extends EventMap {
   endGame: () => void;
   error: ({ error }: { error: string }) => void;
   poll: ({ poll }: { poll: Poll }) => void;
+  playerRoleUpdated: ({ player, role }: { player: Player; role: Role }) => void;
 }
 
 export interface ClientToServerEvents extends EventMap {
