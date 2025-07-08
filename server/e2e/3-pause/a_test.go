@@ -32,8 +32,18 @@ func Test(t *testing.T) {
 		cli2.JoinGame(game)
 	}, 3)
 
+	fw.Step("Set route", func() {
+		cli1.Emit(event.SetRoute{
+			RouteID: "route-1-id",
+		})
+	}, 2)
+
+	fw.Step("Start game", func() {
+		cli1.Emit(event.StartGame{})
+	}, 4)
+
 	fw.Step("Pause", func() {
-		cli1.Emit(event.Pause{Duration: 100})
+		cli1.Emit(event.Pause{PollDuration: 100})
 	}, 2)
 
 	fw.Step("Unpause", func() {
@@ -41,7 +51,7 @@ func Test(t *testing.T) {
 	}, 4)
 
 	fw.Step("Small pause", func() {
-		cli1.Emit(event.Pause{Duration: 3})
+		cli1.Emit(event.Pause{PollDuration: 3})
 	}, 2)
 
 	fw.Step("Wait for small pause end", func() {

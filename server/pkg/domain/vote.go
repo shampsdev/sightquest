@@ -24,6 +24,10 @@ const (
 	// player catch
 	VoteTypePlayerCatchApprove VoteType = "playerCatchApprove"
 	VoteTypePlayerCatchReject  VoteType = "playerCatchReject"
+
+	// finish game
+	VoteTypeFinishGameApprove VoteType = "finishGameApprove"
+	VoteTypeFinishGameReject  VoteType = "finishGameReject"
 )
 
 type VoteData struct {
