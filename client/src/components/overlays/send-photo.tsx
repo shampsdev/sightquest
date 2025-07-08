@@ -24,6 +24,7 @@ import { logger } from "@/shared/instances/logger.instance";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
 import { Role } from "@/shared/interfaces/game/role";
+import { useSocket } from "@/shared/hooks/useSocket";
 
 interface CameraOverlayProps {
   visible?: boolean;
@@ -32,7 +33,7 @@ interface CameraOverlayProps {
 
 export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
   const { photo } = useCameraStore();
-  const { token } = useAuthStore();
+  const { emit } = useSocket();
 
   const { game } = useGameStore();
   const { user } = useAuthStore();
@@ -101,11 +102,21 @@ export const SendPhotoOverlay = ({ visible, onClose }: CameraOverlayProps) => {
               );
 
               if (role === "catcher") {
+                emit("taskComplete", {
+                  taskId: game?.route?.taskPoints[0].id ?? "",
+                  photo: result.url,
+                });
               }
+
               if (role === "runner") {
+                emit("taskComplete", {
+                  taskId: game?.route?.taskPoints[0].id ?? "",
+                  photo: result.url,
+                });
               }
 
               logger.log("ui", result.url);
+              onClose();
             }}
           />
         </View>

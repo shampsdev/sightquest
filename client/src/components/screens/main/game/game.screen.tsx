@@ -38,8 +38,7 @@ import { useCamera } from "@/shared/hooks/useCamera";
 import { SendPhotoOverlay } from "@/components/overlays/send-photo";
 import { ModalCardProps } from "@/components/widgets/modal-card";
 import { useModal } from "@/shared/hooks/useModal";
-import { isTaskPoll } from '@/shared/interfaces/polls/task-poll';
-
+import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -84,7 +83,7 @@ export const GameScreen = () => {
     if (!game || !game.activePoll) return;
     const poll = game.activePoll;
 
-    if (isTaskPoll(poll)) console.info(poll.data)
+    if (isTaskPoll(poll)) console.info(poll.data);
 
     if (isPause(poll) && poll.state === "active") setPauseOpened(true);
     if (isPause(poll) && poll.state === "finished") setPauseOpened(false);
@@ -133,13 +132,6 @@ export const GameScreen = () => {
         onClick: () => setModalOpen(false),
       },
     ],
-  };
-
-  const completeTask = () => {
-    emit("taskComplete", {
-      taskId: game?.route?.taskPoints[0].id ?? "",
-      photo: "penis",
-    });
   };
 
   return (
@@ -195,8 +187,13 @@ export const GameScreen = () => {
             </IconContainer>
           </Pressable>
 
-
-          <Button onPress={() => {completeTask(); setCameraOverlayOpened(true)}} text="Поймать" className="flex-1" />
+          <Button
+            onPress={() => {
+              setCameraOverlayOpened(true);
+            }}
+            text="Поймать"
+            className="flex-1"
+          />
           <Pressable onPress={openChat}>
             <IconContainer>
               <Icons.Chat />
