@@ -19,12 +19,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:07.769582Z",
+              "createdAt": "2025-07-08T18:16:35.531076Z",
               "data": {
                 "taskComplete": {
                   "photo": "cot-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -32,7 +32,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -54,8 +54,8 @@
                 }
               },
               "duration": 3,
-              "gameId": "038633",
-              "id": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+              "gameId": "140605",
+              "id": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
               "result": null,
               "state": "active",
               "type": "taskComplete"
@@ -68,12 +68,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:07.769582Z",
+              "createdAt": "2025-07-08T18:16:35.531076Z",
               "data": {
                 "taskComplete": {
                   "photo": "cot-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -81,7 +81,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -103,8 +103,8 @@
                 }
               },
               "duration": 3,
-              "gameId": "038633",
-              "id": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+              "gameId": "140605",
+              "id": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
               "result": null,
               "state": "active",
               "type": "taskComplete"
@@ -122,12 +122,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:07.769582Z",
+              "createdAt": "2025-07-08T18:16:35.531076Z",
               "data": {
                 "taskComplete": {
                   "photo": "cot-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -135,7 +135,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -157,20 +157,20 @@
                 }
               },
               "duration": 3,
-              "gameId": "038633",
-              "id": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+              "gameId": "140605",
+              "id": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
               "result": null,
               "state": "active",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:07.969607021Z",
+                  "createdAt": "2025-07-08T18:16:35.730308Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
                   "type": "taskApprove"
                 }
               ]
@@ -181,12 +181,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:07.769582Z",
+              "createdAt": "2025-07-08T18:16:35.531076Z",
               "data": {
                 "taskComplete": {
                   "photo": "cot-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -194,7 +194,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -216,24 +216,32 @@
                 }
               },
               "duration": 3,
-              "gameId": "038633",
-              "id": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+              "gameId": "140605",
+              "id": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
               "result": {
                 "taskComplete": {
-                  "approved": true
+                  "approved": true,
+                  "completedTaskPoint": {
+                    "createdAt": "2025-07-08T18:16:38.94669Z",
+                    "gameId": "140605",
+                    "photo": "cot-photo",
+                    "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                    "pointId": "taskpoint-1-id",
+                    "score": 105
+                  }
                 }
               },
               "state": "finished",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:07.969607021Z",
+                  "createdAt": "2025-07-08T18:16:35.730308Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
                   "type": "taskApprove"
                 }
               ]
@@ -243,17 +251,17 @@
         {
           "Event": "scoreUpdated",
           "Data": {
-            "deltaScore": 106,
+            "deltaScore": 105,
             "player": {
-              "gameId": "038633",
+              "gameId": "140605",
               "location": {
                 "lat": 0,
                 "lon": 0
               },
               "role": "runner",
-              "score": 106,
+              "score": 105,
               "user": {
-                "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -262,7 +270,7 @@
               }
             },
             "reason": "Игрок выполнил задание \"Taskpoint 1\"!",
-            "score": 106
+            "score": 105
           }
         }
       ],
@@ -271,12 +279,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:07.769582Z",
+              "createdAt": "2025-07-08T18:16:35.531076Z",
               "data": {
                 "taskComplete": {
                   "photo": "cot-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -284,7 +292,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -306,20 +314,20 @@
                 }
               },
               "duration": 3,
-              "gameId": "038633",
-              "id": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+              "gameId": "140605",
+              "id": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
               "result": null,
               "state": "active",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:07.969607021Z",
+                  "createdAt": "2025-07-08T18:16:35.730308Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
                   "type": "taskApprove"
                 }
               ]
@@ -330,12 +338,12 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:07.769582Z",
+              "createdAt": "2025-07-08T18:16:35.531076Z",
               "data": {
                 "taskComplete": {
                   "photo": "cot-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
@@ -343,7 +351,7 @@
                     "role": "runner",
                     "score": 0,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -365,24 +373,32 @@
                 }
               },
               "duration": 3,
-              "gameId": "038633",
-              "id": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+              "gameId": "140605",
+              "id": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
               "result": {
                 "taskComplete": {
-                  "approved": true
+                  "approved": true,
+                  "completedTaskPoint": {
+                    "createdAt": "2025-07-08T18:16:38.94669Z",
+                    "gameId": "140605",
+                    "photo": "cot-photo",
+                    "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                    "pointId": "taskpoint-1-id",
+                    "score": 105
+                  }
                 }
               },
               "state": "finished",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:07.969607021Z",
+                  "createdAt": "2025-07-08T18:16:35.730308Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "1ed7f27f-67a7-47a4-864b-d6270cb0b3fc",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "7d1d310d-430e-4766-b9ff-cf20ad2458f4",
                   "type": "taskApprove"
                 }
               ]
@@ -392,17 +408,17 @@
         {
           "Event": "scoreUpdated",
           "Data": {
-            "deltaScore": 106,
+            "deltaScore": 105,
             "player": {
-              "gameId": "038633",
+              "gameId": "140605",
               "location": {
                 "lat": 0,
                 "lon": 0
               },
               "role": "runner",
-              "score": 106,
+              "score": 105,
               "user": {
-                "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -411,7 +427,7 @@
               }
             },
             "reason": "Игрок выполнил задание \"Taskpoint 1\"!",
-            "score": 106
+            "score": 105
           }
         }
       ]
@@ -425,20 +441,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:11.37054Z",
+              "createdAt": "2025-07-08T18:16:39.131544Z",
               "data": {
                 "taskComplete": {
                   "photo": "dag-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -460,8 +476,8 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+              "gameId": "140605",
+              "id": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
               "result": null,
               "state": "active",
               "type": "taskComplete"
@@ -474,20 +490,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:11.37054Z",
+              "createdAt": "2025-07-08T18:16:39.131544Z",
               "data": {
                 "taskComplete": {
                   "photo": "dag-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -509,8 +525,8 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+              "gameId": "140605",
+              "id": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
               "result": null,
               "state": "active",
               "type": "taskComplete"
@@ -528,20 +544,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:11.37054Z",
+              "createdAt": "2025-07-08T18:16:39.131544Z",
               "data": {
                 "taskComplete": {
                   "photo": "dag-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -563,20 +579,20 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+              "gameId": "140605",
+              "id": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
               "result": null,
               "state": "active",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:11.570326202Z",
+                  "createdAt": "2025-07-08T18:16:39.331907Z",
                   "data": {
                     "comment": "Not cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
                   "type": "taskReject"
                 }
               ]
@@ -587,20 +603,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:11.37054Z",
+              "createdAt": "2025-07-08T18:16:39.131544Z",
               "data": {
                 "taskComplete": {
                   "photo": "dag-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -622,8 +638,8 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+              "gameId": "140605",
+              "id": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
               "result": {
                 "taskComplete": {
                   "approved": false
@@ -633,13 +649,13 @@
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:11.570326202Z",
+                  "createdAt": "2025-07-08T18:16:39.331907Z",
                   "data": {
                     "comment": "Not cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
                   "type": "taskReject"
                 }
               ]
@@ -652,20 +668,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:11.37054Z",
+              "createdAt": "2025-07-08T18:16:39.131544Z",
               "data": {
                 "taskComplete": {
                   "photo": "dag-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -687,20 +703,20 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+              "gameId": "140605",
+              "id": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
               "result": null,
               "state": "active",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:11.570326202Z",
+                  "createdAt": "2025-07-08T18:16:39.331907Z",
                   "data": {
                     "comment": "Not cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
                   "type": "taskReject"
                 }
               ]
@@ -711,20 +727,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:11.37054Z",
+              "createdAt": "2025-07-08T18:16:39.131544Z",
               "data": {
                 "taskComplete": {
                   "photo": "dag-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -746,8 +762,8 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+              "gameId": "140605",
+              "id": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
               "result": {
                 "taskComplete": {
                   "approved": false
@@ -757,13 +773,13 @@
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:11.570326202Z",
+                  "createdAt": "2025-07-08T18:16:39.331907Z",
                   "data": {
                     "comment": "Not cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "20a9af1f-1c55-4246-bbdd-5e752b5603d3",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "4f1dc9b5-25bc-4160-8655-7c57d17675af",
                   "type": "taskReject"
                 }
               ]
@@ -781,20 +797,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:12.371132Z",
+              "createdAt": "2025-07-08T18:16:40.133003Z",
               "data": {
                 "taskComplete": {
                   "photo": "bird-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -816,8 +832,8 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+              "gameId": "140605",
+              "id": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
               "result": null,
               "state": "active",
               "type": "taskComplete"
@@ -830,20 +846,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:12.371132Z",
+              "createdAt": "2025-07-08T18:16:40.133003Z",
               "data": {
                 "taskComplete": {
                   "photo": "bird-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -865,8 +881,8 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+              "gameId": "140605",
+              "id": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
               "result": null,
               "state": "active",
               "type": "taskComplete"
@@ -884,20 +900,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:12.371132Z",
+              "createdAt": "2025-07-08T18:16:40.133003Z",
               "data": {
                 "taskComplete": {
                   "photo": "bird-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -919,30 +935,20 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+              "gameId": "140605",
+              "id": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
               "result": null,
               "state": "active",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:12.571093273Z",
+                  "createdAt": "2025-07-08T18:16:40.333503Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
-                  "type": "taskApprove"
-                },
-                {
-                  "createdAt": "2025-07-08T17:06:12.572741676Z",
-                  "data": {
-                    "comment": "Cool!"
-                  },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 }
               ]
@@ -953,20 +959,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:12.371132Z",
+              "createdAt": "2025-07-08T18:16:40.133003Z",
               "data": {
                 "taskComplete": {
                   "photo": "bird-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -988,30 +994,30 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+              "gameId": "140605",
+              "id": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
               "result": null,
               "state": "active",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:12.571093273Z",
+                  "createdAt": "2025-07-08T18:16:40.333503Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 },
                 {
-                  "createdAt": "2025-07-08T17:06:12.572741676Z",
+                  "createdAt": "2025-07-08T18:16:40.358957Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 }
               ]
@@ -1022,20 +1028,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:12.371132Z",
+              "createdAt": "2025-07-08T18:16:40.133003Z",
               "data": {
                 "taskComplete": {
                   "photo": "bird-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -1057,34 +1063,42 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+              "gameId": "140605",
+              "id": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
               "result": {
                 "taskComplete": {
-                  "approved": true
+                  "approved": true,
+                  "completedTaskPoint": {
+                    "createdAt": "2025-07-08T18:16:40.946535Z",
+                    "gameId": "140605",
+                    "photo": "bird-photo",
+                    "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                    "pointId": "taskpoint-3-id",
+                    "score": 212
+                  }
                 }
               },
               "state": "finished",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:12.571093273Z",
+                  "createdAt": "2025-07-08T18:16:40.333503Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 },
                 {
-                  "createdAt": "2025-07-08T17:06:12.572741676Z",
+                  "createdAt": "2025-07-08T18:16:40.358957Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 }
               ]
@@ -1094,17 +1108,17 @@
         {
           "Event": "scoreUpdated",
           "Data": {
-            "deltaScore": 110,
+            "deltaScore": 212,
             "player": {
-              "gameId": "038633",
+              "gameId": "140605",
               "location": {
                 "lat": 0,
                 "lon": 0
               },
               "role": "runner",
-              "score": 216,
+              "score": 317,
               "user": {
-                "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -1113,7 +1127,7 @@
               }
             },
             "reason": "Игрок выполнил задание \"Taskpoint 3\"!",
-            "score": 216
+            "score": 317
           }
         }
       ],
@@ -1122,20 +1136,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:12.371132Z",
+              "createdAt": "2025-07-08T18:16:40.133003Z",
               "data": {
                 "taskComplete": {
                   "photo": "bird-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -1157,30 +1171,20 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+              "gameId": "140605",
+              "id": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
               "result": null,
               "state": "active",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:12.571093273Z",
+                  "createdAt": "2025-07-08T18:16:40.333503Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
-                  "type": "taskApprove"
-                },
-                {
-                  "createdAt": "2025-07-08T17:06:12.572741676Z",
-                  "data": {
-                    "comment": "Cool!"
-                  },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 }
               ]
@@ -1191,20 +1195,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:12.371132Z",
+              "createdAt": "2025-07-08T18:16:40.133003Z",
               "data": {
                 "taskComplete": {
                   "photo": "bird-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -1226,30 +1230,30 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+              "gameId": "140605",
+              "id": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
               "result": null,
               "state": "active",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:12.571093273Z",
+                  "createdAt": "2025-07-08T18:16:40.333503Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 },
                 {
-                  "createdAt": "2025-07-08T17:06:12.572741676Z",
+                  "createdAt": "2025-07-08T18:16:40.358957Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 }
               ]
@@ -1260,20 +1264,20 @@
           "Event": "poll",
           "Data": {
             "poll": {
-              "createdAt": "2025-07-08T17:06:12.371132Z",
+              "createdAt": "2025-07-08T18:16:40.133003Z",
               "data": {
                 "taskComplete": {
                   "photo": "bird-photo",
                   "player": {
-                    "gameId": "038633",
+                    "gameId": "140605",
                     "location": {
                       "lat": 0,
                       "lon": 0
                     },
                     "role": "runner",
-                    "score": 106,
+                    "score": 105,
                     "user": {
-                      "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                      "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                       "name": "",
                       "styles": {
                         "avatarId": ""
@@ -1295,34 +1299,42 @@
                 }
               },
               "duration": 100,
-              "gameId": "038633",
-              "id": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+              "gameId": "140605",
+              "id": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
               "result": {
                 "taskComplete": {
-                  "approved": true
+                  "approved": true,
+                  "completedTaskPoint": {
+                    "createdAt": "2025-07-08T18:16:40.946535Z",
+                    "gameId": "140605",
+                    "photo": "bird-photo",
+                    "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                    "pointId": "taskpoint-3-id",
+                    "score": 212
+                  }
                 }
               },
               "state": "finished",
               "type": "taskComplete",
               "votes": [
                 {
-                  "createdAt": "2025-07-08T17:06:12.571093273Z",
+                  "createdAt": "2025-07-08T18:16:40.333503Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "96719b0f-9ec6-4095-bff0-44523941cc3b",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 },
                 {
-                  "createdAt": "2025-07-08T17:06:12.572741676Z",
+                  "createdAt": "2025-07-08T18:16:40.358957Z",
                   "data": {
                     "comment": "Cool!"
                   },
-                  "gameId": "038633",
-                  "playerId": "aa365bd0-126f-4405-8577-9bafca56263c",
-                  "pollId": "c25bf63d-797c-4f61-a389-fcd385ce57b3",
+                  "gameId": "140605",
+                  "playerId": "7a26108e-ecb0-4bd2-be77-d4bdf20f7f87",
+                  "pollId": "8de2c45b-74f9-4479-bdef-060c6b5aaa07",
                   "type": "taskApprove"
                 }
               ]
@@ -1332,17 +1344,17 @@
         {
           "Event": "scoreUpdated",
           "Data": {
-            "deltaScore": 110,
+            "deltaScore": 212,
             "player": {
-              "gameId": "038633",
+              "gameId": "140605",
               "location": {
                 "lat": 0,
                 "lon": 0
               },
               "role": "runner",
-              "score": 216,
+              "score": 317,
               "user": {
-                "id": "9cc0a23e-8782-4a22-8fd4-05b7bfce3d55",
+                "id": "96719b0f-9ec6-4095-bff0-44523941cc3b",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -1351,7 +1363,7 @@
               }
             },
             "reason": "Игрок выполнил задание \"Taskpoint 3\"!",
-            "score": 216
+            "score": 317
           }
         }
       ]

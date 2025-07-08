@@ -15,11 +15,12 @@ import (
 )
 
 type InMemoryGameRepo struct {
-	gameCase   *usecore.Game
-	playerCase *usecore.Player
-	routeCase  *usecore.Route
-	pollRepo   repo.Poll
-	voteRepo   repo.Vote
+	gameCase               *usecore.Game
+	playerCase             *usecore.Player
+	routeCase              *usecore.Route
+	pollRepo               repo.Poll
+	voteRepo               repo.Vote
+	completedTaskPointRepo repo.CompletedTaskPoint
 
 	gamesMutex sync.RWMutex
 	games      map[string]gameWithContext
@@ -38,14 +39,16 @@ func NewInMemoryGameRepo(
 	routeCase *usecore.Route,
 	pollRepo repo.Poll,
 	voteRepo repo.Vote,
+	completedTaskPointRepo repo.CompletedTaskPoint,
 ) *InMemoryGameRepo {
 	r := &InMemoryGameRepo{
-		gameCase:   gameCase,
-		games:      make(map[string]gameWithContext),
-		playerCase: playerCase,
-		routeCase:  routeCase,
-		pollRepo:   pollRepo,
-		voteRepo:   voteRepo,
+		gameCase:               gameCase,
+		games:                  make(map[string]gameWithContext),
+		playerCase:             playerCase,
+		routeCase:              routeCase,
+		pollRepo:               pollRepo,
+		voteRepo:               voteRepo,
+		completedTaskPointRepo: completedTaskPointRepo,
 	}
 
 	r.goGC(ctx)
@@ -58,7 +61,7 @@ func (r *InMemoryGameRepo) GetGame(ctx context.Context, id string, server state.
 	game, ok := r.games[id]
 	if !ok {
 		ctx, cancel := context.WithCancel(ctx)
-		game, err := NewGame(ctx, id, r.gameCase, r.playerCase, r.routeCase, r.pollRepo, r.voteRepo, server)
+		game, err := NewGame(ctx, id, server, r.gameCase, r.playerCase, r.routeCase, r.pollRepo, r.voteRepo, r.completedTaskPointRepo)
 		if err != nil {
 			cancel()
 			return nil, fmt.Errorf("failed to create game: %w", err)

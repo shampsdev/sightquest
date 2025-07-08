@@ -56,7 +56,8 @@ type PollResultPause struct {
 }
 
 type PollResultTaskComplete struct {
-	Approved bool `json:"approved"`
+	Approved           bool                `json:"approved"`
+	CompletedTaskPoint *CompletedTaskPoint `json:"completedTaskPoint,omitempty"`
 }
 
 type CreatePoll struct {

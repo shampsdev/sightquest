@@ -25,11 +25,12 @@ type Game struct {
 	activity map[string]time.Time
 	maxIdle  time.Duration
 
-	playerCase *usecore.Player
-	gameCase   *usecore.Game
-	routeCase  *usecore.Route
-	pollRepo   repo.Poll
-	voteRepo   repo.Vote
+	playerCase             *usecore.Player
+	gameCase               *usecore.Game
+	routeCase              *usecore.Route
+	pollRepo               repo.Poll
+	voteRepo               repo.Vote
+	completedTaskPointRepo repo.CompletedTaskPoint
 
 	server state.Server[*PlayerState]
 }
@@ -37,22 +38,24 @@ type Game struct {
 func NewGame(
 	ctx context.Context,
 	gameID string,
+	server state.Server[*PlayerState],
 	gameCase *usecore.Game,
 	playerCase *usecore.Player,
 	routeCase *usecore.Route,
 	pollRepo repo.Poll,
 	voteRepo repo.Vote,
-	server state.Server[*PlayerState],
+	completedTaskPointRepo repo.CompletedTaskPoint,
 ) (*Game, error) {
 	g := &Game{
-		activity:   make(map[string]time.Time),
-		maxIdle:    10 * time.Minute,
-		playerCase: playerCase,
-		gameCase:   gameCase,
-		routeCase:  routeCase,
-		pollRepo:   pollRepo,
-		voteRepo:   voteRepo,
-		server:     server,
+		activity:               make(map[string]time.Time),
+		maxIdle:                10 * time.Minute,
+		playerCase:             playerCase,
+		gameCase:               gameCase,
+		routeCase:              routeCase,
+		pollRepo:               pollRepo,
+		voteRepo:               voteRepo,
+		completedTaskPointRepo: completedTaskPointRepo,
+		server:                 server,
 	}
 
 	game, err := gameCase.GetGameByID(ctx, gameID)
