@@ -1,8 +1,6 @@
 package tests
 
 import (
-	"maps"
-	"slices"
 	"testing"
 	"time"
 
@@ -16,7 +14,14 @@ import (
 var fw = framework.MustInit()
 
 func TestMain(m *testing.M) {
-	fw.RecordEvents(slices.Collect(maps.Keys(framework.AllEvents))...)
+	fw.RecordEvents(
+		event.ErrorEvent,
+		event.PlayerLeftEvent,
+		event.PlayerJoinedEvent,
+		event.GameEvent,
+		event.AuthedEvent,
+		event.StartGameEvent,
+	)
 	fw.TestMain(m)
 }
 
@@ -45,7 +50,7 @@ func Test(t *testing.T) {
 
 	fw.Step("Start game", func() {
 		cli1.Emit(event.StartGame{})
-	}, 2)
+	}, 4)
 
 	fw.Step("User1 disconnect", func() {
 		cli1.Emit(event.LeaveGame{})
