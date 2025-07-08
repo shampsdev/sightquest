@@ -4,4 +4,5 @@ export type GameOverlay =
   | "sendPhoto"
   | "pause"
   | "taskCompleted"
+  | "updateRole"
   | null;

@@ -35,6 +35,8 @@ import { PlaceMarker } from "@/components/ui/map/place-marker";
 import { CompleteTaskOverlay } from "@/components/overlays/complete-task.overlay";
 import { useTaskCompletionStore } from "@/shared/stores/camera.store";
 import { TaskCompletedOverlay } from "@/components/overlays/task-completed.overlay";
+import { useUpdateRoleStore } from "@/shared/stores/update-role.store";
+import { UpdateRoleOverlay } from "@/components/overlays/update-role.overlay";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -51,9 +53,9 @@ export const GameScreen = () => {
     useGameStore();
   const { location } = useGeolocationStore();
   const { user } = useAuthStore();
-  const { emit } = useSocket();
+  const { emit, on } = useSocket();
   const { data: avatars } = useStyles({ type: "avatar" });
-
+  const { setPlayer, reset: resetUpdateRoleStore } = useUpdateRoleStore();
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
   const leaderboardSheet = useRef<BottomSheet>(null);
 
@@ -92,6 +94,17 @@ export const GameScreen = () => {
     if (isPause(poll) && poll.state === "active") openOverlay("pause");
     if (isPause(poll) && poll.state === "finished") closeOverlay();
   }, [game?.activePoll]);
+
+  on("playerRoleUpdated", ({ player, role }) => {
+    if (role === "runner") {
+      setPlayer(player);
+      openOverlay("updateRole");
+      setTimeout(() => {
+        closeOverlay();
+        resetUpdateRoleStore();
+      }, 4000);
+    }
+  });
 
   const players = game?.players ?? [];
 
@@ -297,6 +310,10 @@ export const GameScreen = () => {
         onSucces={() => {
           openOverlay("sendPhoto");
         }}
+      />
+      <UpdateRoleOverlay
+        visible={isOverlayOpen("updateRole")}
+        onClose={closeOverlay}
       />
       <CompleteTaskOverlay
         visible={isOverlayOpen("sendPhoto")}
