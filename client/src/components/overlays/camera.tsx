@@ -1,8 +1,7 @@
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
-import { useSocket } from "@/shared/hooks/useSocket";
 import { BlurView } from "expo-blur";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Pressable,
   ScrollView,
@@ -19,30 +18,26 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { twMerge } from "tailwind-merge";
-import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { Button } from "../ui/button";
 import { logger } from "@/shared/instances/logger.instance";
-
+import { useCamera } from "@/shared/hooks/useCamera";
+import { CameraView } from "expo-camera";
 interface CameraOverlayProps {
   visible?: boolean;
   onClose: () => void;
 }
 
 export const CameraOverlay = ({ visible, onClose }: CameraOverlayProps) => {
-  const [permission, requestPermission] = useCameraPermissions();
-  const [facing, setFacing] = useState<CameraType>("back");
-
-  const { emit } = useSocket();
-
-  const scrollViewRef = useRef<ScrollViewType>(null);
+  const {
+    cameraRef,
+    permission,
+    requestPermission,
+    facing,
+    toggleFacing,
+    takePhoto,
+  } = useCamera();
 
   const opacity = useSharedValue(0);
-
-  const ref = useRef<CameraView>(null);
-
-  const toggleFacing = () => {
-    setFacing((prev) => (prev === "back" ? "front" : "back"));
-  };
 
   useEffect(() => {
     if (visible) {
@@ -81,10 +76,10 @@ export const CameraOverlay = ({ visible, onClose }: CameraOverlayProps) => {
         style={{ zIndex: 30 }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         className={twMerge(
-          "py-[40px] px-[36px] h-[85%] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-center gap-16"
+          "py-[40px] px-[36px] h-[85%] mb-[80px] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
         )}
       >
-        <View className="flex flex-col justify-start">
+        <View className="flex flex-col justify-center">
           {!permission.granted && (
             <Button
               text={"Дать разрешение на использование камеры"}
@@ -93,7 +88,11 @@ export const CameraOverlay = ({ visible, onClose }: CameraOverlayProps) => {
           )}
           <View className="w-[360px] h-[360px] rounded-[16px] overflow-hidden">
             {permission.granted && (
-              <CameraView style={styles.camera} ref={ref} facing={facing} />
+              <CameraView
+                style={styles.camera}
+                ref={cameraRef}
+                facing={facing}
+              />
             )}
           </View>
         </View>
@@ -106,10 +105,8 @@ export const CameraOverlay = ({ visible, onClose }: CameraOverlayProps) => {
           </Pressable>
           <Pressable
             onPress={async () => {
-              logger.log("ui", "pressed");
-              const photo = await ref.current?.takePictureAsync();
-              logger.log("ui", "unpressed");
-              logger.log("ui", photo?.uri);
+              const photo = await takePhoto();
+              logger.log("ui", photo);
             }}
           >
             <IconContainer className="bg-accent_primary border-[3px] border-[#FFF] w-[86px] h-[86px]">
@@ -117,8 +114,8 @@ export const CameraOverlay = ({ visible, onClose }: CameraOverlayProps) => {
             </IconContainer>
           </Pressable>
           <Pressable onPress={toggleFacing}>
-            <IconContainer className="bg-accent_primary">
-              <Icons.Camera />
+            <IconContainer className="bg-primary p-[13px]">
+              <Icons.Revert />
             </IconContainer>
           </Pressable>
         </View>

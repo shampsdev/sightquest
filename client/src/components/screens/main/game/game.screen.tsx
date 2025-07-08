@@ -48,7 +48,7 @@ export const GameScreen = () => {
 
   const [chatOpened, setChatOpened] = useState<boolean>(false);
   const [pauseOpened, setPauseOpened] = useState<boolean>(false);
-  const [cameraOverlayVisible, setCameraOverlayVisible] =
+  const [cameraOverlayOpened, setCameraOverlayOpened] =
     useState<boolean>(false);
 
   const togglePauseGame = useCallback(() => {
@@ -101,47 +101,49 @@ export const GameScreen = () => {
 
   return (
     <View className="flex-1">
-      <Map>
-        {location && players && (
-          <>
-            {players?.map((player, index) => (
-              <PlayerMarker
-                key={index}
-                coordinate={
-                  player.user.id === user?.id
-                    ? { lon: location[0], lat: location[1] }
-                    : player.location
-                }
-                name={player?.user.name ?? player.user.username}
-                avatarSrc={{
-                  uri: avatars?.find(
-                    (x) => x.id === player.user.styles?.avatarId
-                  )?.style.url,
-                }}
-              />
-            ))}
-          </>
-        )}
+      {!cameraOverlayOpened && (
+        <Map>
+          {location && players && (
+            <>
+              {players?.map((player, index) => (
+                <PlayerMarker
+                  key={index}
+                  coordinate={
+                    player.user.id === user?.id
+                      ? { lon: location[0], lat: location[1] }
+                      : player.location
+                  }
+                  name={player?.user.name ?? player.user.username}
+                  avatarSrc={{
+                    uri: avatars?.find(
+                      (x) => x.id === player.user.styles?.avatarId
+                    )?.style.url,
+                  }}
+                />
+              ))}
+            </>
+          )}
 
-        {game && game?.route && (
-          <RouteMarker
-            points={game.route.taskPoints.map((x) => [
-              x.location.lon,
-              x.location.lat,
-            ])}
-            path={game.route.taskPoints.map((x) => [
-              x.location.lon,
-              x.location.lat,
-            ])}
+          {game && game?.route && (
+            <RouteMarker
+              points={game.route.taskPoints.map((x) => [
+                x.location.lon,
+                x.location.lat,
+              ])}
+              path={game.route.taskPoints.map((x) => [
+                x.location.lon,
+                x.location.lat,
+              ])}
+            />
+          )}
+          <Camera
+            defaultSettings={{
+              centerCoordinate: location || DEFAULT_MAP_CAMERA_LOCATION,
+              zoomLevel: 12,
+            }}
           />
-        )}
-        <Camera
-          defaultSettings={{
-            centerCoordinate: location || DEFAULT_MAP_CAMERA_LOCATION,
-            zoomLevel: 12,
-          }}
-        />
-      </Map>
+        </Map>
+      )}
       {!chatOpened && (
         <View className="absolute px-[5%] gap-4 bottom-12 flex items-center flex-row left-0 right-0 z-10">
           <Pressable onPress={togglePauseGame}>
@@ -149,13 +151,17 @@ export const GameScreen = () => {
               {pauseOpened ? <Icons.Play /> : <Icons.Pause />}
             </IconContainer>
           </Pressable>
-          <Button text="Поймать" className="flex-1" />
+          <Button
+            text="Поймать"
+            className="flex-1"
+            onPress={() => setCameraOverlayOpened(true)}
+          />
           <Pressable onPress={openChat}>
             <IconContainer>
               <Icons.Chat />
             </IconContainer>
           </Pressable>
-          <Pressable onPress={() => setCameraOverlayVisible(true)}>
+          <Pressable onPress={() => setCameraOverlayOpened(true)}>
             <IconContainer>
               <Icons.Camera />
             </IconContainer>
@@ -167,14 +173,17 @@ export const GameScreen = () => {
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
           <Pressable
             onPress={
-              chatOpened
-                ? () => setChatOpened(false)
+              chatOpened || cameraOverlayOpened
+                ? () => {
+                    setChatOpened(false);
+                    setCameraOverlayOpened(false);
+                  }
                 : () => setModalOpened(true)
             }
           >
             <IconContainer>
-              {chatOpened && <Icons.Back />}
-              {!chatOpened && <Icons.Exit />}
+              {(chatOpened || cameraOverlayOpened) && <Icons.Back />}
+              {!chatOpened && !cameraOverlayOpened && <Icons.Exit />}
             </IconContainer>
           </Pressable>
 
@@ -251,8 +260,8 @@ export const GameScreen = () => {
       <ChatScreen visible={chatOpened} onClose={() => setChatOpened(false)} />
       <PauseScreen visible={pauseOpened} />
       <CameraOverlay
-        visible={cameraOverlayVisible}
-        onClose={() => setCameraOverlayVisible(false)}
+        visible={cameraOverlayOpened}
+        onClose={() => setCameraOverlayOpened(false)}
       />
 
       <LeaderboardSheet
