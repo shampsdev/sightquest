@@ -10,21 +10,20 @@ import { Camera } from "@rnmapbox/maps";
 import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
-import { RouteMarker } from "@/components/ui/map/route-marker";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useEffect, useRef } from "react";
 import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
 import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useStyles } from "@/shared/api/hooks/useStyles";
-import React from "react";
 import { useGeolocationStore } from "@/shared/stores/location.store";
 import { useGameStore } from "@/shared/stores/game.store";
 import { ReconnectNotification } from "@/components/ui/notifications/notification";
 import { useGame } from "@/shared/api/hooks/useGame";
-import { ModalCard } from "@/components/widgets/modal-card";
+import { ModalCardProps } from "@/components/widgets/modal-card";
 import { logger } from "@/shared/instances/logger.instance";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useModal } from "@/shared/hooks/useModal";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -35,6 +34,26 @@ export const HomeScreen = () => {
   const { data, isLoading, refetch, isError, error } = useGame(
     storedGame?.id || ""
   );
+
+  const { setModalOpen } = useModal();
+
+  useEffect(() => {
+    if (isError && error) {
+      const modalOptions: ModalCardProps = {
+        title: "Уупс",
+        subtitle: error.message,
+        buttons: [
+          {
+            text: "Бывает",
+            type: "primary",
+            onClick: () => setModalOpen(false),
+          },
+        ],
+      };
+
+      setModalOpen(modalOptions);
+    }
+  }, [isError, error]);
 
   const handleAccept = async () => {
     if (storedGame?.id && storedGame.state) {
@@ -106,21 +125,6 @@ export const HomeScreen = () => {
             />
           </>
         )}
-
-        <RouteMarker
-          points={[
-            [30.322951, 59.943216],
-            [30.3241, 59.9532],
-          ]}
-          path={[
-            [30.318977, 59.94153],
-            [30.326345, 59.944563],
-            [30.33018, 59.945526],
-            [30.323688, 59.953183],
-            [30.333407, 59.957705],
-            [30.344544, 59.958102],
-          ]}
-        />
       </Map>
 
       <View
@@ -160,9 +164,6 @@ export const HomeScreen = () => {
           )}
         </View>
       </View>
-      {isError && !isLoading && (
-        <ModalCard title="Уупс" subtitle={error.message} />
-      )}
       <View className="absolute bottom-12 px-[5%] gap-2 flex flex-1 flex-row items-center">
         <Button
           onPress={() => bottomSheetRef.current?.snapToIndex(0)}

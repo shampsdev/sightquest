@@ -1,7 +1,7 @@
 export interface Poll {
   id: string;
   gameId: string;
-  type: "pause" | "taskCompleted";
+  type: "pause" | "taskComplete";
   state: "active" | "finished";
   duration: number;
   createdAt: string;

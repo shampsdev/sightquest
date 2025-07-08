@@ -46,8 +46,6 @@ export const LobbyScreen = () => {
     }
   }, [game?.state]);
 
-  useEffect(() => console.log(game?.players), [game]);
-
   const insets = useSafeAreaInsets();
   return (
     <View className="flex-1 bg-bg_primary" style={{ paddingTop: insets.top }}>
