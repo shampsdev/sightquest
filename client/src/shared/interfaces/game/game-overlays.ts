@@ -5,4 +5,5 @@ export type GameOverlay =
   | "pause"
   | "taskCompleted"
   | "updateRole"
+  | "taskCompleted"
   | null;
