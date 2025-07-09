@@ -5,7 +5,6 @@ import React, { useEffect } from "react";
 import {
   Pressable,
   View,
-  ScrollView as ScrollViewType,
   Platform,
   KeyboardAvoidingView,
   StyleSheet,

@@ -26,7 +26,6 @@ export const GameNavigator = () => {
   const { gameId } = route.params;
 
   const { emit } = useSocket();
-  const { location } = useGeolocationStore();
   const { setGame } = useGameStore();
   const { data: initialGame, isLoading, error } = useGame(gameId);
   const { user } = useAuthStore();

@@ -1,11 +1,10 @@
 import { BlurView } from "expo-blur";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Pressable,
   View,
   Platform,
   KeyboardAvoidingView,
-  StyleSheet,
   Image,
 } from "react-native";
 import Animated, {
@@ -17,7 +16,6 @@ import { twMerge } from "tailwind-merge";
 import { Button } from "../ui/button";
 import { uploadImageToS3 } from "@/shared/api/s3.api";
 import { logger } from "@/shared/instances/logger.instance";
-import { useGameStore } from "@/shared/stores/game.store";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { usePlayer } from "@/shared/hooks/usePlayer";
 import { useTaskCompletionStore } from "@/shared/stores/camera.store";
@@ -34,7 +32,6 @@ export const CompleteTaskOverlay = ({
   const { photo, taskId } = useTaskCompletionStore();
   const { emit } = useSocket();
 
-  const { player } = usePlayer();
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -93,19 +90,11 @@ export const CompleteTaskOverlay = ({
                 "games"
               );
 
-              if (player?.role === "catcher") {
-                emit("taskComplete", {
-                  taskId: taskId ?? "",
-                  photo: result.url,
-                });
-              }
-
-              if (player?.role === "runner") {
-                emit("taskComplete", {
-                  taskId: taskId ?? "",
-                  photo: result.url,
-                });
-              }
+              emit("taskComplete", {
+                taskId: taskId ?? "",
+                photo: result.url,
+                pollDuration: 10,
+              });
 
               logger.log("ui", result.url);
               onClose();

@@ -1,11 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { CameraType, useCameraPermissions, CameraView } from "expo-camera";
-import { useCameraStore } from "../stores/camera.store";
+import { useTaskCompletionStore } from "../stores/camera.store";
+
 export const useCamera = () => {
   const [permission, requestPermission] = useCameraPermissions();
   const [facing, setFacing] = useState<CameraType>("back");
 
-  const { setPhoto: setStorePhoto } = useCameraStore();
+  const { setPhoto: setStorePhoto } = useTaskCompletionStore();
 
   const ref = useRef<CameraView>(null);
 

@@ -37,8 +37,16 @@ export interface ClientToServerEvents extends EventMap {
   startGame: () => void;
   endGame: () => void;
   leaveGame: () => void;
-  taskComplete: ({ taskId, photo }: { taskId: string; photo: string }) => void;
-  pause: ({ duration }: { duration: number }) => void;
+  taskComplete: ({
+    taskId,
+    photo,
+    pollDuration,
+  }: {
+    taskId: string;
+    photo: string;
+    pollDuration: number;
+  }) => void;
+  pause: ({ pollDuration }: { pollDuration: number }) => void;
   unpause: () => void;
 }
 

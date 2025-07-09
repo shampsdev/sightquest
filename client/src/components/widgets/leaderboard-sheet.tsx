@@ -6,7 +6,7 @@ import BottomSheet, {
   BottomSheetProps,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import React, { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { View } from "react-native";
 import { UserPreview } from "./user/user-preview";
 import { BlurView } from "expo-blur";
@@ -32,7 +32,8 @@ const BackgroundComponent = ({ style }: BottomSheetBackgroundProps) => {
 };
 
 export const LeaderboardSheet = forwardRef<BottomSheet, LeaderboardSheetProps>(
-  ({ players }, ref) => {
+  (props, ref) => {
+    const { players } = props;
     const localRef = useRef<BottomSheet>(null);
 
     const { user } = useAuthStore();
@@ -40,6 +41,11 @@ export const LeaderboardSheet = forwardRef<BottomSheet, LeaderboardSheetProps>(
     useImperativeHandle(ref, () => localRef.current!);
 
     const { data: avatars } = useStyles({ type: "avatar" });
+
+    const sortedPlayers = useMemo(
+      () => (players ? [...players].sort((a, b) => b.score - a.score) : []),
+      [players]
+    );
 
     return (
       <BottomSheet
@@ -56,23 +62,20 @@ export const LeaderboardSheet = forwardRef<BottomSheet, LeaderboardSheetProps>(
       >
         <BottomSheetView className="rounded-t-3xl px-6 pt-4 pb-10">
           <View className="flex flex-col w-full gap-[15px]">
-            {players &&
-              players
-                .sort((a, b) => a.score - b.score)
-                .map((player) => (
-                  <UserPreview
-                    key={player.user.id}
-                    avatar={{
-                      uri: avatars?.find(
-                        (x) => player?.user.styles?.avatarId === x.id
-                      )?.style.url,
-                    }}
-                    name={player.user.name}
-                    active={player.user.id === user?.id}
-                    scores={player.score}
-                    role={player.role}
-                  />
-                ))}
+            {sortedPlayers.map((player) => (
+              <UserPreview
+                key={player.user.id}
+                avatar={{
+                  uri: avatars?.find(
+                    (x) => player?.user.styles?.avatarId === x.id
+                  )?.style.url,
+                }}
+                name={player.user.name}
+                active={player.user.id === user?.id}
+                scores={player.score}
+                role={player.role}
+              />
+            ))}
           </View>
         </BottomSheetView>
       </BottomSheet>

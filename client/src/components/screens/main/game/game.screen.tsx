@@ -25,7 +25,6 @@ import { BlurView } from "expo-blur";
 import { RouteMarker } from "@/components/ui/map/route-marker";
 import { isPause } from "@/shared/interfaces/polls/pause";
 import { CameraOverlay } from "@/components/overlays/camera.overlay";
-import { useCamera } from "@/shared/hooks/useCamera";
 import { ModalCardProps } from "@/components/widgets/modal-card";
 import { useModal } from "@/shared/hooks/useModal";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
@@ -33,7 +32,9 @@ import { Chat } from "@/components/overlays/chat.overlay";
 import { useGameOverlays } from "@/shared/hooks/useGameOverlays";
 import { PauseOverlay } from "@/components/overlays/pause.overlay";
 import { PlaceMarker } from "@/components/ui/map/place-marker";
-import { CompleteTaskOverlay } from "@/components/overlays/complete-task";
+import { CompleteTaskOverlay } from "@/components/overlays/complete-task.overlay";
+import { useTaskCompletionStore } from "@/shared/stores/camera.store";
+import { TaskCompletedOverlay } from "@/components/overlays/task-completed.overlay";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -41,14 +42,10 @@ type NavProp = StackNavigationProp<
 >;
 
 export const GameScreen = () => {
-  const {
-    openedOverlay,
-    openOverlay,
-    closeOverlay,
-    isOverlayOpen,
-    isAnyOverlayOpen,
-  } = useGameOverlays();
+  const { openOverlay, closeOverlay, isOverlayOpen, isAnyOverlayOpen } =
+    useGameOverlays();
 
+  const { setTaskId } = useTaskCompletionStore();
   const navigation = useNavigation<NavProp>();
   const { game, updateStatus, resetChat, setGame, addCompletedTaskPoint } =
     useGameStore();
@@ -71,7 +68,7 @@ export const GameScreen = () => {
     ) {
       emit("unpause");
     } else {
-      emit("pause", { duration: 5 });
+      emit("pause", { pollDuration: 5 });
     }
   }, [game]);
 
@@ -79,9 +76,17 @@ export const GameScreen = () => {
     if (!game || !game.activePoll) return;
     const poll = game.activePoll;
 
+    if (isTaskPoll(poll) && poll.state === "active") {
+      if (poll.data) {
+        openOverlay("taskCompleted");
+      }
+    }
+
     if (isTaskPoll(poll) && poll.state === "finished") {
-      if (poll.result.taskComplete.approved)
+      if (poll.result.taskComplete.approved) {
+        closeOverlay();
         addCompletedTaskPoint(poll.result.taskComplete.completedTaskPoint);
+      }
     }
 
     if (isPause(poll) && poll.state === "active") openOverlay("pause");
@@ -161,17 +166,27 @@ export const GameScreen = () => {
           {game && game?.route && (
             <RouteMarker
               path={game.route.taskPoints}
-              shapes={game.route.taskPoints.map((point) => (
-                <PlaceMarker
-                  key={point.id}
-                  coordinate={[point.location.lon, point.location.lat]}
-                  disabled={
-                    game.completedTaskPoints.find(
-                      (x) => x.pointId === point.id
-                    ) !== undefined
-                  }
-                />
-              ))}
+              shapes={game.route.taskPoints.map((point) => {
+                const disabled =
+                  game.completedTaskPoints.find(
+                    (x) => x.pointId === point.id
+                  ) !== undefined;
+
+                const openTaskPoint = () => {
+                  if (disabled) return;
+                  setTaskId(point.id);
+                  openOverlay("camera");
+                };
+
+                return (
+                  <PlaceMarker
+                    key={point.id}
+                    coordinate={[point.location.lon, point.location.lat]}
+                    disabled={disabled}
+                    onPress={openTaskPoint}
+                  />
+                );
+              })}
             />
           )}
           <Camera
@@ -274,6 +289,7 @@ export const GameScreen = () => {
         </View>
       </View>
       <Chat visible={isOverlayOpen("chat")} onClose={closeOverlay} />
+      <TaskCompletedOverlay visible={isOverlayOpen("taskCompleted")} />
       <PauseOverlay visible={isOverlayOpen("pause")} />
       <CameraOverlay
         visible={isOverlayOpen("camera")}
