@@ -102,6 +102,15 @@ module.exports = {
         },
       ],
       "react-native-background-fetch",
+      [
+        "expo-camera",
+        {
+          cameraPermission:
+            "Allow $(PRODUCT_NAME) to take photos",
+          microphonePermission:
+            "Allow $(PRODUCT_NAME) to record video with sound",
+        },
+      ],
     ],
   },
 };
