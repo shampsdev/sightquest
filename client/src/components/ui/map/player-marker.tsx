@@ -1,7 +1,6 @@
-import { useAnimatedCoord } from "@/shared/hooks/useAnimatedCoord";
 import Mapbox from "@rnmapbox/maps";
 import { BlurView } from "expo-blur";
-import { useEffect } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { View, Text, Image } from "react-native";
 import Animated, {
   Easing,
@@ -12,6 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Avatar } from "../avatar";
 import { Coords } from "@/shared/interfaces/coords";
+import { useAnimatedCoord } from "@/shared/hooks/useAnimatedCoord";
 
 const AnimatedMarkerView = Animated.createAnimatedComponent(Mapbox.MarkerView);
 
@@ -26,10 +26,26 @@ export const PlayerMarker = ({
   avatarSrc: any;
   pulse?: boolean;
 }) => {
+  const initialCoord = useRef(coordinate);
   const [animatedProps, animate] = useAnimatedCoord([
-    coordinate.lon,
-    coordinate.lat,
+    initialCoord.current.lon,
+    initialCoord.current.lat,
   ]);
+  const prevCoord = useRef(coordinate);
+
+  useEffect(() => {
+    if (
+      coordinate &&
+      (prevCoord.current.lat !== coordinate.lat ||
+        prevCoord.current.lon !== coordinate.lon)
+    ) {
+      animate({
+        latitude: coordinate.lat,
+        longitude: coordinate.lon,
+      });
+      prevCoord.current = coordinate;
+    }
+  }, [coordinate.lat, coordinate.lon]);
 
   const pulseScale = useSharedValue(1);
   const pulseOpacity = useSharedValue(0.5);
@@ -51,16 +67,6 @@ export const PlayerMarker = ({
     }
   }, [pulse]);
 
-  useEffect(() => {
-    if (coordinate) {
-      animate({
-        latitude: coordinate.lat,
-        longitude: coordinate.lon,
-        duration: 500,
-      });
-    }
-  }, [coordinate]);
-
   const pulseStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pulseScale.value }],
     opacity: pulseOpacity.value,
@@ -68,7 +74,7 @@ export const PlayerMarker = ({
 
   return (
     <AnimatedMarkerView
-      coordinate={[coordinate.lon, coordinate.lat]}
+      coordinate={[initialCoord.current.lon, initialCoord.current.lat]}
       anchor={{ x: 0.5, y: 0.5 }}
       animatedProps={animatedProps}
       allowOverlap={false}

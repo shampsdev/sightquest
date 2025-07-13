@@ -24,19 +24,21 @@ import { useGeolocationStore } from "@/shared/stores/location.store";
 import { BlurView } from "expo-blur";
 import { RouteMarker } from "@/components/ui/map/route-marker";
 import { isPause } from "@/shared/interfaces/polls/pause";
-import { CameraOverlay } from "@/components/overlays/camera.overlay";
 import { ModalCardProps } from "@/components/widgets/modal-card";
 import { useModal } from "@/shared/hooks/useModal";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
-import { Chat } from "@/components/overlays/chat.overlay";
-import { useGameOverlays } from "@/shared/hooks/useGameOverlays";
-import { PauseOverlay } from "@/components/overlays/pause.overlay";
+import { useOverlays } from "@/shared/hooks/useOverlays";
 import { PlaceMarker } from "@/components/ui/map/place-marker";
-import { CompleteTaskOverlay } from "@/components/overlays/complete-task.overlay";
 import { useTaskCompletionStore } from "@/shared/stores/camera.store";
-import { TaskCompletedOverlay } from "@/components/overlays/task-completed.overlay";
 import { useUpdateRoleStore } from "@/shared/stores/update-role.store";
+import { OverlayProvider } from "@/components/overlays/overlay.provider";
+import { hasAvatar, isAdmin, isMe } from "@/shared/interfaces/user";
+import { CompleteTaskOverlay } from "@/components/overlays/complete-task.overlay";
 import { UpdateRoleOverlay } from "@/components/overlays/update-role.overlay";
+import { CameraOverlay } from "@/components/overlays/camera.overlay";
+import { PauseOverlay } from "@/components/overlays/pause.overlay";
+import { TaskCompletedOverlay } from "@/components/overlays/task-completed.overlay";
+import { ChatOverlay } from "@/components/overlays/chat.overlay";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -45,7 +47,9 @@ type NavProp = StackNavigationProp<
 
 export const GameScreen = () => {
   const { openOverlay, closeOverlay, isOverlayOpen, isAnyOverlayOpen } =
-    useGameOverlays();
+    useOverlays();
+
+  const cameraRef = useRef<Camera>(null);
 
   const { setTaskId } = useTaskCompletionStore();
   const navigation = useNavigation<NavProp>();
@@ -54,7 +58,7 @@ export const GameScreen = () => {
   const { location } = useGeolocationStore();
   const { user } = useAuthStore();
   const { emit, on } = useSocket();
-  const { data: avatars } = useStyles({ type: "avatar" });
+  const { data: avatars, getStyle } = useStyles({ type: "avatar" });
   const { setPlayer, reset: resetUpdateRoleStore } = useUpdateRoleStore();
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
   const leaderboardSheet = useRef<BottomSheet>(null);
@@ -153,63 +157,61 @@ export const GameScreen = () => {
 
   return (
     <View className="flex-1">
-      {!isOverlayOpen("camera") && (
-        <Map>
-          {location && players && (
-            <>
-              {players?.map((player, index) => (
-                <PlayerMarker
-                  key={index}
-                  coordinate={
-                    player.user.id === user?.id
-                      ? { lon: location[0], lat: location[1] }
-                      : player.location
-                  }
-                  name={player?.user.name ?? player.user.username}
-                  avatarSrc={{
-                    uri: avatars?.find(
-                      (x) => x.id === player.user.styles?.avatarId
-                    )?.style.url,
-                  }}
+      <Map>
+        {players && game && user && location && (
+          <>
+            {players.map((player, index) => (
+              <PlayerMarker
+                key={index}
+                coordinate={
+                  isMe(player.user, user)
+                    ? { lon: location[0], lat: location[1] }
+                    : player.location
+                }
+                pulse={player.role == "catcher"}
+                name={player.user.name}
+                avatarSrc={{
+                  uri:
+                    hasAvatar(player.user) &&
+                    getStyle(player.user.styles.avatarId)?.style.url,
+                }}
+              />
+            ))}
+          </>
+        )}
+        {game && game.route && (
+          <RouteMarker
+            path={game.route.taskPoints}
+            shapes={game.route.taskPoints.map((point) => {
+              const disabled =
+                game.completedTaskPoints.find((x) => x.pointId === point.id) !==
+                undefined;
+
+              const openTaskPoint = () => {
+                if (disabled) return;
+                setTaskId(point.id);
+                openOverlay("camera");
+              };
+
+              return (
+                <PlaceMarker
+                  key={point.id}
+                  coordinate={[point.location.lon, point.location.lat]}
+                  disabled={disabled}
+                  onPress={openTaskPoint}
                 />
-              ))}
-            </>
-          )}
-
-          {game && game?.route && (
-            <RouteMarker
-              path={game.route.taskPoints}
-              shapes={game.route.taskPoints.map((point) => {
-                const disabled =
-                  game.completedTaskPoints.find(
-                    (x) => x.pointId === point.id
-                  ) !== undefined;
-
-                const openTaskPoint = () => {
-                  if (disabled) return;
-                  setTaskId(point.id);
-                  openOverlay("camera");
-                };
-
-                return (
-                  <PlaceMarker
-                    key={point.id}
-                    coordinate={[point.location.lon, point.location.lat]}
-                    disabled={disabled}
-                    onPress={openTaskPoint}
-                  />
-                );
-              })}
-            />
-          )}
-          <Camera
-            defaultSettings={{
-              centerCoordinate: location || DEFAULT_MAP_CAMERA_LOCATION,
-              zoomLevel: 12,
-            }}
+              );
+            })}
           />
-        </Map>
-      )}
+        )}
+        <Camera
+          ref={cameraRef}
+          defaultSettings={{
+            centerCoordinate: location || DEFAULT_MAP_CAMERA_LOCATION,
+            zoomLevel: 12,
+          }}
+        />
+      </Map>
       {!isOverlayOpen("chat") && (
         <View className="absolute px-[5%] gap-4 bottom-12 flex items-center flex-row left-0 right-0 z-10">
           <Pressable onPress={togglePauseGame}>
@@ -301,25 +303,18 @@ export const GameScreen = () => {
           )}
         </View>
       </View>
-      <Chat visible={isOverlayOpen("chat")} onClose={closeOverlay} />
-      <TaskCompletedOverlay visible={isOverlayOpen("taskCompleted")} />
-      <PauseOverlay visible={isOverlayOpen("pause")} />
-      <CameraOverlay
-        visible={isOverlayOpen("camera")}
-        onClose={closeOverlay}
-        onSucces={() => {
-          openOverlay("sendPhoto");
-        }}
-      />
-      <UpdateRoleOverlay
-        visible={isOverlayOpen("updateRole")}
-        onClose={closeOverlay}
-      />
-      <CompleteTaskOverlay
-        visible={isOverlayOpen("sendPhoto")}
-        onClose={closeOverlay}
-      />
+      <OverlayProvider />
       <LeaderboardSheet
+        onPlayerPress={(player) => {
+          const offset = 0.002;
+          cameraRef.current?.fitBounds(
+            [player.location.lon - offset, player.location.lat - offset],
+            [player.location.lon + offset, player.location.lat + offset],
+            100,
+            1000
+          );
+          leaderboardSheet.current?.close();
+        }}
         ref={leaderboardSheet}
         players={game?.players ?? []}
         children={undefined}

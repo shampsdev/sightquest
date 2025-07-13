@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import type { CameraCapturedPicture } from "expo-camera";
+import { ImageResult } from 'expo-image-manipulator';
 
 interface TaskCompletionState {
-  photo: CameraCapturedPicture | null;
-  setPhoto: (p: CameraCapturedPicture) => void;
+  photo: ImageResult | null;
+  setPhoto: (p: ImageResult) => void;
   taskId: string | null;
   setTaskId: (taskId: string) => void;
   reset: () => void;

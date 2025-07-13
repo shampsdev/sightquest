@@ -1,8 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { GameOverlay } from "../interfaces/game/game-overlays";
+import { useOverlayStore } from "../stores/overlay.store";
 
-export const useGameOverlays = () => {
-  const [openedOverlay, setOpenedOverlay] = useState<GameOverlay>(null);
+export const useOverlays = () => {
+  const { overlay: openedOverlay, setOpenedOverlay } = useOverlayStore();
 
   const openOverlay = useCallback((overlay: Exclude<GameOverlay, null>) => {
     setOpenedOverlay(overlay);

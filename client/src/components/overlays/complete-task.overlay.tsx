@@ -68,14 +68,17 @@ export const CompleteTaskOverlay = ({
         style={{ zIndex: 30 }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         className={twMerge(
-          "py-[40px] h-[85%] mb-[80px] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
+          "py-[40px] px-[36px] h-[85%] mb-[80px] mx-auto flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
         )}
       >
-        <View className="flex flex-col justify-center">
-          <View className="w-[360px] h-[360px] rounded-[16px] overflow-hidden">
+        <View className="flex flex-col w-full justify-center mx-auto">
+          <View className="w-full aspect-square mx-auto rounded-[16px] overflow-hidden">
             <Image
               source={{ uri: photo?.uri }}
-              style={{ width: 360, height: 360 }}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
             />
           </View>
         </View>
@@ -89,13 +92,11 @@ export const CompleteTaskOverlay = ({
                 undefined,
                 "games"
               );
-
               emit("taskComplete", {
                 taskId: taskId ?? "",
                 photo: result.url,
                 pollDuration: 10,
               });
-
               logger.log("ui", result.url);
               onClose();
             }}

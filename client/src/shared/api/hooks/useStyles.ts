@@ -17,8 +17,13 @@ export const useStyles = (params: { type?: StyleType; bought?: boolean }) => {
     },
   });
 
+  const getStyle = (styleId: string) => {
+    return stylesQuery.data?.find((x) => x.id == styleId);
+  };
+
   return {
     ...stylesQuery,
+    getStyle,
     buyStyle: buyMutation.mutateAsync,
     isBuying: buyMutation.isPending,
   };

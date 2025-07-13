@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "@/routers/main.navigator";
-import { Camera } from "@rnmapbox/maps";
+import { Camera, MarkerView } from "@rnmapbox/maps";
 import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
@@ -27,6 +27,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CameraOverlay } from "@/components/overlays/camera.overlay";
 
 import { useModal } from "@/shared/hooks/useModal";
+import { hasAvatar } from "@/shared/interfaces/user";
+import { PlaceMarker } from "@/components/ui/map/place-marker";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -34,9 +36,7 @@ export const HomeScreen = () => {
   const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
   const { game: storedGame, setGame, resetChat, setRoute } = useGameStore();
-  const { data, isLoading, refetch, isError, error } = useGame(
-    storedGame?.id || ""
-  );
+  const { isLoading, refetch, isError, error } = useGame(storedGame?.id || "");
 
   const { setModalOpen } = useModal();
 
@@ -103,12 +103,11 @@ export const HomeScreen = () => {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const { data: avatars } = useStyles({ type: "avatar", bought: true });
-
+  const { data: avatars, getStyle } = useStyles({
+    type: "avatar",
+    bought: true,
+  });
   const insets = useSafeAreaInsets();
-
-  const [cameraOverlayVisible, setCameraOverlayVisible] =
-    useState<boolean>(false);
 
   return (
     <View className="flex-1">
@@ -117,10 +116,10 @@ export const HomeScreen = () => {
           <>
             <PlayerMarker
               coordinate={{ lon: location[0], lat: location[1] }}
-              name={user?.name ?? user.username}
+              name={user.name}
               avatarSrc={{
-                uri: avatars?.find((x) => x.id === user.styles?.avatarId)?.style
-                  .url,
+                uri:
+                  hasAvatar(user) && getStyle(user.styles.avatarId)?.style.url,
               }}
             />
             <Camera
@@ -149,8 +148,9 @@ export const HomeScreen = () => {
               <Avatar
                 className="h-12 w-12"
                 source={{
-                  uri: avatars?.find((x) => x.id === user.styles?.avatarId)
-                    ?.style.url,
+                  uri:
+                    hasAvatar(user) &&
+                    getStyle(user.styles.avatarId)?.style.url,
                 }}
               />
             </Pressable>

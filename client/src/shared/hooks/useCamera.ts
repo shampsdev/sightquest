@@ -1,12 +1,10 @@
 import { useState, useRef } from "react";
 import { CameraType, useCameraPermissions, CameraView } from "expo-camera";
-import { useTaskCompletionStore } from "../stores/camera.store";
+import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 
 export const useCamera = () => {
   const [permission, requestPermission] = useCameraPermissions();
   const [facing, setFacing] = useState<CameraType>("back");
-
-  const { setPhoto: setStorePhoto } = useTaskCompletionStore();
 
   const ref = useRef<CameraView>(null);
 
@@ -16,10 +14,21 @@ export const useCamera = () => {
 
   const takePhoto = async () => {
     if (ref.current) {
-      const result = await ref.current.takePictureAsync();
-      if (result) {
-        setStorePhoto(result);
-        return result;
+      const rawPhoto = await ref.current.takePictureAsync({
+        quality: 0,
+      });
+
+      const processedPhoto = await ImageManipulator.manipulate(rawPhoto.uri)
+        .resize({
+          width: 800,
+          height: 800,
+        })
+        .renderAsync();
+
+      const photo = await processedPhoto.saveAsync({ format: SaveFormat.JPEG });
+
+      if (photo) {
+        return photo;
       }
     }
   };

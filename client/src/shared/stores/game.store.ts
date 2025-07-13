@@ -3,6 +3,8 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+// MVC -> Model (store) -> View -> Controller
+
 import { Game } from "@/shared/interfaces/game/game";
 import { Player } from "../interfaces/game/player";
 import { GameState as GameStatus } from "../interfaces/game/game-state";

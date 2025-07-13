@@ -7,12 +7,13 @@ import BottomSheet, {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import React, { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { UserPreview } from "./user/user-preview";
 import { BlurView } from "expo-blur";
 
 export interface LeaderboardSheetProps extends BottomSheetProps {
   players: Player[];
+  onPlayerPress?: (player: Player) => void;
 }
 
 const BackgroundComponent = ({ style }: BottomSheetBackgroundProps) => {
@@ -33,7 +34,7 @@ const BackgroundComponent = ({ style }: BottomSheetBackgroundProps) => {
 
 export const LeaderboardSheet = forwardRef<BottomSheet, LeaderboardSheetProps>(
   (props, ref) => {
-    const { players } = props;
+    const { players, onPlayerPress } = props;
     const localRef = useRef<BottomSheet>(null);
 
     const { user } = useAuthStore();
@@ -63,18 +64,24 @@ export const LeaderboardSheet = forwardRef<BottomSheet, LeaderboardSheetProps>(
         <BottomSheetView className="rounded-t-3xl px-6 pt-4 pb-10">
           <View className="flex flex-col w-full gap-[15px]">
             {sortedPlayers.map((player) => (
-              <UserPreview
+              <Pressable
                 key={player.user.id}
-                avatar={{
-                  uri: avatars?.find(
-                    (x) => player?.user.styles?.avatarId === x.id
-                  )?.style.url,
+                onPress={() => {
+                  if (onPlayerPress) onPlayerPress(player);
                 }}
-                name={player.user.name}
-                active={player.user.id === user?.id}
-                scores={player.score}
-                role={player.role}
-              />
+              >
+                <UserPreview
+                  avatar={{
+                    uri: avatars?.find(
+                      (x) => player?.user.styles?.avatarId === x.id
+                    )?.style.url,
+                  }}
+                  name={player.user.name}
+                  active={player.user.id === user?.id}
+                  scores={player.score}
+                  role={player.role}
+                />
+              </Pressable>
             ))}
           </View>
         </BottomSheetView>

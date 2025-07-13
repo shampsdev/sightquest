@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import { logger } from "@/shared/instances/logger.instance";
 import { useCamera } from "@/shared/hooks/useCamera";
 import { CameraView } from "expo-camera";
+import { useTaskCompletionStore } from "@/shared/stores/camera.store";
 
 interface CameraOverlayProps {
   visible?: boolean;
@@ -40,6 +41,7 @@ export const CameraOverlay = ({
     takePhoto,
   } = useCamera();
 
+  const { setPhoto: setStorePhoto } = useTaskCompletionStore();
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -89,12 +91,13 @@ export const CameraOverlay = ({
               onPress={requestPermission}
             />
           )}
-          <View className=" h-[360px] mx-auto rounded-[16px] z-10 overflow-hidden">
+          <View className="w-full aspect-square mx-auto rounded-[16px] z-10 overflow-hidden">
             {permission.granted && visible && (
               <CameraView
                 style={styles.camera}
                 ref={cameraRef}
                 facing={facing}
+                ratio="1:1"
               />
             )}
           </View>
@@ -110,9 +113,10 @@ export const CameraOverlay = ({
             onPress={async () => {
               try {
                 const photo = await takePhoto();
+                if (photo) setStorePhoto(photo);
                 onSucces();
               } catch (error) {
-                logger.error("ui", "Error taking photo");
+                logger.error("ui", "Error taking photo", error);
               }
             }}
           >
@@ -134,9 +138,7 @@ export const CameraOverlay = ({
 const styles = StyleSheet.create({
   camera: {
     flex: 1,
-    width: 360,
-    height: 360,
-    marginLeft: "auto",
-    marginRight: "auto",
+    width: "100%",
+    height: "100%",
   },
 });
