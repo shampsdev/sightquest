@@ -1,7 +1,7 @@
 export interface Poll {
   id: string;
   gameId: string;
-  type: "pause" | "taskComplete";
+  type: "pause" | "taskComplete" | "playerCatch";
   state: "active" | "finished";
   duration: number;
   createdAt: string;
@@ -12,4 +12,3 @@ export interface Poll {
 export interface PollData {}
 
 export interface PollResult {}
-

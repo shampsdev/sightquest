@@ -48,6 +48,15 @@ export interface ClientToServerEvents extends EventMap {
     photo: string;
     pollDuration: number;
   }) => void;
+  playerCatch: ({
+    playerId,
+    photo,
+    pollDuration,
+  }: {
+    playerId: string;
+    photo: string;
+    pollDuration: number;
+  }) => void;
   pause: ({ pollDuration }: { pollDuration: number }) => void;
   unpause: () => void;
 }

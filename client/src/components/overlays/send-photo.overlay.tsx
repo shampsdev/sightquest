@@ -17,22 +17,26 @@ import { Button } from "../ui/button";
 import { uploadImageToS3 } from "@/shared/api/s3.api";
 import { logger } from "@/shared/instances/logger.instance";
 import { useSocket } from "@/shared/hooks/useSocket";
-import { usePlayer } from "@/shared/hooks/usePlayer";
-import { useTaskCompletionStore } from "@/shared/stores/camera.store";
+import { useOverlays } from "@/shared/providers/overlay.provider";
+import { CameraAction } from "./camera.overlay";
 
-interface CompleteTaskOverlayProps {
+export interface SendPhotoOverlayProps {
   visible?: boolean;
-  onClose: () => void;
+  action: CameraAction;
 }
 
-export const CompleteTaskOverlay = ({
+export const SendPhotoOverlay = ({
   visible,
-  onClose,
-}: CompleteTaskOverlayProps) => {
-  const { photo, taskId } = useTaskCompletionStore();
+  action,
+}: SendPhotoOverlayProps) => {
   const { emit } = useSocket();
+  const { closeOverlay } = useOverlays();
 
   const opacity = useSharedValue(0);
+
+  const onClose = () => {
+    closeOverlay("sendPhoto");
+  };
 
   useEffect(() => {
     if (visible) {
@@ -74,7 +78,7 @@ export const CompleteTaskOverlay = ({
         <View className="flex flex-col w-full justify-center mx-auto">
           <View className="w-full aspect-square mx-auto rounded-[16px] overflow-hidden">
             <Image
-              source={{ uri: photo?.uri }}
+              source={{ uri: action?.photo?.uri }}
               style={{
                 width: "100%",
                 height: "100%",
@@ -88,15 +92,23 @@ export const CompleteTaskOverlay = ({
             text="Отправить"
             onPress={async () => {
               const result = await uploadImageToS3(
-                photo?.uri ?? "",
+                action.photo?.uri ?? "",
                 undefined,
                 "games"
               );
-              emit("taskComplete", {
-                taskId: taskId ?? "",
-                photo: result.url,
-                pollDuration: 10,
-              });
+              if (action.type == "completeTask") {
+                emit("taskComplete", {
+                  taskId: action.taskId,
+                  photo: result.url,
+                  pollDuration: 10,
+                });
+              } else {
+                emit("playerCatch", {
+                  playerId: action.playerId,
+                  photo: result.url,
+                  pollDuration: 10,
+                });
+              }
               logger.log("ui", result.url);
               onClose();
             }}

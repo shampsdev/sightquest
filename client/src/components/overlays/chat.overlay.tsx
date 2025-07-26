@@ -24,12 +24,12 @@ import Animated, {
 } from "react-native-reanimated";
 import { twMerge } from "tailwind-merge";
 
-interface ChatScreenProps {
-  visible?: boolean;
+export interface ChatOverlayProps {
+  visible: boolean;
   onClose: () => void;
 }
 
-export const ChatOverlay = ({ visible, onClose }: ChatScreenProps) => {
+export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
   const { emit } = useSocket();
   const [message, setMessage] = useState("");
 

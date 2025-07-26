@@ -19,19 +19,29 @@ import { Button } from "../ui/button";
 import { logger } from "@/shared/instances/logger.instance";
 import { useCamera } from "@/shared/hooks/useCamera";
 import { CameraView } from "expo-camera";
-import { useTaskCompletionStore } from "@/shared/stores/camera.store";
+import { useOverlays } from "@/shared/providers/overlay.provider";
+import { ImageResult } from "expo-image-manipulator";
 
-interface CameraOverlayProps {
-  visible?: boolean;
-  onClose: () => void;
-  onSucces: () => void;
+interface CompleteTaskCameraAction {
+  type: "completeTask";
+  taskId: string;
+  photo?: ImageResult;
 }
 
-export const CameraOverlay = ({
-  visible,
-  onClose,
-  onSucces,
-}: CameraOverlayProps) => {
+interface CatchPlayerCameraAction {
+  type: "catchPlayer";
+  playerId: string;
+  photo?: ImageResult;
+}
+
+export type CameraAction = CompleteTaskCameraAction | CatchPlayerCameraAction;
+
+export interface CameraOverlayProps {
+  visible?: boolean;
+  action: CameraAction;
+}
+
+export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
   const {
     cameraRef,
     permission,
@@ -41,8 +51,8 @@ export const CameraOverlay = ({
     takePhoto,
   } = useCamera();
 
-  const { setPhoto: setStorePhoto } = useTaskCompletionStore();
   const opacity = useSharedValue(0);
+  const { closeOverlay, openOverlay } = useOverlays();
 
   useEffect(() => {
     if (visible) {
@@ -59,6 +69,16 @@ export const CameraOverlay = ({
   if (!permission) {
     return <View />;
   }
+
+  const onClose = () => {
+    closeOverlay("camera");
+  };
+
+  const onSucces = (photo: ImageResult) => {
+    closeOverlay("camera");
+    openOverlay("sendPhoto", { action: { ...action, photo } });
+  };
+
   return (
     <Animated.View
       style={animatedStyle}
@@ -113,8 +133,7 @@ export const CameraOverlay = ({
             onPress={async () => {
               try {
                 const photo = await takePhoto();
-                if (photo) setStorePhoto(photo);
-                onSucces();
+                if (photo) onSucces(photo);
               } catch (error) {
                 logger.error("ui", "Error taking photo", error);
               }

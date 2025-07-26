@@ -9,8 +9,9 @@ import Animated, {
 import { twMerge } from "tailwind-merge";
 import { useGameStore } from "@/shared/stores/game.store";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
+import { isPlayerPoll } from "@/shared/interfaces/polls/player-poll";
 
-interface TaskCompletedOverlayProps {
+export interface TaskCompletedOverlayProps {
   visible?: boolean;
 }
 
@@ -57,8 +58,8 @@ export const TaskCompletedOverlay = ({
         <View className="flex flex-col w-full justify-center mx-auto">
           <View className="w-full aspect-square mx-auto rounded-[16px] overflow-hidden">
             {game?.activePoll &&
-              isTaskPoll(game.activePoll) &&
-              game.activePoll.state == "active" && (
+              game.activePoll.state == "active" &&
+              ((isTaskPoll(game.activePoll) && (
                 <Image
                   source={{
                     uri: game.activePoll.data?.taskComplete.photo,
@@ -68,7 +69,18 @@ export const TaskCompletedOverlay = ({
                     height: "100%",
                   }}
                 />
-              )}
+              )) ||
+                (isPlayerPoll(game.activePoll) && (
+                  <Image
+                    source={{
+                      uri: game.activePoll.data?.playerCatch.photo,
+                    }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  />
+                )))}
           </View>
         </View>
       </KeyboardAvoidingView>

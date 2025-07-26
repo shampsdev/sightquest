@@ -27,18 +27,10 @@ import { isPause } from "@/shared/interfaces/polls/pause";
 import { ModalCardProps } from "@/components/widgets/modal-card";
 import { useModal } from "@/shared/hooks/useModal";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
-import { useOverlays } from "@/shared/hooks/useOverlays";
 import { PlaceMarker } from "@/components/ui/map/place-marker";
-import { useTaskCompletionStore } from "@/shared/stores/camera.store";
-import { useUpdateRoleStore } from "@/shared/stores/update-role.store";
-import { OverlayProvider } from "@/components/overlays/overlay.provider";
-import { hasAvatar, isAdmin, isMe } from "@/shared/interfaces/user";
-import { CompleteTaskOverlay } from "@/components/overlays/complete-task.overlay";
-import { UpdateRoleOverlay } from "@/components/overlays/update-role.overlay";
-import { CameraOverlay } from "@/components/overlays/camera.overlay";
-import { PauseOverlay } from "@/components/overlays/pause.overlay";
-import { TaskCompletedOverlay } from "@/components/overlays/task-completed.overlay";
-import { ChatOverlay } from "@/components/overlays/chat.overlay";
+import { hasAvatar, isMe } from "@/shared/interfaces/user";
+import { useOverlays } from "@/shared/providers/overlay.provider";
+import { isPlayerPoll } from "@/shared/interfaces/polls/player-poll";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -46,12 +38,10 @@ type NavProp = StackNavigationProp<
 >;
 
 export const GameScreen = () => {
-  const { openOverlay, closeOverlay, isOverlayOpen, isAnyOverlayOpen } =
-    useOverlays();
+  const { openOverlay, closeOverlay, isOverlayOpen } = useOverlays();
 
   const cameraRef = useRef<Camera>(null);
 
-  const { setTaskId } = useTaskCompletionStore();
   const navigation = useNavigation<NavProp>();
   const { game, updateStatus, resetChat, setGame, addCompletedTaskPoint } =
     useGameStore();
@@ -59,7 +49,6 @@ export const GameScreen = () => {
   const { user } = useAuthStore();
   const { emit, on } = useSocket();
   const { data: avatars, getStyle } = useStyles({ type: "avatar" });
-  const { setPlayer, reset: resetUpdateRoleStore } = useUpdateRoleStore();
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
   const leaderboardSheet = useRef<BottomSheet>(null);
 
@@ -87,7 +76,6 @@ export const GameScreen = () => {
         openOverlay("taskCompleted");
       }
     }
-
     if (isTaskPoll(poll) && poll.state === "finished") {
       if (poll.result.taskComplete.approved) {
         closeOverlay();
@@ -95,19 +83,32 @@ export const GameScreen = () => {
       }
     }
 
-    if (isPause(poll) && poll.state === "active") openOverlay("pause");
+    if (isPlayerPoll(poll) && poll.state === "active") {
+      if (poll.data) {
+        openOverlay("taskCompleted");
+      }
+    }
+    if (isTaskPoll(poll) && poll.state === "finished") {
+      if (poll.result.taskComplete.approved) {
+        closeOverlay();
+        addCompletedTaskPoint(poll.result.taskComplete.completedTaskPoint);
+      }
+    }
+
+    if (isPause(poll) && poll.state === "active")
+      openOverlay("pause", undefined);
     if (isPause(poll) && poll.state === "finished") closeOverlay();
   }, [game?.activePoll]);
 
   on("playerRoleUpdated", ({ player, role }) => {
-    if (role === "runner") {
-      setPlayer(player);
-      openOverlay("updateRole");
-      setTimeout(() => {
-        closeOverlay();
-        resetUpdateRoleStore();
-      }, 4000);
-    }
+    // if (role == "catcher")
+    //   openOverlay("updateRole", {
+    //     player,
+    //   });
+    // setTimeout(() => {
+    //   console.log("HEEEEEEEEEey")
+    //   closeOverlay();
+    // }, 5000);
   });
 
   const players = game?.players ?? [];
@@ -188,9 +189,12 @@ export const GameScreen = () => {
                 undefined;
 
               const openTaskPoint = () => {
-                if (disabled) return;
-                setTaskId(point.id);
-                openOverlay("camera");
+                openOverlay("camera", {
+                  action: {
+                    type: "completeTask",
+                    taskId: point.id,
+                  },
+                });
               };
 
               return (
@@ -222,7 +226,14 @@ export const GameScreen = () => {
 
           <Button
             onPress={() => {
-              openOverlay("camera");
+              openOverlay("camera", {
+                action: {
+                  type: "catchPlayer",
+                  playerId:
+                    game?.players.filter((p) => p.role == "runner")[0].user
+                      .id ?? "",
+                },
+              });
             }}
             text="Поймать"
             className="flex-1"
@@ -237,12 +248,12 @@ export const GameScreen = () => {
       <View className="absolute top-20 w-full z-40">
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
           <Pressable
-            onPress={
-              isAnyOverlayOpen ? closeOverlay : () => setModalOpen(modalOptions)
+            onPress={() =>
+              isOverlayOpen() ? closeOverlay : () => setModalOpen(modalOptions)
             }
           >
             <IconContainer>
-              {isAnyOverlayOpen ? <Icons.Back /> : <Icons.Exit />}
+              {isOverlayOpen() ? <Icons.Back /> : <Icons.Exit />}
             </IconContainer>
           </Pressable>
 
@@ -303,7 +314,6 @@ export const GameScreen = () => {
           )}
         </View>
       </View>
-      <OverlayProvider />
       <LeaderboardSheet
         onPlayerPress={(player) => {
           const offset = 0.002;

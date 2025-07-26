@@ -8,11 +8,11 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-interface PaueScreenProps {
+export interface PauseOverlayProps {
   visible?: boolean;
 }
 
-export const PauseOverlay = ({ visible }: PaueScreenProps) => {
+export const PauseOverlay = ({ visible }: PauseOverlayProps) => {
   const opacity = useSharedValue(0);
 
   useEffect(() => {
