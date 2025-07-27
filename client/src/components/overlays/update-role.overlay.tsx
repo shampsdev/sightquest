@@ -29,7 +29,6 @@ export const UpdateRoleOverlay = ({
   player,
 }: UpdateRoleOverlayProps) => {
   const { closeOverlay } = useOverlays();
-
   const opacity = useSharedValue(0);
 
   useEffect(() => {
