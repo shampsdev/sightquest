@@ -10,5 +10,6 @@ func Setup(r *gin.RouterGroup, cases *usecase.Cases) {
 	{
 		routes.GET("", GetRoutes(cases))
 		routes.GET("/:id", GetRoute(cases))
+		routes.GET("/:id/buy", BuyRoute(cases))
 	}
 }

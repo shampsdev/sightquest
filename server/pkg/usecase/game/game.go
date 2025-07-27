@@ -3,7 +3,8 @@ package game
 import (
 	"context"
 	"fmt"
-	"math/rand"
+	"hash/fnv"
+	"math/rand/v2"
 	"slices"
 	"sync"
 	"time"
@@ -19,6 +20,7 @@ import (
 
 type Game struct {
 	lock sync.Mutex
+	rand *rand.Rand
 
 	game *domain.Game
 
@@ -64,6 +66,7 @@ func NewGame(
 		return nil, fmt.Errorf("failed to get game: %w", err)
 	}
 	g.game = game
+	g.rand = newGameRand(game.Seed)
 
 	for _, p := range g.game.Players {
 		g.appendPlayer(p)
@@ -72,6 +75,16 @@ func NewGame(
 	go g.pollObserver(ctx)
 
 	return g, nil
+}
+
+func hash(s string) uint64 {
+	h := fnv.New64a()
+	h.Write([]byte(s))
+	return h.Sum64()
+}
+
+func newGameRand(seed string) *rand.Rand {
+	return rand.New(rand.NewPCG(hash(seed), hash(seed)))
 }
 
 func (g *Game) appendPlayer(p *domain.Player) {
@@ -124,7 +137,7 @@ func (g *Game) OnJoinGame(c Context) error {
 		createPlayer := &domain.CreatePlayer{
 			UserID:   c.S.User.ID,
 			GameID:   g.game.ID,
-			Role:     "runner",
+			Role:     domain.PlayerRoleCatcher,
 			Score:    0,
 			Location: domain.Coordinate{},
 		}
@@ -191,7 +204,7 @@ func (g *Game) OnStartGame(c Context, _ event.StartGame) error {
 	}
 	c.Broadcast(event.StartGame{})
 
-	runner := g.game.Players[rand.Intn(len(g.game.Players))]
+	runner := g.game.Players[g.rand.IntN(len(g.game.Players))]
 	runner.Role = domain.PlayerRoleRunner
 	err = g.playerCase.UpdatePlayer(c.Ctx, runner.GameID, runner.User.ID, &domain.PatchPlayer{Role: &runner.Role})
 	if err != nil {
@@ -258,6 +271,12 @@ func (g *Game) OnTaskComplete(c Context, ev event.TaskComplete) error {
 	}
 	if task == nil {
 		return fmt.Errorf("task not found")
+	}
+
+	for _, t := range g.game.CompletedTaskPoints {
+		if t.PointID == ev.TaskID {
+			return fmt.Errorf("task already completed")
+		}
 	}
 
 	if ev.PollDuration == nil {
@@ -445,15 +464,13 @@ func (g *Game) rotation(
 	}
 
 	newRunner = utils.RandomChoice(g.game.Players, playersWeights)
-	catcherReward = 80 + rand.Intn(40)
+	catcherReward = 80 + g.rand.IntN(40)
 	return catcherReward, newRunner
 }
 
 func (g *Game) finishGame(ctx context.Context) error {
 	g.game.State = domain.GameStateFinished
-	err := g.gameCase.UpdateGame(ctx, g.game.ID, &domain.PatchGame{
-		State: &g.game.State,
-	})
+	err := g.gameCase.UpdateGame(ctx, g.game.ID, &domain.PatchGame{State: &g.game.State})
 	if err != nil {
 		return fmt.Errorf("failed to update game: %w", err)
 	}

@@ -2,6 +2,7 @@ package usecore
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
 	"github.com/shampsdev/sightquest/server/pkg/repo"
@@ -9,11 +10,12 @@ import (
 )
 
 type Route struct {
-	routeRepo repo.Route
+	routeRepo     repo.Route
+	userRouteRepo repo.UserRoute
 }
 
-func NewRoute(routeRepo repo.Route) *Route {
-	return &Route{routeRepo: routeRepo}
+func NewRoute(routeRepo repo.Route, userRouteRepo repo.UserRoute) *Route {
+	return &Route{routeRepo: routeRepo, userRouteRepo: userRouteRepo}
 }
 
 func (r *Route) CreateRoute(ctx context.Context, createRoute *domain.CreateRoute) (*domain.Route, error) {
@@ -26,6 +28,20 @@ func (r *Route) CreateRoute(ctx context.Context, createRoute *domain.CreateRoute
 
 func (r *Route) GetRouteByID(ctx context.Context, id string) (*domain.Route, error) {
 	return repo.First(r.routeRepo)(ctx, &domain.FilterRoute{ID: &id, IncludeTaskPoints: true})
+}
+
+func (r *Route) BuyRoute(ctx *Context, routeID string) error {
+	_, err := repo.First(r.routeRepo)(ctx, &domain.FilterRoute{ID: &routeID})
+	if err != nil {
+		return fmt.Errorf("failed to get style: %w", err)
+	}
+
+	err = r.userRouteRepo.Create(ctx, ctx.UserID, routeID)
+	if err != nil {
+		return fmt.Errorf("failed to add style to user: %w", err)
+	}
+
+	return nil
 }
 
 func (r *Route) EnsureRouteBought(ctx context.Context, userID, routeID string) error {

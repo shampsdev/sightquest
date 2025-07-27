@@ -54,6 +54,12 @@ type Route interface {
 	Delete(ctx context.Context, id string) error
 }
 
+type UserRoute interface {
+	Create(ctx context.Context, userID, routeID string) error
+	Delete(ctx context.Context, userID, routeID string) error
+	Exists(ctx context.Context, userID, routeID string) (bool, error)
+}
+
 type TaskPoint interface {
 	Create(ctx context.Context, taskPoint *domain.CreateTaskPoint) (string, error)
 	Patch(ctx context.Context, id string, taskPoint *domain.PatchTaskPoint) error

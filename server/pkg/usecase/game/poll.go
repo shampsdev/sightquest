@@ -3,7 +3,6 @@ package game
 import (
 	"context"
 	"fmt"
-	"math/rand"
 	"time"
 
 	"github.com/shampsdev/sightquest/server/pkg/domain"
@@ -124,7 +123,7 @@ func (g *Game) checkActivePollTaskComplete(ctx context.Context) error {
 		return fmt.Errorf("failed to get player")
 	}
 
-	deltaScore := pollData.Task.Score - 20 + rand.Intn(40)
+	deltaScore := pollData.Task.Score - 20 + g.rand.IntN(40)
 	player.Score += deltaScore
 
 	err := g.completedTaskPointRepo.Create(ctx, &domain.CreateCompletedTaskPoint{
@@ -159,6 +158,13 @@ func (g *Game) checkActivePollTaskComplete(ctx context.Context) error {
 		Score:      player.Score,
 		DeltaScore: deltaScore,
 	})
+
+	if len(g.game.CompletedTaskPoints) == len(g.game.Route.TaskPoints) {
+		err := g.finishGame(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to finish game: %w", err)
+		}
+	}
 
 	return nil
 }

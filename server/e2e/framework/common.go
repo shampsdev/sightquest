@@ -37,6 +37,10 @@ var AllEvents = map[string]struct{}{
 	event.PlayerCatchApproveEvent: {},
 	event.PlayerCatchRejectEvent:  {},
 	event.PlayerRoleUpdatedEvent:  {},
+	event.FinishGameEvent:         {},
+	event.FinishGameApproveEvent:  {},
+	event.FinishGameRejectEvent:   {},
+	event.FinishedGameEvent:       {},
 }
 
 func isE2ETesting() bool {
