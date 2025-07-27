@@ -3,5 +3,7 @@ export type GameOverlay =
   | "camera"
   | "sendPhoto"
   | "pause"
+  | "taskCompleted"
   | "updateRole"
+  | "taskCompleted"
   | null;

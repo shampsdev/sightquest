@@ -1,11 +1,10 @@
 import { BlurView } from "expo-blur";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Pressable,
   View,
   Platform,
   KeyboardAvoidingView,
-  StyleSheet,
   Image,
   Text,
 } from "react-native";
@@ -16,21 +15,20 @@ import Animated, {
 } from "react-native-reanimated";
 import { twMerge } from "tailwind-merge";
 import { AvatarCard } from "../widgets/avatar-card";
-import { useUpdateRoleStore } from "@/shared/stores/update-role.store";
-import { useGameStore } from "@/shared/stores/game.store";
 import { useStyles } from "@/shared/api/hooks/useStyles";
+import { Player } from "@/shared/interfaces/game/player";
+import { useOverlays } from '@/shared/hooks/useOverlays';
 
-interface UpdateRoleOverlayProps {
+export interface UpdateRoleOverlayProps {
   visible?: boolean;
-  onClose: () => void;
+  player: Player;
 }
 
 export const UpdateRoleOverlay = ({
   visible,
-  onClose,
+  player,
 }: UpdateRoleOverlayProps) => {
-  const { player } = useUpdateRoleStore();
-  const { game } = useGameStore();
+  const { closeOverlay } = useOverlays();
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -46,6 +44,10 @@ export const UpdateRoleOverlay = ({
   }));
 
   const { data: avatars } = useStyles({ type: "avatar" });
+
+  const onClose = () => {
+    closeOverlay("updateRole");
+  };
 
   return (
     <Animated.View

@@ -1,11 +1,10 @@
 import { BlurView } from "expo-blur";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Pressable,
   View,
   Platform,
   KeyboardAvoidingView,
-  StyleSheet,
   Image,
 } from "react-native";
 import Animated, {
@@ -17,25 +16,27 @@ import { twMerge } from "tailwind-merge";
 import { Button } from "../ui/button";
 import { uploadImageToS3 } from "@/shared/api/s3.api";
 import { logger } from "@/shared/instances/logger.instance";
-import { useGameStore } from "@/shared/stores/game.store";
 import { useSocket } from "@/shared/hooks/useSocket";
-import { usePlayer } from "@/shared/hooks/usePlayer";
-import { useTaskCompletionStore } from "@/shared/stores/camera.store";
+import { CameraAction } from "./camera.overlay";
+import { useOverlays } from '@/shared/hooks/useOverlays';
 
-interface CompleteTaskOverlayProps {
+export interface SendPhotoOverlayProps {
   visible?: boolean;
-  onClose: () => void;
+  action: CameraAction;
 }
 
-export const CompleteTaskOverlay = ({
+export const SendPhotoOverlay = ({
   visible,
-  onClose,
-}: CompleteTaskOverlayProps) => {
-  const { photo, taskId } = useTaskCompletionStore();
+  action,
+}: SendPhotoOverlayProps) => {
   const { emit } = useSocket();
+  const { closeOverlay } = useOverlays();
 
-  const { player } = usePlayer();
   const opacity = useSharedValue(0);
+
+  const onClose = () => {
+    closeOverlay("sendPhoto");
+  };
 
   useEffect(() => {
     if (visible) {
@@ -71,14 +72,17 @@ export const CompleteTaskOverlay = ({
         style={{ zIndex: 30 }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         className={twMerge(
-          "py-[40px] h-[85%] mb-[80px] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
+          "py-[40px] px-[36px] h-[85%] mb-[80px] mx-auto flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
         )}
       >
-        <View className="flex flex-col justify-center">
-          <View className="w-[360px] h-[360px] rounded-[16px] overflow-hidden">
+        <View className="flex flex-col w-full justify-center mx-auto">
+          <View className="w-full aspect-square mx-auto rounded-[16px] overflow-hidden">
             <Image
-              source={{ uri: photo?.uri }}
-              style={{ width: 360, height: 360 }}
+              source={{ uri: action?.photo?.uri }}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
             />
           </View>
         </View>
@@ -88,25 +92,23 @@ export const CompleteTaskOverlay = ({
             text="Отправить"
             onPress={async () => {
               const result = await uploadImageToS3(
-                photo?.uri ?? "",
+                action.photo?.uri ?? "",
                 undefined,
                 "games"
               );
-
-              if (player?.role === "catcher") {
+              if (action.type == "completeTask") {
                 emit("taskComplete", {
-                  taskId: taskId ?? "",
+                  taskId: action.taskId,
                   photo: result.url,
+                  pollDuration: 10,
+                });
+              } else {
+                emit("playerCatch", {
+                  playerId: action.playerId,
+                  photo: result.url,
+                  pollDuration: 10,
                 });
               }
-
-              if (player?.role === "runner") {
-                emit("taskComplete", {
-                  taskId: taskId ?? "",
-                  photo: result.url,
-                });
-              }
-
               logger.log("ui", result.url);
               onClose();
             }}

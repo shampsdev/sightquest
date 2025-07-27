@@ -7,11 +7,11 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "@/routers/main.navigator";
 import { Camera } from "@rnmapbox/maps";
-import { PlayerMarker } from "@/components/ui/map/player-marker";
+import { UserMarker } from "@/components/ui/map/user-marker";
 import { StatusBar } from "expo-status-bar";
 import { Avatar } from "@/components/ui/avatar";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { JoinBottomSheet } from "@/components/widgets/join-bottom-sheet";
 import { useCreateGame } from "@/shared/api/hooks/useCreateGame";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -24,9 +24,8 @@ import { ModalCardProps } from "@/components/widgets/modal-card";
 import { logger } from "@/shared/instances/logger.instance";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { CameraOverlay } from "@/components/overlays/camera.overlay";
-
 import { useModal } from "@/shared/hooks/useModal";
+import { hasAvatar } from "@/shared/interfaces/user";
 
 export const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -34,9 +33,7 @@ export const HomeScreen = () => {
   const { user } = useAuthStore();
   const createGameMutation = useCreateGame();
   const { game: storedGame, setGame, resetChat, setRoute } = useGameStore();
-  const { data, isLoading, refetch, isError, error } = useGame(
-    storedGame?.id || ""
-  );
+  const { isLoading, refetch, isError, error } = useGame(storedGame?.id || "");
 
   const { setModalOpen } = useModal();
 
@@ -103,25 +100,23 @@ export const HomeScreen = () => {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const { data: avatars } = useStyles({ type: "avatar", bought: true });
-
+  const { getStyle } = useStyles({
+    type: "avatar",
+    bought: true,
+  });
   const insets = useSafeAreaInsets();
-
-  const [cameraOverlayVisible, setCameraOverlayVisible] =
-    useState<boolean>(false);
 
   return (
     <View className="flex-1">
       <Map>
         {location && user && (
           <>
-            <PlayerMarker
+            <UserMarker
               coordinate={{ lon: location[0], lat: location[1] }}
-              name={user?.name ?? user.username}
-              avatarSrc={{
-                uri: avatars?.find((x) => x.id === user.styles?.avatarId)?.style
-                  .url,
-              }}
+              name={user.name}
+              avatarSrc={
+                hasAvatar(user) && getStyle(user.styles.avatarId)?.style.url
+              }
             />
             <Camera
               defaultSettings={{
@@ -149,8 +144,9 @@ export const HomeScreen = () => {
               <Avatar
                 className="h-12 w-12"
                 source={{
-                  uri: avatars?.find((x) => x.id === user.styles?.avatarId)
-                    ?.style.url,
+                  uri:
+                    hasAvatar(user) &&
+                    getStyle(user.styles.avatarId)?.style.url,
                 }}
               />
             </Pressable>

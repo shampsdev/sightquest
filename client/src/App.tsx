@@ -15,6 +15,7 @@ import { useAuthStore } from "./shared/stores/auth.store";
 import { useGeolocationStore } from "./shared/stores/location.store";
 import { logger } from "./shared/instances/logger.instance";
 import { ModalProvider } from "./shared/providers/modal-provider";
+import { OverlayProvider } from "./shared/providers/overlay.provider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -75,7 +76,9 @@ export default function App() {
         <SafeAreaProvider>
           <NavigationContainer>
             <ModalProvider>
-              {auth ? <MainNavigator /> : <AuthNavigator />}
+              <OverlayProvider>
+                {auth ? <MainNavigator /> : <AuthNavigator />}
+              </OverlayProvider>
             </ModalProvider>
           </NavigationContainer>
         </SafeAreaProvider>

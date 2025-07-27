@@ -1,15 +1,14 @@
-import { AvatarCardProps } from "@/components/widgets/avatar-card";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import { SectionPicker } from "@/components/widgets/section-picker";
 import { AvatarsWidget } from "@/components/widgets/shop/avatars";
-import { AVATARS, SHOP_SECTIONS } from "@/constants";
+import { SHOP_SECTIONS } from "@/constants";
 import { MainStackParamList } from "@/routers/main.navigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { View, Pressable, ScrollView } from "react-native";
-import { RoutesWidget, RouteData } from "@/components/widgets/shop/routes";
+import { RoutesWidget } from "@/components/widgets/shop/routes";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "@/components/ui/header";
 import { StatusBar } from "expo-status-bar";
@@ -19,14 +18,13 @@ import { useAuthStore } from "@/shared/stores/auth.store";
 import { setAvatar } from "@/shared/api/styles.api";
 import { getMe } from "@/shared/api/auth.api";
 import { Style } from "@/shared/interfaces/styles/styles";
+import { useRoutes } from "@/shared/api/hooks/useRoutes";
 
 export const ShopScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const sectionRef = useRef<{ selectedSection: string }>({
     selectedSection: "Аватарки",
   });
-
-  const insets = useSafeAreaInsets();
 
   const [selectedSeciton, setSelectedSection] = useState<string>("Аватарки");
 
@@ -38,29 +36,11 @@ export const ShopScreen = () => {
     type: "avatar",
   });
 
-  const routes: RouteData[] = [
-    {
-      coords: { lon: 30.33018, lat: 59.945526 },
-      route: {
-        id: "",
-        title: "Kletka",
-        description: "",
-        priceRoubles: 0,
-        taskPoints: [],
-      },
-      disabled: true,
-    },
-    {
-      coords: { lon: 30.33018, lat: 59.945526 },
-      route: {
-        id: "",
-        title: "Peter I",
-        description: "",
-        priceRoubles: 0,
-        taskPoints: [],
-      },
-    },
-  ];
+  const { data, isFetched } = useRoutes();
+  const routes = useMemo(
+    () => (isFetched && data !== undefined ? data : []),
+    [isFetched, data]
+  );
 
   const { user, setUser } = useAuthStore();
 
@@ -99,7 +79,7 @@ export const ShopScreen = () => {
             descriptionText={"Все, чтобы бежать стильно"}
           />
 
-          <View className="flex items-center justify-center">
+          <View className="flex items-center justify-center pb-10">
             <SectionPicker
               options={[...SHOP_SECTIONS]}
               selectedRef={sectionRef}
@@ -118,7 +98,10 @@ export const ShopScreen = () => {
                   buttonAction: async () => {
                     await handleButton(avatar);
                   },
-                  subtitle: String(avatar.priceRoubles),
+                  subtitle:
+                    avatar.priceRoubles == 0
+                      ? "Бесплатно"
+                      : `${avatar.priceRoubles} ₽`,
                   disabled: avatar.id === user?.styles?.avatarId,
                 }))}
                 className="pb-[70px]"
@@ -126,7 +109,12 @@ export const ShopScreen = () => {
             )}
 
           {sectionRef.current?.selectedSection === "Маршруты" && (
-            <RoutesWidget routes={routes} />
+            <RoutesWidget
+              routes={routes.map((r) => ({
+                route: r,
+                disabled: false,
+              }))}
+            />
           )}
         </View>
       </ScrollView>

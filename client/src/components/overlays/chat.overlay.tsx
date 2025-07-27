@@ -24,18 +24,22 @@ import Animated, {
 } from "react-native-reanimated";
 import { twMerge } from "tailwind-merge";
 
-interface ChatScreenProps {
-  visible?: boolean;
+export interface ChatOverlayProps {
+  visible: boolean;
   onClose: () => void;
 }
 
-export const Chat = ({ visible, onClose }: ChatScreenProps) => {
+export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
   const { emit } = useSocket();
   const [message, setMessage] = useState("");
 
   const { data: avatars } = useStyles({ type: "avatar" });
-  const { chatMessages, game } = useGameStore();
+  const { chatMessages, game, setUndreadMessages } = useGameStore();
   const { user } = useAuthStore();
+
+  useEffect(() => {
+    setUndreadMessages(false);
+  }, [chatMessages]);
 
   const scrollViewRef = useRef<ScrollViewType>(null);
 

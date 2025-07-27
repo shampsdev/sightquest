@@ -64,24 +64,8 @@ export const AccountScreen = () => {
               games?.map((game) => (
                 <GameStats
                   key={game.id}
-                  membersStatistics={game.players.map((player) => {
-                    return {
-                      score: player.score,
-                      username: player.user.username,
-                      avatar: {
-                        uri: avatars?.find(
-                          (x) => x.id === player.user.styles?.avatarId
-                        )?.style.url,
-                      },
-                    };
-                  })}
-                  route={{
-                    id: "",
-                    title: "Петр I",
-                    description: "",
-                    priceRoubles: 0,
-                    taskPoints: [],
-                  }}
+                  players={game.players}
+                  route={game.route!}
                   date={new Date(game.createdAt)}
                   onPress={() => {
                     navigation.navigate("History", { gameId: game.id });

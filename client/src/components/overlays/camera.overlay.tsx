@@ -5,7 +5,6 @@ import React, { useEffect } from "react";
 import {
   Pressable,
   View,
-  ScrollView as ScrollViewType,
   Platform,
   KeyboardAvoidingView,
   StyleSheet,
@@ -20,18 +19,29 @@ import { Button } from "../ui/button";
 import { logger } from "@/shared/instances/logger.instance";
 import { useCamera } from "@/shared/hooks/useCamera";
 import { CameraView } from "expo-camera";
+import { ImageResult } from "expo-image-manipulator";
+import { useOverlays } from '@/shared/hooks/useOverlays';
 
-interface CameraOverlayProps {
-  visible?: boolean;
-  onClose: () => void;
-  onSucces: () => void;
+interface CompleteTaskCameraAction {
+  type: "completeTask";
+  taskId: string;
+  photo?: ImageResult;
 }
 
-export const CameraOverlay = ({
-  visible,
-  onClose,
-  onSucces,
-}: CameraOverlayProps) => {
+interface CatchPlayerCameraAction {
+  type: "catchPlayer";
+  playerId: string;
+  photo?: ImageResult;
+}
+
+export type CameraAction = CompleteTaskCameraAction | CatchPlayerCameraAction;
+
+export interface CameraOverlayProps {
+  visible?: boolean;
+  action: CameraAction;
+}
+
+export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
   const {
     cameraRef,
     permission,
@@ -42,6 +52,7 @@ export const CameraOverlay = ({
   } = useCamera();
 
   const opacity = useSharedValue(0);
+  const { closeOverlay, openOverlay } = useOverlays();
 
   useEffect(() => {
     if (visible) {
@@ -58,6 +69,16 @@ export const CameraOverlay = ({
   if (!permission) {
     return <View />;
   }
+
+  const onClose = () => {
+    closeOverlay("camera");
+  };
+
+  const onSucces = (photo: ImageResult) => {
+    closeOverlay("camera");
+    openOverlay("sendPhoto", { action: { ...action, photo } });
+  };
+
   return (
     <Animated.View
       style={animatedStyle}
@@ -90,12 +111,13 @@ export const CameraOverlay = ({
               onPress={requestPermission}
             />
           )}
-          <View className=" h-[360px] mx-auto rounded-[16px] z-10 overflow-hidden">
+          <View className="w-full aspect-square mx-auto rounded-[16px] z-10 overflow-hidden">
             {permission.granted && visible && (
               <CameraView
                 style={styles.camera}
                 ref={cameraRef}
                 facing={facing}
+                ratio="1:1"
               />
             )}
           </View>
@@ -111,9 +133,9 @@ export const CameraOverlay = ({
             onPress={async () => {
               try {
                 const photo = await takePhoto();
-                onSucces();
+                if (photo) onSucces(photo);
               } catch (error) {
-                logger.error("ui", "Error taking photo");
+                logger.error("ui", "Error taking photo", error);
               }
             }}
           >
@@ -135,9 +157,7 @@ export const CameraOverlay = ({
 const styles = StyleSheet.create({
   camera: {
     flex: 1,
-    width: 360,
-    height: 360,
-    marginLeft: "auto",
-    marginRight: "auto",
+    width: "100%",
+    height: "100%",
   },
 });
