@@ -19,8 +19,8 @@ import { Button } from "../ui/button";
 import { logger } from "@/shared/instances/logger.instance";
 import { useCamera } from "@/shared/hooks/useCamera";
 import { CameraView } from "expo-camera";
-import { useOverlays } from "@/shared/providers/overlay.provider";
 import { ImageResult } from "expo-image-manipulator";
+import { useOverlays } from '@/shared/hooks/useOverlays';
 
 interface CompleteTaskCameraAction {
   type: "completeTask";

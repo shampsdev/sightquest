@@ -26,7 +26,9 @@ interface ChatMessage {
 
 interface StoreState {
   game: Game | null;
+
   chatMessages: ChatMessageGroup[];
+  unreadMessages: boolean;
 
   /* actions */
   setGame: (g: Game | null) => void;
@@ -37,6 +39,7 @@ interface StoreState {
   updatePlayerScore: (userId: string, score: number) => void;
   updatePlayerRole: (userId: string, role: Role) => void;
   addMessage: (msg: ChatMessage) => void;
+  setUndreadMessages: (unreadMessages: boolean) => void;
   resetChat: () => void;
   setRoute: (route: Route | null) => void;
   setPoll: (poll: Poll | null) => void;
@@ -49,7 +52,9 @@ export const useGameStore = create<StoreState>()(
     persist(
       (set, get) => ({
         game: null,
+
         chatMessages: [],
+        unreadMessages: false,
 
         setGame: (game) => set({ game }),
 
@@ -111,6 +116,12 @@ export const useGameStore = create<StoreState>()(
                 messages: [data],
               });
             }
+            state.unreadMessages = true;
+          }),
+
+        setUndreadMessages: (unreadMessages) =>
+          set((state) => {
+            state.unreadMessages = unreadMessages;
           }),
 
         addCompletedTaskPoint: (taskPoint) =>

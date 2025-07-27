@@ -34,8 +34,12 @@ export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
   const [message, setMessage] = useState("");
 
   const { data: avatars } = useStyles({ type: "avatar" });
-  const { chatMessages, game } = useGameStore();
+  const { chatMessages, game, setUndreadMessages } = useGameStore();
   const { user } = useAuthStore();
+
+  useEffect(() => {
+    setUndreadMessages(false);
+  }, [chatMessages]);
 
   const scrollViewRef = useRef<ScrollViewType>(null);
 

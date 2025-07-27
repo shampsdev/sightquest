@@ -1,27 +1,14 @@
-import { createContext, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   OverlayName,
   OverlayPropsMap,
   overlayRegistry,
 } from "../interfaces/overlays";
+import { OverlayContext } from "../hooks/useOverlays";
 
 type OverlayState = Partial<
   Record<OverlayName, { visible: boolean; props?: any }>
 >;
-
-interface OverlayContextValue {
-  openOverlay<T extends OverlayName>(name: T, props?: OverlayPropsMap[T]): void;
-  closeOverlay(name?: OverlayName): void;
-  isOverlayOpen(name?: OverlayName): boolean;
-}
-
-const OverlayContext = createContext<OverlayContextValue | null>(null);
-
-export const useOverlays = (): OverlayContextValue => {
-  const ctx = useContext(OverlayContext);
-  if (!ctx) throw new Error("useOverlays must be inside OverlayProvider");
-  return ctx;
-};
 
 export const OverlayProvider: React.FC<{
   children: React.ReactNode;
@@ -53,21 +40,24 @@ export const OverlayProvider: React.FC<{
     }
   };
 
-  const isOverlayOpen = (name?: OverlayName): boolean => {
-    if (name) {
-      return !!state[name]?.visible;
-    }
-    return Object.values(state).some((overlay) => overlay?.visible);
-  };
-
-  const ctxValue: OverlayContextValue = {
-    openOverlay,
-    closeOverlay,
-    isOverlayOpen,
-  };
+  const isOverlayOpen = useCallback(
+    (name?: OverlayName): boolean => {
+      if (name) {
+        return !!state[name]?.visible;
+      }
+      return Object.values(state).some((overlay) => overlay?.visible);
+    },
+    [state]
+  );
 
   return (
-    <OverlayContext.Provider value={ctxValue}>
+    <OverlayContext.Provider
+      value={{
+        openOverlay,
+        closeOverlay,
+        isOverlayOpen,
+      }}
+    >
       {children}
       {Object.entries(overlayRegistry).map(([name, Component]) => {
         const key = name as OverlayName;

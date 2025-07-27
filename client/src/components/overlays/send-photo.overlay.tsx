@@ -17,8 +17,8 @@ import { Button } from "../ui/button";
 import { uploadImageToS3 } from "@/shared/api/s3.api";
 import { logger } from "@/shared/instances/logger.instance";
 import { useSocket } from "@/shared/hooks/useSocket";
-import { useOverlays } from "@/shared/providers/overlay.provider";
 import { CameraAction } from "./camera.overlay";
+import { useOverlays } from '@/shared/hooks/useOverlays';
 
 export interface SendPhotoOverlayProps {
   visible?: boolean;

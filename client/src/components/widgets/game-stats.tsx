@@ -8,24 +8,26 @@ interface Pressable {
 }
 
 export const GameStats = ({
-  membersStatistics,
+  players,
   date,
   route,
   onPress,
 }: GameStatistics & Pressable) => {
-  const avatars = membersStatistics.map((user) => user.avatar);
+  const users = players.map((player) => player.user);
 
   return (
     <Pressable onPress={onPress}>
       <View className="flex w-full flex-row items-center justify-between py-[20px] px-[27.5px]">
-        <AvatarStack avatars={avatars} />
+        <AvatarStack users={users} />
         <View className="flex flex-col gap-2">
           <Text className="text-text_primary text-[18px] font-bounded-regular">
             {date.toLocaleDateString("ru-RU")}
           </Text>
-          <Text className="text-[#b6b6b6] font-onest-regular text-[16px]">
-            Маршрут: {route.title}
-          </Text>
+          {route && (
+            <Text className="text-[#b6b6b6] font-onest-regular text-[16px]">
+              Маршрут: {route.title}
+            </Text>
+          )}
         </View>
         <Icons.Eye.Default />
       </View>

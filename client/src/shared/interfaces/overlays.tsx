@@ -1,10 +1,19 @@
-import { ChatOverlay, ChatOverlayProps } from "../../components/overlays/chat.overlay";
+import {
+  ChatOverlay,
+  ChatOverlayProps,
+} from "../../components/overlays/chat.overlay";
 import {
   TaskCompletedOverlay,
   TaskCompletedOverlayProps,
 } from "../../components/overlays/task-completed.overlay";
-import { PauseOverlay, PauseOverlayProps } from "../../components/overlays/pause.overlay";
-import { CameraOverlay, CameraOverlayProps } from "../../components/overlays/camera.overlay";
+import {
+  PauseOverlay,
+  PauseOverlayProps,
+} from "../../components/overlays/pause.overlay";
+import {
+  CameraOverlay,
+  CameraOverlayProps,
+} from "../../components/overlays/camera.overlay";
 import {
   UpdateRoleOverlay,
   UpdateRoleOverlayProps,
@@ -13,7 +22,7 @@ import {
   SendPhotoOverlay,
   SendPhotoOverlayProps,
 } from "../../components/overlays/send-photo.overlay";
-import React from "react";
+import { StartGameOverlay, StartGameOverlayProps } from '@/components/overlays/start-game.overlay';
 
 export interface OverlayPropsMap {
   chat: Omit<ChatOverlayProps, "visible">;
@@ -22,6 +31,7 @@ export interface OverlayPropsMap {
   camera: Omit<CameraOverlayProps, "visible">;
   updateRole: Omit<UpdateRoleOverlayProps, "visible">;
   sendPhoto: Omit<SendPhotoOverlayProps, "visible">;
+  startGame: Omit<StartGameOverlayProps, "visible">;
 }
 
 export type OverlayName = keyof OverlayPropsMap;
@@ -40,4 +50,5 @@ export const overlayRegistry: {
   camera: CameraOverlay,
   updateRole: UpdateRoleOverlay,
   sendPhoto: SendPhotoOverlay,
+  startGame: StartGameOverlay,
 };

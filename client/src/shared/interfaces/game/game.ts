@@ -13,6 +13,6 @@ export interface Game {
   players: Player[];
   state: GameState;
   activePoll: Poll | null;
-  route: Route | null;
+  route: Route | null; // we know that these will not be null if game is not lobby
   completedTaskPoints: CompletedTaskPoint[];
 }

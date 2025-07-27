@@ -17,7 +17,7 @@ import { twMerge } from "tailwind-merge";
 import { AvatarCard } from "../widgets/avatar-card";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import { Player } from "@/shared/interfaces/game/player";
-import { useOverlays } from "@/shared/providers/overlay.provider";
+import { useOverlays } from '@/shared/hooks/useOverlays';
 
 export interface UpdateRoleOverlayProps {
   visible?: boolean;

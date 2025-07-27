@@ -1,10 +1,8 @@
 import { View } from "react-native";
 import { RouteCard } from "../route-card";
-import { Coords } from "@/shared/interfaces/coords";
 import { Route } from "@/shared/interfaces/route";
 
 export interface RouteData {
-  coords: Coords;
   route: Route;
   disabled?: boolean;
 }
@@ -21,7 +19,6 @@ export const RoutesWidget = (props: RoutesWidgetProps) => {
           key={index}
           title={route.route.title}
           route={route.route}
-          coords={route.coords}
           disabled={route.disabled}
         />
       ))}

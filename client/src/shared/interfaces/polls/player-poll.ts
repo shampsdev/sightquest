@@ -12,9 +12,9 @@ interface PlayerPollData extends PollData {
 
 interface PlayerPollResult extends PollResult {
   playerCatch: {
-    runner: Player;
-    catchedBy: Player;
-    photo: string;
+    approved: boolean;
+    catcherReward: number;
+    newRunner: Player;
   };
 }
 

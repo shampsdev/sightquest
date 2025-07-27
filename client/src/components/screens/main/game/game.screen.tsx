@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ImageSourcePropType, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { Camera } from "@rnmapbox/maps";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { StatusBar } from "expo-status-bar";
@@ -9,11 +9,9 @@ import { Avatar } from "@/components/ui/avatar";
 import { AvatarStackSmall } from "@/components/ui/avatar-stack";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
-import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { Button } from "@/components/ui/button";
 import { Map } from "@/components/widgets/map";
 import { LeaderboardSheet } from "@/components/widgets/leaderboard-sheet";
-import { useStyles } from "@/shared/api/hooks/useStyles";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
@@ -28,9 +26,11 @@ import { ModalCardProps } from "@/components/widgets/modal-card";
 import { useModal } from "@/shared/hooks/useModal";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
 import { PlaceMarker } from "@/components/ui/map/place-marker";
-import { hasAvatar, isMe } from "@/shared/interfaces/user";
-import { useOverlays } from "@/shared/providers/overlay.provider";
 import { isPlayerPoll } from "@/shared/interfaces/polls/player-poll";
+import { hasAvatar, isMe } from "@/shared/interfaces/user";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { PlayerMarker } from "@/components/ui/map/player-marker";
+import { useOverlays } from "@/shared/hooks/useOverlays";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -39,20 +39,37 @@ type NavProp = StackNavigationProp<
 
 export const GameScreen = () => {
   const { openOverlay, closeOverlay, isOverlayOpen } = useOverlays();
+  const { getStyle } = useStyles({ type: "avatar" });
 
   const cameraRef = useRef<Camera>(null);
 
   const navigation = useNavigation<NavProp>();
-  const { game, updateStatus, resetChat, setGame, addCompletedTaskPoint } =
-    useGameStore();
+  const {
+    game,
+    updateStatus,
+    resetChat,
+    unreadMessages,
+    setGame,
+    addCompletedTaskPoint,
+  } = useGameStore();
   const { location } = useGeolocationStore();
   const { user } = useAuthStore();
-  const { emit, on } = useSocket();
-  const { data: avatars, getStyle } = useStyles({ type: "avatar" });
+  const { emit } = useSocket();
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
   const leaderboardSheet = useRef<BottomSheet>(null);
 
   const { setModalOpen } = useModal();
+
+  useEffect(() => {
+    openOverlay("startGame", {
+      players: game?.players,
+      route: game?.route ?? undefined,
+    });
+    setTimeout(() => {
+      console.log("whaat");
+      closeOverlay("startGame");
+    }, 3000);
+  }, []);
 
   const togglePauseGame = useCallback(() => {
     if (!game) return;
@@ -88,28 +105,15 @@ export const GameScreen = () => {
         openOverlay("taskCompleted");
       }
     }
-    if (isTaskPoll(poll) && poll.state === "finished") {
-      if (poll.result.taskComplete.approved) {
+    if (isPlayerPoll(poll) && poll.state === "finished") {
+      if (poll.result.playerCatch.approved) {
         closeOverlay();
-        addCompletedTaskPoint(poll.result.taskComplete.completedTaskPoint);
       }
     }
 
-    if (isPause(poll) && poll.state === "active")
-      openOverlay("pause", undefined);
+    if (isPause(poll) && poll.state === "active") openOverlay("pause");
     if (isPause(poll) && poll.state === "finished") closeOverlay();
   }, [game?.activePoll]);
-
-  on("playerRoleUpdated", ({ player, role }) => {
-    // if (role == "catcher")
-    //   openOverlay("updateRole", {
-    //     player,
-    //   });
-    // setTimeout(() => {
-    //   console.log("HEEEEEEEEEey")
-    //   closeOverlay();
-    // }, 5000);
-  });
 
   const players = game?.players ?? [];
 
@@ -138,7 +142,7 @@ export const GameScreen = () => {
     }
   }, [location]);
 
-  const modalOptions: ModalCardProps = {
+  const exitModalOptions: ModalCardProps = {
     title: "Выйти из игры?",
     subtitle:
       "Вы точно хотите завершить забег? Ваш прогресс будет сохранён, но бегуны разбегутся..",
@@ -159,27 +163,19 @@ export const GameScreen = () => {
   return (
     <View className="flex-1">
       <Map>
-        {players && game && user && location && (
-          <>
-            {players.map((player, index) => (
-              <PlayerMarker
-                key={index}
-                coordinate={
-                  isMe(player.user, user)
-                    ? { lon: location[0], lat: location[1] }
-                    : player.location
-                }
-                pulse={player.role == "catcher"}
-                name={player.user.name}
-                avatarSrc={{
-                  uri:
-                    hasAvatar(player.user) &&
-                    getStyle(player.user.styles.avatarId)?.style.url,
-                }}
-              />
-            ))}
-          </>
-        )}
+        {players &&
+          players.map(
+            (player, index) =>
+              user &&
+              (isMe(player.user, user) ||
+                (player.location.lat !== 0 && player.location.lon)) && (
+                <PlayerMarker
+                  key={index}
+                  player={player}
+                  pulse={player.role == "runner"}
+                />
+              )
+          )}
         {game && game.route && (
           <RouteMarker
             path={game.route.taskPoints}
@@ -189,12 +185,13 @@ export const GameScreen = () => {
                 undefined;
 
               const openTaskPoint = () => {
-                openOverlay("camera", {
-                  action: {
-                    type: "completeTask",
-                    taskId: point.id,
-                  },
-                });
+                if (!disabled)
+                  openOverlay("camera", {
+                    action: {
+                      type: "completeTask",
+                      taskId: point.id,
+                    },
+                  });
               };
 
               return (
@@ -239,7 +236,7 @@ export const GameScreen = () => {
             className="flex-1"
           />
           <Pressable onPress={openChat}>
-            <IconContainer>
+            <IconContainer active={unreadMessages}>
               <Icons.Chat />
             </IconContainer>
           </Pressable>
@@ -249,7 +246,7 @@ export const GameScreen = () => {
         <View className="w-[90%] mx-auto flex-row justify-between items-center">
           <Pressable
             onPress={() =>
-              isOverlayOpen() ? closeOverlay : () => setModalOpen(modalOptions)
+              isOverlayOpen() ? closeOverlay() : setModalOpen(exitModalOptions)
             }
           >
             <IconContainer>
@@ -275,17 +272,7 @@ export const GameScreen = () => {
               intensity={10}
             >
               <AvatarStackSmall
-                avatars={
-                  players
-                    ?.map((player) => ({
-                      uri: avatars?.find(
-                        (x) => x.id === player.user.styles?.avatarId
-                      )?.style.url,
-                    }))
-                    .filter(
-                      (avatar) => avatar !== undefined
-                    ) as ImageSourcePropType[]
-                }
+                users={players.map((p) => p.user)}
                 avatarWidth={25}
               />
               <View className="flex flex-row items-center">
@@ -306,8 +293,9 @@ export const GameScreen = () => {
               <Avatar
                 className="h-12 w-12"
                 source={{
-                  uri: avatars?.find((x) => x.id === user.styles?.avatarId)
-                    ?.style.url,
+                  uri:
+                    hasAvatar(user) &&
+                    getStyle(user.styles.avatarId)?.style.url,
                 }}
               />
             </Pressable>
@@ -317,12 +305,21 @@ export const GameScreen = () => {
       <LeaderboardSheet
         onPlayerPress={(player) => {
           const offset = 0.002;
-          cameraRef.current?.fitBounds(
-            [player.location.lon - offset, player.location.lat - offset],
-            [player.location.lon + offset, player.location.lat + offset],
-            100,
-            1000
-          );
+          if (user && isMe(player.user, user) && location) {
+            cameraRef.current?.fitBounds(
+              [location[0] - offset, location[1] - offset],
+              [location[0] + offset, location[1] + offset],
+              100,
+              1000
+            );
+          } else {
+            cameraRef.current?.fitBounds(
+              [player.location.lon - offset, player.location.lat - offset],
+              [player.location.lon + offset, player.location.lat + offset],
+              100,
+              1000
+            );
+          }
           leaderboardSheet.current?.close();
         }}
         ref={leaderboardSheet}

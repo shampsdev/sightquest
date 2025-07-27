@@ -2,10 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/header";
 import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
+import { ModalCardProps } from "@/components/widgets/modal-card";
 import { UserLobbyPreview } from "@/components/widgets/user/user-preview.lobby";
 import { GameStackParamList } from "@/routers/game.navigator";
 import { useStyles } from "@/shared/api/hooks/useStyles";
+import { useModal } from "@/shared/hooks/useModal";
+import { useOverlays } from "@/shared/hooks/useOverlays";
 import { useSocket } from "@/shared/hooks/useSocket";
+import { isAdmin } from "@/shared/interfaces/user";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
 import { useNavigation } from "@react-navigation/native";
@@ -14,6 +18,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { twMerge } from "tailwind-merge";
 
 type NavProp = StackNavigationProp<GameStackParamList, "Lobby">;
 
@@ -24,7 +29,11 @@ export const LobbyScreen = () => {
   const { user } = useAuthStore();
   const { data: avatars } = useStyles({ type: "avatar" });
 
+  const { setModalOpen } = useModal();
+  const { openOverlay } = useOverlays();
+
   const start = () => {
+    if (game?.route === null) setModalOpen(routeModalOptions);
     if (game && game?.state === "game") {
       navigation.navigate("Game");
     } else {
@@ -46,7 +55,25 @@ export const LobbyScreen = () => {
     }
   }, [game?.state]);
 
+  const routeModalOptions: ModalCardProps = {
+    title: "Ой, а маршрут?",
+    subtitle: "Выберите  из списка маршрут, где будете бегать, перед стартом",
+    buttons: [
+      {
+        text: "Выбрать",
+        type: "primary",
+        onClick: routes,
+      },
+      {
+        text: "Отмена",
+        type: "secondary",
+        onClick: () => setModalOpen(false),
+      },
+    ],
+  };
+
   const insets = useSafeAreaInsets();
+
   return (
     <View className="flex-1 bg-bg_primary" style={{ paddingTop: insets.top }}>
       <View className="flex-1 w-full">
@@ -94,14 +121,22 @@ export const LobbyScreen = () => {
           </View>
         </ScrollView>
 
-        {game && game.admin.id === user?.id && (
+        {game && user && isAdmin(user, game) ? (
           <View className="absolute bottom-12 px-[5%] gap-2 flex flex-1 flex-row items-center">
             <Button onPress={routes} className="flex-1 w-auto" text="Маршрут" />
             <Button
               onPress={start}
-              className="flex-1 w-auto bg-navigation"
+              className={`flex-1 w-auto ${
+                game.route == null && "bg-navigation"
+              }`}
               text={game && game?.state === "game" ? "К игре" : "Начать"}
             />
+          </View>
+        ) : (
+          <View className="absolute bottom-12 px-[5%] gap-2 w-full">
+            <Text className="text-text_secondary text-lg mx-auto">
+              Ожидаем старта от создателя игры...
+            </Text>
           </View>
         )}
 
