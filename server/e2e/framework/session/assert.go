@@ -39,7 +39,5 @@ func isIgnoredMapEntry(key string, _ any) bool {
 		"createdAt",
 		"updatedAt",
 		"finishedAt",
-		"score",
-		"deltaScore",
 	}, key)
 }

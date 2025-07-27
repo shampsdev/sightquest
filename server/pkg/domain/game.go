@@ -4,6 +4,7 @@ import "time"
 
 type Game struct {
 	ID                  string                `json:"id"`
+	Seed                string                `json:"seed"`
 	Admin               *User                 `json:"admin"`
 	State               GameState             `json:"state"`
 	Route               *Route                `json:"route,omitempty"`
@@ -20,6 +21,7 @@ type GameState string
 type CreateGame struct {
 	AdminID string    `json:"admin_id"`
 	State   GameState `json:"state"`
+	Seed    *string   `json:"seed"`
 }
 
 type PatchGame struct {

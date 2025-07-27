@@ -104,6 +104,14 @@ const docTemplate = `{
                     "game"
                 ],
                 "summary": "Create game",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Seed for game",
+                        "name": "seed",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -180,6 +188,18 @@ const docTemplate = `{
                         "name": "limit",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "lobby",
+                            "game",
+                            "poll",
+                            "finished"
+                        ],
+                        "type": "string",
+                        "description": "Game state",
+                        "name": "state",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -314,6 +334,42 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/route/{id}/buy": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "route"
+                ],
+                "summary": "Buy route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Route ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
                     }
                 }
             }
@@ -524,6 +580,29 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.CompletedTaskPoint": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "gameId": {
+                    "type": "string"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "playerId": {
+                    "type": "string"
+                },
+                "pointId": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "integer"
+                }
+            }
+        },
         "domain.Coordinate": {
             "type": "object",
             "properties": {
@@ -561,6 +640,12 @@ const docTemplate = `{
                 "admin": {
                     "$ref": "#/definitions/domain.User"
                 },
+                "completedTaskPoints": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.CompletedTaskPoint"
+                    }
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -578,6 +663,9 @@ const docTemplate = `{
                 },
                 "route": {
                     "$ref": "#/definitions/domain.Route"
+                },
+                "seed": {
+                    "type": "string"
                 },
                 "state": {
                     "$ref": "#/definitions/domain.GameState"
@@ -656,6 +744,9 @@ const docTemplate = `{
                 "duration": {
                     "type": "integer"
                 },
+                "finishedAt": {
+                    "type": "string"
+                },
                 "gameId": {
                     "type": "string"
                 },
@@ -682,11 +773,28 @@ const docTemplate = `{
         "domain.PollData": {
             "type": "object",
             "properties": {
+                "finishGame": {
+                    "$ref": "#/definitions/domain.PollDataFinishGame"
+                },
                 "pause": {
                     "$ref": "#/definitions/domain.PollDataPause"
                 },
-                "taskCompleted": {
-                    "$ref": "#/definitions/domain.PollDataTaskCompleted"
+                "playerCatch": {
+                    "$ref": "#/definitions/domain.PollDataPlayerCatch"
+                },
+                "taskComplete": {
+                    "$ref": "#/definitions/domain.PollDataTaskComplete"
+                }
+            }
+        },
+        "domain.PollDataFinishGame": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "suggestedBy": {
+                    "$ref": "#/definitions/domain.Player"
                 }
             }
         },
@@ -701,7 +809,21 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.PollDataTaskCompleted": {
+        "domain.PollDataPlayerCatch": {
+            "type": "object",
+            "properties": {
+                "catchedBy": {
+                    "$ref": "#/definitions/domain.Player"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "runner": {
+                    "$ref": "#/definitions/domain.Player"
+                }
+            }
+        },
+        "domain.PollDataTaskComplete": {
             "type": "object",
             "properties": {
                 "photo": {
@@ -718,16 +840,58 @@ const docTemplate = `{
         "domain.PollResult": {
             "type": "object",
             "properties": {
+                "finishGame": {
+                    "$ref": "#/definitions/domain.PollResultFinishGame"
+                },
                 "pause": {
                     "$ref": "#/definitions/domain.PollResultPause"
+                },
+                "playerCatch": {
+                    "$ref": "#/definitions/domain.PollResultPlayerCatch"
+                },
+                "taskComplete": {
+                    "$ref": "#/definitions/domain.PollResultTaskComplete"
+                }
+            }
+        },
+        "domain.PollResultFinishGame": {
+            "type": "object",
+            "properties": {
+                "approved": {
+                    "type": "boolean"
                 }
             }
         },
         "domain.PollResultPause": {
             "type": "object",
             "properties": {
-                "pausedBy": {
+                "unpausedBy": {
                     "$ref": "#/definitions/domain.Player"
+                }
+            }
+        },
+        "domain.PollResultPlayerCatch": {
+            "type": "object",
+            "properties": {
+                "approved": {
+                    "type": "boolean"
+                },
+                "catcherReward": {
+                    "type": "integer"
+                },
+                "newRunner": {
+                    "$ref": "#/definitions/domain.Player"
+                }
+            }
+        },
+        "domain.PollResultTaskComplete": {
+            "type": "object",
+            "properties": {
+                "approved": {
+                    "type": "boolean"
+                },
+                "completedTaskPoint": {
+                    "$ref": "#/definitions/domain.CompletedTaskPoint"
                 }
             }
         },
@@ -746,11 +910,15 @@ const docTemplate = `{
             "type": "string",
             "enum": [
                 "pause",
-                "taskCompleted"
+                "taskComplete",
+                "playerCatch",
+                "finishGame"
             ],
             "x-enum-varnames": [
                 "PollTypePause",
-                "PollTypeTaskCompleted"
+                "PollTypeTaskComplete",
+                "PollTypePlayerCatch",
+                "PollTypeFinishGame"
             ]
         },
         "domain.Route": {
@@ -895,15 +1063,32 @@ const docTemplate = `{
             }
         },
         "domain.VoteData": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                }
+            }
         },
         "domain.VoteType": {
             "type": "string",
             "enum": [
-                "unpause"
+                "unpause",
+                "taskApprove",
+                "taskReject",
+                "playerCatchApprove",
+                "playerCatchReject",
+                "finishGameApprove",
+                "finishGameReject"
             ],
             "x-enum-varnames": [
-                "VoteTypeUnpause"
+                "VoteTypeUnpause",
+                "VoteTypeTaskApprove",
+                "VoteTypeTaskReject",
+                "VoteTypePlayerCatchApprove",
+                "VoteTypePlayerCatchReject",
+                "VoteTypeFinishGameApprove",
+                "VoteTypeFinishGameReject"
             ]
         },
         "image.UploadResponse": {

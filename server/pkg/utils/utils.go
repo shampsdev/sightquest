@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"math/rand"
+	"math/rand/v2"
 )
 
 func PtrTo[T any](t T) *T {
@@ -18,7 +18,7 @@ func RandomChoice[T any](choices []T, weigths []int) T {
 		total += w
 	}
 
-	r := rand.Intn(total)
+	r := rand.N(total)
 	for i, w := range weigths {
 		r -= w
 		if r < 0 {
@@ -26,4 +26,13 @@ func RandomChoice[T any](choices []T, weigths []int) T {
 		}
 	}
 	panic("unreachable")
+}
+
+func NRandomLetters(n int) string {
+	letters := []rune("abcdefghijklmnopqrstuvwxyz")
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.N(len(letters))]
+	}
+	return string(b)
 }

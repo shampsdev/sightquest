@@ -6,6 +6,21 @@ definitions:
       user:
         $ref: '#/definitions/domain.User'
     type: object
+  domain.CompletedTaskPoint:
+    properties:
+      createdAt:
+        type: string
+      gameId:
+        type: string
+      photo:
+        type: string
+      playerId:
+        type: string
+      pointId:
+        type: string
+      score:
+        type: integer
+    type: object
   domain.Coordinate:
     properties:
       lat:
@@ -30,6 +45,10 @@ definitions:
         $ref: '#/definitions/domain.Poll'
       admin:
         $ref: '#/definitions/domain.User'
+      completedTaskPoints:
+        items:
+          $ref: '#/definitions/domain.CompletedTaskPoint'
+        type: array
       createdAt:
         type: string
       finishedAt:
@@ -42,6 +61,8 @@ definitions:
         type: array
       route:
         $ref: '#/definitions/domain.Route'
+      seed:
+        type: string
       state:
         $ref: '#/definitions/domain.GameState'
     type: object
@@ -95,6 +116,8 @@ definitions:
         $ref: '#/definitions/domain.PollData'
       duration:
         type: integer
+      finishedAt:
+        type: string
       gameId:
         type: string
       id:
@@ -112,10 +135,21 @@ definitions:
     type: object
   domain.PollData:
     properties:
+      finishGame:
+        $ref: '#/definitions/domain.PollDataFinishGame'
       pause:
         $ref: '#/definitions/domain.PollDataPause'
-      taskCompleted:
-        $ref: '#/definitions/domain.PollDataTaskCompleted'
+      playerCatch:
+        $ref: '#/definitions/domain.PollDataPlayerCatch'
+      taskComplete:
+        $ref: '#/definitions/domain.PollDataTaskComplete'
+    type: object
+  domain.PollDataFinishGame:
+    properties:
+      comment:
+        type: string
+      suggestedBy:
+        $ref: '#/definitions/domain.Player'
     type: object
   domain.PollDataPause:
     properties:
@@ -124,7 +158,16 @@ definitions:
       pausedBy:
         $ref: '#/definitions/domain.Player'
     type: object
-  domain.PollDataTaskCompleted:
+  domain.PollDataPlayerCatch:
+    properties:
+      catchedBy:
+        $ref: '#/definitions/domain.Player'
+      photo:
+        type: string
+      runner:
+        $ref: '#/definitions/domain.Player'
+    type: object
+  domain.PollDataTaskComplete:
     properties:
       photo:
         type: string
@@ -135,13 +178,40 @@ definitions:
     type: object
   domain.PollResult:
     properties:
+      finishGame:
+        $ref: '#/definitions/domain.PollResultFinishGame'
       pause:
         $ref: '#/definitions/domain.PollResultPause'
+      playerCatch:
+        $ref: '#/definitions/domain.PollResultPlayerCatch'
+      taskComplete:
+        $ref: '#/definitions/domain.PollResultTaskComplete'
+    type: object
+  domain.PollResultFinishGame:
+    properties:
+      approved:
+        type: boolean
     type: object
   domain.PollResultPause:
     properties:
-      pausedBy:
+      unpausedBy:
         $ref: '#/definitions/domain.Player'
+    type: object
+  domain.PollResultPlayerCatch:
+    properties:
+      approved:
+        type: boolean
+      catcherReward:
+        type: integer
+      newRunner:
+        $ref: '#/definitions/domain.Player'
+    type: object
+  domain.PollResultTaskComplete:
+    properties:
+      approved:
+        type: boolean
+      completedTaskPoint:
+        $ref: '#/definitions/domain.CompletedTaskPoint'
     type: object
   domain.PollState:
     enum:
@@ -154,11 +224,15 @@ definitions:
   domain.PollType:
     enum:
     - pause
-    - taskCompleted
+    - taskComplete
+    - playerCatch
+    - finishGame
     type: string
     x-enum-varnames:
     - PollTypePause
-    - PollTypeTaskCompleted
+    - PollTypeTaskComplete
+    - PollTypePlayerCatch
+    - PollTypeFinishGame
   domain.Route:
     properties:
       bought:
@@ -252,13 +326,28 @@ definitions:
         $ref: '#/definitions/domain.VoteType'
     type: object
   domain.VoteData:
+    properties:
+      comment:
+        type: string
     type: object
   domain.VoteType:
     enum:
     - unpause
+    - taskApprove
+    - taskReject
+    - playerCatchApprove
+    - playerCatchReject
+    - finishGameApprove
+    - finishGameReject
     type: string
     x-enum-varnames:
     - VoteTypeUnpause
+    - VoteTypeTaskApprove
+    - VoteTypeTaskReject
+    - VoteTypePlayerCatchApprove
+    - VoteTypePlayerCatchReject
+    - VoteTypeFinishGameApprove
+    - VoteTypeFinishGameReject
   image.UploadResponse:
     properties:
       url:
@@ -324,6 +413,11 @@ paths:
     post:
       consumes:
       - application/json
+      parameters:
+      - description: Seed for game
+        in: query
+        name: seed
+        type: string
       produces:
       - application/json
       responses:
@@ -372,6 +466,15 @@ paths:
         name: limit
         required: true
         type: integer
+      - description: Game state
+        enum:
+        - lobby
+        - game
+        - poll
+        - finished
+        in: query
+        name: state
+        type: string
       produces:
       - application/json
       responses:
@@ -463,6 +566,28 @@ paths:
         "404":
           description: Not Found
       summary: Get route by ID
+      tags:
+      - route
+  /route/{id}/buy:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Buy route
       tags:
       - route
   /styles:

@@ -34,10 +34,14 @@ func NewGame(
 	}
 }
 
-func (g *Game) CreateGame(ctx *Context) (*domain.Game, error) {
+func (g *Game) CreateGame(ctx *Context, seed *string) (*domain.Game, error) {
+	if seed == nil {
+		seed = utils.PtrTo(utils.NRandomLetters(16))
+	}
 	cg := &domain.CreateGame{
 		AdminID: ctx.UserID,
 		State:   domain.GameStateLobby,
+		Seed:    seed,
 	}
 	id, err := g.gameRepo.Create(ctx, cg)
 	if err != nil {
@@ -102,7 +106,7 @@ func (g *Game) UpdateGame(ctx context.Context, gameID string, patch *domain.Patc
 	return nil
 }
 
-func (g *Game) GetLastGamesByPlayer(ctx context.Context, playerID string, limit int) ([]*domain.Game, error) {
+func (g *Game) GetLastGamesByPlayer(ctx context.Context, playerID string, limit int, state *domain.GameState) ([]*domain.Game, error) {
 	if limit <= 0 {
 		return nil, fmt.Errorf("limit must be positive")
 	}
@@ -111,6 +115,7 @@ func (g *Game) GetLastGamesByPlayer(ctx context.Context, playerID string, limit 
 		PlayerID:            &playerID,
 		SortByCreatedAtDesc: true,
 		Limit:               &limit,
+		State:               state,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get player games: %w", err)

@@ -17,6 +17,7 @@ func TestMain(m *testing.M) {
 		event.ErrorEvent,
 		event.PollEvent,
 		event.ScoreUpdatedEvent,
+		event.FinishedGameEvent,
 	)
 	fw.TestMain(m)
 }

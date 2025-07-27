@@ -7,7 +7,7 @@
           "Event": "authed",
           "Data": {
             "user": {
-              "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+              "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
               "name": "",
               "styles": {
                 "avatarId": ""
@@ -21,7 +21,7 @@
           "Data": {
             "game": {
               "admin": {
-                "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+                "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -29,20 +29,20 @@
                 "username": "user1"
               },
               "completedTaskPoints": [],
-              "createdAt": "2025-07-08T22:00:03.834219Z",
+              "createdAt": "2025-07-27T20:21:34.65327Z",
               "finishedAt": null,
-              "id": "459372",
+              "id": "126244",
               "players": [
                 {
-                  "gameId": "459372",
+                  "gameId": "126244",
                   "location": {
                     "lat": 0,
                     "lon": 0
                   },
-                  "role": "runner",
+                  "role": "catcher",
                   "score": 0,
                   "user": {
-                    "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+                    "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -51,6 +51,7 @@
                   }
                 }
               ],
+              "seed": "shampiniony",
               "state": "lobby"
             }
           }
@@ -66,15 +67,15 @@
           "Event": "playerJoined",
           "Data": {
             "player": {
-              "gameId": "459372",
+              "gameId": "126244",
               "location": {
                 "lat": 0,
                 "lon": 0
               },
-              "role": "runner",
+              "role": "catcher",
               "score": 0,
               "user": {
-                "id": "13231dc2-9c7b-457f-9b6a-6d691bd452e7",
+                "id": "1bfe1828-1ecd-4b5c-abc3-89706291832d",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -90,7 +91,7 @@
           "Event": "authed",
           "Data": {
             "user": {
-              "id": "13231dc2-9c7b-457f-9b6a-6d691bd452e7",
+              "id": "1bfe1828-1ecd-4b5c-abc3-89706291832d",
               "name": "",
               "styles": {
                 "avatarId": ""
@@ -104,7 +105,7 @@
           "Data": {
             "game": {
               "admin": {
-                "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+                "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -112,20 +113,20 @@
                 "username": "user1"
               },
               "completedTaskPoints": [],
-              "createdAt": "2025-07-08T22:00:03.834219Z",
+              "createdAt": "2025-07-27T20:21:34.65327Z",
               "finishedAt": null,
-              "id": "459372",
+              "id": "126244",
               "players": [
                 {
-                  "gameId": "459372",
+                  "gameId": "126244",
                   "location": {
                     "lat": 0,
                     "lon": 0
                   },
-                  "role": "runner",
+                  "role": "catcher",
                   "score": 0,
                   "user": {
-                    "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+                    "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -134,15 +135,15 @@
                   }
                 },
                 {
-                  "gameId": "459372",
+                  "gameId": "126244",
                   "location": {
                     "lat": 0,
                     "lon": 0
                   },
-                  "role": "runner",
+                  "role": "catcher",
                   "score": 0,
                   "user": {
-                    "id": "13231dc2-9c7b-457f-9b6a-6d691bd452e7",
+                    "id": "1bfe1828-1ecd-4b5c-abc3-89706291832d",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -151,6 +152,7 @@
                   }
                 }
               ],
+              "seed": "shampiniony",
               "state": "lobby"
             }
           }
@@ -166,15 +168,15 @@
           "Event": "playerLeft",
           "Data": {
             "player": {
-              "gameId": "459372",
+              "gameId": "126244",
               "location": {
                 "lat": 0,
                 "lon": 0
               },
-              "role": "runner",
+              "role": "catcher",
               "score": 0,
               "user": {
-                "id": "13231dc2-9c7b-457f-9b6a-6d691bd452e7",
+                "id": "1bfe1828-1ecd-4b5c-abc3-89706291832d",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -195,15 +197,15 @@
           "Event": "playerJoined",
           "Data": {
             "player": {
-              "gameId": "459372",
+              "gameId": "126244",
               "location": {
                 "lat": 0,
                 "lon": 0
               },
-              "role": "runner",
+              "role": "catcher",
               "score": 0,
               "user": {
-                "id": "5d4f1a9e-43b9-4e91-b1f3-ae8cb722cea2",
+                "id": "1c57a3f9-e6cf-4a64-b9e7-847e5545c8bc",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -219,7 +221,7 @@
           "Event": "authed",
           "Data": {
             "user": {
-              "id": "5d4f1a9e-43b9-4e91-b1f3-ae8cb722cea2",
+              "id": "1c57a3f9-e6cf-4a64-b9e7-847e5545c8bc",
               "name": "",
               "styles": {
                 "avatarId": ""
@@ -233,7 +235,7 @@
           "Data": {
             "game": {
               "admin": {
-                "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+                "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -241,20 +243,20 @@
                 "username": "user1"
               },
               "completedTaskPoints": [],
-              "createdAt": "2025-07-08T22:00:03.834219Z",
+              "createdAt": "2025-07-27T20:21:34.65327Z",
               "finishedAt": null,
-              "id": "459372",
+              "id": "126244",
               "players": [
                 {
-                  "gameId": "459372",
+                  "gameId": "126244",
                   "location": {
                     "lat": 0,
                     "lon": 0
                   },
-                  "role": "runner",
+                  "role": "catcher",
                   "score": 0,
                   "user": {
-                    "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+                    "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -263,15 +265,15 @@
                   }
                 },
                 {
-                  "gameId": "459372",
+                  "gameId": "126244",
                   "location": {
                     "lat": 0,
                     "lon": 0
                   },
-                  "role": "runner",
+                  "role": "catcher",
                   "score": 0,
                   "user": {
-                    "id": "5d4f1a9e-43b9-4e91-b1f3-ae8cb722cea2",
+                    "id": "1c57a3f9-e6cf-4a64-b9e7-847e5545c8bc",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -280,6 +282,7 @@
                   }
                 }
               ],
+              "seed": "shampiniony",
               "state": "lobby"
             }
           }
@@ -320,7 +323,7 @@
           "Event": "authed",
           "Data": {
             "user": {
-              "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+              "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
               "name": "",
               "styles": {
                 "avatarId": ""
@@ -334,7 +337,7 @@
           "Data": {
             "game": {
               "admin": {
-                "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+                "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
                 "name": "",
                 "styles": {
                   "avatarId": ""
@@ -342,20 +345,20 @@
                 "username": "user1"
               },
               "completedTaskPoints": [],
-              "createdAt": "2025-07-08T22:00:03.834219Z",
+              "createdAt": "2025-07-27T20:21:34.65327Z",
               "finishedAt": null,
-              "id": "459372",
+              "id": "126244",
               "players": [
                 {
-                  "gameId": "459372",
+                  "gameId": "126244",
                   "location": {
                     "lat": 0,
                     "lon": 0
                   },
-                  "role": "runner",
+                  "role": "catcher",
                   "score": 0,
                   "user": {
-                    "id": "fb52fb6d-6726-416a-8a07-1e54c7c889cd",
+                    "id": "4a329550-bd62-4aaf-abda-2e848f5eedba",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -364,7 +367,7 @@
                   }
                 },
                 {
-                  "gameId": "459372",
+                  "gameId": "126244",
                   "location": {
                     "lat": 0,
                     "lon": 0
@@ -372,7 +375,7 @@
                   "role": "runner",
                   "score": 0,
                   "user": {
-                    "id": "5d4f1a9e-43b9-4e91-b1f3-ae8cb722cea2",
+                    "id": "1c57a3f9-e6cf-4a64-b9e7-847e5545c8bc",
                     "name": "",
                     "styles": {
                       "avatarId": ""
@@ -422,6 +425,7 @@
                 ],
                 "title": "Route 1"
               },
+              "seed": "shampiniony",
               "state": "game"
             }
           }

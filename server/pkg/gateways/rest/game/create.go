@@ -11,6 +11,7 @@ import (
 // @Summary Create game
 // @Tags game
 // @Accept json
+// @Param seed query string false "Seed for game"
 // @Produce json
 // @Schemes http https
 // @Success 200 {object} domain.Game
@@ -19,7 +20,11 @@ import (
 // @Security ApiKeyAuth
 func Create(cases *usecase.Cases) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		game, err := cases.Game.CreateGame(middlewares.MustUsecaseCtx(c))
+		var seed *string
+		if seedStr := c.Query("seed"); seedStr != "" {
+			seed = &seedStr
+		}
+		game, err := cases.Game.CreateGame(middlewares.MustUsecaseCtx(c), seed)
 		if ginerr.AbortIfErr(c, err, 400, "failed to create game") {
 			return
 		}

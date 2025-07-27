@@ -33,8 +33,8 @@ func NewGame(db *pgxpool.Pool, ur repo.User, rr repo.Route) *Game {
 func (g *Game) Create(ctx context.Context, game *domain.CreateGame) (string, error) {
 	gameID := g.generateID()
 	q := g.psql.Insert("game").
-		Columns("id", "admin_id", "state").
-		Values(gameID, game.AdminID, game.State)
+		Columns("id", "admin_id", "state", "seed").
+		Values(gameID, game.AdminID, game.State, game.Seed)
 
 	sql, args, err := q.ToSql()
 	if err != nil {
@@ -79,6 +79,7 @@ func (g *Game) Patch(ctx context.Context, id string, patch *domain.PatchGame) er
 func (g *Game) Filter(ctx context.Context, filter *domain.FilterGame) ([]*domain.Game, error) {
 	q := g.psql.Select(
 		"g.id",
+		"g.seed",
 		"g.state",
 		"g.admin_id",
 		"g.route_id",
@@ -126,6 +127,7 @@ func (g *Game) Filter(ctx context.Context, filter *domain.FilterGame) ([]*domain
 		routeID := new(string)
 		err := rows.Scan(
 			&game.ID,
+			&game.Seed,
 			&game.State,
 			&game.Admin.ID,
 			&routeID,

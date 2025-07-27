@@ -47,7 +47,7 @@ func (c *Client) MustCreateGame() *domain.Game {
 }
 
 func (c *Client) CreateGame() (*domain.Game, error) {
-	u, err := url.Parse(fmt.Sprintf("%s/game", c.FW.APIHost))
+	u, err := url.Parse(fmt.Sprintf("%s/game?seed=shampiniony", c.FW.APIHost))
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse url: %w", err)
 	}

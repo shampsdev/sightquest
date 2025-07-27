@@ -4,9 +4,11 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/shampsdev/sightquest/server/pkg/domain"
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/ginerr"
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/middlewares"
 	"github.com/shampsdev/sightquest/server/pkg/usecase"
+	"github.com/shampsdev/sightquest/server/pkg/utils"
 )
 
 // Latest godoc
@@ -17,6 +19,7 @@ import (
 // @Schemes http https
 // @Security ApiKeyAuth
 // @Param limit query int true "Number of games to return"
+// @Param state query domain.GameState false "Game state"
 // @Success 200 {array} domain.Game
 // @Failure 400
 // @Failure 404
@@ -31,7 +34,12 @@ func Latest(cases *usecase.Cases) gin.HandlerFunc {
 			return
 		}
 
-		games, err := cases.Game.GetLastGamesByPlayer(ctx, ctx.UserID, limit)
+		var state *domain.GameState
+		if stateStr := c.Query("state"); stateStr != "" {
+			state = utils.PtrTo(domain.GameState(stateStr))
+		}
+
+		games, err := cases.Game.GetLastGamesByPlayer(ctx, ctx.UserID, limit, state)
 		if ginerr.AbortIfErr(c, err, 404, "failed to get player games") {
 			return
 		}
