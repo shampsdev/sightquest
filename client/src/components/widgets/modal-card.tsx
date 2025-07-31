@@ -25,7 +25,7 @@ export const ModalCard = ({
   return (
     <View className="absolute w-full h-full z-20 flex justify-center items-center">
       <BlurView
-        experimentalBlurMethod="dimezisBlurView"
+        
         intensity={80}
         tint="dark"
         className="absolute w-full h-full"

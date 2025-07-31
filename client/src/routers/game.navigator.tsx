@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { GameScreen } from "@/components/screens/main/game/game.screen";
@@ -9,7 +9,7 @@ import { useGameStore } from "@/shared/stores/game.store";
 import { MainStackParamList } from "./main.navigator";
 import { useGeolocationStore } from "@/shared/stores/location.store";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { RouteScreen } from '@/components/screens/main/game/route.screen';
+import { RouteScreen } from "@/components/screens/main/game/route.screen";
 
 export type GameStackParamList = {
   Lobby: undefined;
@@ -27,21 +27,18 @@ export const GameNavigator = () => {
 
   const { emit } = useSocket();
   const { setGame } = useGameStore();
-  const { data: initialGame, isLoading, error } = useGame(gameId);
-  const { user } = useAuthStore();
-  const { game } = useGameStore();
+  const { data: initialGame, isLoading } = useGame(gameId);
+  const hasJoinedGame = useRef(false);
 
   useEffect(() => {
     if (isLoading || !initialGame) return;
+    if (hasJoinedGame.current) return;
 
-    if (!game) setGame(initialGame);
-
-    if (game?.players.some((x) => x.user.id === user?.id)) {
-      return;
-    }
-
+    setGame(initialGame);
     emit("joinGame", { gameId: initialGame.id });
-  }, [isLoading, error, initialGame]);
+
+    hasJoinedGame.current = true;
+  }, [isLoading, initialGame, setGame, emit]);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

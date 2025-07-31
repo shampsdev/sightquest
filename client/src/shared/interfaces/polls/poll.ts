@@ -1,3 +1,5 @@
+import { Vote } from "./vote";
+
 export interface Poll {
   id: string;
   gameId: string;
@@ -7,6 +9,7 @@ export interface Poll {
   createdAt: string;
   data: PollData;
   result: PollResult;
+  votes?: Vote[];
 }
 
 export interface PollData {}

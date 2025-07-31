@@ -84,7 +84,7 @@ export const UserMarker = ({
       <View className="items-center">
         <View className="rounded-full overflow-hidden z-10">
           <BlurView
-            experimentalBlurMethod="dimezisBlurView"
+            
             intensity={10}
             tint="dark"
             className="px-2 py-1"

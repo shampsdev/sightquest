@@ -11,6 +11,7 @@ import { useOverlays } from "@/shared/hooks/useOverlays";
 import { Icons } from "../ui/icons/icons";
 import { CompletedTaskPoint } from "@/shared/interfaces/game/completed-task-point";
 import { IconContainer } from "../ui/icons/icon-container";
+import { usePlayer } from "@/shared/hooks/usePlayer";
 
 export interface TaskPointOverlayProps {
   visible?: boolean;
@@ -26,6 +27,8 @@ export const TaskPointOverlay = ({
   const { openOverlay, closeOverlay, isOverlayOpen } = useOverlays();
   const opacity = useSharedValue(0);
 
+  const { player } = usePlayer();
+
   useEffect(() => {
     if (visible) {
       opacity.value = withTiming(1, { duration: 300 });
@@ -39,6 +42,7 @@ export const TaskPointOverlay = ({
   }));
 
   const onButtonPress = () => {
+    if (player?.role == "catcher") return;
     closeOverlay("taskPoint");
     if (taskPoint)
       openOverlay("camera", {
@@ -114,10 +118,18 @@ export const TaskPointOverlay = ({
           </View>
           <Button
             className="bottom-12 mx-auto"
-            variant={completedTaskPoint ? "disabled" : "default"}
+            variant={
+              completedTaskPoint || player?.role == "catcher"
+                ? "disabled"
+                : "default"
+            }
             onPress={onButtonPress}
             text={
-              completedTaskPoint ? "Задание выполнено" : "Выполнить задание"
+              completedTaskPoint
+                ? "Задание выполнено"
+                : player?.role == "catcher"
+                ? "Упс, ты догонающий!"
+                : "Выполнить задание"
             }
           />
         </View>

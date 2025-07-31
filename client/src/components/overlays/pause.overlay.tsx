@@ -45,7 +45,7 @@ export const PauseOverlay = ({ visible }: PauseOverlayProps) => {
         </View>
       </View>
       <BlurView
-        experimentalBlurMethod="dimezisBlurView"
+        
         intensity={20}
         tint="dark"
         className="absolute w-full h-full z-10"

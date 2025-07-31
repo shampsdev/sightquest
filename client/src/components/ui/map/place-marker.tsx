@@ -14,8 +14,8 @@ interface PlaceMarkerProps {
 export const PlaceMarker = ({
   coordinate,
   isSelected = false,
-  allowOverlap = false,
-  allowOverlapWithPuck = false,
+  allowOverlap = true,
+  allowOverlapWithPuck = true,
   disabled = false,
   onPress = () => {},
 }: PlaceMarkerProps) => (

@@ -26,6 +26,7 @@ import { Avatar } from "../ui/avatar";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import { hasAvatar } from "@/shared/interfaces/user";
+import { Player } from '@/shared/interfaces/game/player';
 
 interface CompleteTaskCameraAction {
   type: "completeTask";
@@ -35,7 +36,7 @@ interface CompleteTaskCameraAction {
 
 interface CatchPlayerCameraAction {
   type: "catchPlayer";
-  playerId: string;
+  player: Player;
   photo?: ImageResult;
 }
 
@@ -120,7 +121,7 @@ export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
         </View>
       </View>
       <BlurView
-        experimentalBlurMethod="dimezisBlurView"
+        
         intensity={100}
         tint="dark"
         className="absolute w-full h-full z-10"
@@ -129,9 +130,11 @@ export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
       <View
         style={{ zIndex: 30 }}
         className={twMerge(
-          "py-[40px] px-[36px] h-[85%] mb-[80px] mx-auto flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
+          "px-[36px] mx-auto flex-1 rounded-[30px] w-full z-30 flex flex-col justify-center gap-16"
         )}
       >
+        <View className="h-[86px] w-full"></View>
+
         <View className="flex flex-col w-full justify-center mx-auto">
           {!permission.granted && (
             <Button
@@ -139,7 +142,7 @@ export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
               onPress={requestPermission}
             />
           )}
-          <View className="w-full aspect-square mx-auto rounded-[16px] z-10 overflow-hidden">
+          <View className="w-full aspect-square mx-auto rounded-[40px] z-10 overflow-hidden">
             {permission.granted && visible && (
               <CameraView
                 style={styles.camera}
@@ -151,7 +154,7 @@ export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
           </View>
         </View>
 
-        <View className="flex flex-row pb-12 px-5 items-center justify-between w-full">
+        <View className="flex flex-row px-5 items-center justify-between w-full">
           <IconContainer className="p-[30px] opacity-0"></IconContainer>
           <TouchableOpacity
             activeOpacity={0.8}

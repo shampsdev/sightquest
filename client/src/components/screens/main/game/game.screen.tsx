@@ -110,10 +110,14 @@ export const GameScreen = () => {
       }
     }
     if (isTaskPoll(poll) && poll.state === "finished") {
+      closeOverlay();
       if (poll.result.taskComplete.approved) {
-        closeOverlay();
         addCompletedTaskPoint(poll.result.taskComplete.completedTaskPoint);
       }
+      openOverlay("result");
+      setTimeout(() => {
+        closeOverlay("result");
+      }, 3000);
     }
 
     if (isPlayerPoll(poll) && poll.state === "active") {
@@ -122,9 +126,11 @@ export const GameScreen = () => {
       }
     }
     if (isPlayerPoll(poll) && poll.state === "finished") {
-      if (poll.result.playerCatch.approved) {
-        closeOverlay();
-      }
+      closeOverlay();
+      openOverlay("result");
+      setTimeout(() => {
+        closeOverlay("result");
+      }, 3000);
     }
 
     if (isPause(poll) && poll.state === "active") openOverlay("pause");
@@ -237,14 +243,16 @@ export const GameScreen = () => {
           {player?.role == "catcher" && (
             <Button
               onPress={() => {
-                openOverlay("camera", {
-                  action: {
-                    type: "catchPlayer",
-                    playerId:
-                      game?.players.filter((p) => p.role == "runner")[0].user
-                        .id ?? "",
-                  },
-                });
+                const runner = game?.players.filter(
+                  (p) => p.role == "runner"
+                )[0];
+                if (runner)
+                  openOverlay("camera", {
+                    action: {
+                      type: "catchPlayer",
+                      player: runner,
+                    },
+                  });
               }}
               text="Поймать"
               className="flex-1"
@@ -284,7 +292,6 @@ export const GameScreen = () => {
               className="bg-[#67676780] overflow-hidden rounded-full"
             >
               <BlurView
-                experimentalBlurMethod="dimezisBlurView"
                 className="gap-[10px] px-[20px] items-center flex flex-row justify-center"
                 intensity={10}
               >
