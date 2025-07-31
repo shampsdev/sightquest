@@ -31,6 +31,7 @@ import { hasAvatar, isMe } from "@/shared/interfaces/user";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { useOverlays } from "@/shared/hooks/useOverlays";
+import { usePlayer } from "@/shared/hooks/usePlayer";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -39,6 +40,8 @@ type NavProp = StackNavigationProp<
 
 export const GameScreen = () => {
   const { openOverlay, closeOverlay, isOverlayOpen } = useOverlays();
+
+  const { user } = useAuthStore();
   const { getStyle } = useStyles({ type: "avatar" });
 
   const cameraRef = useRef<Camera>(null);
@@ -53,10 +56,11 @@ export const GameScreen = () => {
     addCompletedTaskPoint,
   } = useGameStore();
   const { location } = useGeolocationStore();
-  const { user } = useAuthStore();
   const { emit } = useSocket();
   const [leaderboardOpened, setLeaderboardOpened] = useState<boolean>(false);
   const leaderboardSheet = useRef<BottomSheet>(null);
+
+  const { player } = usePlayer();
 
   const { setModalOpen } = useModal();
 
@@ -223,27 +227,29 @@ export const GameScreen = () => {
         />
       </Map>
       {!isOverlayOpen("chat") && (
-        <View className="absolute px-[5%] gap-4 bottom-12 flex items-center flex-row left-0 right-0 z-10">
+        <View className="absolute px-[5%] gap-4 bottom-12 flex items-center justify-between flex-row left-0 right-0 z-10">
           <Pressable onPress={togglePauseGame}>
             <IconContainer>
               {isOverlayOpen("pause") ? <Icons.Play /> : <Icons.Pause />}
             </IconContainer>
           </Pressable>
 
-          <Button
-            onPress={() => {
-              openOverlay("camera", {
-                action: {
-                  type: "catchPlayer",
-                  playerId:
-                    game?.players.filter((p) => p.role == "runner")[0].user
-                      .id ?? "",
-                },
-              });
-            }}
-            text="Поймать"
-            className="flex-1"
-          />
+          {player?.role == "catcher" && (
+            <Button
+              onPress={() => {
+                openOverlay("camera", {
+                  action: {
+                    type: "catchPlayer",
+                    playerId:
+                      game?.players.filter((p) => p.role == "runner")[0].user
+                        .id ?? "",
+                  },
+                });
+              }}
+              text="Поймать"
+              className="flex-1"
+            />
+          )}
           <Pressable onPress={openChat}>
             <IconContainer active={unreadMessages}>
               <Icons.Chat />
@@ -251,66 +257,71 @@ export const GameScreen = () => {
           </Pressable>
         </View>
       )}
-      <View className="absolute top-20 w-full z-40">
-        <View className="w-[90%] mx-auto flex-row justify-between items-center">
-          <Pressable
-            onPress={() =>
-              isOverlayOpen() ? closeOverlay() : setModalOpen(exitModalOptions)
-            }
-          >
-            <IconContainer>
-              {isOverlayOpen() ? <Icons.Back /> : <Icons.Exit />}
-            </IconContainer>
-          </Pressable>
-
-          <Pressable
-            onPress={() => {
-              closeOverlay();
-              setLeaderboardOpened(!leaderboardOpened);
-              if (leaderboardOpened) {
-                leaderboardSheet.current?.close();
-              } else {
-                leaderboardSheet.current?.snapToIndex(0);
+      {!isOverlayOpen() ? (
+        <View className="absolute top-20 w-full z-40">
+          <View className="w-[90%] mx-auto flex-row justify-between items-center">
+            <Pressable
+              onPress={() =>
+                isOverlayOpen()
+                  ? closeOverlay()
+                  : setModalOpen(exitModalOptions)
               }
-            }}
-            className="bg-[#67676780] overflow-hidden rounded-full"
-          >
-            <BlurView
-              experimentalBlurMethod="dimezisBlurView"
-              className="gap-[10px] px-[20px] items-center flex flex-row justify-center"
-              intensity={10}
             >
-              <AvatarStackSmall
-                users={players.map((p) => p.user)}
-                avatarWidth={25}
-              />
-              <View className="flex flex-row items-center">
-                <Text className="font-bounded-regular text-[#FFF]">
-                  Таблица игроков
-                </Text>
-                <View className="relative w-[20px]">
-                  <View className="absolute bottom-[-12px]">
-                    <Icons.DownArrow />
+              <IconContainer>
+                <Icons.Exit />
+              </IconContainer>
+            </Pressable>
+
+            <Pressable
+              onPress={() => {
+                setLeaderboardOpened(!leaderboardOpened);
+                if (leaderboardOpened) {
+                  leaderboardSheet.current?.close();
+                } else {
+                  leaderboardSheet.current?.snapToIndex(0);
+                }
+              }}
+              className="bg-[#67676780] overflow-hidden rounded-full"
+            >
+              <BlurView
+                experimentalBlurMethod="dimezisBlurView"
+                className="gap-[10px] px-[20px] items-center flex flex-row justify-center"
+                intensity={10}
+              >
+                <AvatarStackSmall
+                  users={players.map((p) => p.user)}
+                  avatarWidth={25}
+                />
+                <View className="flex flex-row items-center">
+                  <Text className="font-bounded-regular text-[#FFF]">
+                    Таблица игроков
+                  </Text>
+                  <View className="relative w-[20px]">
+                    <View className="absolute bottom-[-12px]">
+                      <Icons.DownArrow />
+                    </View>
                   </View>
                 </View>
-              </View>
-            </BlurView>
-          </Pressable>
-
-          {user && (
-            <Pressable onPress={() => {}}>
-              <Avatar
-                className="h-12 w-12"
-                source={{
-                  uri:
-                    hasAvatar(user) &&
-                    getStyle(user.styles.avatarId)?.style.url,
-                }}
-              />
+              </BlurView>
             </Pressable>
-          )}
+
+            {user && (
+              <Pressable onPress={() => {}}>
+                <Avatar
+                  className="h-12 w-12"
+                  source={{
+                    uri:
+                      hasAvatar(user) &&
+                      getStyle(user.styles.avatarId)?.style.url,
+                  }}
+                />
+              </Pressable>
+            )}
+          </View>
         </View>
-      </View>
+      ) : (
+        <></>
+      )}
       <LeaderboardSheet
         onPlayerPress={(player) => {
           const offset = 0.002;

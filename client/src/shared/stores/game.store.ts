@@ -192,6 +192,6 @@ socket.on("locationUpdated", ({ player, location }) => {
 socket.on("scoreUpdated", ({ player, score }) => {
   updatePlayerScore(player.user.id!, score);
 });
-socket.on("playerRoleUpdated", ({ player, role }) => {
+socket.on("roleUpdated", ({ player, role }) => {
   updatePlayerRole(player.user.id!, role);
 });

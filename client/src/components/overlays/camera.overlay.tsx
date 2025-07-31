@@ -8,6 +8,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -20,7 +21,11 @@ import { logger } from "@/shared/instances/logger.instance";
 import { useCamera } from "@/shared/hooks/useCamera";
 import { CameraView } from "expo-camera";
 import { ImageResult } from "expo-image-manipulator";
-import { useOverlays } from '@/shared/hooks/useOverlays';
+import { useOverlays } from "@/shared/hooks/useOverlays";
+import { Avatar } from "../ui/avatar";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { useStyles } from "@/shared/api/hooks/useStyles";
+import { hasAvatar } from "@/shared/interfaces/user";
 
 interface CompleteTaskCameraAction {
   type: "completeTask";
@@ -50,6 +55,9 @@ export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
     toggleFacing,
     takePhoto,
   } = useCamera();
+
+  const { user } = useAuthStore();
+  const { getStyle } = useStyles({ type: "avatar" });
 
   const opacity = useSharedValue(0);
   const { closeOverlay, openOverlay } = useOverlays();
@@ -89,6 +97,28 @@ export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
         onPress={onClose}
         className="absolute top-0 left-0 right-0 bottom-0"
       />
+      <View className="absolute top-20 w-full z-40">
+        <View className="w-[90%] mx-auto flex-row justify-between items-center">
+          <Pressable onPress={() => closeOverlay()}>
+            <IconContainer>
+              <Icons.Back />
+            </IconContainer>
+          </Pressable>
+
+          {user && (
+            <Pressable onPress={() => {}}>
+              <Avatar
+                className="h-12 w-12"
+                source={{
+                  uri:
+                    hasAvatar(user) &&
+                    getStyle(user.styles.avatarId)?.style.url,
+                }}
+              />
+            </Pressable>
+          )}
+        </View>
+      </View>
       <BlurView
         experimentalBlurMethod="dimezisBlurView"
         intensity={100}
@@ -96,10 +126,8 @@ export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
         className="absolute w-full h-full z-10"
       />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <View
         style={{ zIndex: 30 }}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         className={twMerge(
           "py-[40px] px-[36px] h-[85%] mb-[80px] mx-auto flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-16"
         )}
@@ -123,13 +151,10 @@ export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
           </View>
         </View>
 
-        <View className="flex flex-row gap-[53px] pb-12 items-center justify-center w-full">
-          <Pressable onPress={() => {}} className="opacity-0">
-            <IconContainer className="bg-accent_primary">
-              <Icons.Camera />
-            </IconContainer>
-          </Pressable>
-          <Pressable
+        <View className="flex flex-row pb-12 px-5 items-center justify-between w-full">
+          <IconContainer className="p-[30px] opacity-0"></IconContainer>
+          <TouchableOpacity
+            activeOpacity={0.8}
             onPress={async () => {
               try {
                 const photo = await takePhoto();
@@ -139,17 +164,17 @@ export const CameraOverlay = ({ visible, action }: CameraOverlayProps) => {
               }
             }}
           >
-            <IconContainer className="bg-accent_primary border-[3px] border-[#FFF] w-[86px] h-[86px]">
-              <Icons.TakePhoto />
+            <IconContainer className="border-[3px] border-[#FFF] w-[86px] h-[86px] p-1">
+              <View className="bg-accent_primary rounded-full w-full h-full"></View>
             </IconContainer>
-          </Pressable>
-          <Pressable onPress={toggleFacing}>
-            <IconContainer className="bg-primary p-[13px]">
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.8} onPress={toggleFacing}>
+            <IconContainer className="p-[30px]">
               <Icons.Revert />
             </IconContainer>
-          </Pressable>
+          </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+      </View>
     </Animated.View>
   );
 };

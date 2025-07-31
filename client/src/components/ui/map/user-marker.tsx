@@ -77,8 +77,8 @@ export const UserMarker = ({
       coordinate={[initialCoord.current.lon, initialCoord.current.lat]}
       anchor={{ x: 0.5, y: 0.5 }}
       animatedProps={animatedProps}
-      allowOverlap={false}
-      allowOverlapWithPuck={false}
+      allowOverlap={true}
+      allowOverlapWithPuck={true}
       isSelected={false}
     >
       <View className="items-center">
