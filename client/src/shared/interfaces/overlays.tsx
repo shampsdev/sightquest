@@ -22,7 +22,14 @@ import {
   SendPhotoOverlay,
   SendPhotoOverlayProps,
 } from "../../components/overlays/send-photo.overlay";
-import { StartGameOverlay, StartGameOverlayProps } from '@/components/overlays/start-game.overlay';
+import {
+  StartGameOverlay,
+  StartGameOverlayProps,
+} from "@/components/overlays/start-game.overlay";
+import {
+  TaskPointOverlay,
+  TaskPointOverlayProps,
+} from "@/components/overlays/task-point.overlay";
 
 export interface OverlayPropsMap {
   chat: Omit<ChatOverlayProps, "visible">;
@@ -32,6 +39,7 @@ export interface OverlayPropsMap {
   updateRole: Omit<UpdateRoleOverlayProps, "visible">;
   sendPhoto: Omit<SendPhotoOverlayProps, "visible">;
   startGame: Omit<StartGameOverlayProps, "visible">;
+  taskPoint: Omit<TaskPointOverlayProps, "visible">;
 }
 
 export type OverlayName = keyof OverlayPropsMap;
@@ -51,4 +59,5 @@ export const overlayRegistry: {
   updateRole: UpdateRoleOverlay,
   sendPhoto: SendPhotoOverlay,
   startGame: StartGameOverlay,
+  taskPoint: TaskPointOverlay,
 };

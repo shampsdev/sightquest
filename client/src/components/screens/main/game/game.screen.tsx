@@ -66,10 +66,22 @@ export const GameScreen = () => {
       route: game?.route ?? undefined,
     });
     setTimeout(() => {
-      console.log("whaat");
       closeOverlay("startGame");
     }, 3000);
   }, []);
+
+  useEffect(() => {
+    if (game?.state == "finished") {
+      openOverlay("startGame", {
+        players: game?.players,
+        route: game?.route ?? undefined,
+      });
+      setTimeout(() => {
+        closeOverlay("startGame");
+        exit();
+      }, 3000);
+    }
+  }, [game]);
 
   const togglePauseGame = useCallback(() => {
     if (!game) return;
@@ -114,17 +126,6 @@ export const GameScreen = () => {
     if (isPause(poll) && poll.state === "active") openOverlay("pause");
     if (isPause(poll) && poll.state === "finished") closeOverlay();
   }, [game?.activePoll]);
-
-  // on("playerRoleUpdated", ({ player, role }) => {
-  //   if (role === "runner") {
-  //     setPlayer(player);
-  //     openOverlay("updateRole");
-  //     setTimeout(() => {
-  //       closeOverlay();
-  //       resetUpdateRoleStore();
-  //     }, 4000);
-  //   }
-  // });
 
   const players = game?.players ?? [];
 
@@ -191,25 +192,22 @@ export const GameScreen = () => {
           <RouteMarker
             path={game.route.taskPoints}
             shapes={game.route.taskPoints.map((point) => {
-              const disabled =
-                game.completedTaskPoints.find((x) => x.pointId === point.id) !==
-                undefined;
+              const completedTaskPoint = game.completedTaskPoints.find(
+                (x) => x.pointId === point.id
+              );
 
               const openTaskPoint = () => {
-                if (!disabled)
-                  openOverlay("camera", {
-                    action: {
-                      type: "completeTask",
-                      taskId: point.id,
-                    },
-                  });
+                openOverlay("taskPoint", {
+                  taskPoint: point,
+                  completedTaskPoint,
+                });
               };
 
               return (
                 <PlaceMarker
                   key={point.id}
                   coordinate={[point.location.lon, point.location.lat]}
-                  disabled={disabled}
+                  disabled={completedTaskPoint !== undefined}
                   onPress={openTaskPoint}
                 />
               );

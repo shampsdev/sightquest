@@ -2,6 +2,7 @@ import { IconContainer } from "@/components/ui/icons/icon-container";
 import { Icons } from "@/components/ui/icons/icons";
 import { PlayerMessageBlock } from "@/components/widgets/player-message-block";
 import { useStyles } from "@/shared/api/hooks/useStyles";
+import { useOverlays } from "@/shared/hooks/useOverlays";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGameStore } from "@/shared/stores/game.store";
@@ -30,6 +31,8 @@ export interface ChatOverlayProps {
 }
 
 export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
+  const { isOverlayOpen, closeOverlay } = useOverlays();
+
   const { emit } = useSocket();
   const [message, setMessage] = useState("");
 
@@ -76,6 +79,15 @@ export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
       className="absolute w-full h-full flex justify-end items-center z-30"
       pointerEvents={visible ? "auto" : "none"}
     >
+      <View className="absolute top-20 w-full z-40">
+        <View className="w-[90%] mx-auto flex-row justify-between items-center">
+          <Pressable onPress={() => closeOverlay()}>
+            <IconContainer>
+              {isOverlayOpen() ? <Icons.Back /> : <Icons.Exit />}
+            </IconContainer>
+          </Pressable>
+        </View>
+      </View>
       <Pressable
         onPress={onClose}
         className="absolute top-0 left-0 right-0 bottom-0"
