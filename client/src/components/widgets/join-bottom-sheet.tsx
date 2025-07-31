@@ -69,7 +69,7 @@ export const JoinBottomSheet = forwardRef<BottomSheet, JoinBottomSheetProps>(
                 code.length !== 6 ? "bg-accent_secondary" : ""
               )}
               text="Готово"
-              disabled={code.length === 0}
+              variant={code.length === 0 ? "disabled" : "default"}
               onPress={() => {
                 handleChangeText("");
                 handleJoin(code);

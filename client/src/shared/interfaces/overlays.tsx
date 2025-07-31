@@ -3,9 +3,9 @@ import {
   ChatOverlayProps,
 } from "../../components/overlays/chat.overlay";
 import {
-  TaskCompletedOverlay,
-  TaskCompletedOverlayProps,
-} from "../../components/overlays/task-completed.overlay";
+  VoteOverlay,
+  VoteOverlayProps,
+} from "../../components/overlays/vote.overlay";
 import {
   PauseOverlay,
   PauseOverlayProps,
@@ -22,16 +22,29 @@ import {
   SendPhotoOverlay,
   SendPhotoOverlayProps,
 } from "../../components/overlays/send-photo.overlay";
-import { StartGameOverlay, StartGameOverlayProps } from '@/components/overlays/start-game.overlay';
+import {
+  StartGameOverlay,
+  StartGameOverlayProps,
+} from "@/components/overlays/start-game.overlay";
+import {
+  TaskPointOverlay,
+  TaskPointOverlayProps,
+} from "@/components/overlays/task-point.overlay";
+import {
+  ResultOverlay,
+  ResultOverlayProps,
+} from "@/components/overlays/result.overlay";
 
 export interface OverlayPropsMap {
   chat: Omit<ChatOverlayProps, "visible">;
-  taskCompleted: Omit<TaskCompletedOverlayProps, "visible">;
+  taskCompleted: Omit<VoteOverlayProps, "visible">;
   pause: Omit<PauseOverlayProps, "visible">;
   camera: Omit<CameraOverlayProps, "visible">;
   updateRole: Omit<UpdateRoleOverlayProps, "visible">;
   sendPhoto: Omit<SendPhotoOverlayProps, "visible">;
   startGame: Omit<StartGameOverlayProps, "visible">;
+  taskPoint: Omit<TaskPointOverlayProps, "visible">;
+  result: Omit<ResultOverlayProps, "visible">;
 }
 
 export type OverlayName = keyof OverlayPropsMap;
@@ -45,10 +58,12 @@ export const overlayRegistry: {
   [K in OverlayName]: React.ComponentType<OverlayComponentProps<K>>;
 } = {
   chat: ChatOverlay,
-  taskCompleted: TaskCompletedOverlay,
+  taskCompleted: VoteOverlay,
   pause: PauseOverlay,
   camera: CameraOverlay,
   updateRole: UpdateRoleOverlay,
   sendPhoto: SendPhotoOverlay,
   startGame: StartGameOverlay,
+  taskPoint: TaskPointOverlay,
+  result: ResultOverlay,
 };

@@ -27,7 +27,7 @@ export interface ServerToClientEvents extends EventMap {
   endGame: () => void;
   error: ({ error }: { error: string }) => void;
   poll: ({ poll }: { poll: Poll }) => void;
-  playerRoleUpdated: ({ player, role }: { player: Player; role: Role }) => void;
+  roleUpdated: ({ player, role }: { player: Player; role: Role }) => void;
 }
 
 export interface ClientToServerEvents extends EventMap {

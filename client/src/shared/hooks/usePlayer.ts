@@ -6,6 +6,6 @@ export const usePlayer = () => {
   const { user } = useAuthStore();
 
   return {
-    player: game?.players.find((x) => x.user.id === user?.id),
+    player: game?.players?.find((x) => x.user.id === user?.id),
   };
 };

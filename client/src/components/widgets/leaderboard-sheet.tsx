@@ -24,7 +24,7 @@ const BackgroundComponent = ({ style }: BottomSheetBackgroundProps) => {
     >
       <BlurView
         className="w-full h-full"
-        experimentalBlurMethod="dimezisBlurView"
+        
         tint="dark"
         intensity={100}
       />

@@ -177,9 +177,8 @@ socket.on("game", ({ game }) => {
 socket.on("startGame", () => {
   updateStatus("game");
 });
-socket.on("endGame", () => {
+socket.on("finishedGame", () => {
   updateStatus("finished");
-  useGameStore.setState({ game: null, chatMessages: [] });
 });
 socket.on("playerJoined", ({ player }) => {
   addPlayer(player);
@@ -193,6 +192,6 @@ socket.on("locationUpdated", ({ player, location }) => {
 socket.on("scoreUpdated", ({ player, score }) => {
   updatePlayerScore(player.user.id!, score);
 });
-socket.on("playerRoleUpdated", ({ player, role }) => {
+socket.on("roleUpdated", ({ player, role }) => {
   updatePlayerRole(player.user.id!, role);
 });

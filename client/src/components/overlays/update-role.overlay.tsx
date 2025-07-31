@@ -60,7 +60,7 @@ export const UpdateRoleOverlay = ({
         className="absolute top-0 left-0 right-0 bottom-0"
       />
       <BlurView
-        experimentalBlurMethod="dimezisBlurView"
+        
         intensity={100}
         tint="dark"
         className="absolute w-full h-full z-10"

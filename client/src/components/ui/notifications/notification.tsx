@@ -28,7 +28,7 @@ export const ReconnectNotification = ({
           ...StyleSheet.absoluteFillObject,
           borderRadius: 10,
         }}
-        experimentalBlurMethod="dimezisBlurView"
+        
         tint="dark"
         intensity={90}
       />

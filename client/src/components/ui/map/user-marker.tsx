@@ -77,14 +77,14 @@ export const UserMarker = ({
       coordinate={[initialCoord.current.lon, initialCoord.current.lat]}
       anchor={{ x: 0.5, y: 0.5 }}
       animatedProps={animatedProps}
-      allowOverlap={false}
-      allowOverlapWithPuck={false}
+      allowOverlap={true}
+      allowOverlapWithPuck={true}
       isSelected={false}
     >
       <View className="items-center">
         <View className="rounded-full overflow-hidden z-10">
           <BlurView
-            experimentalBlurMethod="dimezisBlurView"
+            
             intensity={10}
             tint="dark"
             className="px-2 py-1"

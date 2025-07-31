@@ -30,7 +30,6 @@ export const LobbyScreen = () => {
   const { data: avatars } = useStyles({ type: "avatar" });
 
   const { setModalOpen } = useModal();
-  const { openOverlay } = useOverlays();
 
   const start = () => {
     if (game?.route === null) setModalOpen(routeModalOptions);

@@ -6,6 +6,7 @@ export interface Point {
 
 export interface TaskPoint extends Point {
   id: string;
+  photo: string;
   title: string;
   description: string;
   score: number;
