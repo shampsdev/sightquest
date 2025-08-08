@@ -4,7 +4,6 @@ import { setAvatar } from "@/shared/api/styles.api";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useState } from "react";
 import {
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -18,6 +17,7 @@ import { ProgressBarSteps } from "../ui/progress/progress-bar-steps";
 import { TextInput } from "../ui/textinput";
 import { AvatarPicker } from "./avatar-picker";
 import { logger } from "@/shared/instances/logger.instance";
+import { useModal } from "@/shared/hooks/useModal";
 
 export const SignUpWidget = () => {
   const { user, token, login, setToken, setUser } = useAuthStore();
@@ -29,6 +29,7 @@ export const SignUpWidget = () => {
 
   const [step, setStep] = useState<0 | 1>(0);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+  const { setModalOpen } = useModal();
 
   const { data: avatars, isLoading } = useStyles({
     type: "avatar",
@@ -42,14 +43,26 @@ export const SignUpWidget = () => {
       setUser(response.user);
       setStep(1);
     } catch (error: any) {
-      logger.error("ui", error, error.response.data);
-      Alert.alert("Ошибка регистрации", "Проверьте корректность данных");
+      logger.error("ui", "register failed", error?.response?.data ?? error);
+      setModalOpen({
+        title: "Ошибка регистрации",
+        subtitle: "Проверь корректность данных",
+        buttons: [
+          { text: "Ок", type: "primary", onClick: () => setModalOpen(false) },
+        ],
+      });
     }
   };
 
   const handleFinish = async () => {
     if (selectedAvatar === null) {
-      Alert.alert("Выбор аватара", "Пожалуйста, выбери аватар");
+      setModalOpen({
+        title: "Выбор аватара",
+        subtitle: "Пожалуйста, выбери аватар",
+        buttons: [
+          { text: "Ок", type: "primary", onClick: () => setModalOpen(false) },
+        ],
+      });
       return;
     }
 

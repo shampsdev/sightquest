@@ -18,6 +18,8 @@ import { useAuthStore } from "@/shared/stores/auth.store";
 import { setAvatar } from "@/shared/api/styles.api";
 import { getMe } from "@/shared/api/auth.api";
 import { Style } from "@/shared/interfaces/styles/styles";
+import { useModal } from "@/shared/hooks/useModal";
+import { logger } from "@/shared/instances/logger.instance";
 import { useRoutes } from "@/shared/api/hooks/useRoutes";
 
 export const ShopScreen = () => {
@@ -43,6 +45,7 @@ export const ShopScreen = () => {
   );
 
   const { user, setUser } = useAuthStore();
+  const { setModalOpen } = useModal();
 
   const back = () => {
     navigation.goBack();
@@ -54,8 +57,26 @@ export const ShopScreen = () => {
         await setAvatar(avatar.id);
         const updatedUser = await getMe();
         setUser(updatedUser);
+        setModalOpen({
+          title: "Готово",
+          subtitle: "Аватар обновлён",
+          buttons: [
+            { text: "Ок", type: "primary", onClick: () => setModalOpen(false) },
+          ],
+        });
       } catch (error) {
-        alert("Произошла ошибка при установке аватара");
+        logger.error("ui", "set avatar failed", error);
+        setModalOpen({
+          title: "Ошибка",
+          subtitle: "Не удалось установить аватар",
+          buttons: [
+            {
+              text: "Закрыть",
+              type: "primary",
+              onClick: () => setModalOpen(false),
+            },
+          ],
+        });
       }
     } else {
       await buyStyle(avatar.id);

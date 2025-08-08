@@ -1,6 +1,7 @@
 import { API_URL } from "@/constants";
 import axios from "axios";
 import { useAuthStore } from "../stores/auth.store";
+import { logger } from "./logger.instance";
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -19,6 +20,15 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    logger.error("http", "request error", error);
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    logger.error("http", "response error", error);
     return Promise.reject(error);
   }
 );

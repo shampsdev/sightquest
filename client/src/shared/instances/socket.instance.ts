@@ -5,6 +5,7 @@ import { User } from "../interfaces/user";
 import { EventMap, SocketManager } from "../custom/socket-manager";
 import { ModalContext } from "../providers/modal-provider";
 import React from "react";
+import { logger } from "./logger.instance";
 import { Route } from "../interfaces/route";
 import { Poll } from "../interfaces/polls/poll";
 import { Role } from "../interfaces/game/role";
@@ -72,10 +73,12 @@ export const socket = new SocketManager<
 const ReactModalErrorBridge: React.FC = () => {
   const { setModalOpen } = React.useContext(ModalContext);
   React.useEffect(() => {
-    const handler = ({ error }: { error: string }) => {
+    const handler = (payload: any) => {
+      const msg = typeof payload === "string" ? payload : payload?.error;
+      logger.error("socket", "server error event", msg);
       setModalOpen({
         title: "Ошибка",
-        subtitle: error,
+        subtitle: msg ?? "Неизвестная ошибка сервера",
         buttons: [
           {
             text: "Ок",

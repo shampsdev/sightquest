@@ -90,19 +90,19 @@ export const AvatarPicker = ({
 }) => {
   const flatListRef = useRef<FlatList<Item>>(null);
   const scrollX = useSharedValue(0);
-  const isSelecting = useRef(false);
+  const isSelecting = useSharedValue(0);
 
   const data: Item[] = avatars;
 
-  const lastCenteredIndex = useRef<number | null>(null);
+  const lastCenteredIndex = useSharedValue<number>(-1);
 
   const triggerHapticAndSelect = (index: number) => {
-    if (isSelecting.current) return;
-    isSelecting.current = true;
+    if (isSelecting.value === 1) return;
+    isSelecting.value = 1;
 
     if (index < 0 || index >= avatars.length) {
       logger.warn("ui", `Invalid centered index: ${index}`);
-      isSelecting.current = false;
+      isSelecting.value = 0;
       return;
     }
 
@@ -117,8 +117,8 @@ export const AvatarPicker = ({
     }
 
     setTimeout(() => {
-      isSelecting.current = false;
-    }, 300); // Debounce selections
+      isSelecting.value = 0;
+    }, 300);
   };
 
   const scrollHandler = useAnimatedScrollHandler({
@@ -133,9 +133,9 @@ export const AvatarPicker = ({
       if (
         roundedIndex >= 0 &&
         roundedIndex < avatars.length &&
-        lastCenteredIndex.current !== roundedIndex
+        lastCenteredIndex.value !== roundedIndex
       ) {
-        lastCenteredIndex.current = roundedIndex;
+        lastCenteredIndex.value = roundedIndex;
         runOnJS(triggerHapticAndSelect)(roundedIndex);
       }
     },
@@ -175,7 +175,7 @@ export const AvatarPicker = ({
       animated: false,
     });
     scrollX.value = initialOffset;
-    lastCenteredIndex.current = middleIndex;
+    lastCenteredIndex.value = middleIndex;
     triggerHapticAndSelect(middleIndex);
     logger.log(
       "ui",

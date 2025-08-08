@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { twMerge } from "tailwind-merge";
+import { logger } from "@/shared/instances/logger.instance";
 
 type NavProp = StackNavigationProp<GameStackParamList, "Lobby">;
 
@@ -36,7 +37,11 @@ export const LobbyScreen = () => {
     if (game && game?.state === "game") {
       navigation.navigate("Game");
     } else {
-      emit("startGame");
+      try {
+        emit("startGame");
+      } catch (e) {
+        logger.error("ui", "startGame emit failed", e);
+      }
     }
   };
 
