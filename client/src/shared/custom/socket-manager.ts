@@ -64,7 +64,16 @@ export class SocketManager<S extends EventMap, C extends EventMap> {
   on<K extends keyof S>(event: K, cb: S[K], signal?: AbortSignal): () => void {
     this.sock.on(event as string, cb as any);
 
-    const off = () => this.sock.off(event as string, cb as any);
+    const off = () => {
+      // Support older socket.io-client builds that don't have .off
+      if (typeof this.sock.off === "function") {
+        this.sock.off(event as string, cb as any);
+      } else if (typeof this.sock.removeListener === "function") {
+        this.sock.removeListener(event as string, cb as any);
+      } else if (typeof this.sock.removeAllListeners === "function") {
+        this.sock.removeAllListeners(event as string);
+      }
+    };
 
     if (signal) {
       if (signal.aborted) {

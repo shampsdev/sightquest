@@ -35,6 +35,7 @@ import { useSocket } from "@/shared/hooks/useSocket";
 import { useGameStore } from "@/shared/stores/game.store";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useRoutes } from "@/shared/api/hooks/useRoutes";
+import { useModal } from "@/shared/hooks/useModal";
 import { PlaceMarker } from "@/components/ui/map/place-marker";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -67,24 +68,58 @@ export const RouteScreen = () => {
   const { user } = useAuthStore();
 
   const { data, isFetched } = useRoutes();
-  const routes = useMemo(
-    () => (isFetched && data !== undefined ? data : []),
-    [isFetched, data]
-  );
+  // Show only free/accessible routes for now (no ownership info available on client)
+  const routes = useMemo(() => {
+    const list = isFetched && data !== undefined ? data : [];
+    return list.filter((r) => r.priceRoubles === 0);
+  }, [isFetched, data]);
 
   const [index, setIndex] = useState(0);
   const flatListRef = useRef<FlatList<Route>>(null);
   const scrollIndexRef = useRef(0);
+  const { setModalOpen } = useModal();
 
   const back = () => navigation.goBack();
 
-  const selected = useMemo(() => routes[index], [index]);
+  const selected = useMemo(() => routes[index], [index, routes]);
 
   const choose = useCallback(() => {
+    if (!selected) {
+      setModalOpen({
+        title: "Ошибка",
+        subtitle: "Маршрут не выбран. Попробуйте ещё раз",
+        buttons: [
+          {
+            text: "Ок",
+            type: "primary",
+            onClick: () => setModalOpen(false),
+          },
+        ],
+      });
+      return;
+    }
+    // Defensive guard: prevent choosing paid/unavailable routes
+    if (selected.priceRoubles > 0) {
+      setModalOpen({
+        title: "Маршрут недоступен",
+        subtitle: "Этот маршрут платный. Купите его в магазине",
+        buttons: [
+          {
+            text: "Открыть магазин",
+            type: "primary",
+            onClick: () => {
+              setModalOpen(false);
+              navigation.navigate("Shop" as never);
+            },
+          },
+        ],
+      });
+      return;
+    }
     emit("setRoute", { routeId: selected.id });
     back();
     logger.log("ui", `selected route with id ${selected.id}`);
-  }, [index, routes]);
+  }, [selected, navigation, setModalOpen, emit, back]);
 
   const cameraRef = useRef<Camera>(null);
 
@@ -124,6 +159,7 @@ export const RouteScreen = () => {
   );
 
   useEffect(() => {
+    if (index >= routes.length) setIndex(0);
     if (routes.length > 0) fitToPoints(toLonLat(routes[0]));
   }, [routes]);
 
@@ -212,12 +248,12 @@ export const RouteScreen = () => {
             onPress={choose}
             className="mt-4 flex-1 w-[90%] mx-auto "
             text="Выбрать"
-            variant={routes.length === 0 ? "disabled" : "default"}
+            variant={!selected ? "disabled" : "default"}
           />
         ) : (
           <Button
             className="mt-4 flex-1 w-[90%] mx-auto bg-accent_secondary"
-            text={game?.route?.id == selected.id ? "Выбран" : "Выбрать"}
+            text={game?.route?.id == selected?.id ? "Выбран" : "Выбрать"}
             variant={"disabled"}
           />
         )}

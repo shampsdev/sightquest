@@ -103,17 +103,21 @@ export const LobbyScreen = () => {
 
             <View className="flex flex-col w-full gap-[15px]">
               {game?.players &&
-                game.players.map((player, index) => (
+                game.players.filter(Boolean).map((player, index) => (
                   <UserLobbyPreview
                     className="p-0"
                     key={index}
                     avatar={{
-                      uri: avatars?.find(
-                        (x) => player?.user.styles?.avatarId === x.id
-                      )?.style.url,
+                      uri:
+                        (player?.user &&
+                          player.user.styles?.avatarId &&
+                          avatars?.find(
+                            (x) => player.user.styles?.avatarId === x.id
+                          )?.style.url) ||
+                        undefined,
                     }}
-                    name={player.user.name}
-                    username={player.user.username}
+                    name={player?.user?.name ?? ""}
+                    username={player?.user?.username ?? ""}
                   />
                 ))}
             </View>

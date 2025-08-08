@@ -15,11 +15,14 @@ export const PlayerMarker = ({
   player: Player;
   pulse?: boolean;
 }) => {
+  if (!player || !player.user) {
+    return null;
+  }
   const coordinate = usePlayerLocation(player);
   const { getStyle } = useStyles({ type: "avatar" });
 
   const avatarSrc = hasAvatar(player.user)
-    ? getStyle(player.user.styles.avatarId)?.style.url
+    ? getStyle(player.user.styles.avatarId)?.style.url ?? ""
     : "";
 
   return (
