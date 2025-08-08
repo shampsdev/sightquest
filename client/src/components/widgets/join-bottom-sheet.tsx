@@ -2,6 +2,7 @@ import React, {
   forwardRef,
   useCallback,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -14,6 +15,7 @@ import BottomSheet, {
 import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
 import { TextInput } from "../ui/textinput";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface JoinBottomSheetProps extends BottomSheetProps {
   handleJoin: (id: string) => void;
@@ -27,6 +29,9 @@ export const JoinBottomSheet = forwardRef<BottomSheet, JoinBottomSheetProps>(
   ({ handleJoin }, ref) => {
     const localRef = useRef<BottomSheet>(null);
     const [code, setCode] = useState("");
+    const insets = useSafeAreaInsets();
+
+    const snapPoints = useMemo(() => ["55%", "80%"], []);
 
     useImperativeHandle(ref, () => localRef.current!);
 
@@ -38,16 +43,20 @@ export const JoinBottomSheet = forwardRef<BottomSheet, JoinBottomSheetProps>(
       <BottomSheet
         ref={localRef}
         index={-1}
-        snapPoints={["40%"]}
-        enableDynamicSizing={false}
+        // Two static snap points; expand to the larger one on focus to clear the keyboard
+        snapPoints={snapPoints}
         enablePanDownToClose
         backgroundStyle={{ backgroundColor: "#222323" }}
         handleIndicatorStyle={{ backgroundColor: "#878787", width: 38 }}
-        keyboardBehavior="interactive"
+        keyboardBehavior="fillParent"
         keyboardBlurBehavior="restore"
         android_keyboardInputMode="adjustResize"
+        bottomInset={insets.bottom}
       >
-        <BottomSheetView className="bg-zinc-900 rounded-t-3xl px-6 pt-4 pb-10">
+        <BottomSheetView
+          className="bg-zinc-900 rounded-t-3xl px-6 pt-4"
+          style={{ paddingBottom: Math.max(insets.bottom, 10) }}
+        >
           <View className="gap-5">
             <RNText className="text-center text-3xl text-text_primary font-bounded-semibold">
               Код доступа
@@ -61,6 +70,8 @@ export const JoinBottomSheet = forwardRef<BottomSheet, JoinBottomSheetProps>(
               InputComponent={BottomSheetTextInput}
               value={formatCode(code)}
               onChangeText={handleChangeText}
+              onFocus={() => localRef.current?.expand()}
+              onBlur={() => localRef.current?.snapToIndex(0)}
               maxLength={7}
             />
             <Button

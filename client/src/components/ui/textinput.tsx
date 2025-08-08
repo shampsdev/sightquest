@@ -4,6 +4,8 @@ import {
   View,
   Pressable,
   StyleSheet,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
 } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { useState } from "react";
@@ -25,6 +27,16 @@ export const TextInput = ({
   const [isSecure, setIsSecure] = useState(secureTextEntry);
   const [inputFocused, setInputFocused] = useState(false);
 
+  const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    setInputFocused(true);
+    props.onFocus?.(e);
+  };
+
+  const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    setInputFocused(false);
+    props.onBlur?.(e);
+  };
+
   return (
     <View
       className={twMerge("flex-row items-center rounded-3xl border", className)}
@@ -39,8 +51,8 @@ export const TextInput = ({
           inputClassName
         )}
         placeholderTextColor="#878787"
-        onFocus={() => setInputFocused(true)}
-        onBlur={() => setInputFocused(false)}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         {...props}
       />
 

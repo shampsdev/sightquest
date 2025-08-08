@@ -179,7 +179,10 @@ export const RouteScreen = () => {
         />
       </Map>
 
-      <View className="absolute bottom-12 left-0 right-0 z-50">
+      <View
+        className="absolute left-0 right-0 z-50"
+        style={{ bottom: Math.max(insets.bottom, 12) }}
+      >
         <FlatList
           ref={flatListRef}
           data={routes}

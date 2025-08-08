@@ -38,6 +38,8 @@ module.exports = {
         backgroundColor: "#111111",
       },
       edgeToEdgeEnabled: true,
+      // Ensure the window resizes when the keyboard appears on Android so KeyboardAvoidingView works as expected
+      softwareKeyboardLayoutMode: "resize",
       package: "com.shampsdev.sightquest",
       permissions: [
         "android.permission.ACCESS_FINE_LOCATION",
@@ -105,8 +107,7 @@ module.exports = {
       [
         "expo-camera",
         {
-          cameraPermission:
-            "Allow $(PRODUCT_NAME) to take photos",
+          cameraPermission: "Allow $(PRODUCT_NAME) to take photos",
           microphonePermission:
             "Allow $(PRODUCT_NAME) to record video with sound",
         },

@@ -32,6 +32,7 @@ import { useStyles } from "@/shared/api/hooks/useStyles";
 import { PlayerMarker } from "@/components/ui/map/player-marker";
 import { useOverlays } from "@/shared/hooks/useOverlays";
 import { usePlayer } from "@/shared/hooks/usePlayer";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type NavProp = StackNavigationProp<
   GameStackParamList & MainStackParamList,
@@ -39,6 +40,7 @@ type NavProp = StackNavigationProp<
 >;
 
 export const GameScreen = () => {
+  const insets = useSafeAreaInsets();
   const { openOverlay, closeOverlay, isOverlayOpen } = useOverlays();
 
   const { user } = useAuthStore();
@@ -233,7 +235,10 @@ export const GameScreen = () => {
         />
       </Map>
       {!isOverlayOpen("chat") && (
-        <View className="absolute px-[5%] gap-4 bottom-12 flex items-center justify-between flex-row left-0 right-0 z-10">
+        <View
+          className="absolute px-[5%] gap-4 flex items-center justify-between flex-row left-0 right-0 z-10"
+          style={{ bottom: Math.max(insets.bottom, 12) }}
+        >
           <Pressable onPress={togglePauseGame}>
             <IconContainer>
               {isOverlayOpen("pause") ? <Icons.Play /> : <Icons.Pause />}

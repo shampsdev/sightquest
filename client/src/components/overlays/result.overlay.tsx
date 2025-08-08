@@ -15,12 +15,14 @@ import { useStyles } from "@/shared/api/hooks/useStyles";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
 import { AvatarCard } from "../widgets/avatar-card";
 import { useOverlays } from "@/shared/hooks/useOverlays";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface ResultOverlayProps {
   visible?: boolean;
 }
 
 export const ResultOverlay = ({ visible }: ResultOverlayProps) => {
+  const insets = useSafeAreaInsets();
   const { getStyle } = useStyles({ type: "avatar" });
   const opacity = useSharedValue(0);
 
@@ -138,7 +140,10 @@ export const ResultOverlay = ({ visible }: ResultOverlayProps) => {
             </View>
           </View>
 
-          <View className="h-[86px] w-full"></View>
+          <View
+            style={{ height: 86 + Math.max(insets.bottom, 0) }}
+            className="w-full"
+          />
         </View>
       </Animated.View>
     )
