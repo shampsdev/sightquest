@@ -3,6 +3,9 @@ import { Game } from "../interfaces/game/game";
 import { Player } from "../interfaces/game/player";
 import { User } from "../interfaces/user";
 import { EventMap, SocketManager } from "../custom/socket-manager";
+import { ModalContext } from "../providers/modal-provider";
+import React from "react";
+import { logger } from "./logger.instance";
 import { Route } from "../interfaces/route";
 import { Poll } from "../interfaces/polls/poll";
 import { Role } from "../interfaces/game/role";
@@ -65,3 +68,30 @@ export const socket = new SocketManager<
   ServerToClientEvents,
   ClientToServerEvents
 >();
+
+// Show server-sent errors in a modal instead of crashing
+const ReactModalErrorBridge: React.FC = () => {
+  const { setModalOpen } = React.useContext(ModalContext);
+  React.useEffect(() => {
+    const handler = (payload: any) => {
+      const msg = typeof payload === "string" ? payload : payload?.error;
+      logger.error("socket", "server error event", msg);
+      setModalOpen({
+        title: "Ошибка",
+        subtitle: msg ?? "Неизвестная ошибка сервера",
+        buttons: [
+          {
+            text: "Ок",
+            type: "primary",
+            onClick: () => setModalOpen(false),
+          },
+        ],
+      });
+    };
+    const off = socket.on("error", handler as any);
+    return off;
+  }, [setModalOpen]);
+  return null;
+};
+
+export const SocketErrorModalBridge = React.memo(ReactModalErrorBridge);

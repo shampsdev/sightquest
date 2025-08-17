@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { twMerge } from "tailwind-merge";
+import { logger } from "@/shared/instances/logger.instance";
 
 type NavProp = StackNavigationProp<GameStackParamList, "Lobby">;
 
@@ -36,7 +37,11 @@ export const LobbyScreen = () => {
     if (game && game?.state === "game") {
       navigation.navigate("Game");
     } else {
-      emit("startGame");
+      try {
+        emit("startGame");
+      } catch (e) {
+        logger.error("ui", "startGame emit failed", e);
+      }
     }
   };
 
@@ -103,17 +108,21 @@ export const LobbyScreen = () => {
 
             <View className="flex flex-col w-full gap-[15px]">
               {game?.players &&
-                game.players.map((player, index) => (
+                game.players.filter(Boolean).map((player, index) => (
                   <UserLobbyPreview
                     className="p-0"
                     key={index}
                     avatar={{
-                      uri: avatars?.find(
-                        (x) => player?.user.styles?.avatarId === x.id
-                      )?.style.url,
+                      uri:
+                        (player?.user &&
+                          player.user.styles?.avatarId &&
+                          avatars?.find(
+                            (x) => player.user.styles?.avatarId === x.id
+                          )?.style.url) ||
+                        undefined,
                     }}
-                    name={player.user.name}
-                    username={player.user.username}
+                    name={player?.user?.name ?? ""}
+                    username={player?.user?.username ?? ""}
                   />
                 ))}
             </View>
@@ -121,7 +130,10 @@ export const LobbyScreen = () => {
         </ScrollView>
 
         {game && user && isAdmin(user, game) ? (
-          <View className="absolute bottom-12 px-[5%] gap-2 flex flex-1 flex-row items-center">
+          <View
+            className="absolute px-[5%] gap-2 flex flex-1 flex-row items-center"
+            style={{ bottom: Math.max(insets.bottom, 12) }}
+          >
             <Button onPress={routes} className="flex-1 w-auto" text="Маршрут" />
             <Button
               onPress={start}
@@ -132,7 +144,10 @@ export const LobbyScreen = () => {
             />
           </View>
         ) : (
-          <View className="absolute bottom-12 px-[5%] gap-2 w-full">
+          <View
+            className="absolute px-[5%] gap-2 w-full"
+            style={{ bottom: Math.max(insets.bottom, 12) }}
+          >
             <Text className="text-text_secondary text-lg mx-auto">
               Ожидаем старта от создателя игры...
             </Text>

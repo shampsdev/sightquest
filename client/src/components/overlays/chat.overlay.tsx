@@ -17,6 +17,7 @@ import {
   ScrollView as ScrollViewType,
   Platform,
   KeyboardAvoidingView,
+  Keyboard,
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -24,6 +25,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { twMerge } from "tailwind-merge";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface ChatOverlayProps {
   visible: boolean;
@@ -32,6 +34,7 @@ export interface ChatOverlayProps {
 
 export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
   const { isOverlayOpen, closeOverlay } = useOverlays();
+  const insets = useSafeAreaInsets();
 
   const { emit } = useSocket();
   const [message, setMessage] = useState("");
@@ -45,6 +48,7 @@ export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
   }, [chatMessages]);
 
   const scrollViewRef = useRef<ScrollViewType>(null);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const opacity = useSharedValue(0);
 
@@ -73,6 +77,18 @@ export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   }, [chatMessages]);
 
+  useEffect(() => {
+    if (Platform.OS !== "android") return;
+    const show = (e: any) => setKeyboardHeight(e.endCoordinates?.height ?? 0);
+    const hide = () => setKeyboardHeight(0);
+    const s1 = Keyboard.addListener("keyboardDidShow", show);
+    const s2 = Keyboard.addListener("keyboardDidHide", hide);
+    return () => {
+      s1.remove();
+      s2.remove();
+    };
+  }, []);
+
   return (
     <Animated.View
       style={animatedStyle}
@@ -93,7 +109,6 @@ export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
         className="absolute top-0 left-0 right-0 bottom-0"
       />
       <BlurView
-        
         intensity={100}
         tint="dark"
         className="absolute w-full h-full z-10"
@@ -101,10 +116,10 @@ export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ zIndex: 30 }}
+        style={{ zIndex: 30, flex: 1 }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         className={twMerge(
-          "py-[40px] px-[36px] h-[85%] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-8"
+          "px-[36px] flex-1 rounded-[30px] w-full z-30 flex flex-col justify-end gap-4"
         )}
       >
         <ScrollView
@@ -113,10 +128,14 @@ export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent: "flex-end",
-            gap: 24,
-            paddingBottom: 10,
+            gap: 16,
+            paddingBottom: Math.max(insets.bottom, 12) + keyboardHeight,
           }}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          onContentSizeChange={() =>
+            scrollViewRef.current?.scrollToEnd({ animated: true })
+          }
         >
           {chatMessages.map((messageGroup, index) => (
             <PlayerMessageBlock
@@ -143,7 +162,12 @@ export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
           ))}
         </ScrollView>
 
-        <View className="flex flex-row gap-[10px] pb-12 items-center justify-center w-full">
+        <View
+          className="flex flex-row gap-[10px] items-center justify-center w-full"
+          style={{
+            paddingBottom: Math.max(insets.bottom, 12) + keyboardHeight,
+          }}
+        >
           <TextInput
             className={twMerge(
               "rounded-full flex-1 border-text_secondary border-[1px] text-[16px] text-[#B6B6B6]  px-[20px]",
@@ -153,6 +177,12 @@ export const ChatOverlay = ({ visible, onClose }: ChatOverlayProps) => {
             placeholderTextColor="#B6B6B6"
             value={message}
             onChangeText={setMessage}
+            onFocus={() =>
+              setTimeout(
+                () => scrollViewRef.current?.scrollToEnd({ animated: true }),
+                50
+              )
+            }
           />
           <Pressable onPress={sendMessage}>
             <IconContainer className="bg-accent_primary">

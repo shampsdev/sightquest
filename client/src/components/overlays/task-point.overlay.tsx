@@ -12,6 +12,7 @@ import { Icons } from "../ui/icons/icons";
 import { CompletedTaskPoint } from "@/shared/interfaces/game/completed-task-point";
 import { IconContainer } from "../ui/icons/icon-container";
 import { usePlayer } from "@/shared/hooks/usePlayer";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface TaskPointOverlayProps {
   visible?: boolean;
@@ -24,6 +25,7 @@ export const TaskPointOverlay = ({
   taskPoint,
   completedTaskPoint,
 }: TaskPointOverlayProps) => {
+  const insets = useSafeAreaInsets();
   const { openOverlay, closeOverlay, isOverlayOpen } = useOverlays();
   const opacity = useSharedValue(0);
 
@@ -117,7 +119,8 @@ export const TaskPointOverlay = ({
             </View>
           </View>
           <Button
-            className="bottom-12 mx-auto"
+            className="mx-auto"
+            style={{ marginBottom: Math.max(insets.bottom, 12) }}
             variant={
               completedTaskPoint || player?.role == "catcher"
                 ? "disabled"

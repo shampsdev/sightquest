@@ -18,6 +18,7 @@ import { Icons } from "../ui/icons/icons";
 import { Avatar } from "../ui/avatar";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import { hasAvatar } from "@/shared/interfaces/user";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface SendPhotoOverlayProps {
   visible?: boolean;
@@ -28,6 +29,7 @@ export const SendPhotoOverlay = ({
   visible,
   action,
 }: SendPhotoOverlayProps) => {
+  const insets = useSafeAreaInsets();
   const { emit } = useSocket();
   const { closeOverlay, openOverlay } = useOverlays();
   const { getStyle } = useStyles({ type: "avatar" });
@@ -139,7 +141,10 @@ export const SendPhotoOverlay = ({
           <View className="h-[86px] w-full"></View>
         </View>
 
-        <View className="absolute bottom-0 flex flex-row gap-[53px] pb-12 items-center justify-center w-full z-40">
+        <View
+          className="absolute bottom-0 flex flex-row gap-[53px] items-center justify-center w-full z-40"
+          style={{ paddingBottom: Math.max(insets.bottom, 12) }}
+        >
           <Button
             text="Отправить"
             className="w-fit px-12"

@@ -16,12 +16,14 @@ import { hasAvatar } from "@/shared/interfaces/user";
 import { useStyles } from "@/shared/api/hooks/useStyles";
 import { useSocket } from "@/shared/hooks/useSocket";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface VoteOverlayProps {
   visible?: boolean;
 }
 
 export const VoteOverlay = ({ visible }: VoteOverlayProps) => {
+  const insets = useSafeAreaInsets();
   const { getStyle } = useStyles({ type: "avatar" });
   const opacity = useSharedValue(0);
   const progress = useSharedValue(1);
@@ -226,7 +228,9 @@ export const VoteOverlay = ({ visible }: VoteOverlayProps) => {
                     <Text className="text-text_primary text-xl font-bounded-bold">
                       {game.activePoll.data.taskComplete.player.user.name}
                     </Text>
-                    <Text className="text-text_secondary">Выполнил задание</Text>
+                    <Text className="text-text_secondary">
+                      Выполнил задание
+                    </Text>
                   </View>
                   <BlurView
                     intensity={50}
@@ -242,7 +246,10 @@ export const VoteOverlay = ({ visible }: VoteOverlayProps) => {
         <View className="h-[86px] w-full"></View>
       </View>
 
-      <View className="absolute bottom-0 flex flex-row pb-12 px-[5%] items-center justify-center w-full z-40">
+      <View
+        className="absolute bottom-0 flex flex-row px-[5%] items-center justify-center w-full z-40"
+        style={{ paddingBottom: Math.max(insets.bottom, 12) }}
+      >
         {voted ? (
           <Text className="text-text_primary font-bounded-bold text-xl">
             Проголосовали {game?.activePoll?.votes?.length || 0} из{" "}

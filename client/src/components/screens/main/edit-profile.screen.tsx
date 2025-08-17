@@ -16,6 +16,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { BlurView } from "expo-blur";
 import { useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, View } from "react-native";
+import { useModal } from "@/shared/hooks/useModal";
+import { logger } from "@/shared/instances/logger.instance";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export const EditProfileScreen = () => {
@@ -34,6 +36,7 @@ export const EditProfileScreen = () => {
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(
     avatars?.find((x) => x.id === user?.styles?.avatarId)?.id!
   );
+  const { setModalOpen } = useModal();
 
   const back = () => {
     navigation.goBack();
@@ -48,18 +51,36 @@ export const EditProfileScreen = () => {
   const handleSubmit = async () => {
     try {
       await setAvatar(selectedAvatar?.toString() ?? "");
-
-      await patchMeMutation.mutateAsync({
-        username,
-        name,
-      });
-
+      await patchMeMutation.mutateAsync({ username, name });
       const updatedUser = await getMe();
       setUser(updatedUser);
-      alert("Профиль успешно обновлен");
-      back();
+      setModalOpen({
+        title: "Готово",
+        subtitle: "Профиль успешно обновлён",
+        buttons: [
+          {
+            text: "Ок",
+            type: "primary",
+            onClick: () => {
+              setModalOpen(false);
+              back();
+            },
+          },
+        ],
+      });
     } catch (error) {
-      alert("Произошла ошибка при обновлении профиля");
+      logger.error("ui", "update profile failed", error);
+      setModalOpen({
+        title: "Ошибка",
+        subtitle: "Не удалось обновить профиль",
+        buttons: [
+          {
+            text: "Закрыть",
+            type: "primary",
+            onClick: () => setModalOpen(false),
+          },
+        ],
+      });
     }
   };
 
@@ -87,28 +108,7 @@ export const EditProfileScreen = () => {
               </View>
 
               <Pressable onPress={() => setStep(1)}>
-                <View className="relative flex items-center justify-center">
-                  <IconContainer
-                    style={{ backgroundColor: "rgba(255,255,255, 0)" }}
-                    className="z-20 absolute top-0 left-0 right-0 bottom-0 rounded-full w-[154px] overflow-hidden h-[154px]"
-                  >
-                    <Icons.Camera />
-                  </IconContainer>
-                  <BlurView
-                    
-                    className="absolute top-0 left-0 right-0 bottom-0 z-10 rounded-full w-[154px] overflow-hidden h-[154px]"
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      borderRadius: 9999,
-                      zIndex: 10,
-                    }}
-                    tint="dark"
-                    intensity={10}
-                  />
+                <View className="relative items-center justify-center">
                   <Avatar
                     source={{
                       uri: avatars?.find((x) => x.id === selectedAvatar)?.style
@@ -116,6 +116,11 @@ export const EditProfileScreen = () => {
                     }}
                     className="w-[154px] h-[154px]"
                   />
+                  <View className="absolute">
+                    <IconContainer className="w-[64px] h-[64px]">
+                      <Icons.Camera />
+                    </IconContainer>
+                  </View>
                 </View>
               </Pressable>
             </View>

@@ -17,10 +17,9 @@ export const ModalProvider = ({ children }: { children?: React.ReactNode }) => {
   const [modalOpen, setModalOpen] = useState<ModalOptions>(false);
 
   return (
-    <ModalContext value={{ modalOpen, setModalOpen }}>
+    <ModalContext.Provider value={{ modalOpen, setModalOpen }}>
       {children}
       {modalOpen && <ModalCard {...modalOpen} />}
-    </ModalContext>
+    </ModalContext.Provider>
   );
 };
-

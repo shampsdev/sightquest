@@ -14,7 +14,7 @@ interface PlayerPollResult extends PollResult {
   playerCatch: {
     approved: boolean;
     catcherReward: number;
-    newRunner: Player;
+    newRunner: Player | null;
   };
 }
 

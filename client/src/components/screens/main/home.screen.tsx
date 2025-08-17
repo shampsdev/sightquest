@@ -166,7 +166,10 @@ export const HomeScreen = () => {
           )}
         </View>
       </View>
-      <View className="absolute bottom-12 px-[5%] gap-2 flex flex-1 flex-row items-center">
+      <View
+        className="absolute px-[5%] gap-2 flex flex-1 flex-row items-center"
+        style={{ bottom: Math.max(insets.bottom, 12) }}
+      >
         <Button
           onPress={() => bottomSheetRef.current?.snapToIndex(0)}
           className="flex-1 w-auto"

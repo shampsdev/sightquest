@@ -22,12 +22,7 @@ const BackgroundComponent = ({ style }: BottomSheetBackgroundProps) => {
       className="overflow-hidden"
       style={[style, { borderTopRightRadius: 30, borderTopLeftRadius: 30 }]}
     >
-      <BlurView
-        className="w-full h-full"
-        
-        tint="dark"
-        intensity={100}
-      />
+      <BlurView className="w-full h-full" tint="dark" intensity={100} />
     </View>
   );
 };
@@ -63,9 +58,9 @@ export const LeaderboardSheet = forwardRef<BottomSheet, LeaderboardSheetProps>(
       >
         <BottomSheetView className="rounded-t-3xl px-6 pt-4 pb-10">
           <View className="flex flex-col w-full gap-[15px]">
-            {sortedPlayers.map((player) => (
+            {sortedPlayers.map((player, idx) => (
               <Pressable
-                key={player.user.id}
+                key={`${player.user.id}-${idx}`}
                 onPress={() => {
                   if (onPlayerPress) onPlayerPress(player);
                 }}

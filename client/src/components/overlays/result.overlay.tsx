@@ -15,12 +15,15 @@ import { useStyles } from "@/shared/api/hooks/useStyles";
 import { isTaskPoll } from "@/shared/interfaces/polls/task-poll";
 import { AvatarCard } from "../widgets/avatar-card";
 import { useOverlays } from "@/shared/hooks/useOverlays";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { logger } from "@/shared/instances/logger.instance";
 
 export interface ResultOverlayProps {
   visible?: boolean;
 }
 
 export const ResultOverlay = ({ visible }: ResultOverlayProps) => {
+  const insets = useSafeAreaInsets();
   const { getStyle } = useStyles({ type: "avatar" });
   const opacity = useSharedValue(0);
 
@@ -38,8 +41,26 @@ export const ResultOverlay = ({ visible }: ResultOverlayProps) => {
     opacity: opacity.value,
   }));
 
+  const isFinished = game?.activePoll?.state === "finished";
+
+  // Precompute safe entities
+  const playerCatch =
+    game?.activePoll && isPlayerPoll(game.activePoll)
+      ? game.activePoll.result?.playerCatch ?? null
+      : null;
+  const newRunnerUser = playerCatch?.newRunner?.user ?? null;
+
+  if (
+    isFinished &&
+    game?.activePoll &&
+    isPlayerPoll(game.activePoll) &&
+    !newRunnerUser
+  ) {
+    logger.error("ui", "ResultOverlay: missing newRunner.user", playerCatch);
+  }
+
   return (
-    game?.activePoll?.state == "finished" && (
+    isFinished && (
       <Animated.View
         style={animatedStyle}
         className="absolute w-full mx-auto h-full z-30"
@@ -76,23 +97,27 @@ export const ResultOverlay = ({ visible }: ResultOverlayProps) => {
             <View className="w-full relative aspect-square mx-auto rounded-[40px] z-10 overflow-hidden">
               {game?.activePoll && isPlayerPoll(game.activePoll) && (
                 <View className="h-full w-full flex justify-center items-center">
-                  <AvatarCard
-                    avatar={
-                      hasAvatar(
-                        game.activePoll.result.playerCatch.newRunner.user
-                      ) &&
-                      getStyle(
-                        game.activePoll.result.playerCatch.newRunner.user.styles
-                          .avatarId
-                      )?.style.url
-                    }
-                    title={
-                      game.activePoll.result.playerCatch.newRunner.user.name
-                    }
-                    subtitle={
-                      game.activePoll.result.playerCatch.newRunner.user.username
-                    }
-                  />
+                  {newRunnerUser ? (
+                    <AvatarCard
+                      avatar={
+                        hasAvatar(newRunnerUser)
+                          ? getStyle(newRunnerUser.styles.avatarId)?.style
+                              .url ?? ""
+                          : ""
+                      }
+                      title={newRunnerUser?.name ?? ""}
+                      subtitle={newRunnerUser?.username ?? ""}
+                    />
+                  ) : (
+                    <View className="items-center justify-center">
+                      <Text className="text-text_primary text-xl font-bounded-bold">
+                        Голосование отклонено
+                      </Text>
+                      <Text className="text-text_secondary mt-2">
+                        Новый убегающий не назначен
+                      </Text>
+                    </View>
+                  )}
                 </View>
               )}
               {game?.activePoll && isTaskPoll(game.activePoll) && (
@@ -106,23 +131,27 @@ export const ResultOverlay = ({ visible }: ResultOverlayProps) => {
                     resizeMode="cover"
                   />
                   <View className="absolute bottom-5 left-5 flex flex-row gap-2 rounded-full overflow-hidden">
-                    <Avatar
-                      className="z-20 m-[5px]"
-                      source={{
-                        uri:
-                          hasAvatar(
+                    {game.activePoll.data.taskComplete.player?.user && (
+                      <Avatar
+                        className="z-20 m-[5px]"
+                        source={{
+                          uri: hasAvatar(
                             game.activePoll.data.taskComplete.player.user
-                          ) &&
-                          getStyle(
-                            game.activePoll.data.taskComplete.player.user.styles
-                              .avatarId
-                          )?.style.url,
-                      }}
-                    ></Avatar>
+                          )
+                            ? getStyle(
+                                game.activePoll.data.taskComplete.player.user
+                                  .styles.avatarId
+                              )?.style.url ?? ""
+                            : "",
+                        }}
+                      />
+                    )}
                     <View className="flex flex-col justify-center z-20 py-2 pr-4">
-                      <Text className="text-text_primary text-xl font-bounded-bold">
-                        {game.activePoll.data.taskComplete.player.user.name}
-                      </Text>
+                      {game.activePoll.data.taskComplete.player?.user && (
+                        <Text className="text-text_primary text-xl font-bounded-bold">
+                          {game.activePoll.data.taskComplete.player.user.name}
+                        </Text>
+                      )}
                       <Text className="text-text_secondary">
                         Выполнил задание
                       </Text>
@@ -138,7 +167,10 @@ export const ResultOverlay = ({ visible }: ResultOverlayProps) => {
             </View>
           </View>
 
-          <View className="h-[86px] w-full"></View>
+          <View
+            style={{ height: 86 + Math.max(insets.bottom, 0) }}
+            className="w-full"
+          />
         </View>
       </Animated.View>
     )

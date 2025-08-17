@@ -13,12 +13,12 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { logger } from "@/shared/instances/logger.instance";
+import { useModal } from "@/shared/hooks/useModal";
 
 export const SignInScreen = () => {
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
@@ -26,14 +26,21 @@ export const SignInScreen = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { setModalOpen } = useModal();
 
   const handleLogin = async () => {
     try {
       const response = await loginRequest(username, password);
       login(response.user, response.token);
     } catch (error: any) {
-      logger.error("ui", error);
-      Alert.alert("Ошибка входа", "Неверный логин или пароль");
+      logger.error("ui", "login failed", error);
+      setModalOpen({
+        title: "Ошибка входа",
+        subtitle: "Неверный логин или пароль",
+        buttons: [
+          { text: "Ок", type: "primary", onClick: () => setModalOpen(false) },
+        ],
+      });
     }
   };
 
