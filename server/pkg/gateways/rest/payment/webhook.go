@@ -2,6 +2,7 @@ package payment
 
 import (
 	"encoding/json"
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,7 +29,8 @@ func YooKassaWebhook(cases *usecase.Cases) gin.HandlerFunc {
 		}
 
 		// Обрабатываем только события успешных платежей
-		if webhookEvent.Event == "payment.succeeded" || webhookEvent.Event == "payment.canceled" {
+		slog.Info("webhook event", "event", webhookEvent)
+		if webhookEvent.Event == yoowebhook.EventPaymentSucceeded || webhookEvent.Event == yoowebhook.EventPaymentCanceled {
 			if webhookEvent.Object.ID != "" {
 				err := cases.Payment.ConfirmPayment(c.Request.Context(), webhookEvent.Object.ID)
 				if ginerr.AbortIfErr(c, err, http.StatusInternalServerError, "failed to process payment") {
