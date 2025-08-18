@@ -23,7 +23,6 @@ type Payment struct {
 	Status          yoopayment.Status `json:"status"`
 	ConfirmationURL *string           `json:"confirmationUrl,omitempty"`
 	CreatedAt       time.Time         `json:"createdAt"`
-	UpdatedAt       time.Time         `json:"updatedAt"`
 }
 
 type CreatePaymentRequest struct {

@@ -37,7 +37,7 @@ func (r *Payment) Create(ctx context.Context, payment *domain.Payment) error {
 }
 
 func (r *Payment) Patch(ctx context.Context, id string, patch *domain.PatchPayment) error {
-	q := r.psql.Update(`"payment"`).Set("updated_at", "CURRENT_TIMESTAMP")
+	q := r.psql.Update(`"payment"`)
 
 	if patch.Status != nil {
 		q = q.Set("status", *patch.Status)
@@ -60,7 +60,7 @@ func (r *Payment) Patch(ctx context.Context, id string, patch *domain.PatchPayme
 }
 
 func (r *Payment) Filter(ctx context.Context, filter *domain.FilterPayment) ([]*domain.Payment, error) {
-	q := r.psql.Select("id", "user_id", "yookassa_id", "type", "item_id", "amount_roubles", "status", "confirmation_url", "created_at", "updated_at").
+	q := r.psql.Select("id", "user_id", "yookassa_id", "type", "item_id", "amount_roubles", "status", "confirmation_url", "created_at").
 		From(`"payment"`)
 
 	if filter.ID != nil {
@@ -113,7 +113,6 @@ func (r *Payment) Filter(ctx context.Context, filter *domain.FilterPayment) ([]*
 			&p.Status,
 			&p.ConfirmationURL,
 			&p.CreatedAt,
-			&p.UpdatedAt,
 		)
 		if err != nil {
 			return nil, err

@@ -851,9 +851,6 @@ const docTemplate = `{
                 "type": {
                     "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PaymentType"
                 },
-                "updatedAt": {
-                    "type": "string"
-                },
                 "userId": {
                     "type": "string"
                 },

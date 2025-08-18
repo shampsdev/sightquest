@@ -9,7 +9,6 @@ CREATE TABLE "payment"
     "status"           varchar(255) NOT NULL DEFAULT 'pending',
     "confirmation_url" text,
     "created_at"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
     PRIMARY KEY ("id"),
     FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE
