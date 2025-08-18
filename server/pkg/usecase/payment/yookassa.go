@@ -111,8 +111,15 @@ func (s *YooKassa) ConfirmPayment(ctx context.Context, yooKassaID string) error 
 		return fmt.Errorf("failed to get YooKassa payment: %w", err)
 	}
 
+	paymentInDB, err := repo.First(s.paymentRepo)(ctx, &domain.FilterPayment{
+		YooKassaID: &yooKassaID,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to get payment: %w", err)
+	}
+
 	// Обновляем статус в нашей БД
-	err = s.paymentRepo.Patch(ctx, "", &domain.PatchPayment{
+	err = s.paymentRepo.Patch(ctx, paymentInDB.ID, &domain.PatchPayment{
 		Status: &yooPayment.Status,
 	})
 	if err != nil {
