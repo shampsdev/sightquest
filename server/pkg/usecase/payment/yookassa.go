@@ -54,7 +54,7 @@ func (s *YooKassa) CreatePayment(ctx context.Context, userID string, req *domain
 			ReturnURL: req.ReturnURL,
 		},
 		Description: fmt.Sprintf("Покупка: %s", item.Title),
-		Capture: true,
+		Capture:     true,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to create YooKassa payment: %w", err)
