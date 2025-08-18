@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Schemes http https
-// @Success 200 {object} domain.User
+// @Success 200 {object} github_com_shampsdev_sightquest_server_pkg_domain.User
 // @Failure 400
 // @Router /user/me [get]
 // @Security ApiKeyAuth

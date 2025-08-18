@@ -34,7 +34,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.UserCredentials"
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.UserCredentials"
                         }
                     }
                 ],
@@ -42,7 +42,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.userToken"
+                            "$ref": "#/definitions/pkg_gateways_rest_auth.userToken"
                         }
                     },
                     "400": {
@@ -70,7 +70,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.CreateUser"
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.CreateUser"
                         }
                     }
                 ],
@@ -78,7 +78,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.userToken"
+                            "$ref": "#/definitions/pkg_gateways_rest_auth.userToken"
                         }
                     },
                     "400": {
@@ -116,7 +116,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Game"
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Game"
                         }
                     },
                     "400": {
@@ -155,7 +155,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Game"
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Game"
                         }
                     },
                     "400": {
@@ -208,7 +208,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.Game"
+                                "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Game"
                             }
                         }
                     },
@@ -258,7 +258,7 @@ const docTemplate = `{
                     "200": {
                         "description": "A url to the stored image",
                         "schema": {
-                            "$ref": "#/definitions/image.UploadResponse"
+                            "$ref": "#/definitions/pkg_gateways_rest_image.UploadResponse"
                         }
                     },
                     "400": {
@@ -269,6 +269,182 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/payment/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "payment"
+                ],
+                "summary": "Get user payments",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Payment"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/payment/route/{id}": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "payment"
+                ],
+                "summary": "Buy route with payment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Route ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Buy route request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pkg_gateways_rest_payment.BuyRouteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Payment"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/payment/style/{id}": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "payment"
+                ],
+                "summary": "Buy style with payment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Style ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Buy style request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pkg_gateways_rest_payment.BuyStyleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Payment"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/payment/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "payment"
+                ],
+                "summary": "Get payment by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Payment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Payment"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
                     }
                 }
             }
@@ -291,7 +467,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.Route"
+                                "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Route"
                             }
                         }
                     },
@@ -326,7 +502,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Route"
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Route"
                         }
                     },
                     "400": {
@@ -334,42 +510,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/route/{id}/buy": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "route"
-                ],
-                "summary": "Buy route",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Route ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Bad Request"
                     }
                 }
             }
@@ -411,45 +551,9 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.Style"
+                                "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Style"
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    }
-                }
-            }
-        },
-        "/styles/id/{id}/buy": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "style"
-                ],
-                "summary": "Buy style",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Style ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
                     },
                     "400": {
                         "description": "Bad Request"
@@ -481,7 +585,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/style.setAvatarRequest"
+                            "$ref": "#/definitions/pkg_gateways_rest_style.setAvatarRequest"
                         }
                     }
                 ],
@@ -489,7 +593,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.User"
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User"
                         }
                     },
                     "400": {
@@ -519,7 +623,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.User"
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User"
                         }
                     },
                     "400": {
@@ -550,7 +654,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.PatchUser"
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PatchUser"
                         }
                     }
                 ],
@@ -558,8 +662,41 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.User"
+                            "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/webhook/yookassa": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "payment"
+                ],
+                "summary": "YooKassa webhook handler",
+                "parameters": [
+                    {
+                        "description": "Webhook event",
+                        "name": "webhook",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/yoowebhook.WebhookEvent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     },
                     "400": {
                         "description": "Bad Request"
@@ -569,18 +706,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.userToken": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/domain.User"
-                }
-            }
-        },
-        "domain.CompletedTaskPoint": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.CompletedTaskPoint": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -603,7 +729,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.Coordinate": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.Coordinate": {
             "type": "object",
             "properties": {
                 "lat": {
@@ -614,7 +740,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.CreateUser": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.CreateUser": {
             "type": "object",
             "properties": {
                 "email": {
@@ -631,19 +757,19 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.Game": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.Game": {
             "type": "object",
             "properties": {
                 "activePoll": {
-                    "$ref": "#/definitions/domain.Poll"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Poll"
                 },
                 "admin": {
-                    "$ref": "#/definitions/domain.User"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User"
                 },
                 "completedTaskPoints": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.CompletedTaskPoint"
+                        "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.CompletedTaskPoint"
                     }
                 },
                 "createdAt": {
@@ -658,21 +784,21 @@ const docTemplate = `{
                 "players": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.Player"
+                        "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player"
                     }
                 },
                 "route": {
-                    "$ref": "#/definitions/domain.Route"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Route"
                 },
                 "seed": {
                     "type": "string"
                 },
                 "state": {
-                    "$ref": "#/definitions/domain.GameState"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.GameState"
                 }
             }
         },
-        "domain.GameState": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.GameState": {
             "type": "string",
             "enum": [
                 "lobby",
@@ -687,41 +813,87 @@ const docTemplate = `{
                 "GameStateFinished"
             ]
         },
-        "domain.PatchUser": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PatchUser": {
             "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
                 },
                 "styles": {
-                    "$ref": "#/definitions/domain.UserStyles"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.UserStyles"
                 },
                 "username": {
                     "type": "string"
                 }
             }
         },
-        "domain.Player": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.Payment": {
+            "type": "object",
+            "properties": {
+                "amountRoubles": {
+                    "type": "integer"
+                },
+                "confirmationUrl": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "itemId": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/yoopayment.Status"
+                },
+                "type": {
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PaymentType"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "yooKassaId": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_shampsdev_sightquest_server_pkg_domain.PaymentType": {
+            "type": "string",
+            "enum": [
+                "route",
+                "style"
+            ],
+            "x-enum-varnames": [
+                "PaymentTypeRoute",
+                "PaymentTypeStyle"
+            ]
+        },
+        "github_com_shampsdev_sightquest_server_pkg_domain.Player": {
             "type": "object",
             "properties": {
                 "gameId": {
                     "type": "string"
                 },
                 "location": {
-                    "$ref": "#/definitions/domain.Coordinate"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Coordinate"
                 },
                 "role": {
-                    "$ref": "#/definitions/domain.PlayerRole"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PlayerRole"
                 },
                 "score": {
                     "type": "integer"
                 },
                 "user": {
-                    "$ref": "#/definitions/domain.User"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User"
                 }
             }
         },
-        "domain.PlayerRole": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PlayerRole": {
             "type": "string",
             "enum": [
                 "runner",
@@ -732,14 +904,14 @@ const docTemplate = `{
                 "PlayerRoleCatcher"
             ]
         },
-        "domain.Poll": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.Poll": {
             "type": "object",
             "properties": {
                 "createdAt": {
                     "type": "string"
                 },
                 "data": {
-                    "$ref": "#/definitions/domain.PollData"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollData"
                 },
                 "duration": {
                     "type": "integer"
@@ -754,107 +926,107 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "result": {
-                    "$ref": "#/definitions/domain.PollResult"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResult"
                 },
                 "state": {
-                    "$ref": "#/definitions/domain.PollState"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollState"
                 },
                 "type": {
-                    "$ref": "#/definitions/domain.PollType"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollType"
                 },
                 "votes": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.Vote"
+                        "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Vote"
                     }
                 }
             }
         },
-        "domain.PollData": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollData": {
             "type": "object",
             "properties": {
                 "finishGame": {
-                    "$ref": "#/definitions/domain.PollDataFinishGame"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollDataFinishGame"
                 },
                 "pause": {
-                    "$ref": "#/definitions/domain.PollDataPause"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollDataPause"
                 },
                 "playerCatch": {
-                    "$ref": "#/definitions/domain.PollDataPlayerCatch"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollDataPlayerCatch"
                 },
                 "taskComplete": {
-                    "$ref": "#/definitions/domain.PollDataTaskComplete"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollDataTaskComplete"
                 }
             }
         },
-        "domain.PollDataFinishGame": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollDataFinishGame": {
             "type": "object",
             "properties": {
                 "comment": {
                     "type": "string"
                 },
                 "suggestedBy": {
-                    "$ref": "#/definitions/domain.Player"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player"
                 }
             }
         },
-        "domain.PollDataPause": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollDataPause": {
             "type": "object",
             "properties": {
                 "duration": {
                     "type": "integer"
                 },
                 "pausedBy": {
-                    "$ref": "#/definitions/domain.Player"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player"
                 }
             }
         },
-        "domain.PollDataPlayerCatch": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollDataPlayerCatch": {
             "type": "object",
             "properties": {
                 "catchedBy": {
-                    "$ref": "#/definitions/domain.Player"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player"
                 },
                 "photo": {
                     "type": "string"
                 },
                 "runner": {
-                    "$ref": "#/definitions/domain.Player"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player"
                 }
             }
         },
-        "domain.PollDataTaskComplete": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollDataTaskComplete": {
             "type": "object",
             "properties": {
                 "photo": {
                     "type": "string"
                 },
                 "player": {
-                    "$ref": "#/definitions/domain.Player"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player"
                 },
                 "task": {
-                    "$ref": "#/definitions/domain.TaskPoint"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.TaskPoint"
                 }
             }
         },
-        "domain.PollResult": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollResult": {
             "type": "object",
             "properties": {
                 "finishGame": {
-                    "$ref": "#/definitions/domain.PollResultFinishGame"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResultFinishGame"
                 },
                 "pause": {
-                    "$ref": "#/definitions/domain.PollResultPause"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResultPause"
                 },
                 "playerCatch": {
-                    "$ref": "#/definitions/domain.PollResultPlayerCatch"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResultPlayerCatch"
                 },
                 "taskComplete": {
-                    "$ref": "#/definitions/domain.PollResultTaskComplete"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResultTaskComplete"
                 }
             }
         },
-        "domain.PollResultFinishGame": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollResultFinishGame": {
             "type": "object",
             "properties": {
                 "approved": {
@@ -862,15 +1034,15 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.PollResultPause": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollResultPause": {
             "type": "object",
             "properties": {
                 "unpausedBy": {
-                    "$ref": "#/definitions/domain.Player"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player"
                 }
             }
         },
-        "domain.PollResultPlayerCatch": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollResultPlayerCatch": {
             "type": "object",
             "properties": {
                 "approved": {
@@ -880,22 +1052,22 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "newRunner": {
-                    "$ref": "#/definitions/domain.Player"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player"
                 }
             }
         },
-        "domain.PollResultTaskComplete": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollResultTaskComplete": {
             "type": "object",
             "properties": {
                 "approved": {
                     "type": "boolean"
                 },
                 "completedTaskPoint": {
-                    "$ref": "#/definitions/domain.CompletedTaskPoint"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.CompletedTaskPoint"
                 }
             }
         },
-        "domain.PollState": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollState": {
             "type": "string",
             "enum": [
                 "active",
@@ -906,7 +1078,7 @@ const docTemplate = `{
                 "PollStateFinished"
             ]
         },
-        "domain.PollType": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.PollType": {
             "type": "string",
             "enum": [
                 "pause",
@@ -921,7 +1093,7 @@ const docTemplate = `{
                 "PollTypeFinishGame"
             ]
         },
-        "domain.Route": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.Route": {
             "type": "object",
             "properties": {
                 "bought": {
@@ -939,7 +1111,7 @@ const docTemplate = `{
                 "taskPoints": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.TaskPoint"
+                        "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.TaskPoint"
                     }
                 },
                 "title": {
@@ -947,7 +1119,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.Style": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.Style": {
             "type": "object",
             "properties": {
                 "bought": {
@@ -964,11 +1136,11 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/domain.StyleType"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.StyleType"
                 }
             }
         },
-        "domain.StyleType": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.StyleType": {
             "type": "string",
             "enum": [
                 "avatar"
@@ -977,7 +1149,7 @@ const docTemplate = `{
                 "StyleTypeAvatar"
             ]
         },
-        "domain.TaskPoint": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.TaskPoint": {
             "type": "object",
             "properties": {
                 "description": {
@@ -987,7 +1159,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "location": {
-                    "$ref": "#/definitions/domain.Coordinate"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Coordinate"
                 },
                 "score": {
                     "type": "integer"
@@ -1000,7 +1172,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.User": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.User": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1010,14 +1182,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "styles": {
-                    "$ref": "#/definitions/domain.UserStyles"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.UserStyles"
                 },
                 "username": {
                     "type": "string"
                 }
             }
         },
-        "domain.UserCredentials": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.UserCredentials": {
             "type": "object",
             "properties": {
                 "email": {
@@ -1031,7 +1203,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.UserStyles": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.UserStyles": {
             "type": "object",
             "properties": {
                 "avatarId": {
@@ -1039,14 +1211,14 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.Vote": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.Vote": {
             "type": "object",
             "properties": {
                 "createdAt": {
                     "type": "string"
                 },
                 "data": {
-                    "$ref": "#/definitions/domain.VoteData"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.VoteData"
                 },
                 "gameId": {
                     "type": "string"
@@ -1058,11 +1230,11 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/domain.VoteType"
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.VoteType"
                 }
             }
         },
-        "domain.VoteData": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.VoteData": {
             "type": "object",
             "properties": {
                 "comment": {
@@ -1070,7 +1242,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.VoteType": {
+        "github_com_shampsdev_sightquest_server_pkg_domain.VoteType": {
             "type": "string",
             "enum": [
                 "unpause",
@@ -1091,7 +1263,18 @@ const docTemplate = `{
                 "VoteTypeFinishGameReject"
             ]
         },
-        "image.UploadResponse": {
+        "pkg_gateways_rest_auth.userToken": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User"
+                }
+            }
+        },
+        "pkg_gateways_rest_image.UploadResponse": {
             "type": "object",
             "properties": {
                 "url": {
@@ -1099,13 +1282,81 @@ const docTemplate = `{
                 }
             }
         },
-        "style.setAvatarRequest": {
+        "pkg_gateways_rest_payment.BuyRouteRequest": {
+            "type": "object",
+            "required": [
+                "returnUrl"
+            ],
+            "properties": {
+                "returnUrl": {
+                    "type": "string"
+                }
+            }
+        },
+        "pkg_gateways_rest_payment.BuyStyleRequest": {
+            "type": "object",
+            "required": [
+                "returnUrl"
+            ],
+            "properties": {
+                "returnUrl": {
+                    "type": "string"
+                }
+            }
+        },
+        "pkg_gateways_rest_style.setAvatarRequest": {
             "type": "object",
             "properties": {
                 "styleId": {
                     "type": "string"
                 }
             }
+        },
+        "yoopayment.Status": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "waiting_for_capture",
+                "succeeded",
+                "canceled"
+            ],
+            "x-enum-varnames": [
+                "Pending",
+                "WaitingForCapture",
+                "Succeeded",
+                "Canceled"
+            ]
+        },
+        "yoowebhook.WebhookEvent": {
+            "type": "object"
+        },
+        "yoowebhook.WebhookEventType": {
+            "type": "string",
+            "enum": [
+                "payment.succeeded",
+                "payment.waiting_for_capture",
+                "payment.canceled",
+                "refund.succeeded",
+                "payout.succeeded",
+                "payout.canceled"
+            ],
+            "x-enum-varnames": [
+                "EventPaymentSucceeded",
+                "EventPaymentWaitingForCapture",
+                "EventPaymentCanceled",
+                "EventRefundSucceeded",
+                "EventPayoutSucceeded",
+                "EventPayoutCanceled"
+            ]
+        },
+        "yoowebhook.WebhookType": {
+            "type": "string",
+            "enum": [
+                "notification"
+            ],
+            "x-enum-varnames": [
+                "WebhookTypeNotification"
+            ]
         }
     },
     "securityDefinitions": {

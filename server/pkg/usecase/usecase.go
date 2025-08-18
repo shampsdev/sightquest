@@ -9,6 +9,7 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/repo/pg"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/auth"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/game"
+	"github.com/shampsdev/sightquest/server/pkg/usecase/payment"
 	"github.com/shampsdev/sightquest/server/pkg/usecase/usecore"
 )
 
@@ -20,6 +21,7 @@ type Cases struct {
 	Route     *usecore.Route
 	TaskPoint *usecore.TaskPoint
 	Style     *usecore.Style
+	Payment   *usecore.Payment
 
 	GameHandler *game.Handler
 }
@@ -33,6 +35,7 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 	gameRepo := pg.NewGame(pool, userRepo, routeRepo)
 	styleRepo := pg.NewStyle(pool)
 	userStyleRepo := pg.NewUserStyle(pool)
+	paymentRepo := pg.NewPayment(pool)
 	voteRepo := pg.NewVote(pool)
 	completedTaskPointRepo := pg.NewCompletedTaskPoint(pool)
 	pollRepo := pg.NewPoll(pool, voteRepo)
@@ -47,10 +50,14 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 	routeCase := usecore.NewRoute(routeRepo, userRouteRepo)
 	taskPointCase := usecore.NewTaskPoint(taskPointRepo)
 	gameCase := usecore.NewGame(gameRepo, playerRepo, pollRepo, voteRepo, completedTaskPointRepo)
+	styleCase := usecore.NewStyle(styleRepo, userStyleRepo, userRepo)
+
+	// Создаем YooKassa сервис и Payment usecase
+	yookassa := payment.NewYooKassa(&cfg.YooKassa, paymentRepo, routeRepo, styleRepo, userRouteRepo, userStyleRepo)
+	paymentCase := usecore.NewPayment(yookassa, userRouteRepo, userStyleRepo)
 
 	gameProvider := game.NewInMemoryGameRepo(ctx, gameCase, playerCase, routeCase, pollRepo, voteRepo, completedTaskPointRepo)
 	gameHandler := game.NewHandler(gameProvider, userCase, auth)
-	styleCase := usecore.NewStyle(styleRepo, userStyleRepo, userRepo)
 
 	return &Cases{
 		Auth:        auth,
@@ -60,6 +67,7 @@ func Setup(ctx context.Context, cfg *config.Config, pool *pgxpool.Pool) (*Cases,
 		Route:       routeCase,
 		TaskPoint:   taskPointCase,
 		Style:       styleCase,
+		Payment:     paymentCase,
 		GameHandler: gameHandler,
 	}, nil
 }

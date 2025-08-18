@@ -20,7 +20,7 @@ import (
 // @Security ApiKeyAuth
 // @Param limit query int true "Number of games to return"
 // @Param state query domain.GameState false "Game state"
-// @Success 200 {array} domain.Game
+// @Success 200 {array} github_com_shampsdev_sightquest_server_pkg_domain.Game
 // @Failure 400
 // @Failure 404
 // @Router /game/latest [get]

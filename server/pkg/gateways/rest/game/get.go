@@ -13,7 +13,7 @@ import (
 // @Produce json
 // @Schemes http https
 // @Param id path string true "Game ID"
-// @Success 200 {object} domain.Game
+// @Success 200 {object} github_com_shampsdev_sightquest_server_pkg_domain.Game
 // @Failure 400
 // @Router /game/id/{id} [get]
 // @Security ApiKeyAuth

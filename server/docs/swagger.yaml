@@ -1,12 +1,5 @@
 definitions:
-  auth.userToken:
-    properties:
-      token:
-        type: string
-      user:
-        $ref: '#/definitions/domain.User'
-    type: object
-  domain.CompletedTaskPoint:
+  github_com_shampsdev_sightquest_server_pkg_domain.CompletedTaskPoint:
     properties:
       createdAt:
         type: string
@@ -21,14 +14,14 @@ definitions:
       score:
         type: integer
     type: object
-  domain.Coordinate:
+  github_com_shampsdev_sightquest_server_pkg_domain.Coordinate:
     properties:
       lat:
         type: number
       lon:
         type: number
     type: object
-  domain.CreateUser:
+  github_com_shampsdev_sightquest_server_pkg_domain.CreateUser:
     properties:
       email:
         type: string
@@ -39,15 +32,15 @@ definitions:
       username:
         type: string
     type: object
-  domain.Game:
+  github_com_shampsdev_sightquest_server_pkg_domain.Game:
     properties:
       activePoll:
-        $ref: '#/definitions/domain.Poll'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Poll'
       admin:
-        $ref: '#/definitions/domain.User'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User'
       completedTaskPoints:
         items:
-          $ref: '#/definitions/domain.CompletedTaskPoint'
+          $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.CompletedTaskPoint'
         type: array
       createdAt:
         type: string
@@ -57,16 +50,16 @@ definitions:
         type: string
       players:
         items:
-          $ref: '#/definitions/domain.Player'
+          $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player'
         type: array
       route:
-        $ref: '#/definitions/domain.Route'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Route'
       seed:
         type: string
       state:
-        $ref: '#/definitions/domain.GameState'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.GameState'
     type: object
-  domain.GameState:
+  github_com_shampsdev_sightquest_server_pkg_domain.GameState:
     enum:
     - lobby
     - game
@@ -78,29 +71,60 @@ definitions:
     - GameStateGame
     - GameStatePoll
     - GameStateFinished
-  domain.PatchUser:
+  github_com_shampsdev_sightquest_server_pkg_domain.PatchUser:
     properties:
       name:
         type: string
       styles:
-        $ref: '#/definitions/domain.UserStyles'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.UserStyles'
       username:
         type: string
     type: object
-  domain.Player:
+  github_com_shampsdev_sightquest_server_pkg_domain.Payment:
+    properties:
+      amountRoubles:
+        type: integer
+      confirmationUrl:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      itemId:
+        type: string
+      status:
+        $ref: '#/definitions/yoopayment.Status'
+      type:
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PaymentType'
+      updatedAt:
+        type: string
+      userId:
+        type: string
+      yooKassaId:
+        type: string
+    type: object
+  github_com_shampsdev_sightquest_server_pkg_domain.PaymentType:
+    enum:
+    - route
+    - style
+    type: string
+    x-enum-varnames:
+    - PaymentTypeRoute
+    - PaymentTypeStyle
+  github_com_shampsdev_sightquest_server_pkg_domain.Player:
     properties:
       gameId:
         type: string
       location:
-        $ref: '#/definitions/domain.Coordinate'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Coordinate'
       role:
-        $ref: '#/definitions/domain.PlayerRole'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PlayerRole'
       score:
         type: integer
       user:
-        $ref: '#/definitions/domain.User'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User'
     type: object
-  domain.PlayerRole:
+  github_com_shampsdev_sightquest_server_pkg_domain.PlayerRole:
     enum:
     - runner
     - catcher
@@ -108,12 +132,12 @@ definitions:
     x-enum-varnames:
     - PlayerRoleRunner
     - PlayerRoleCatcher
-  domain.Poll:
+  github_com_shampsdev_sightquest_server_pkg_domain.Poll:
     properties:
       createdAt:
         type: string
       data:
-        $ref: '#/definitions/domain.PollData'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollData'
       duration:
         type: integer
       finishedAt:
@@ -123,97 +147,97 @@ definitions:
       id:
         type: string
       result:
-        $ref: '#/definitions/domain.PollResult'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResult'
       state:
-        $ref: '#/definitions/domain.PollState'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollState'
       type:
-        $ref: '#/definitions/domain.PollType'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollType'
       votes:
         items:
-          $ref: '#/definitions/domain.Vote'
+          $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Vote'
         type: array
     type: object
-  domain.PollData:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollData:
     properties:
       finishGame:
-        $ref: '#/definitions/domain.PollDataFinishGame'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollDataFinishGame'
       pause:
-        $ref: '#/definitions/domain.PollDataPause'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollDataPause'
       playerCatch:
-        $ref: '#/definitions/domain.PollDataPlayerCatch'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollDataPlayerCatch'
       taskComplete:
-        $ref: '#/definitions/domain.PollDataTaskComplete'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollDataTaskComplete'
     type: object
-  domain.PollDataFinishGame:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollDataFinishGame:
     properties:
       comment:
         type: string
       suggestedBy:
-        $ref: '#/definitions/domain.Player'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player'
     type: object
-  domain.PollDataPause:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollDataPause:
     properties:
       duration:
         type: integer
       pausedBy:
-        $ref: '#/definitions/domain.Player'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player'
     type: object
-  domain.PollDataPlayerCatch:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollDataPlayerCatch:
     properties:
       catchedBy:
-        $ref: '#/definitions/domain.Player'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player'
       photo:
         type: string
       runner:
-        $ref: '#/definitions/domain.Player'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player'
     type: object
-  domain.PollDataTaskComplete:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollDataTaskComplete:
     properties:
       photo:
         type: string
       player:
-        $ref: '#/definitions/domain.Player'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player'
       task:
-        $ref: '#/definitions/domain.TaskPoint'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.TaskPoint'
     type: object
-  domain.PollResult:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollResult:
     properties:
       finishGame:
-        $ref: '#/definitions/domain.PollResultFinishGame'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResultFinishGame'
       pause:
-        $ref: '#/definitions/domain.PollResultPause'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResultPause'
       playerCatch:
-        $ref: '#/definitions/domain.PollResultPlayerCatch'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResultPlayerCatch'
       taskComplete:
-        $ref: '#/definitions/domain.PollResultTaskComplete'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PollResultTaskComplete'
     type: object
-  domain.PollResultFinishGame:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollResultFinishGame:
     properties:
       approved:
         type: boolean
     type: object
-  domain.PollResultPause:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollResultPause:
     properties:
       unpausedBy:
-        $ref: '#/definitions/domain.Player'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player'
     type: object
-  domain.PollResultPlayerCatch:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollResultPlayerCatch:
     properties:
       approved:
         type: boolean
       catcherReward:
         type: integer
       newRunner:
-        $ref: '#/definitions/domain.Player'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Player'
     type: object
-  domain.PollResultTaskComplete:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollResultTaskComplete:
     properties:
       approved:
         type: boolean
       completedTaskPoint:
-        $ref: '#/definitions/domain.CompletedTaskPoint'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.CompletedTaskPoint'
     type: object
-  domain.PollState:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollState:
     enum:
     - active
     - finished
@@ -221,7 +245,7 @@ definitions:
     x-enum-varnames:
     - PollStateActive
     - PollStateFinished
-  domain.PollType:
+  github_com_shampsdev_sightquest_server_pkg_domain.PollType:
     enum:
     - pause
     - taskComplete
@@ -233,7 +257,7 @@ definitions:
     - PollTypeTaskComplete
     - PollTypePlayerCatch
     - PollTypeFinishGame
-  domain.Route:
+  github_com_shampsdev_sightquest_server_pkg_domain.Route:
     properties:
       bought:
         type: boolean
@@ -245,12 +269,12 @@ definitions:
         type: integer
       taskPoints:
         items:
-          $ref: '#/definitions/domain.TaskPoint'
+          $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.TaskPoint'
         type: array
       title:
         type: string
     type: object
-  domain.Style:
+  github_com_shampsdev_sightquest_server_pkg_domain.Style:
     properties:
       bought:
         type: boolean
@@ -262,22 +286,22 @@ definitions:
       title:
         type: string
       type:
-        $ref: '#/definitions/domain.StyleType'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.StyleType'
     type: object
-  domain.StyleType:
+  github_com_shampsdev_sightquest_server_pkg_domain.StyleType:
     enum:
     - avatar
     type: string
     x-enum-varnames:
     - StyleTypeAvatar
-  domain.TaskPoint:
+  github_com_shampsdev_sightquest_server_pkg_domain.TaskPoint:
     properties:
       description:
         type: string
       id:
         type: string
       location:
-        $ref: '#/definitions/domain.Coordinate'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Coordinate'
       score:
         type: integer
       task:
@@ -285,18 +309,18 @@ definitions:
       title:
         type: string
     type: object
-  domain.User:
+  github_com_shampsdev_sightquest_server_pkg_domain.User:
     properties:
       id:
         type: string
       name:
         type: string
       styles:
-        $ref: '#/definitions/domain.UserStyles'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.UserStyles'
       username:
         type: string
     type: object
-  domain.UserCredentials:
+  github_com_shampsdev_sightquest_server_pkg_domain.UserCredentials:
     properties:
       email:
         type: string
@@ -305,17 +329,17 @@ definitions:
       username:
         type: string
     type: object
-  domain.UserStyles:
+  github_com_shampsdev_sightquest_server_pkg_domain.UserStyles:
     properties:
       avatarId:
         type: string
     type: object
-  domain.Vote:
+  github_com_shampsdev_sightquest_server_pkg_domain.Vote:
     properties:
       createdAt:
         type: string
       data:
-        $ref: '#/definitions/domain.VoteData'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.VoteData'
       gameId:
         type: string
       playerId:
@@ -323,14 +347,14 @@ definitions:
       pollId:
         type: string
       type:
-        $ref: '#/definitions/domain.VoteType'
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.VoteType'
     type: object
-  domain.VoteData:
+  github_com_shampsdev_sightquest_server_pkg_domain.VoteData:
     properties:
       comment:
         type: string
     type: object
-  domain.VoteType:
+  github_com_shampsdev_sightquest_server_pkg_domain.VoteType:
     enum:
     - unpause
     - taskApprove
@@ -348,16 +372,73 @@ definitions:
     - VoteTypePlayerCatchReject
     - VoteTypeFinishGameApprove
     - VoteTypeFinishGameReject
-  image.UploadResponse:
+  pkg_gateways_rest_auth.userToken:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User'
+    type: object
+  pkg_gateways_rest_image.UploadResponse:
     properties:
       url:
         type: string
     type: object
-  style.setAvatarRequest:
+  pkg_gateways_rest_payment.BuyRouteRequest:
+    properties:
+      returnUrl:
+        type: string
+    required:
+    - returnUrl
+    type: object
+  pkg_gateways_rest_payment.BuyStyleRequest:
+    properties:
+      returnUrl:
+        type: string
+    required:
+    - returnUrl
+    type: object
+  pkg_gateways_rest_style.setAvatarRequest:
     properties:
       styleId:
         type: string
     type: object
+  yoopayment.Status:
+    enum:
+    - pending
+    - waiting_for_capture
+    - succeeded
+    - canceled
+    type: string
+    x-enum-varnames:
+    - Pending
+    - WaitingForCapture
+    - Succeeded
+    - Canceled
+  yoowebhook.WebhookEvent:
+    type: object
+  yoowebhook.WebhookEventType:
+    enum:
+    - payment.succeeded
+    - payment.waiting_for_capture
+    - payment.canceled
+    - refund.succeeded
+    - payout.succeeded
+    - payout.canceled
+    type: string
+    x-enum-varnames:
+    - EventPaymentSucceeded
+    - EventPaymentWaitingForCapture
+    - EventPaymentCanceled
+    - EventRefundSucceeded
+    - EventPayoutSucceeded
+    - EventPayoutCanceled
+  yoowebhook.WebhookType:
+    enum:
+    - notification
+    type: string
+    x-enum-varnames:
+    - WebhookTypeNotification
 info:
   contact: {}
   title: Sightquest server
@@ -373,14 +454,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/domain.UserCredentials'
+          $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.UserCredentials'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.userToken'
+            $ref: '#/definitions/pkg_gateways_rest_auth.userToken'
         "400":
           description: Bad Request
       summary: Login user
@@ -396,14 +477,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/domain.CreateUser'
+          $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.CreateUser'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.userToken'
+            $ref: '#/definitions/pkg_gateways_rest_auth.userToken'
         "400":
           description: Bad Request
       summary: Register user
@@ -424,7 +505,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.Game'
+            $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Game'
         "400":
           description: Bad Request
       security:
@@ -448,7 +529,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.Game'
+            $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Game'
         "400":
           description: Bad Request
       security:
@@ -482,7 +563,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.Game'
+              $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Game'
             type: array
         "400":
           description: Bad Request
@@ -514,7 +595,7 @@ paths:
         "200":
           description: A url to the stored image
           schema:
-            $ref: '#/definitions/image.UploadResponse'
+            $ref: '#/definitions/pkg_gateways_rest_image.UploadResponse'
         "400":
           description: Parsing error
         "401":
@@ -526,6 +607,115 @@ paths:
       summary: Upload file to s3
       tags:
       - images
+  /payment/:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Payment'
+            type: array
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Get user payments
+      tags:
+      - payment
+  /payment/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Payment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Payment'
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Get payment by ID
+      tags:
+      - payment
+  /payment/route/{id}:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Route ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Buy route request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/pkg_gateways_rest_payment.BuyRouteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Payment'
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Buy route with payment
+      tags:
+      - payment
+  /payment/style/{id}:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Style ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Buy style request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/pkg_gateways_rest_payment.BuyStyleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Payment'
+        "400":
+          description: Bad Request
+      security:
+      - ApiKeyAuth: []
+      summary: Buy style with payment
+      tags:
+      - payment
   /route:
     get:
       consumes:
@@ -537,7 +727,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.Route'
+              $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Route'
             type: array
         "400":
           description: Bad Request
@@ -560,34 +750,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.Route'
+            $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Route'
         "400":
           description: Bad Request
         "404":
           description: Not Found
       summary: Get route by ID
-      tags:
-      - route
-  /route/{id}/buy:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Route ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Bad Request
-      security:
-      - ApiKeyAuth: []
-      summary: Buy route
       tags:
       - route
   /styles:
@@ -610,35 +778,13 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.Style'
+              $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.Style'
             type: array
         "400":
           description: Bad Request
       security:
       - ApiKeyAuth: []
       summary: Get available styles
-      tags:
-      - style
-  /styles/id/{id}/buy:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Style ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Bad Request
-      security:
-      - ApiKeyAuth: []
-      summary: Buy style
       tags:
       - style
   /styles/me/avatar:
@@ -651,14 +797,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/style.setAvatarRequest'
+          $ref: '#/definitions/pkg_gateways_rest_style.setAvatarRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.User'
+            $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User'
         "400":
           description: Bad Request
       security:
@@ -676,7 +822,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.User'
+            $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User'
         "400":
           description: Bad Request
       security:
@@ -693,14 +839,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/domain.PatchUser'
+          $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.PatchUser'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.User'
+            $ref: '#/definitions/github_com_shampsdev_sightquest_server_pkg_domain.User'
         "400":
           description: Bad Request
       security:
@@ -708,6 +854,27 @@ paths:
       summary: Patch me
       tags:
       - user
+  /webhook/yookassa:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Webhook event
+        in: body
+        name: webhook
+        required: true
+        schema:
+          $ref: '#/definitions/yoowebhook.WebhookEvent'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: YooKassa webhook handler
+      tags:
+      - payment
 securityDefinitions:
   ApiKeyAuth:
     in: header

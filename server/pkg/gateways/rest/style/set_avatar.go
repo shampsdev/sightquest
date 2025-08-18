@@ -17,7 +17,7 @@ type setAvatarRequest struct {
 // @Accept json
 // @Produce json
 // @Param request body setAvatarRequest true "Style ID"
-// @Success 200 {object} domain.User
+// @Success 200 {object} github_com_shampsdev_sightquest_server_pkg_domain.User
 // @Failure 400
 // @Router /styles/me/avatar [post]
 // @Security ApiKeyAuth

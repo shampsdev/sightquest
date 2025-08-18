@@ -13,7 +13,7 @@ import (
 // @Produce json
 // @Schemes http https
 // @Param id path string true "Route ID"
-// @Success 200 {object} domain.Route
+// @Success 200 {object} github_com_shampsdev_sightquest_server_pkg_domain.Route
 // @Failure 400
 // @Failure 404
 // @Router /route/{id} [get]

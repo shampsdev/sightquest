@@ -14,7 +14,7 @@ import (
 // @Param seed query string false "Seed for game"
 // @Produce json
 // @Schemes http https
-// @Success 200 {object} domain.Game
+// @Success 200 {object} github_com_shampsdev_sightquest_server_pkg_domain.Game
 // @Failure 400
 // @Router /game [post]
 // @Security ApiKeyAuth

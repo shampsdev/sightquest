@@ -88,6 +88,13 @@ type CompletedTaskPoint interface {
 	Delete(ctx context.Context, playerID, gameID, pointID string) error
 }
 
+type Payment interface {
+	Create(ctx context.Context, payment *domain.Payment) error
+	Patch(ctx context.Context, id string, patch *domain.PatchPayment) error
+	Filter(ctx context.Context, filter *domain.FilterPayment) ([]*domain.Payment, error)
+	Delete(ctx context.Context, id string) error
+}
+
 type ImageStorage interface {
 	SaveImageByReader(ctx context.Context, imageData io.Reader, destDir string) (string, error)
 }

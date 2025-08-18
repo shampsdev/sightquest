@@ -10,6 +10,7 @@ import (
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/game"
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/image"
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/middlewares"
+	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/payment"
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/route"
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/style"
 	"github.com/shampsdev/sightquest/server/pkg/gateways/rest/user"
@@ -35,5 +36,6 @@ func setupRouter(ctx context.Context, cfg *config.Config, r *gin.Engine, cases *
 		user.Setup(v1, cases)
 		route.Setup(v1, cases)
 		style.Setup(v1, cases)
+		payment.Setup(v1, cases)
 	}
 }

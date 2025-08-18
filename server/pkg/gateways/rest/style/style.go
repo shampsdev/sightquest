@@ -8,7 +8,6 @@ import (
 
 func Setup(r *gin.RouterGroup, cases *usecase.Cases) {
 	r.Group("/styles").Use(middlewares.Auth(cases.Auth)).
-		POST("/id/:id/buy", BuyStyle(cases)).
 		GET("", GetStyles(cases)).
 		POST("/me/avatar", SetAvatar(cases))
 }

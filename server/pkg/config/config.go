@@ -35,7 +35,8 @@ type Config struct {
 		JWTSecret      string `envconfig:"AUTH_JWT_SECRET"`
 	}
 
-	S3 S3Config
+	YooKassa YooKassaConfig
+	S3       S3Config
 }
 
 type S3Config struct {
@@ -45,6 +46,11 @@ type S3Config struct {
 	Bucket        string `envconfig:"S3_BUCKET"`
 	EndpointURL   string `envconfig:"S3_ENDPOINT_URL"`
 	RootDirectory string `envconfig:"S3_ROOT_DIRECTORY"`
+}
+
+type YooKassaConfig struct {
+	ShopID    string `envconfig:"YOOKASSA_SHOP_ID"`
+	SecretKey string `envconfig:"YOOKASSA_SECRET_KEY"`
 }
 
 func Load(envFile string) *Config {
