@@ -17,6 +17,7 @@ import (
 // @Failure 400
 // @Failure 404
 // @Router /route/{id} [get]
+// @Security ApiKeyAuth
 func GetRoute(cases *usecase.Cases) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")

@@ -8,7 +8,7 @@ CREATE TABLE "payment"
     "amount_roubles"   int NOT NULL,
     "status"           varchar(255) NOT NULL DEFAULT 'pending',
     "confirmation_url" text,
-    "created_at"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at"       timestamp NOT NULL DEFAULT (now() at time zone 'utc'),
     
     PRIMARY KEY ("id"),
     FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE

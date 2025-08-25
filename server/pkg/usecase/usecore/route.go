@@ -53,8 +53,12 @@ func (r *Route) EnsureRouteBought(ctx context.Context, userID, routeID string) e
 	return err
 }
 
-func (r *Route) GetRoutes(ctx context.Context, filter *domain.FilterRoute) ([]*domain.Route, error) {
-	return r.routeRepo.Filter(ctx, filter)
+func (r *Route) GetRoutes(ctx *Context, bought *bool) ([]*domain.Route, error) {
+	return r.routeRepo.Filter(ctx, &domain.FilterRoute{
+		UserID:            &ctx.UserID,
+		Bought:            bought,
+		IncludeTaskPoints: true,
+	})
 }
 
 func (r *Route) PatchRoute(ctx context.Context, id string, patchRoute *domain.PatchRoute) (*domain.Route, error) {

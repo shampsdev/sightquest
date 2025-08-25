@@ -451,6 +451,11 @@ const docTemplate = `{
         },
         "/route": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -461,6 +466,14 @@ const docTemplate = `{
                     "route"
                 ],
                 "summary": "Get all routes",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "Bought filter",
+                        "name": "bought",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -479,6 +492,11 @@ const docTemplate = `{
         },
         "/route/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],

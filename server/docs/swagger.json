@@ -442,6 +442,11 @@
         },
         "/route": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -452,6 +457,14 @@
                     "route"
                 ],
                 "summary": "Get all routes",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "Bought filter",
+                        "name": "bought",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -470,6 +483,11 @@
         },
         "/route/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
