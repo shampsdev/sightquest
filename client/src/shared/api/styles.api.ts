@@ -1,4 +1,5 @@
 import { api } from "../instances/axios.instance";
+import { PaymentResult } from "../interfaces/styles/payment";
 import { Style, StyleType } from "../interfaces/styles/styles";
 
 export const getStyles = async (params: {
@@ -9,9 +10,9 @@ export const getStyles = async (params: {
   return response.data;
 };
 
-export const buyStyle = async (styleId: string) => {
-  const response = await api.post(`api/v1/styles/id/${styleId}/buy`, {
-    styleId,
+export const buyStyle = async (styleId: string): Promise<PaymentResult> => {
+  const response = await api.post(`api/v1/payment/style/${styleId}`, {
+    returnUrl: "sightquest://main/shop",
   });
   return response.data;
 };

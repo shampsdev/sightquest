@@ -15,12 +15,16 @@ import { useAuthStore } from "./shared/stores/auth.store";
 import { useGeolocationStore } from "./shared/stores/location.store";
 import { logger } from "./shared/instances/logger.instance";
 import React from "react";
-import { View, Text } from "react-native";
 import { ModalProvider } from "./shared/providers/modal-provider";
 import { OverlayProvider } from "./shared/providers/overlay.provider";
 import { SocketErrorModalBridge } from "./shared/instances/socket.instance";
+import { ErrorBoundary } from "./shared/error-boundary";
 
 SplashScreen.preventAutoHideAsync();
+
+ErrorUtils.setGlobalHandler((error, isFatal) => {
+  logger.error("ui", "Global error:", error, isFatal);
+});
 
 const queryClient = new QueryClient();
 
@@ -71,50 +75,6 @@ export default function App() {
 
   if (!loaded && !error) {
     return null;
-  }
-
-  class ErrorBoundary extends React.Component<
-    { children: React.ReactNode },
-    { hasError: boolean }
-  > {
-    constructor(props: any) {
-      super(props);
-      this.state = { hasError: false };
-    }
-    static getDerivedStateFromError() {
-      return { hasError: true };
-    }
-    componentDidCatch(err: any) {
-      console.error("Unhandled UI error:", err);
-    }
-    render() {
-      if (this.state.hasError) {
-        return (
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <SafeAreaProvider>
-              <NavigationContainer>
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: 24,
-                  }}
-                >
-                  <Text
-                    style={{ color: "#fff", fontSize: 18, textAlign: "center" }}
-                  >
-                    Произошла ошибка. Приложение продолжает работу. Вернитесь
-                    назад.
-                  </Text>
-                </View>
-              </NavigationContainer>
-            </SafeAreaProvider>
-          </GestureHandlerRootView>
-        );
-      }
-      return this.props.children as any;
-    }
   }
 
   return (

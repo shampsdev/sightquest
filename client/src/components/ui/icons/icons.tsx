@@ -176,6 +176,24 @@ export const Icons = {
     );
   },
 
+  Check: () => {
+    return (
+      <Svg
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={3}
+        stroke="white"
+        className="size-6"
+      >
+        <Path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="m4.5 12.75 6 6 9-13.5"
+        />
+      </Svg>
+    );
+  },
+
   Chat: () => {
     return (
       <Svg width="20" height="20" viewBox="0 0 20 20" fill="none">
