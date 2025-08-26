@@ -18,10 +18,12 @@ import { TextInput } from "../ui/textinput";
 import { AvatarPicker } from "./avatar-picker";
 import { logger } from "@/shared/instances/logger.instance";
 import { useModal } from "@/shared/hooks/useModal";
+import { CheckboxInput } from "../ui/checkbox-input";
 
 export const SignUpWidget = () => {
   const { user, token, login, setToken, setUser } = useAuthStore();
 
+  const [agreed, setAgreed] = useState(false);
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -37,6 +39,17 @@ export const SignUpWidget = () => {
   });
 
   const handleRegister = async () => {
+    if (agreed === false) {
+      setModalOpen({
+        title: "Условия использования",
+        subtitle: "Пожалуйста, прими условия использования",
+        buttons: [
+          { text: "Ок", type: "primary", onClick: () => setModalOpen(false) },
+        ],
+      });
+      return;
+    }
+
     try {
       const response = await registerRequest(email, username, password, name);
       setToken(response.token);
@@ -135,11 +148,21 @@ export const SignUpWidget = () => {
                   onChangeText={setPassword}
                   className="w-[90%] mx-auto"
                 />
+                <View className="flex-row items-start gap-2 mx-[5%] mt-2">
+                  <CheckboxInput
+                    checked={agreed}
+                    onChange={(state) => setAgreed(state)}
+                  />
+                  <Text className="text-md text-text_secondary font-onest-medium">
+                    Я даю согласие на обработку персональных данных
+                  </Text>
+                </View>
               </View>
             </View>
             <View className="h-28 gap-5 mt-5">
               <Button
                 className="w-[90%] mx-auto"
+                variant={agreed ? "default" : "disabled"}
                 onPress={handleRegister}
                 text="Дальше"
               />
