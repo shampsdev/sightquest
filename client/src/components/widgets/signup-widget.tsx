@@ -19,6 +19,7 @@ import { AvatarPicker } from "./avatar-picker";
 import { logger } from "@/shared/instances/logger.instance";
 import { useModal } from "@/shared/hooks/useModal";
 import { CheckboxInput } from "../ui/checkbox-input";
+import { DEFAULT_AVATAR_ID } from "@/constants";
 
 export const SignUpWidget = () => {
   const { user, token, login, setToken, setUser } = useAuthStore();
@@ -30,7 +31,8 @@ export const SignUpWidget = () => {
   const [password, setPassword] = useState("");
 
   const [step, setStep] = useState<0 | 1>(0);
-  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+  const [selectedAvatar, setSelectedAvatar] =
+    useState<string>(DEFAULT_AVATAR_ID);
   const { setModalOpen } = useModal();
 
   const {
@@ -60,6 +62,7 @@ export const SignUpWidget = () => {
       setUser(response.user);
       setStep(1);
       refetch();
+      await setAvatar(selectedAvatar?.toString());
     } catch (error: any) {
       logger.error("ui", "register failed", error?.response?.data ?? error);
       setModalOpen({

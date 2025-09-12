@@ -33,6 +33,8 @@ export const ACTIVITIES: Record<"wins" | "matches", ImageSourcePropType> = {
 
 export const SHOP_SECTIONS = ["Аватарки", "Маршруты"] as const;
 
+export const DEFAULT_AVATAR_ID = "1";
+
 export const DEFAULT_MAP_CAMERA_LOCATION: [number, number] = [
   30.308354, 59.955536,
 ] as const;
