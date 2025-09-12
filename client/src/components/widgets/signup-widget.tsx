@@ -33,7 +33,11 @@ export const SignUpWidget = () => {
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const { setModalOpen } = useModal();
 
-  const { data: avatars, isLoading } = useStyles({
+  const {
+    data: avatars,
+    isLoading,
+    refetch,
+  } = useStyles({
     type: "avatar",
     bought: true,
   });
@@ -55,6 +59,7 @@ export const SignUpWidget = () => {
       setToken(response.token);
       setUser(response.user);
       setStep(1);
+      refetch();
     } catch (error: any) {
       logger.error("ui", "register failed", error?.response?.data ?? error);
       setModalOpen({
