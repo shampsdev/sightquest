@@ -82,10 +82,10 @@ export const TaskPointOverlay = ({
         {/* Content Sleeve */}
         <View className="flex justify-between px-8 pt-10 bg-[#FFF] w-full h-[65%] rounded-t-[40px] z-10">
           <View className="gap-5">
-            <Text className="text-3xl font-bounded-medium">
+            <Text className="text-3xl font-bounded-medium text-black">
               {taskPoint.title}
             </Text>
-            <Text className="text-xl">{taskPoint.description}</Text>
+            <Text className="text-xl text-black">{taskPoint.description}</Text>
             <View className="bg-[#9090901A] w-full p-3 gap-4 rounded-2xl flex flex-row">
               <View className="bg-[#FFF] h-[72px] w-[72px] rounded-xl overflow-hidden flex justify-center items-center">
                 {completedTaskPoint ? (
@@ -104,13 +104,13 @@ export const TaskPointOverlay = ({
               <View className="flex-1">
                 {/* Takes remaining space */}
                 <Text
-                  className="text-lg font-bounded-medium"
+                  className="text-lg font-bounded-medium text-black"
                   numberOfLines={1} // Optional: limit title lines
                 >
                   {taskPoint.title}
                 </Text>
                 <Text
-                  className="text-md"
+                  className="text-md text-black"
                   numberOfLines={3} // Optional: limit description lines
                 >
                   {taskPoint.task}
