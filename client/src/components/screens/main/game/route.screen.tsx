@@ -115,7 +115,7 @@ export const RouteScreen = () => {
   // Show only free/accessible routes for now (no ownership info available on client)
   const routes = useMemo(() => {
     const list = isFetched && data !== undefined ? data : [];
-    return list.filter((r) => r.priceRoubles === 0);
+    return list.filter((r) => r.bought === true || r.priceRoubles === 0);
   }, [isFetched, data]);
 
   const [index, setIndex] = useState(0);

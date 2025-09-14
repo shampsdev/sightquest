@@ -19,4 +19,5 @@ export interface Route {
   description: string;
   priceRoubles: number;
   taskPoints: TaskPoint[];
+  bought: boolean;
 }

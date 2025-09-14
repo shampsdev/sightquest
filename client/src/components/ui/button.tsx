@@ -1,6 +1,7 @@
-import { Pressable, Text } from "react-native";
+import { Pressable, StyleProp, Text, ViewStyle } from "react-native";
 import { cva, type VariantProps } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
+import React from "react";
 
 const button = {
   variant: {
@@ -39,12 +40,19 @@ interface ButtonProps extends VariantProps<typeof buttonVariants> {
   className?: string;
   onPress?: () => void;
   text: string;
-  variant?: "default" | "disabled" | "invisible";
+  style?: StyleProp<ViewStyle>;
 }
 
-export const Button = ({ className, onPress, text, variant }: ButtonProps) => {
+export const Button = ({
+  className,
+  onPress,
+  text,
+  variant,
+  style,
+}: ButtonProps) => {
   return (
     <Pressable
+      style={style}
       className={twMerge(buttonVariants({ variant }), className)}
       onPress={variant == "disabled" ? undefined : onPress}
     >

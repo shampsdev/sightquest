@@ -62,6 +62,11 @@ export const OverlayProvider: React.FC<{
       {Object.entries(overlayRegistry).map(([name, Component]) => {
         const key = name as OverlayName;
         const entry = state[key];
+
+        if (!entry?.visible) {
+          return null;
+        }
+
         return (
           <Component
             key={key}

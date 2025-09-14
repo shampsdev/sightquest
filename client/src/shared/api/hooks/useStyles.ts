@@ -12,13 +12,14 @@ export const useStyles = (params: { type?: StyleType; bought?: boolean }) => {
 
   const buyMutation = useMutation({
     mutationFn: (styleId: string) => buyStyle(styleId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["styles"] });
-    },
   });
 
   const getStyle = (styleId: string) => {
     return stylesQuery.data?.find((x) => x.id == styleId);
+  };
+
+  const updateStyles = () => {
+    queryClient.invalidateQueries({ queryKey: ["styles"] });
   };
 
   return {
@@ -26,5 +27,6 @@ export const useStyles = (params: { type?: StyleType; bought?: boolean }) => {
     getStyle,
     buyStyle: buyMutation.mutateAsync,
     isBuying: buyMutation.isPending,
+    updateStyles,
   };
 };
